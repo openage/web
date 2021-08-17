@@ -1,0 +1,35 @@
+<div [oaTooltip]="text | titlecase">
+  @switch (view) {
+    @case ('avatar') {
+      <ng-container *ngTemplateOutlet="avatar"></ng-container>
+    }
+
+    @case ('selectable') {
+      <div class="selectable controls-row" [class.selected]="selected">
+        <ng-container *ngTemplateOutlet="avatar"></ng-container>
+        @if(selected) {
+          <span (click)="onClick()">{{text | titlecase}}</span>
+        }
+      </div>
+    }
+
+    @case ('text') {
+      <span (click)="onClick()">{{text | titlecase}}</span>
+    }
+
+    @case ('pic') {
+      <div [style]="style" (click)="onClick()"></div>
+    }
+
+  }
+</div>
+
+<ng-template #avatar>
+  <ngx-avatars *ngIf="url" [style]="style" [src]="url" [size]="size" [textSizeRatio]="1" [round]="shape === 'round'"
+    (clickOnAvatar)="onClick()">
+  </ngx-avatars>
+
+  <ngx-avatars *ngIf="!url" [style]="style" name="{{text}}" [size]="size" [round]="shape === 'round'" initialsSize="3"
+    (clickOnAvatar)="onClick()">
+  </ngx-avatars>
+</ng-template>

@@ -1,0 +1,88 @@
+{
+  "items": [
+    {
+      "code": "dragDrop",
+      "icon": "/assets/app/applegos/images/development/drag_drop_ui.webp",
+      "image": "/assets/app/applegos/images/development/drag_drop_ui.webp",
+      "title": "Lorem Ipsum",
+      "description": ""
+    },
+    {
+      "code": "integrateData",
+      "icon": "/assets/app/applegos/images/development/integrations.webp",
+      "image": "/assets/app/applegos/images/development/integrations.webp",
+      "title": "Dolor Sitema",
+      "description": ""
+    },
+    {
+      "code": "addFrontend",
+      "icon": "/assets/app/applegos/images/development/frontend.webp",
+      "image": "/assets/app/applegos/images/development/frontend.webp",
+      "title": "Sed perspiciatis",
+      "description": ""
+    },
+    {
+      "code": "customise",
+      "icon": "/assets/app/applegos/images/development/customized.webp",
+      "image": "/assets/app/applegos/images/development/customized.webp",
+      "title": "Magni Dolores",
+      "description": ""
+    },
+    {
+      "code": "Debug",
+      "icon": "/assets/app/applegos/images/development/debug.webp",
+      "image": "/assets/app/applegos/images/development/debug.webp",
+      "title": "Nemo Enim",
+      "description": ""
+    },
+    {
+      "code": "secure",
+      "icon": "/assets/app/applegos/images/development/secure.webp",
+      "image": "/assets/app/applegos/images/development/secure.webp",
+      "title": "Eiusmod Tempor",
+      "description": ""
+    },
+    {
+      "code": "publish",
+      "icon": "/assets/app/applegos/images/development/publish.webp",
+      "image": "/assets/app/applegos/images/development/publish.webp",
+      "title": "Midela Teren",
+      "description": ""
+    },
+    {
+      "code": "support",
+      "icon": "/assets/app/applegos/images/development/premium_support.webp",
+      "image": "/assets/app/applegos/images/development/premium_support.webp",
+      "title": "Pira Neve",
+      "description": ""
+    },
+    {
+      "code": "support",
+      "icon": "/assets/app/applegos/images/development/premium_support.webp",
+      "image": "/assets/app/applegos/images/development/premium_support.webp",
+      "title": "Dirada Pack",
+      "description": ""
+    },
+    {
+      "code": "support",
+      "icon": "/assets/app/applegos/images/development/premium_support.webp",
+      "image": "/assets/app/applegos/images/development/premium_support.webp",
+      "title": "Moton Ideal",
+      "description": ""
+    },
+    {
+      "code": "support",
+      "icon": "/assets/app/applegos/images/development/premium_support.webp",
+      "image": "/assets/app/applegos/images/development/premium_support.webp",
+      "title": "Verdo Park",
+      "description": ""
+    },
+    {
+      "code": "support",
+      "icon": "/assets/app/applegos/images/development/premium_support.webp",
+      "image": "/assets/app/applegos/images/development/premium_support.webp",
+      "title": "Flavor Nivelanda",
+      "description": ""
+    }
+  ]
+}

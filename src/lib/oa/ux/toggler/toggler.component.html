@@ -1,0 +1,19 @@
+@switch (view) {
+@case ('icon') {
+<oa-icon [value]="selected.icon" (click)="readonly?'': onToggle()" [class]="selected.class"
+  [title]="selected.label"></oa-icon>
+}
+@case ('button') {
+<div class="oa-controls" [class.readonly]="readonly">
+  @for (item of items; track $index) {
+  <button [class]="item?.class" [style]="item?.style" (click)="onToggle()" [disabled]="disabled || readonly">
+    @if(item.icon){
+    <oa-icon [value]="item.icon" [oaTooltip]="item.label"></oa-icon>
+    } @else {
+    <span>{{item.label}}</span>
+    }
+  </button>
+  }
+</div>
+}
+}

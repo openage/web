@@ -1,0 +1,6 @@
+.container {
+  align-items: center;
+  min-height: 100px;
+  display: flex;
+  flex-direction: column;
+}

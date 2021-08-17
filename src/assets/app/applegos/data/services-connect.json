@@ -1,0 +1,196 @@
+{
+    "data": [
+        {
+            "code": "use-cases",
+            "src": "/assets/app/applegos/data/use-cases/index.json"
+        }
+    ],
+    "layout": {
+        "sections": [
+            {
+                "code": "banner-container",
+                "class": "container",
+                "container": {
+                    "body": {
+                        "class": "flex-1-1 middle"
+                    }
+                }
+            },
+            {
+                "code": "overview-container",
+                "class": "container"
+            },
+            {
+                "class": "container",
+                "code": "collection-container",
+                "container": {}
+            },
+            {
+                "class": "container",
+                "code": "pricing-container",
+                "container": {
+                    "body": {
+                        "class": "flex-row one"
+                    }
+                }
+            },
+            {
+                "code": "use-cases-container",
+                "class": "container",
+                "container": {
+                    "title": {
+                        "style": {
+                            "text-align": "justify"
+                        },
+                        "text": "<h2 >Use <span class='highlight'>Cases</span></h2>"
+                    },
+                    "link": {
+                        "text": "More...",
+                        "url": "/landing/use-cases"
+                    },
+                    "body": {
+                        "class": "flex-row two"
+                    }
+                }
+            },
+            {
+                "code": "domains-container",
+                "container": {
+                    "description": {
+                        "text": "<h4>Not just limited to the below <span class='highlight'>domains</span></h4>"
+                    },
+                    "body": {
+                        "class": "flex-row seven domains"
+                    }
+                }
+            }
+        ]
+    },
+    "components": [
+        {
+            "section": "banner-container",
+            "control": "html",
+            "value": [
+                "<h1><span class='highlight'> Connect Service </span></h1>",
+                "<br>",
+                "<h3Real time application which  integrates data from device to cloud and ensures databases are in-sync for reporting, analytics, and data warehousing without overloading networks or affecting its performance.</h3>",
+                "<br>",
+                "<h3 class='card-detail-text'><i class='fa fa-check highlight'></i>Design once, deploy anywhere  </h3>",
+                "<h3 class='card-detail-text'><i class='fa fa-check highlight'></i>Visually design workflows for on-premises or cloud deployments to Spark, MapReduce, Linux, UNIX, or Windows</h3>",
+                "<h3 class='card-detail-text'><i class='fa fa-check highlight'></i>Connect, point, click and onboard entire schemas from a database in minutes.</h3>",
+                "<h3 class='card-detail-text'><i class='fa fa-check highlight'></i>Supports IOT framework and makes communication possible in remote locations.  </h3>",
+                "<h3 class='card-detail-text'><i class='fa fa-check highlight'></i>Tolerant to interruptions in data flow and offers hassle free delivery.</h3>",
+                "<h3 class='card-detail-text'><i class='fa fa-check highlight'></i>Offers 10 times faster performance and saves quality time.</h3>"
+            ]
+        },
+        {
+            "section": "banner-container",
+            "control": "html",
+            "container": {},
+            "value": [
+                "<img class='infoImage' src='/assets/app/applegos/images/services/banner-bg.svg'>"
+            ]
+        },
+        {
+            "section": "overview-container",
+            "control": "video",
+            "options": {
+                "provider": "file",
+                "controls": true,
+                "autoplay": false,
+                "muted": false,
+                "style": {
+                    "width": "100%",
+                    "height": "auto",
+                    "border-radius": "35px"
+                }
+            },
+            "value": "/assets/app/applegos/videos/overview.mp4"
+        },
+        {
+            "section": "pricing-container",
+            "control": "html",
+            "container": {
+                "class": "card-detail-container"
+            },
+            "value": [
+                "<h1>Why did we <span class='highlight'> create it?</span></h1>",
+                "<br>",
+                "<h3 class='card-detail-text'><i class='fa fa-check highlight'></i></h3>",
+                "<h3 class='card-detail-text'><i class='fa fa-check highlight'></i></h3>",
+                "<h3 class='card-detail-text'><i class='fa fa-check highlight'></i></h3>",
+                "<h3 class='card-detail-text'><i class='fa fa-check highlight'></i></h3>"
+            ]
+        },
+        {
+            "section": "pricing-container",
+            "control": "html",
+            "container": {
+                "class": "card-detail-container"
+            },
+            "value": [
+                "<h1>How does <span class='highlight'> it works?</span></h1>",
+                "<br>",
+                "<h3 class='card-detail-text'><i class='fa fa-check highlight'></i> </h3>",
+                "<h3 class='card-detail-text'><i class='fa fa-check highlight'></i></h3>",
+                "<h3 class='card-detail-text'><i class='fa fa-check highlight'></i></h3>"
+            ]
+        },
+        {
+            "section": "domains-container",
+            "control": "html",
+            "value": [
+                "<img class='domainImage' src='/assets/app/applegos/images/domains/education.svg'>",
+                "<h3 class=''>Education</h3>"
+            ]
+        },
+        {
+            "section": "domains-container",
+            "control": "html",
+            "value": [
+                "<img class='domainImage' src='/assets/app/applegos/images/domains/finance.svg'>",
+                "<h3 class=''>Finance</h3>"
+            ]
+        },
+        {
+            "section": "domains-container",
+            "control": "html",
+            "value": [
+                "<img class='' src='/assets/app/applegos/images/domains/government.svg'>",
+                "<h3 class=''>Government</h3>"
+            ]
+        },
+        {
+            "section": "domains-container",
+            "control": "html",
+            "value": [
+                "<img class='' src='/assets/app/applegos/images/domains/health-care.svg'>",
+                "<h3 class=''>Health Care</h3>"
+            ]
+        },
+        {
+            "section": "domains-container",
+            "control": "html",
+            "value": [
+                "<img class='' src='/assets/app/applegos/images/domains/logistics.svg'>",
+                "<h3 class=''>Logistics</h3>"
+            ]
+        },
+        {
+            "section": "domains-container",
+            "control": "html",
+            "value": [
+                "<img class='' src='/assets/app/applegos/images/domains/travel.svg'>",
+                "<h3 class=''>Travel</h3>"
+            ]
+        },
+        {
+            "section": "domains-container",
+            "control": "html",
+            "value": [
+                "<img class='' src='/assets/app/applegos/images/domains/e-commerence.svg'>",
+                "<h3 class=''>E-commerence</h3>"
+            ]
+        }
+    ]
+}

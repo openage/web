@@ -1,0 +1,238 @@
+.clear {
+  clear: both;
+}
+
+.week>div {
+  display: flex;
+  justify-content: center;
+}
+
+.weekAndData {
+  position: relative;
+}
+
+.weekAndData>div {
+  display: flex;
+  justify-content: center;
+}
+
+.overdue {
+  color: var(--error);
+}
+
+mat-form-field {
+  width: 100%;
+  padding-left: 10px;
+}
+
+.form-control {
+  display: block;
+  width: 99%;
+  height: calc(1.5em + .75rem + 2px);
+  padding: .375rem .75rem;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: var(--text-primary);
+  background-color: var(--surface);
+  background-clip: padding-box;
+  border: 0px solid var(--neutral-light);
+  border-radius: .25rem;
+  transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+  margin: 1px;
+}
+
+.bor {
+  border: 1px solid var(--neutral-light);
+}
+
+.dateText {
+  font-size: 14px;
+}
+
+.oa-input>.input {
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
+.oa-input>input.hidden {
+  width: 0;
+  max-width: 0;
+  height: 0;
+  border: none;
+  display: inline !important;
+  margin: 0;
+}
+
+.oa-icon {
+
+  &>.month {
+    line-height: 1;
+    font-size: xx-small;
+    text-align: center;
+    color: var(--text-dark);
+    padding: 1px;
+    border-radius: 5px 5px 0 0;
+    border: 1px solid var(--text-disabled);
+    background: var(--text-disabled);
+  }
+
+  &>.day {
+    line-height: 1;
+    font-size: small;
+    text-align: center;
+    border-radius: 0 0 5px 5px;
+    border: 1px solid var(--text-disabled);
+    color: var(--text-disabled);
+  }
+}
+
+.oa-icon.active {
+  &>.month {
+    border: 1px solid var(--primary);
+    background: var(--primary);
+  }
+
+  &>.day {
+    font-weight: bold;
+    border: 1px solid var(--primary);
+    color: var(--primary);
+  }
+}
+
+.oa-icon.warn {
+  &>.month {
+    border: 1px solid var(--warn);
+    background: var(--warn);
+  }
+
+  &>.day {
+    font-weight: bold;
+    border: 1px solid var(--warn);
+    color: var(--warn);
+  }
+}
+
+.oa-icon.error {
+  padding: unset;
+
+  &>.month {
+    border: 1px solid var(--error);
+    background: var(--error);
+  }
+
+  &>.day {
+    font-weight: bold;
+    border: 1px solid var(--error);
+    color: var(--error);
+  }
+}
+
+.weekAndData div .oa-icon {
+  border: 1px solid var(--backdrop);
+  border-radius: 4px;
+  padding: 4px;
+  margin: 5px;
+  background: var(--surface);
+  cursor: pointer;
+}
+
+.weekAndData div .oa-icon {
+
+  &>.weekBage {
+    position: absolute;
+    margin-top: -14px;
+    margin-left: 25px;
+    background: var(--backdrop);
+    border-radius: 50%;
+    font-size: 10px;
+    min-width: 18px;
+    min-height: 18px;
+    height: auto;
+    width: auto;
+    color: var(--surface);
+    text-align: center;
+    padding-top: 3px;
+  }
+
+  &>.month {
+    line-height: 1;
+    font-size: x-small;
+    text-align: center;
+    color: var(--backdrop);
+    padding: 1px;
+    border-radius: 0px;
+    border: unset;
+    background: none;
+  }
+
+  &>.day {
+    line-height: 1;
+    font-size: 15px;
+    text-align: center;
+    border-radius: 0px;
+    border: unset;
+    color: var(--dark);
+  }
+}
+
+.weekAndData button {
+  margin-top: 5px;
+}
+
+.weekAndData div .oa-icon.active {
+  border: 1px solid var(--primary);
+  color: var(--primary);
+  pointer-events: none;
+  cursor: not-allowed;
+
+  &>.weekBage {
+    background: var(--primary);
+  }
+
+  &>.month {
+    color: var(--primary);
+  }
+
+  &>.day {
+    color: var(--primary);
+  }
+}
+
+.weekAndData div .oa-icon.minDate {
+  border: 1px solid var(--neutral);
+  color: var(--neutral);
+  background: var(--surface);
+  pointer-events: none;
+  cursor: not-allowed;
+
+  &>.weekBage {
+    background: var(--neutral);
+  }
+
+  &>.month {
+    color: var(--neutral);
+    background: unset;
+    border: unset;
+  }
+
+  &>.day {
+    color: var(--neutral);
+    background: unset;
+    border: unset;
+  }
+}
+
+.inline-date-picker {
+  display: none;
+}
+
+.subtle.inline-date-picker {
+  display: block;
+}
+
+@media only screen and (max-width:568px) {
+  .oa-input>.input {
+    min-width: 86px;
+  }
+}

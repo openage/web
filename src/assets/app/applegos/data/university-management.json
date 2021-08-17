@@ -1,0 +1,171 @@
+{
+    "layout": {
+        "sections": [
+            {
+                "class": "container",
+                "code": "collection-container",
+                "container": {
+                    "title": {
+                        "text": "<h3>University Management <span class='highlight'> Solution</span></h3>"
+                    }
+                }
+            },
+            {
+                "code": "banner-container",
+                "class": "container",
+                "container": {
+                    "body": {
+                        "class": "flex-2-1"
+                    }
+                }
+            },
+            {
+                "class": "container",
+                "code": "pricing-container",
+                "container": {
+                    "body": {
+                        "class": "flex-row three"
+                    }
+                }
+            },
+            {
+                "code": "domains-container",
+                "container": {
+                    "description": {
+                        "text": "<h4>Not just limited to the below <span class='highlight'>domains</span></h4>"
+                    },
+                    "body": {
+                        "class": "flex-row seven domains"
+                    }
+                }
+            }
+        ]
+    },
+    "components": [
+        {
+            "section": "banner-container",
+            "control": "html",
+            "value": []
+        },
+        {
+            "section": "banner-container",
+            "control": "html",
+            "container": {},
+            "value": [
+                "<img class='testimonialImage' src='/assets/app/applegos/images/testimonial/guru-kashi.png'>"
+            ]
+        },
+        {
+            "section": "banner-container",
+            "control": "html",
+            "value": [
+                "<h1>Guru Kashi<span class='highlight'> University</span></h1>",
+                "<br>",
+                "<h3 class='card-detail-text'>A large academic institution was facing difficulty in managing data due to outdated and </h3>",
+                "<h3 class='card-detail-text'>disconnected systems leading to errors and delays in processing information.</h3>",
+                "<h3 class='card-detail-text'>Implemented a university management solution that included modules for student information, </h3>",
+                "<h3 class='card-detail-text'> course scheduling, faculty information, and financial management. </h3>"
+            ]
+        },
+        {
+            "section": "pricing-container",
+            "control": "html",
+            "container": {
+                "class": "card-detail-container"
+            },
+            "value": [
+                "<img class='' src='/assets/app/applegos/images/testimonial/solution.svg'>",
+                "<h1 class='highlight'>Solution</h1>",
+                "<br>",
+                "<h3 class='card-detail-text'><i class='fa fa-check highlight'></i>Implemented a university management solution that included modules for student information, </h3>",
+                "<h3 class='card-detail-text'> <i class='fa fa-check highlight'></i>Course scheduling, faculty information, and financial management. </h3>"
+            ]
+        },
+        {
+            "section": "pricing-container",
+            "control": "html",
+            "container": {
+                "class": "card-detail-container"
+            },
+            "value": [
+                "<img class='' src='/assets/app/applegos/images/testimonial/gear.svg'>",
+                "<h1 class='highlight'>Implementation</h1>",
+                "<br>",
+                "<h3 class='card-detail-text'><i class='fa fa-check highlight'></i>RFID and Biometric based Identity solution for students and faculty</h3>",
+                "<h3 class='card-detail-text'><i class='fa fa-check highlight'></i>Customized the system to meet unique business process of the institution </h3>",
+                "<h3 class='card-detail-text'><i class='fa fa-check highlight'></i>Integrated with existing systems to ensure a smooth transition.</h3>"
+            ]
+        },
+        {
+            "section": "pricing-container",
+            "control": "html",
+            "container": {
+                "class": "card-detail-container"
+            },
+            "value": [
+                "<img class='' src='/assets/app/applegos/images/testimonial/analysis.svg'>",
+                "<h1 class='highlight'>Results</h1>",
+                "<br>",
+                "<h3 class='card-detail-text'><i class='fa fa-check highlight'></i>Improved data accuracy and reduced errors and delays in processing information.</h3>",
+                "<h3 class='card-detail-text'><i class='fa fa-check highlight'></i>Centralized management of student data, course schedules, and faculty information.</h3>",
+                "<h3 class='card-detail-text'><i class='fa fa-check highlight'></i>Increased operational efficiency and productivity.</h3>"
+            ]
+        },
+        {
+            "section": "domains-container",
+            "control": "html",
+            "value": [
+                "<img class='domainImage' src='/assets/app/applegos/images/domains/education.svg'>",
+                "<h3 class=''>Education</h3>"
+            ]
+        },
+        {
+            "section": "domains-container",
+            "control": "html",
+            "value": [
+                "<img class='domainImage' src='/assets/app/applegos/images/domains/finance.svg'>",
+                "<h3 class=''>Finance</h3>"
+            ]
+        },
+        {
+            "section": "domains-container",
+            "control": "html",
+            "value": [
+                "<img class='' src='/assets/app/applegos/images/domains/government.svg'>",
+                "<h3 class=''>Government</h3>"
+            ]
+        },
+        {
+            "section": "domains-container",
+            "control": "html",
+            "value": [
+                "<img class='' src='/assets/app/applegos/images/domains/health-care.svg'>",
+                "<h3 class=''>Health Care</h3>"
+            ]
+        },
+        {
+            "section": "domains-container",
+            "control": "html",
+            "value": [
+                "<img class='' src='/assets/app/applegos/images/domains/logistics.svg'>",
+                "<h3 class=''>Logistics</h3>"
+            ]
+        },
+        {
+            "section": "domains-container",
+            "control": "html",
+            "value": [
+                "<img class='' src='/assets/app/applegos/images/domains/travel.svg'>",
+                "<h3 class=''>Travel</h3>"
+            ]
+        },
+        {
+            "section": "domains-container",
+            "control": "html",
+            "value": [
+                "<img class='' src='/assets/app/applegos/images/domains/e-commerence.svg'>",
+                "<h3 class=''>E-commerence</h3>"
+            ]
+        }
+    ]
+}

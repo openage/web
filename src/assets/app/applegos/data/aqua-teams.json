@@ -1,0 +1,273 @@
+{
+    "layout": {
+        "sections": [
+            {
+                "class": "container",
+                "code": "collection-container",
+                "container": {
+                    "title": {
+                        "text": "<h3>AQUA <span class='highlight'> TEAMS</span></h3>"
+                    }
+                }
+            },
+            {
+                "code": "banner-container",
+                "class": "container",
+                "container": {
+                    "body": {
+                        "class": "flex-2-1"
+                    }
+                }
+            },
+            {
+                "class": "container",
+                "code": "pricing-container",
+                "container": {
+                    "body": {
+                        "class": "flex-row three"
+                    }
+                }
+            },
+            {
+                "code": "domains-container",
+                "container": {
+                    "description": {
+                        "text": "<h4>Not just limited to the below <span class='highlight'>domains</span></h4>"
+                    },
+                    "body": {
+                        "class": "flex-row seven domains"
+                    }
+                }
+            }
+        ]
+    },
+    "components": [
+        {
+            "section": "banner-container",
+            "control": "html",
+            "value": []
+        },
+        {
+            "section": "banner-container",
+            "control": "html",
+            "container": {},
+            "value": [
+                "<img class='testimonialImage' src='/assets/app/applegos/images/testimonial/aqua.png'>"
+            ]
+        },
+        {
+            "section": "banner-container",
+            "control": "html",
+            "value": [
+                "<h1>AQUA <span class='highlight'> TEAMS</span></h1>",
+                "<br>",
+                "<h3 class='card-detail-text'>AQUA is a cloud based Time tracking through geo-fencing , Attendance Management & Payroll processing engine,</h3>",
+                "<h3 class='card-detail-text'>Attendance Management is done through biometric devices face, thumb, RFID or Iris recognisation. and can punch through mobile app too. </h3>",
+                "<h3 class='card-detail-text'>Get attendance of employees with exact location through SSID. Payroll processing engine provides automatic salary calculations and maintains workflow based payroll.</h3>",
+                "<h3 class='card-detail-text'>Time management engine provides different types of leaves management and management of people during different shifts. Track your employees with the help of mobile app.</h3>"
+            ]
+        },
+        {
+            "section": "pricing-container",
+            "control": "html",
+            "container": {
+                "class": "card-detail-container"
+            },
+            "value": [
+                "<h1 class='highlight'>All Team</h1>",
+                "<br>",
+                "<h3 class='card-detail-text'><i class='fa fa-check highlight'></i> Get organized hierarchy of different teams of different projects on one platform</h3>",
+                "<h3 class='card-detail-text'> <i class='fa fa-check highlight'></i>Manage different teams</h3>",
+                "<h3 class=''><i class='fa fa-check highlight'></i>Three types of logins</h3>",
+                "<ul><h3><li>Super Admin</li></h3><h3><li>Admin</li></h3><h3><li>Normal user</li></h3></ul>"
+            ]
+        },
+        {
+            "section": "pricing-container",
+            "control": "html",
+            "container": {
+                "class": "card-detail-container"
+            },
+            "value": [
+                "<h1 class='highlight'>Time Management Engine</h1>",
+                "<br>",
+                "<h3 class='card-detail-text'><i class='fa fa-check highlight'></i>Get attendance through biometric devices Face / iris recognition (touch less)</h3>",
+                "<h3 class='card-detail-text'><i class='fa fa-check highlight'></i>Daily attendance </h3>",
+                "<h3 class='card-detail-text'><i class='fa fa-check highlight'></i>Monthly attendance</h3>",
+                "<h3 class='card-detail-text'><i class='fa fa-check highlight'></i>Super Admin can manually update punch</h3>",
+                "<h3 class='card-detail-text'><i class='fa fa-check highlight'></i>Can track and manage multiple machines from one location.</h3>"
+            ]
+        },
+        {
+            "section": "pricing-container",
+            "control": "html",
+            "container": {
+                "class": "card-detail-container"
+            },
+            "value": [
+                "<h1 class='highlight'>Shift Roaster</h1>",
+                "<br>",
+                "<h3 class='card-detail-text'><i class='fa fa-check highlight'></i>Change the shifts(day/night) of different employees as and when required.</h3>",
+                "<h3 class='card-detail-text'><i class='fa fa-check highlight'></i>Mange n number of shifts of different employees</h3>",
+                "<h3 class='card-detail-text'><i class='fa fa-check highlight'></i>Manage and make weekly or monthly summary of employees.</h3>",
+                "<h3 class='card-detail-text'><i class='fa fa-check highlight'></i>Shift can be department wise</h3>",
+                "<h3 class='card-detail-text'><i class='fa fa-check highlight'></i>Manage different types of leaves like full day or half day leave.</h3>",
+                "<h3 class='card-detail-text'><i class='fa fa-check highlight'></i>Set what kind of action to be performed if employee comes late</h3>"
+            ]
+        },
+        {
+            "section": "pricing-container",
+            "control": "html",
+            "container": {
+                "class": "card-detail-container"
+            },
+            "value": [
+                "<h1 class='highlight'>Location Logs</h1>",
+                "<br>",
+                "<h3 class='card-detail-text'><i class='fa fa-check highlight'></i> Get the location of your team to know if they are at workplace</h3>",
+                "<h3 class='card-detail-text'><i class='fa fa-check highlight'></i>Capture attendance with location</h3>"
+            ]
+        },
+        {
+            "section": "pricing-container",
+            "control": "html",
+            "container": {
+                "class": "card-detail-container"
+            },
+            "value": [
+                "<h1 class='highlight'>Leave management </h1>",
+                "<br>",
+                "<h3 class='card-detail-text'><i class='fa fa-check highlight'></i>Employee can apply leave request easily and HR can approve it.</h3>",
+                "<h3 class='card-detail-text'><i class='fa fa-check highlight'></i>Different types of leaves can be managed easily.</h3>",
+                "<h3 class='card-detail-text'><i class='fa fa-check highlight'></i>Set new rules of leaves (limited or unlimited)</h3>",
+                "<h3 class='card-detail-text'><i class='fa fa-check highlight'></i>Autoincrement on monthly basis</h3>",
+                "<h3 class='card-detail-text'><i class='fa fa-check highlight'></i>Comprises of sandwich leaves as well</h3>"
+            ]
+        },
+        {
+            "section": "pricing-container",
+            "control": "html",
+            "container": {
+                "class": "card-detail-container"
+            },
+            "value": [
+                "<h1 class='highlight'>Payroll Engine </h1>",
+                "<br>",
+                "<h3 class='card-detail-text'><i class='fa fa-check highlight'></i>Auto salary calculations </h3>",
+                "<h3 class='card-detail-text'><i class='fa fa-check highlight'></i> Organised workflow based payroll publishing</h3>",
+                "<h3 class='card-detail-text'><i class='fa fa-check highlight'></i>Comprises of basic salary, HRA, house rentals</h3>",
+                "<h3 class='card-detail-text'><i class='fa fa-check highlight'></i>User can set calculation formula </h3>"
+            ]
+        },
+        {
+            "section": "pricing-container",
+            "control": "html",
+            "container": {
+                "class": "card-detail-container"
+            },
+            "value": [
+                "<h1 class='highlight'>Employee Management </h1>",
+                "<br>",
+                "<h3 class='card-detail-text'><i class='fa fa-check highlight'></i>Manage employee details like Aadhar details, account details, blood group, leave balance, etc.  </h3>"
+            ]
+        },
+        {
+            "section": "pricing-container",
+            "control": "html",
+            "container": {
+                "class": "card-detail-container"
+            },
+            "value": [
+                "<h1 class='highlight'>Contractor</h1>",
+                "<br>",
+                "<h3 class='card-detail-text'><i class='fa fa-check highlight'></i>Manage contractor and number of members and number of employees involved in the contract.</h3>"
+            ]
+        },
+        {
+            "section": "pricing-container",
+            "control": "html",
+            "container": {
+                "class": "card-detail-container"
+            },
+            "value": [
+                "<h1 class='highlight'>Devices</h1>",
+                "<br>",
+                "<h3 class='card-detail-text'><i class='fa fa-check highlight'></i>Add n number of devices</h3>",
+                "<h3 class='card-detail-text'><i class='fa fa-check highlight'></i>Track device in Active/Passive state</h3>"
+            ]
+        },
+        {
+            "section": "pricing-container",
+            "control": "html",
+            "container": {
+                "class": "card-detail-container"
+            },
+            "value": [
+                "<h1 class='highlight'>Alerts</h1>",
+                "<br>",
+                "<h3 class='card-detail-text'><i class='fa fa-check highlight'></i>Birthday notifications</h3>",
+                "<h3 class='card-detail-text'><i class='fa fa-check highlight'></i>Notifications on early going and late coming</h3>",
+                "<h3 class='card-detail-text'><i class='fa fa-check highlight'></i>Emergency notifications</h3>",
+                "<h3 class='card-detail-text'><i class='fa fa-check highlight'></i>Notification of Employee leave</h3>",
+                "<h3 class='card-detail-text'><i class='fa fa-check highlight'></i>Notifies salary credit</h3>",
+                "<h3 class='card-detail-text'><i class='fa fa-check highlight'></i>Integration of notifications through route SMS, Mailgun and slack</h3>"
+            ]
+        },
+        {
+            "section": "domains-container",
+            "control": "html",
+            "value": [
+                "<img class='domainImage' src='/assets/app/applegos/images/domains/education.svg'>",
+                "<h3 class=''>Education</h3>"
+            ]
+        },
+        {
+            "section": "domains-container",
+            "control": "html",
+            "value": [
+                "<img class='domainImage' src='/assets/app/applegos/images/domains/finance.svg'>",
+                "<h3 class=''>Finance</h3>"
+            ]
+        },
+        {
+            "section": "domains-container",
+            "control": "html",
+            "value": [
+                "<img class='' src='/assets/app/applegos/images/domains/government.svg'>",
+                "<h3 class=''>Government</h3>"
+            ]
+        },
+        {
+            "section": "domains-container",
+            "control": "html",
+            "value": [
+                "<img class='' src='/assets/app/applegos/images/domains/health-care.svg'>",
+                "<h3 class=''>Health Care</h3>"
+            ]
+        },
+        {
+            "section": "domains-container",
+            "control": "html",
+            "value": [
+                "<img class='' src='/assets/app/applegos/images/domains/logistics.svg'>",
+                "<h3 class=''>Logistics</h3>"
+            ]
+        },
+        {
+            "section": "domains-container",
+            "control": "html",
+            "value": [
+                "<img class='' src='/assets/app/applegos/images/domains/travel.svg'>",
+                "<h3 class=''>Travel</h3>"
+            ]
+        },
+        {
+            "section": "domains-container",
+            "control": "html",
+            "value": [
+                "<img class='' src='/assets/app/applegos/images/domains/e-commerence.svg'>",
+                "<h3 class=''>E-commerence</h3>"
+            ]
+        }
+    ]
+}

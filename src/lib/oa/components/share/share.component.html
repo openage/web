@@ -1,0 +1,14 @@
+@if (modes && modes.length) {
+<div class="content" (clickOutside)="showList=false">
+  <i class="icon pointer subtle" (click)="showList=!showList">share</i>
+  @if (showList) {
+  <div class="modes">
+    @for (mode of modes; track mode) {
+    <i class="md {{mode.icon}} flex-row pointer m-r-10" (click)="onSelect(mode)" [oaTooltip]="mode.name"></i>
+    <!-- <mat-icon class="flex-row pointer m-r-10" (click)="onSelect(mode)" [oaTooltip]="mode.name">{{mode.icon}}
+        </mat-icon> -->
+    }
+  </div>
+  }
+</div>
+}

@@ -1,0 +1,13 @@
+.card-wrap {
+    font-weight: bold;
+}
+.mat-form-field {
+    width: 100%;
+    padding: 0 15px;
+}
+
+label {
+    font-size:13px;
+    /* margin-top:15px; */
+    margin-bottom:5px;
+}

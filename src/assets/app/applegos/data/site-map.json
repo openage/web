@@ -1,0 +1,24 @@
+{
+  "items": [
+    {
+      "title": "About",
+      "url": "/landing/about"
+    },
+    {
+      "title": "Customers",
+      "url": "/landing/customers"
+    },
+    {
+      "title": "Contact",
+      "url": "/landing/contact"
+    },
+    {
+      "title": "Support",
+      "url": "/landing/support"
+    },
+    {
+      "title": "Partner Program",
+      "url": "/landing/partnership"
+    }
+  ]
+}

@@ -1,0 +1,1094 @@
+i.sprint {
+  background-image: url("/assets/app/aquateams/icons/sprint.png");
+}
+
+i.release {
+  background-image: url("/assets/app/aquateams/icons/release.png");
+}
+
+i.email {
+  background-image: url("/assets/app/aquateams/icons/envelope.svg");
+}
+
+i.eye {
+  background-image: url("/assets/app/aquateams/icons/eye.svg");
+}
+
+i.lock {
+  background-image: url("/assets/app/aquateams/icons/lock.svg");
+}
+
+i.error-coming-soon {
+  background-image: url("/assets/app/aquateams/icons/error/coming-soon.svg");
+}
+
+i.error-no-data {
+  background-image: url("/assets/app/aquateams/icons/error/no-results.svg");
+}
+
+i.error-wip {
+  background-image: url("/assets/app/aquateams/icons/error/work-in-progress.svg");
+}
+
+i.file-add {
+  background-image: url("/assets/app/aquateams/icons/add-file.svg");
+}
+
+i.file-upload {
+  background-image: url("/assets/app/aquateams/icons/actions/upload.png");
+}
+
+i.file-drop {
+  background-image: url("https://openage.github.io/themes/kredible/v1/icons/system-admin/drag-and-drop.svg");
+}
+
+i.file-doc {
+  background-image: url('https://openage.github.io/themes/kredible/v1/icons/workspace/doc-file.svg');
+}
+
+i.file-html {
+  background-image: url("https://openage.github.io/themes/openage/icons/grey/file-html.svg");
+}
+
+i.file-html.active,
+.active i.file-html {
+  background-image: url("https://openage.github.io/themes/openage/icons/red/file-html.svg");
+}
+
+i.file-img {
+  background-image: url('https://openage.github.io/themes/kredible/v1/icons/workspace/img-file.svg');
+}
+
+i.file-excel {
+  background-image: url('https://openage.github.io/themes/kredible/v1/icons/workspace/xls-file.svg');
+}
+
+i.file-pdf {
+  background-image: url('https://openage.github.io/themes/kredible/v1/icons/workspace/pdf-file.svg');
+}
+
+i.file-link {
+  background-image: url("https://openage.github.io/themes/openage/icons/grey/file-link.svg");
+}
+
+i.file-link.active,
+.active i.file-link {
+  background-image: url("https://openage.github.io/themes/openage/icons/red/file-link.svg");
+}
+
+i.document {
+  background-image: url("https://openage.github.io/themes/default/v1/icons/actions/grey/document-inactive.svg");
+}
+
+i.document.active,
+.active i.document {
+  background-image: url("https://openage.github.io/themes/default/v1/icons/actions/red/document-active.svg");
+}
+
+i.picture-upload {
+  background-image: url("/assets/app/aquateams/icons/profile/documents/add-logo.svg");
+}
+
+i.drag-and-drop {
+  background-image: url("https://openage.github.io/themes/kredible/v1/icons/system-admin/drag-and-drop.svg");
+}
+
+
+i.reports {
+  background-image: url('/assets/app/aquateams/icons/reports/grey/agent-wise-inquiries-report.svg');
+}
+
+i.reports.active,
+.active i.reports {
+  background-image: url('/assets/app/aquateams/icons/reports/agent-wise-inquiries-report.svg');
+}
+
+i.reports.hover {
+  background-image: url('/assets/app/aquateams/icons/reports/white/agent-wise-inquiries-report.svg');
+}
+
+
+i.status-active {
+  background-image: url("/assets/app/aquateams/icons/profile/documents/verified.svg");
+}
+
+i.status-submitted {
+  background-image: url("/assets/app/aquateams/icons/profile/documents/submitted.svg");
+}
+
+i.status-canceled {
+  background-image: url("/assets/app/aquateams/icons/profile/documents/rejected.svg");
+}
+
+i.no-notification {
+  background-image: url("/assets/app/aquateams/icons/dashboard/no-notification.svg");
+}
+
+i.no-task {
+  background-image: url("/assets/app/aquateams/icons/dashboard/no-task.svg");
+}
+
+i.message-enjoy,
+i.message.enjoy {
+  background-image: url("/assets/images/messages/enjoy.png");
+}
+
+i.profile.active,
+.active i.profile {
+  background-image: url("https://openage.github.io/icons/red/profile.svg");
+}
+
+i.todo.active,
+.active i.todo {
+  background-image: url("https://openage.github.io/icons/red/to-do-list.svg");
+}
+
+i.inbox.active,
+.active i.inbox {
+  background-image: url("https://openage.github.io/icons/red/inbox.svg");
+}
+
+i.professionals.active,
+.active i.professionals {
+  background-image: url("https://openage.github.io/icons/red/professionals.svg");
+}
+
+
+i.master.active,
+.active i.master {
+  background-image: url("https://openage.github.io/icons/red/master.svg");
+}
+
+i.order.active,
+.active i.order {
+  background-image: url("https://openage.github.io/icons/red/enquiry-flow-report.svg");
+}
+
+i.team.active,
+.active i.team {
+  background-image: url("https://openage.github.io/icons/red/team.svg");
+}
+
+
+i.customer.active,
+.active i.customer {
+  background-image: url("https://openage.github.io/icons/red/customers.svg");
+}
+
+
+i.supplier.active,
+.active i.supplier {
+  background-image: url("https://openage.github.io/icons/red/suppliers.svg");
+}
+
+
+i.price.active,
+.active i.price {
+  background-image: url("https://openage.github.io/icons/red/pricing.svg");
+}
+
+i.task.active,
+.active i.task {
+  background-image: url("https://openage.github.io/icons/red/tasks.svg");
+}
+
+i.tasks.active,
+.active i.tasks {
+  background-image: url("https://openage.github.io/icons/red/tasks.svg");
+}
+
+i.message.active,
+.active i.message {
+  background-image: url("https://openage.github.io/icons/red/messages.svg");
+}
+
+i.messages.active,
+.active i.messages {
+  background-image: url("https://openage.github.io/icons/red/messages.svg");
+}
+
+i.notes.active,
+.active i.notes {
+  background-image: url("https://openage.github.io/icons/red/messages.svg");
+}
+
+i.tags.active,
+.active i.tags {
+  background-image: url("https://openage.github.io/icons/red/tag.svg");
+}
+
+i.info.active,
+.active i.info {
+  background-image: url("https://openage.github.io/icons/red/info.svg");
+}
+
+i.activities.active,
+.active i.activities {
+  background-image: url("https://openage.github.io/icons/red/timeline.svg");
+}
+
+i.help.active,
+.active i.help {
+  background-image: url("https://openage.github.io/icons/red/help.svg");
+}
+
+i.members.active,
+.active i.members {
+  background-image: url("https://openage.github.io/icons/red/members.svg");
+}
+
+i.promoters.active,
+.active i.promoters {
+  background-image: url("https://openage.github.io/icons/red/promotors.svg");
+}
+
+i.reports.active,
+.active i.reports {
+  background-image: url('https://openage.github.io/icons/red/agent-wise-inquiries-report.svg');
+}
+
+
+i.settings,
+.active i.settings {
+  background-image: url("https://openage.github.io/themes/checklist/v1/icons/nav/active/organisation-setup.svg");
+}
+
+
+
+i.home.active,
+.active i.home {
+  background-image: url("https://openage.github.io/themes/checklist/v1/icons/nav/active/dashboard.svg");
+}
+
+
+i.audits.active,
+.active i.audits {
+  background-image: url("https://openage.github.io/themes/checklist/v1/icons/nav/active/audits.svg");
+}
+
+i.workspace.active,
+.active i.workspace {
+  background-image: url("https://openage.github.io/themes/checklist/v1/icons/nav/active/workspace.svg");
+}
+
+i.lead.active,
+.active i.lead {
+  background-image: url("https://openage.github.io/icons/red/inquiries.svg");
+}
+
+i.section-business.active,
+.active i.section-business {
+  background-image: url("https://openage.github.io/icons/red/business.svg");
+}
+
+i.section-details.active,
+.active i.section-details {
+  background-image: url("https://openage.github.io/icons/red/basic.svg");
+}
+
+i.section-bank {
+  background-image: url("/assets/app/aquateams/icons/profile/bank.svg");
+}
+
+i.section-bank.active,
+.active i.section-bank {
+  background-image: url("https://openage.github.io/icons/red/bank.svg");
+}
+
+
+i.section-requests {
+  background-image: url("/assets/app/aquateams/icons/profile/requests.svg");
+}
+
+i.section-requests.active,
+.active i.section-requests {
+  background-image: url("https://openage.github.io/icons/red/requests.svg");
+}
+
+i.section-details {
+  background-image: url("/assets/app/aquateams/icons/profile/basic.svg");
+}
+
+i.section-details.active,
+.active i.section-details {
+  background-image: url("/assets/app/aquateams/icons/profile/active/basic.svg");
+}
+
+i.section-administrative {
+  background-image: url("/assets/app/aquateams/icons/profile/administrative.svg");
+}
+
+.active i.section-administrative,
+i.section-administrative.active {
+  background-image: url("/assets/app/aquateams/icons/profile/active/administrative.svg");
+}
+
+i.section-security {
+  background-image: url("https://openage.github.io/themes/default/v1/icons/actions/grey/security-inactive.svg");
+}
+
+i.section-security.active,
+.active i.section-security {
+  background-image: url("https://openage.github.io/themes/default/v1/icons/actions/red/security-active.svg");
+}
+
+i.section-account {
+  background-image: url("https://openage.github.io/themes/default/v1/icons/actions/grey/accounts-inactive.svg");
+}
+
+i.section-account.active,
+.active i.section-account {
+  background-image: url("https://openage.github.io/themes/default/v1/icons/actions/red/accounts-active.svg");
+}
+
+
+
+
+
+i.port-sea {
+  background-image: url('https://cdn2.iconfinder.com/data/icons/marine-port/512/port-marine-navy-06-512.png');
+}
+
+i.port-air {
+  background-image: url('https://cdn1.iconfinder.com/data/icons/logistics-fourteen-black-and-white/128/air_shipping-plane-logistics-cargo-512.png');
+}
+
+i.port-icd {
+  background-image: url('https://cdn0.iconfinder.com/data/icons/business-e-commerce-logistics-import-export/500/containerstack-512.png');
+}
+
+i.location-warehouse {
+  background-image: url('https://openage.github.io/themes/openage/icons/grey/warehouse.svg');
+}
+
+i.truck {
+  background-image: url('https://openage.github.io/themes/openage/icons/grey/truck.svg');
+}
+
+
+i.cluster {
+  background-image: url("https://openage.github.io/themes/default/v1/icons/actions/grey/cluster-inactive.svg");
+}
+
+i.cluster.active,
+.active i.cluster {
+  background-image: url("https://openage.github.io/themes/default/v1/icons/actions/red/cluster-active.svg");
+}
+
+i.members {
+  background-image: url("/assets/app/aquateams/icons/profile/promotors.svg");
+}
+
+i.members.active,
+.active i.members {
+  background-image: url("/assets/app/aquateams/icons/profile/active/promotors.svg");
+}
+
+i.business-filled {
+  background-image: url("https://openage.github.io/themes/openage/icons/grey/orders.svg");
+}
+
+i.business-filled.active,
+.active i.business-filled {
+  background-image: url("https://openage.github.io/themes/openage/icons/red/orders.svg");
+}
+
+i.marker {
+  background-image: url("https://openage.github.io/themes/openage/icons/grey/tracking.svg");
+}
+
+i.marker.active,
+.active i.marker {
+  background-image: url("https://openage.github.io/themes/openage/icons/red/tracking.svg");
+}
+
+i.srp {
+  background-image: url("https://openage.github.io/themes/openage/icons/grey/new-search.svg");
+}
+
+i.srp.active,
+.active i.srp {
+  background-image: url("https://openage.github.io/themes/openage/icons/red/new-search.svg");
+}
+
+i.lead,
+.hover i.lead,
+i.lead:hover {
+  background-image: url("/assets/app/aquateams/icons/reports/grey/inquiries.svg");
+}
+
+i.lead.active,
+.active i.lead {
+  background-image: url("/assets/app/aquateams/icons/reports/inquiries.svg");
+}
+
+i.home {
+  background-image: url("https://openage.github.io/themes/openage/icons/grey/home.svg");
+}
+
+i.home.active,
+.active i.home {
+  background-image: url("https://openage.github.io/themes/openage/icons/red/home.svg");
+}
+
+i.travelExplore {
+  background-image: url("https://openage.github.io/themes/openage/icons/grey/travel-explore.svg");
+}
+
+i.travelExplore.active,
+.active i.travelExplore {
+  background-image: url("https://openage.github.io/themes/openage/icons/red/travel-explore.svg");
+}
+
+i.business-filled {
+  background-image: url("https://openage.github.io/themes/openage/icons/grey/business-filled.svg");
+}
+
+i.business-filled.active,
+.active i.business-filled {
+  background-image: url("https://openage.github.io/themes/openage/icons/red/business-filled.svg");
+}
+
+i.marker {
+  background-image: url("https://openage.github.io/themes/openage/icons/grey/marker.svg");
+}
+
+i.marker.active,
+.active i.marker {
+  background-image: url("https://openage.github.io/themes/openage/icons/red/marker.svg");
+}
+
+i.settings {
+  background-image: url("https://openage.github.io/themes/openage/icons/grey/settings.svg");
+}
+
+i.settings.active,
+.active i.settings {
+  background-image: url("https://openage.github.io/themes/openage/icons/red/settings.svg");
+}
+
+i.profile {
+  background-image: url("https://openage.github.io//themes/kredible/v1/icons/organisational-setup/profile.svg");
+}
+
+i.profile.hover {
+  background-image: url("https://openage.github.io/themes/kredible/v1/icons/organisational-setup/active/profile.svg");
+}
+
+i.profile.active,
+.active i.profile {
+  background-image: url("https://openage.github.io//themes/kredible/v1/icons/organisational-setup/profile.svg");
+}
+
+i.workspace {
+  background-image: url("https://openage.github.io/themes/kredible/v1/icons/nav/workspace.svg");
+}
+
+i.workspace.active,
+.active i.workspace {
+  background-image: url("https://openage.github.io/themes/kredible/v1/icons/nav/active/workspace.svg");
+}
+
+i.todo {
+  background-image: url("https://openage.github.io/themes/kredible/v1/icons/dashboard/to-do-list.svg");
+}
+
+i.todo.active,
+.active i.todo {
+  background-image: url("https://openage.github.io/themes/kredible/v1/icons/dashboard/active/to-do-list.svg");
+}
+
+i.inbox {
+  background-image: url("https://openage.github.io/themes/kredible/v1/icons/dashboard/inbox.svg");
+}
+
+i.inbox.active,
+.active i.inbox {
+  background-image: url("https://openage.github.io/themes/kredible/v1/icons/dashboard/active/inbox.svg");
+}
+
+i.master {
+  background-image: url("/assets/app/aquateams/icons/reports/grey/master.svg");
+}
+
+i.master.active,
+.active i.master {
+  background-image: url("/assets/app/aquateams/icons/reports/master.svg");
+}
+
+
+i.order {
+  background-image: url("/assets/app/aquateams/icons/reports/grey/enquiry-flow-report.svg");
+}
+
+i.order.active,
+.active i.order {
+  background-image: url("/assets/app/aquateams/icons/reports/enquiry-flow-report.svg");
+}
+
+i.inbox {
+  background-image: url("https://openage.github.io/themes/openage/icons/grey/inbox.svg");
+}
+
+i.ticket {
+  background-image: url("https://openage.github.io/themes/openage/icons/grey/invoices.svg");
+}
+
+i.ticket.active,
+.active i.ticket {
+  background-image: url("https://openage.github.io/themes/openage/icons/red/invoices.svg");
+}
+
+i.inbox.active,
+.active i.inbox {
+  background-image: url("https://openage.github.io/themes/openage/icons/red/inbox.svg");
+}
+
+i.team {
+  background-image: url("https://openage.github.io/themes/kredible/v1/icons/nav/team.svg");
+}
+
+i.team.active,
+.active i.team {
+  background-image: url("https://openage.github.io/themes/kredible/v1/icons/nav/active/team.svg");
+}
+
+i.quote {
+  background-image: url("/assets/app/aquateams/icons/reports/grey/quote-flow-report.svg");
+}
+
+i.quote.active,
+.active i.quote {
+  background-image: url("/assets/app/aquateams/icons/reports/quote-flow-report.svg");
+}
+
+i.workflow-epic {
+  background-image: url("https://openage.github.io/themes/default/v1/icons/workflows/epic.png");
+}
+
+i.workflow-story {
+  background-image: url("https://openage.github.io/themes/default/v1/icons/workflows/story.png");
+}
+
+i.workflow-technical-story {
+  background-image: url("https://cdn-icons-png.flaticon.com/512/2620/2620969.png");
+}
+
+i.workflow-task {
+  background-image: url("https://openage.github.io/themes/default/v1/icons/workflows/task.png");
+}
+
+i.workflow-test-case {
+  background-image: url("https://openage.github.io/themes/default/v1/icons/workflows/test-case.png");
+}
+
+i.workflow-test-plan {
+  background-image: url("https://www.svgrepo.com/show/168339/test.svg");
+}
+
+i.workflow-defect {
+  background-image: url("https://openage.github.io/themes/default/v1/icons/workflows/defect.png");
+}
+
+i.workflow-ticket {
+  background-image: url("https://openage.github.io/themes/default/v1/icons/workflows/ticket.png");
+}
+
+i.workflow-suggestion {
+  background-image: url("https://openage.github.io/themes/default/v1/icons/workflows/suggestion.png");
+}
+
+i.workflow-bau {
+  background-image: url("https://openage.github.io/themes/default/v1/icons/workflows/bau.png");
+}
+
+i.workflow-risk {
+  background-image: url("https://openage.github.io/themes/default/v1/icons/workflows/risk.png");
+}
+
+i.workflow-release,
+i.workflow-releases {
+  background-image: url("/assets/app/aquateams/icons/release.svg");
+}
+
+i.num-0 {
+  background-image: url("https://openage.github.io/themes/default/v1/icons/numbers/grey/svg/zero.svg");
+}
+
+i.num-1 {
+  background-image: url("https://openage.github.io/themes/default/v1/icons/numbers/grey/svg/one.svg");
+}
+
+i.num-2 {
+  background-image: url("https://openage.github.io/themes/default/v1/icons/numbers/grey/svg/two.svg");
+}
+
+i.num-3 {
+  background-image: url("https://openage.github.io/themes/default/v1/icons/numbers/grey/svg/three.svg");
+}
+
+i.num-4 {
+  background-image: url("https://openage.github.io/themes/default/v1/icons/numbers/grey/svg/four.svg");
+}
+
+i.num-5 {
+  background-image: url("https://openage.github.io/themes/default/v1/icons/numbers/grey/svg/five.svg");
+}
+
+i.num-6 {
+  background-image: url("https://openage.github.io/themes/default/v1/icons/numbers/grey/svg/six.svg");
+}
+
+i.num-7 {
+  background-image: url("https://openage.github.io/themes/default/v1/icons/numbers/grey/svg/seven.svg");
+}
+
+i.num-8 {
+  background-image: url("https://openage.github.io/themes/default/v1/icons/numbers/grey/svg/eight.svg");
+}
+
+i.num-9 {
+  background-image: url("https://openage.github.io/themes/default/v1/icons/numbers/grey/svg/nine.svg");
+}
+
+i.category-onboarding {
+  background-image: url("https://openage.github.io/themes/default/v1/icons/numbers/grey/svg/nine.svg");
+}
+
+i.category-sales {
+  background-image: url("https://openage.github.io/themes/openage/icons/grey/sales-dashboard.svg");
+}
+
+i.category-pricing {
+  background-image: url("https://openage.github.io/themes/openage/icons/grey/pricing-dashboard.svg");
+}
+
+i.category-operations {
+  background-image: url("https://openage.github.io/themes/openage/icons/grey/operation-dashboard.svg");
+}
+
+i.category-finance {
+  background-image: url("https://openage.github.io/themes/openage/icons/grey/finance-dashboard.svg");
+}
+
+i.category-vendor {
+  background-image: url("/assets/app/aquateams/icons/vendor-grey.svg");
+}
+
+i.category-customer {
+  background-image: url("/assets/app/aquateams/icons/reports/grey/customers.svg");
+}
+
+i.category-agent {
+  background-image: url("/assets/app/aquateams/icons/reports/grey/agent-wise-inquiries-report.svg");
+}
+
+i.category-system {
+  background-image: url("https://openage.github.io/themes/openage/icons/grey/system-dashboard.svg");
+}
+
+i.category-framework {
+  background-image: url("https://openage.github.io/themes/default/v1/icons/numbers/grey/svg/nine.svg");
+}
+
+i.category-marketing {
+  background-image: url("https://openage.github.io/themes/default/v1/icons/numbers/grey/svg/nine.svg");
+}
+
+i.category-support {
+  background-image: url("https://openage.github.io/themes/default/v1/icons/numbers/grey/svg/nine.svg");
+}
+
+i.category-dev-ops {
+  background-image: url("https://openage.github.io/themes/default/v1/icons/numbers/grey/svg/nine.svg");
+}
+
+i.category-misclaneous {
+  background-image: url("https://openage.github.io/themes/default/v1/icons/numbers/grey/svg/nine.svg");
+}
+
+i.category-add {
+  background-image: url("https://cdn.iconscout.com/icon/premium/png-256-thumb/add-category-2476304-2084863.png")
+}
+
+.active i.num-0,
+i.active.num-0 {
+  background-image: url("https://openage.github.io/themes/default/v1/icons/numbers/blue/svg/zero.svg");
+}
+
+.active i.num-1,
+i.active.num-1 {
+  background-image: url("https://openage.github.io/themes/default/v1/icons/numbers/blue/svg/one.svg");
+}
+
+.active i.num-2,
+i.active.num-2 {
+  background-image: url("https://openage.github.io/themes/default/v1/icons/numbers/blue/svg/two.svg");
+}
+
+.active i.num-3,
+i.active.num-3 {
+  background-image: url("https://openage.github.io/themes/default/v1/icons/numbers/blue/svg/three.svg");
+}
+
+.active i.num-4,
+i.active.num-4 {
+  background-image: url("https://openage.github.io/themes/default/v1/icons/numbers/blue/svg/four.svg");
+}
+
+.active i.num-5,
+i.active.num-5 {
+  background-image: url("https://openage.github.io/themes/default/v1/icons/numbers/blue/svg/five.svg");
+}
+
+.active i.num-6,
+i.active.num-6 {
+  background-image: url("https://openage.github.io/themes/default/v1/icons/numbers/blue/svg/six.svg");
+}
+
+.active i.num-7,
+i.active.num-7 {
+  background-image: url("https://openage.github.io/themes/default/v1/icons/numbers/blue/svg/seven.svg");
+}
+
+.active i.num-8,
+i.active.num-8 {
+  background-image: url("https://openage.github.io/themes/default/v1/icons/numbers/blue/svg/eight.svg");
+}
+
+.active i.num-9,
+i.active.num-9 {
+  background-image: url("https://openage.github.io/themes/default/v1/icons/numbers/blue/svg/nine.svg");
+}
+
+
+i.phone {
+  background-image: url("/assets/app/aquateams/icons/main-home/grey/phone-icon.svg");
+}
+
+i.phone.white {
+  background-image: url("/assets/app/aquateams/icons/main-home/white/phone-icon.svg");
+}
+
+i.phone.active,
+.active i.phone {
+  background-image: url("/assets/app/aquateams/icons/main-home/red/phone-icon.svg");
+}
+
+
+i.debug {
+  background-image: url("/assets/app/aquateams/icons/log/debug.svg");
+}
+
+i.info {
+  background-image: url("/assets/app/aquateams/icons/log/info.svg");
+}
+
+i.warn {
+  background-image: url("/assets/app/aquateams/icons/log/warn.svg");
+}
+
+i.error {
+  background-image: url("/assets/app/aquateams/icons/log/error.svg");
+}
+
+i.mail {
+  background-image: url("/assets/app/aquateams/icons/main-home/grey/mail-icon.svg");
+}
+
+i.mail.white {
+  background-image: url("/assets/app/aquateams/icons/main-home/white/mail-icon.svg");
+}
+
+i.mail.active,
+.active i.mail {
+  background-image: url("/assets/app/aquateams/icons/main-home/red/mail-icon.svg");
+}
+
+i.ticket {
+  background-image: url("/assets/app/aquateams/icons/reports/grey/tickets.svg");
+}
+
+i.ticket.active,
+.active i.ticket {
+  background-image: url("/assets/app/aquateams/icons/reports/tickets.svg");
+}
+
+i.particular {
+  background-image: url("/assets/app/aquateams/icons/reports/grey/particular.svg");
+}
+
+i.task {
+  background-image: url("https://openage.github.io/themes/openage/icons/grey/action-item.svg");
+}
+
+i.task.active,
+.active i.task {
+  background-image: url("https://openage.github.io/themes/openage/icons/red/action-item.svg");
+}
+
+i.tasks {
+  background-image: url("https://openage.github.io/themes/openage/icons/grey/action-item.svg");
+}
+
+i.tasks.active,
+.active i.tasks {
+  background-image: url("https://openage.github.io/themes/openage/icons/red/action-item.svg");
+}
+
+i.particular.active,
+.active i.particular {
+  background-image: url("https://openage.github.io/themes/openage/icons/red/particular.svg");
+}
+
+i.customer {
+  background-image: url("/assets/app/aquateams/icons/reports/grey/customers.svg");
+}
+
+i.customer.active,
+.active i.customer {
+  background-image: url("/assets/app/aquateams/icons/reports/customers.svg");
+}
+
+i.supplier {
+  background-image: url("/assets/app/aquateams/icons/reports/grey/suppliers.svg");
+}
+
+i.supplier.active,
+.active i.supplier {
+  background-image: url("/assets/app/aquateams/icons/reports/suppliers.svg");
+}
+
+i.price {
+  background-image: url("/assets/app/aquateams/icons/reports/grey/pricing.svg");
+}
+
+i.price.active,
+.active i.price {
+  background-image: url("/assets/app/aquateams/icons/reports/grey/pricing.svg");
+}
+
+i.task {
+  background-image: url("https://openage.github.io/themes/openage/icons/grey/task.svg");
+}
+
+i.task.active,
+.active i.task {
+  background-image: url("https://openage.github.io/themes/openage/icons/red/task.svg");
+}
+
+i.tasks {
+  background-image: url("https://openage.github.io/themes/openage/icons/grey/task.svg");
+}
+
+i.tasks.active,
+.active i.tasks {
+  background-image: url("https://openage.github.io/themes/openage/icons/red/task.svg");
+}
+
+i.messages {
+  background-image: url("/assets/app/aquateams/icons/sidebar/messages.svg");
+}
+
+i.messages.active,
+.active i.messages {
+  background-image: url("/assets/app/aquateams/icons/sidebar/active/messages.svg");
+}
+
+i.message {
+  background-image: url("/assets/app/aquateams/icons/sidebar/messages.svg");
+}
+
+i.message.active,
+.active i.message {
+  background-image: url("/assets/app/aquateams/icons/sidebar/active/messages.svg");
+}
+
+i.notes {
+  background-image: url("/assets/app/aquateams/icons/sidebar/messages.svg");
+}
+
+i.notes.active,
+.active i.notes {
+  background-image: url("/assets/app/aquateams/icons/sidebar/active/messages.svg");
+}
+
+i.tags {
+  background-image: url("/assets/app/aquateams/icons/sidebar/tag.svg");
+}
+
+i.tags.active,
+.active i.tags {
+  background-image: url("/assets/app/aquateams/icons/sidebar/active/tag.svg");
+}
+
+i.workflows {
+  background-image: url("https://openage.github.io/themes/openage/icons/grey/workflow.svg");
+}
+
+i.workflows.active,
+.active i.workflows {
+  background-image: url("https://openage.github.io/themes/openage/icons/red/workflow.svg");
+}
+
+i.products {
+  background-image: url("https://openage.github.io/themes/openage/icons/grey/product.svg");
+}
+
+i.products.active,
+.active i.products {
+  background-image: url("https://openage.github.io/themes/openage/icons/red/product.svg");
+}
+
+i.templates {
+  background-image: url("https://openage.github.io/themes/openage/icons/grey/template-editor.svg");
+}
+
+i.templates.active,
+.active i.templates {
+  background-image: url("https://openage.github.io/themes/openage/icons/red/template-editor.svg");
+}
+
+i.activities {
+  background-image: url("/assets/app/aquateams/icons/sidebar/timeline.svg");
+}
+
+i.activities.active,
+.active i.activities {
+  background-image: url("/assets/app/aquateams/icons/sidebar/active/timeline.svg");
+}
+
+i.info {
+  background-image: url("/assets/app/aquateams/icons/sidebar/info.svg");
+}
+
+i.info.active,
+.active i.info {
+  background-image: url("/assets/app/aquateams/icons/sidebar/active/info.svg");
+}
+
+i.help {
+  background-image: url("/assets/app/aquateams/icons/sidebar/help.svg");
+}
+
+i.help.active,
+.active i.help {
+  background-image: url("/assets/app/aquateams/icons/sidebar/active/help.svg");
+}
+
+i.members {
+  background-image: url("/assets/app/aquateams/icons/sidebar/members.svg");
+}
+
+i.members.active,
+.active i.members {
+  background-image: url("/assets/app/aquateams/icons/sidebar/active/members.svg");
+}
+
+i.my-dashboard {
+  background-image: url("https://openage.github.io/themes/openage/icons/grey/my-dashboard.svg");
+}
+
+i.my-dashboard.active,
+.active i.my-dashboard {
+  background-image: url("https://openage.github.io/themes/openage/icons/red/my-dashboard.svg");
+}
+
+i.finance-dashboard {
+  background-image: url("https://openage.github.io/themes/openage/icons/grey/finance-dashboard.svg");
+}
+
+i.finance-dashboard.active,
+.active i.finance-dashboard {
+  background-image: url("https://openage.github.io/themes/openage/icons/red/finance-dashboard.svg");
+}
+
+i.sales-dashboard {
+  background-image: url("https://openage.github.io/themes/openage/icons/grey/sales-dashboard.svg");
+}
+
+i.sales-dashboard.active,
+.active i.sales-dashboard {
+  background-image: url("https://openage.github.io/themes/openage/icons/red/sales-dashboard.svg");
+}
+
+i.operation-dashboard {
+  background-image: url("https://openage.github.io/themes/openage/icons/grey/operation-dashboard.svg");
+}
+
+i.operation-dashboard.active,
+.active i.operation-dashboard {
+  background-image: url("https://openage.github.io/themes/openage/icons/red/operation-dashboard.svg");
+}
+
+i.human-dashboard {
+  background-image: url("https://openage.github.io/themes/openage/icons/grey/human-resource-dashboard.svg");
+}
+
+i.human-dashboard.active,
+.active i.human-dashboard {
+  background-image: url("https://openage.github.io/themes/openage/icons/red/human-resource-dashboard.svg");
+}
+
+i.system-dashboard {
+  background-image: url("https://openage.github.io/themes/openage/icons/grey/system-dashboard.svg");
+}
+
+i.system-dashboard.active,
+.active i.system-dashboard {
+  background-image: url("https://openage.github.io/themes/openage/icons/red/system-dashboard.svg");
+}
+
+i.pricing-dashboard {
+  background-image: url("https://openage.github.io/themes/openage/icons/grey/pricing-dashboard.svg");
+}
+
+i.pricing-dashboard.active,
+.active i.pricing-dashboard {
+  background-image: url("https://openage.github.io/themes/openage/icons/red/pricing-dashboard.svg");
+}
+
+i.drag-grab {
+  opacity: 0;
+  background-image: url("/assets/app/aquateams/icons/drag-indicator.svg");
+}
+
+i.switch {
+  background-image: url("/assets/app/aquateams/icons/landing/switch.svg");
+}
+
+i.log-info {
+  background-image: url("/assets/app/aquateams/icons/log/info.svg");
+}
+
+i.log-debug {
+  background-image: url("/assets/app/aquateams/icons/log/debug.svg");
+}
+
+i.log-error {
+  background-image: url("/assets/app/aquateams/icons/log/error.svg");
+}
+
+i.log-warn {
+  background-image: url("/assets/app/aquateams/icons/log/warn.svg");
+}
+
+i.log-silly {
+  background-image: url("/assets/app/aquateams/icons/log/silly.svg");
+}
+
+i.slack {
+  background-image: url("/assets/app/aquateams/icons/slack.png");
+}
+
+i.email {
+  background-image: url("/assets/app/aquateams/icons/email.png");
+}
+
+i.whatsapp {
+  background-image: url("/assets/app/aquateams/icons/whatsapp.png");
+}
+
+i.copy {
+  background-image: url("/assets/app/aquateams/icons/copy.png");
+}

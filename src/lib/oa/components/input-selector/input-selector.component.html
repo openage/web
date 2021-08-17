@@ -1,0 +1,56 @@
+<!-- eslint-disable @angular-eslint/template/interactive-supports-focus -->
+<!-- eslint-disable @angular-eslint/template/click-events-have-key-events -->
+<div [class]="class" [style]="style">
+  @if (label && showLabel) {
+  <label [attr.for]="id" [class.required]="required">{{label}}</label>
+  }
+  @switch (view) {
+  @case ('toggler') {
+  <div class="toggler">
+    @for (item of items; track item; let index = $index) {
+    <div [ngClass]="{'active': !value && index === 0 || value === item.value }" (click)="onSelect(item)">
+      {{item.label}}
+    </div>
+    }
+  </div>
+  }
+  @case ('toggler-with-icons-and-stats') {
+  <div class="toggler flex-row">
+    @for (item of items; track item; let index = $index) {
+    <div class="controls-row" [ngClass]="{'active': !value && index === 0 || value === item.value }"
+      (click)="onSelect(item)">
+      @if (item?.icon) {
+      <!-- <mat-icon>{{item.icon}}</mat-icon> -->
+      }
+      <span [ngClass]="item.icon ? 'tab-label-before': 'tab-label-after'">{{item.label}}</span>
+      @if (item?.stat) {
+      <span class="tab-stat">{{item.stat}}</span>
+      }
+    </div>
+    }
+  </div>
+  }
+  @case ('list') {
+  <!-- <mat-select [placeholder]="placeholder" [value]="value?.value" [disabled]="disabled">
+    @for (item of items; track item) {
+    <mat-option [value]="item.value" (click)="onSelect(item)">
+      {{item.label || item.value || item}}
+    </mat-option>
+    }
+  </mat-select> -->
+  }
+  <!-- <ng-container *ngSwitchCase="'list'">
+    <div class="oa-input">
+      <input [name]="label" [placeholder]="placeholder" (change)="addItem($event)" [disabled]="disabled">
+    </div>
+    <div *ngIf="items && items.length" class="my-1 py-2 px-2 rounded summary w-100">
+      <div class="flex-row" *ngFor="let item of items; let i=index">
+        <div>{{i+1}}. {{item.label}}</div>
+        <span class="spacer"></span>
+        <mat-icon *ngIf="!readonly" class="subtle md" (click)="removeItem(i)">
+        close</mat-icon>
+      </div>
+    </div>
+  </ng-container> -->
+  }
+</div>

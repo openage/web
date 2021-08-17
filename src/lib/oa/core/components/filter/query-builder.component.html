@@ -1,0 +1,62 @@
+@switch (view) {
+
+@case ('inline') {
+<div class="flex-row">
+  @for (item of filters; track $index) {
+  <ng-container *ngTemplateOutlet="inlineFilter; context: {filter: filter}"></ng-container>
+  }
+</div>
+}
+
+@default {
+<form type="submit" [class]="options.class" [style]="options.style">
+  @if(!options.title?.hide){
+  <div class="header"> {{options.title.text}} </div>
+  }
+
+  <div class="flex-row three">
+    @for (item of filters; track $index) {
+    <div>
+      <label [class.required]="item.required">{{item.label}}</label>
+      <ng-container *ngTemplateOutlet="filterControl; context: {item: item}"></ng-container>
+    </div>
+    }
+  </div>
+
+  <div class="footer">
+    <div class="spacer"></div>
+    @if(!options.reset?.hide){
+    <button class="default" (click)="onReset()">{{options.reset.text}}</button>
+    }
+    @if(!options.apply?.hide){
+    <button class="primary" (click)="onApply()">{{options.apply.text}}</button>
+    }
+  </div>
+</form>
+}
+}
+
+
+<ng-template #filterControl let-item="item">
+
+  @switch (item.control) {
+  @case ('date-picker') {
+  <oa-date-picker (valueChange)="onValueChange(item, $event)" [value]="item.value" [options]="item.config">
+  </oa-date-picker>
+  }
+  @case ('text-input') {
+  <oa-text-input (valueChange)="onValueChange(item, $event)" [value]="item.value" [options]="item.config">
+  </oa-text-input>
+  }
+  @case ('toggler') {
+  <oa-toggler (valueChange)="onValueChange(item, $event)" [value]="item.value" [options]="item.config">
+  </oa-toggler>
+  }
+
+  @default {
+  @if (item.templates.item) {
+  <div *ngTemplateOutlet="item.templates.value; context: { value: item }"></div>
+  }
+  }
+  }
+</ng-template>

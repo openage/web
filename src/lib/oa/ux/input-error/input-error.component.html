@@ -1,0 +1,19 @@
+<div class="error-container {{class}} {{view}}" [style]="style">
+  @if (error) {
+  @switch (view) {
+  @case ('form-hint') {
+  <div class="flex-row banner" [oaTooltip]="error.name">
+    <i class="{{error.level}} sm xx"></i>
+    <span class="spacer">{{error.message}}</span>
+    <oa-action item="close" class="subtle" (click)="clearError()"></oa-action>
+  </div>
+  }
+  @case ('input-hint') {
+  <div [oaTooltip]="error.message">
+    <i class="{{error.level}}"></i>
+    <span>{{error.name}}</span>
+  </div>
+  }
+  }
+  }
+</div>

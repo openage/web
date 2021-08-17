@@ -1,0 +1,60 @@
+{
+    "items": [
+        {
+            "code": "",
+            "icon": "/assets/app/applegos/images/development/drag_drop_ui.webp",
+            "image": "/assets/app/applegos/images/development/drag_drop_ui.webp",
+            "title": "Publish your work on the Cloud",
+            "description": "Upload your user flows to the Overflow Cloud and get a publication link that you can send to anyone. Recipients are not required to install the Overflow app."
+        },
+        {
+            "code": "",
+            "icon": "/assets/app/applegos/images/development/integrations.webp",
+            "image": "/assets/app/applegos/images/development/integrations.webp",
+            "title": "View on all popular devices",
+            "description": "Your publications are playable on any device - desktop, laptop, tablet, mobile. All you need is a web or mobile browser."
+        },
+        {
+            "code": "",
+            "icon": "/assets/app/applegos/images/development/frontend.webp",
+            "image": "/assets/app/applegos/images/development/frontend.webp",
+            "title": "Passphrase-protected publications",
+            "description": "You can optionally passphrase-protect your publication for increased security."
+        },
+        {
+            "code": "",
+            "icon": "/assets/app/applegos/images/development/customized.webp",
+            "image": "/assets/app/applegos/images/development/customized.webp",
+            "title": "Share in popular collaboration tools",
+            "description": "Overflow presentations can be embedded and viewed in popular collaboration tools, such as Slack, Jira, Confluence, Dropbox, and more."
+        },
+        {
+            "code": "",
+            "icon": "/assets/app/applegos/images/development/debug.webp",
+            "image": "/assets/app/applegos/images/development/debug.webp",
+            "title": "Embed user flows anywhere",
+            "description": "Embed a playable version of your Overflow presentation on websites, blogs - pretty much anywhere online!"
+        },
+        {
+            "code": "",
+            "icon": "/assets/app/applegos/images/development/secure.webp",
+            "image": "/assets/app/applegos/images/development/secure.webp",
+            "title": "Print and Stitch",
+            "description": "Print your user flow diagrams on paper of any size or on multiple sheets and stitch them together to put up for display on a wall."
+        },
+        {
+            "code": "",
+            "icon": "/assets/app/applegos/images/development/publish.webp",
+            "image": "/assets/app/applegos/images/development/publish.webp",
+            "title": "Export to PDF & PNG",
+            "description": "Export your entire user flow or individual boards in PDF or PNG format. Old school? Maybe… but sometimes you may need to!"
+        },
+        {
+            "code": "",
+            "icon": "/assets/app/applegos/images/development/premium_support.webp",
+            "image": "/assets/app/applegos/images/development/premium_support.webp",
+            "title": "Share Overflow documents",
+            "description": "Since Overflow is a desktop app, you can share Overflow documents by attaching them to emails, saving them in shared folders, etc."
+        }
+    ]
+}

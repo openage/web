@@ -1,0 +1,472 @@
+@switch (view) {
+@case ('card') {
+@if (isShowSearchBar && params?.length) {
+@switch (type) {
+@case ('full-text') {
+<div class="flex-row search">
+  @if (isEditing || !params || !params.length) {
+  <oa-input [value]="searchText" [options]="{
+                inline: true,
+                placeholder: 'search'
+              }" (change)="searchByText($event)"></oa-input>
+  } @else {
+  <div class="flex-row">
+    @for (param of params; track param) {
+    @if (param.value) {
+    <div class="pill-box with-value" (click)="onRemoveParam(param)">
+      {{param.label || param.key}} @if (param.value) {
+      <span class="value">{{param.value.label ||
+        param.value.value}}
+      </span>
+      }
+    </div>
+    }
+    }
+  </div>
+  <span class="spacer" (click)="renderFilters()"></span>
+  }
+  @if (params && params.length) {
+  <oa-action [item]="clear"></oa-action>
+  }
+  @if (sorts && sorts.length > 0) {
+  @if (selectedSort) {
+  <button mat-button [matMenuTriggerFor]="menu">
+    @if (selectedSort.value === 'dsc') {
+    <mat-icon>arrow_upward</mat-icon>
+    }
+    @if (selectedSort.value !== 'dsc') {
+    <mat-icon>arrow_downward</mat-icon>
+    }
+    <span>{{selectedSort.label}}</span>
+  </button>
+  }
+  @if (!selectedSort) {
+  <button mat-icon-button [matMenuTriggerFor]="menu">
+    <mat-icon>more_horiz</mat-icon>
+  </button>
+  }
+  <mat-menu #menu="matMenu">
+    @for (sort of sorts; track sort) {
+    <button mat-menu-item [value]="sort.code" (click)="onSort(sort)">
+      @if (sort.value === 'dsc') {
+      <mat-icon>arrow_upward</mat-icon>
+      }
+      @if (sort.value !== 'dsc') {
+      <mat-icon>arrow_downward</mat-icon>
+      }
+      <span>{{sort.label}}</span>
+    </button>
+    }
+  </mat-menu>
+  } @else {
+  <mat-icon>search</mat-icon>
+  }
+</div>
+}
+@case ('dropdown') {
+<div class="controls-row">
+  <span class="spacer"></span>
+  @if (isEditing) {
+  <div class="oa-input mainInput" #inputContainer>
+    <input [value]="searchText" placeholder="search" (change)="searchByText($event)" (blur)="searchByText($event)">
+    <mat-icon class="subtle" (click)="resetSearch()">close</mat-icon>
+  </div>
+  } @else {
+  @if (!params || !params.length) {
+  <mat-icon class="subtle" (click)="isEditing = true">search</mat-icon>
+  } @else {
+  <div class="flex-row">
+    @for (param of params; track param) {
+    @if (param.value) {
+    <div class="pill-box with-value" (click)="onRemoveParam(param)">
+      {{param.label || param.key}} @if (param.value) {
+      <span class="value">{{param.value.label ||
+        param.value.value}}
+      </span>
+      }
+    </div>
+    }
+    }
+  </div>
+  <span class="spacer" (click)="renderFilters()"></span>
+  }
+  }
+</div>
+@if (isEditing) {
+<div class="dropdown {{ddlPosition}}" [style.width]="ddlWidth+ 'px'" tabindex="-1">
+  <div class="contentDiv">
+    @for (param of params; track param) {
+    <div class="flex-row two">
+      @if (param.control !== 'tabs') {
+      <ng-container *ngTemplateOutlet="filterTemplate; context: { param: param }"> </ng-container>
+      }
+      <!-- <label>{{param.label}}</label>
+                  <div [ngSwitch]="param.control">
+                    <ng-container *ngSwitchCase="'autocomplete'">
+                      <oa-autocomplete [value]="null" [url]="param.config.url" [options]="{
+                        search: {
+                        field: param.config.paramField || 'text',
+                        params: param.config.params
+                        },
+                        prefixItem: param.config.prefixItem
+                      }" (changed)="onAutoCompleteSelect($event,param)"></oa-autocomplete>
+                    </ng-container>
+                    <ng-container *ngSwitchCase="'datePicker'">
+                      <oa-date-picker [value]="param.value" (change)="onSelectDate($event,param)">
+                      </oa-date-picker>
+                    </ng-container>
+                    <ng-container *ngSwitchCase="'rangeDate'">
+                      <div class="flex-row two">
+                        <div>
+                          <oa-date-picker (change)="onSelectDate($event,param,'from')"></oa-date-picker>
+                        </div>
+                        <div>
+                          <oa-date-picker (change)="onSelectDate($event,param,'till')"></oa-date-picker>
+                        </div>
+                      </div>
+                    </ng-container>
+                    <ng-container *ngSwitchCase="'rangeNumber'">
+                      <div class="flex-row two">
+                        <div>
+                          <div class="oa-input">
+                            <input type="number" [(ngModel)]="param.range.from.value">
+                          </div>
+                        </div>
+                        <div>
+                          <div class="oa-input">
+                            <input type="number" [(ngModel)]="param.range.till.value">
+                          </div>
+                        </div>
+                      </div>
+                    </ng-container>
+                    <ng-container *ngSwitchCase="'selector'">
+                      <mat-select [ngModel]="param.value">
+                        <mat-option *ngFor="let item of param.options" [value]="item.value || item"
+                          (click)="onSelect(item,param)">
+                          {{item.label || item.value || item}}
+                        </mat-option>
+                      </mat-select>
+                    </ng-container>
+                    <ng-container *ngSwitchCase="'inputNumber'">
+                      <div class="oa-input">
+                        <input type="number" [(ngModel)]="param.value">
+                      </div>
+                    </ng-container>
+                    <ng-container *ngSwitchDefault>
+                      <div class="oa-input">
+                        <input [(ngModel)]="param.value">
+                      </div>
+                    </ng-container>
+                  </div> -->
+    </div>
+    }
+  </div>
+  <div class="controls-row">
+    @if (dropDown && dropDown.length) {
+    <div class="dropDownSelector">
+      <mat-select placeholder="Additional Filters">
+        @for (item of dropDown; track item) {
+        <mat-option [value]="item.value" (click)="addToParam(item)">
+          {{item.label}}
+        </mat-option>
+        }
+      </mat-select>
+    </div>
+    }
+    <div class="spacer"></div>
+    @if (sorts && sorts.length) {
+    <div class="dropDownSelector">
+      <mat-select placeholder="Sort" [value]="selectedSort.code">
+        @for (sort of sorts; track sort) {
+        <mat-option [value]="sort.code" (click)="onSort(sort)">
+          {{sort.label}} @if (sort.value === 'dsc') {
+          <mat-icon>sort</mat-icon>
+          }
+        </mat-option>
+        }
+      </mat-select>
+    </div>
+    }
+    <div class="spacer"></div>
+    <div>
+      <button mat-raised-button (click)="resetSearch()">Cancel</button>
+      <button mat-raised-button (click)="searchByParams()" color="primary">Search</button>
+    </div>
+  </div>
+</div>
+}
+}
+@case ('tabbed') {
+@if (tabs.length) {
+<mat-card class="section">
+  @for (param of params; track param) {
+  <div>
+    @if (param.control === 'tabs') {
+    <ng-container *ngTemplateOutlet="tabsControl; context: { param: param }"> </ng-container>
+    }
+  </div>
+  }
+  <div class="filters-container">
+    <div class="flex-row three">
+      @for (param of params; track param) {
+      @if (!param.isHidden && param.control !== 'tabs') {
+      <div>
+        <ng-container *ngTemplateOutlet="filterTemplate; context: { param: param }"> </ng-container>
+      </div>
+      }
+      }
+    </div>
+  </div>
+  <div class="footer">
+    <div class="dropDownSelector">
+      @if (dropDown && dropDown.length) {
+      <mat-select placeholder="Additional Filters">
+        @for (item of dropDown; track item) {
+        <mat-option [value]="item.value" (click)="addToParam(item)">
+          {{item.label}}
+        </mat-option>
+        }
+      </mat-select>
+      }
+    </div>
+    <div class="spacer"></div>
+    @if (sorts && sorts.length) {
+    <div class="dropDownSelector">
+      <mat-select placeholder="Sort" [value]="selectedSort.key">
+        @for (sort of sorts; track sort) {
+        <mat-option [value]="sort.value" (click)="onSort(sort)">
+          {{sort.label}}
+        </mat-option>
+        }
+      </mat-select>
+    </div>
+    }
+    <div class="spacer"></div>
+    <button mat-stroked-button (click)="onResetFilters()" color="primary">Clear</button>
+    <button mat-raised-button (click)="searchByParams()" color="primary">Search</button>
+  </div>
+</mat-card>
+}
+<ng-content></ng-content>
+}
+@case ('filters') {
+<mat-card class="section">
+  <div class="filters-container">
+    <div class="flex-row three">
+      @for (param of params; track param) {
+      @if (!param.isHidden) {
+      <div>
+        <ng-container *ngTemplateOutlet="filterTemplate; context: { param: param }"> </ng-container>
+      </div>
+      }
+      }
+    </div>
+  </div>
+  <div class="footer">
+    <div class="dropDownSelector">
+      @if (dropDown && dropDown.length) {
+      <mat-select placeholder="Additional Filters">
+        @for (item of dropDown; track item) {
+        <mat-option [value]="item.value" (click)="addToParam(item)">
+          {{item.label}}
+        </mat-option>
+        }
+      </mat-select>
+      }
+    </div>
+    <div class="spacer"></div>
+    @if (sorts && sorts.length) {
+    <div class="dropDownSelector">
+      <mat-select placeholder="Sort" [value]="selectedSort.key">
+        @for (sort of sorts; track sort) {
+        <mat-option [value]="sort.value" (click)="onSort(sort)">
+          {{sort.label}}
+        </mat-option>
+        }
+      </mat-select>
+    </div>
+    }
+    <div class="spacer"></div>
+    <button mat-raised-button (click)="searchByParams()" color="primary">Search</button>
+  </div>
+</mat-card>
+<ng-content></ng-content>
+}
+}
+}
+}
+@case ('bar') {
+@if (isShowSearchBar && params?.length) {
+<div class="search-bar controls-row {{class}}" [style]="style">
+  @for (param of params; track param) {
+  @if (param.control !=='tabs' && !param.isHidden) {
+  <ng-container *ngTemplateOutlet="filterTemplate; context: { param: param }"> </ng-container>
+  }
+  }
+  <span class="spacer"></span>
+  <oa-icon value="reset" (click)="onResetFilters()"></oa-icon>
+</div>
+}
+}
+@case ('column') {
+@for (param of params; track param) {
+@if (param.control !=='tabs' && !param.isHidden) {
+<div class="search-item columnFilterItem">
+  <oa-field-editor [item]="param" (changed)="onFieldChange($event)"></oa-field-editor>
+</div>
+}
+}
+}
+@case ('text') {
+<oa-input placeholder="Search here" [showLabel]="false" preFix="search" (valueChange)="searchByText($event)">
+</oa-input>
+}
+}
+
+
+
+<ng-template #filterTemplate let-param="param">
+  <!-- <label *ngIf="view !== 'bar'">{{param.label}}</label> -->
+  @switch (param.control) {
+  @case ('selectFilter') {
+  @if (dropDown.length) {
+  <div class="controls-row more-filter-section">
+    <div class="more-filters-length">
+      <span class="more-filters-length-value">{{dropDown.length}}</span>
+    </div>
+    <div class="oa-input pointer filter-selector" [ngClass]="view === 'bar' ? 'search-input': ''"
+      (click)="onMoreFilters()">
+      <div class="sub-text">More Filters</div>
+    </div>
+  </div>
+  }
+  }
+  @default {
+  <oa-field-editor [showLabel]="view !== 'bar'" [placeholder]="param.label" class="search-item" [item]="param"
+    validate="false" (changed)="onFieldChange($event)"></oa-field-editor>
+  }
+  }
+  <!-- <div [ngSwitch]="param.control">
+  <ng-container *ngSwitchCase="'autocomplete'">
+    <oa-autocomplete [ngClass]="view === 'bar' ? 'search-input': ''" [value]="null" [placeholder]="param.label" [url]="param.config.url" (changed)="onAutoCompleteSelect($event,param)" [options]="{
+      search: {
+      field: param.config.paramField || 'text',
+      params: param.config.params
+      },
+      prefixItem: param.config.prefixItem
+    }"></oa-autocomplete>
+  </ng-container>
+
+  <ng-container *ngSwitchCase="'datePicker'">
+    <oa-date-picker [showLabel]="false" placeholder="{{param.label}}" [value]="param.value" (change)="onSelectDate($event,param)">
+    </oa-date-picker>
+  </ng-container>
+
+  <ng-container *ngSwitchCase="'iconToggler'">
+    <oa-icon-toggler [value]="param.value" (changed)="onSelectValue($event, param)" [type]="param.config.type" [items]="param.config.items">
+    </oa-icon-toggler>
+  </ng-container>
+
+  <ng-container *ngSwitchCase="'inputToggler'">
+    <oa-input-selector [value]="param.value" (changed)="onSelectValue($event, param)" [placeholder]="param.label" [type]="param.config.type" [items]="param.config.items">
+    </oa-input-selector>
+  </ng-container>
+
+  <ng-container *ngSwitchCase="'rangeDate'">
+    <div class="flex-row two">
+      <div [ngClass]="view === 'bar' ? 'search-input': ''">
+        <oa-date-picker [showLabel]="false" placeholder="{{param.label}} - From" (change)="onSelectDate($event,param,'from')"></oa-date-picker>
+      </div>
+      <div [ngClass]="view === 'bar' ? 'search-input': ''">
+        <oa-date-picker [showLabel]="false" placeholder="{{param.label}} - Till" (change)="onSelectDate($event,param,'till')"></oa-date-picker>
+      </div>
+    </div>
+  </ng-container>
+
+  <ng-container *ngSwitchCase="'rangeNumber'">
+    <div class="flex-row two">
+      <div>
+        <div class="oa-input" [ngClass]="view === 'bar' ? 'search-input': ''">
+          <input type="number" placeholder="{{param.label}} - From" (keyup)="onRangeChange($event, param, 'from')">
+        </div>
+      </div>
+      <div>
+        <div class="oa-input" [ngClass]="view === 'bar' ? 'search-input': ''">
+          <input type="number" placeholder="{{param.label}} - Till" (keyup)="onRangeChange($event, param, 'till')">
+        </div>
+      </div>
+    </div>
+  </ng-container>
+
+  <ng-container *ngSwitchCase="'selector'">
+    <mat-select [ngClass]="view === 'bar' ? 'mat-selector': ''" (selectionChange)="onSelectDropDown($event, param)" [value]="param.value" placeholder="{{param.label}}">
+      <mat-option *ngFor="let item of param.options" [value]="item.value || item">
+        {{item.label || item.value || item}}
+      </mat-option>
+    </mat-select>
+  </ng-container>
+
+  <ng-container *ngSwitchCase="'selectFilter'">
+    <div *ngIf="dropDown.length" class="controls-row more-filter-section">
+      <div class="more-filters-length">
+        <span class="more-filters-length-value">{{dropDown.length}}</span>
+      </div>
+      <div class="oa-input pointer filter-selector" [ngClass]="view === 'bar' ? 'search-input': ''" (click)="onMoreFilters()">
+        <div class="sub-text">More Filters</div>
+      </div>
+    </div>
+  </ng-container>
+
+  <ng-container *ngSwitchCase="'inputNumber'">
+    <div class="oa-input" [ngClass]="view === 'bar' ? 'search-input': ''">
+      <input type="number" (keyup)="onInputKeyUp($event, param)">
+      <mat-icon oaTooltip="Number input field" class="subtle">pin</mat-icon>
+    </div>
+  </ng-container>
+
+  <ng-container *ngSwitchCase="'select'">
+    <mat-select [ngClass]="view === 'bar' ? 'mat-selector': ''" (selectionChange)="onSelectReportSelector($event, param)" [value]="param.value" placeholder="{{param.label}}">
+      <mat-option *ngFor="let item of param.config.options" [value]="item.value || item">
+        {{item.label || item.value || item}}
+      </mat-option>
+    </mat-select>
+  </ng-container>
+
+  <ng-container *ngSwitchCase="'text-input'">
+    <div class="oa-input" [ngClass]="view === 'bar' ? 'search-input': ''">
+      <input placeholder="{{param.value || param.label}}" (keyup)="onReportsInputKeyUp($event, param)">
+      <mat-icon oaTooltip="Text input field" class="subtle">text_fields</mat-icon>
+    </div>
+  </ng-container>
+
+  <ng-container *ngSwitchCase="'date-picker'">
+    <oa-date-picker [showLabel]="false" placeholder="{{param.label}}" [value]="param.value" (change)="onReportSelectDate($event,param)">
+    </oa-date-picker>
+  </ng-container>
+
+  <ng-container *ngSwitchDefault>
+    <div class="oa-input" [ngClass]="view === 'bar' ? 'search-input': ''">
+      <input placeholder="{{param.value || param.label}}" (keyup)="onInputKeyUp($event, param)">
+      <mat-icon oaTooltip="Text input field" class="subtle">text_fields</mat-icon>
+    </div>
+  </ng-container>
+</div> -->
+</ng-template>
+
+<ng-template #tabsControl let-param="param">
+  <div class="tabs horizontal tabs-container">
+    @for (tab of tabs; track tab) {
+    @if (param.config.stats) {
+    <div [ngClass]="{active: selectedTab?.label === tab?.label}" class="with-stat" (click)="onSelectedTab(tab)">
+      <span class="label tab">{{tab.label}}</span> <span class="stat">{{tab.stat}}</span>
+    </div>
+    }
+    @if (!param.config.stats) {
+    <div class="without-stat" [ngClass]="{active: selectedTab?.label === tab?.label}" (click)="onSelectedTab(tab)">
+      {{tab.label}} </div>
+    }
+    }
+    <span class="spacer"></span>
+  </div>
+
+</ng-template>

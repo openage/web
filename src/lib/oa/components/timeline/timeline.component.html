@@ -1,0 +1,66 @@
+@if (list && list.length) {
+  <div class="sTrackig">
+    <div class="row first headingDiv">
+      <div class="col-3">
+        <!-- <div> <label>Date and Time</label> </div> -->
+      </div>
+      <div class="col-9">
+        <div class="row">
+          <div class="col-4"></div>
+          <div class="col-8"><label>Activity</label></div>
+        </div>
+      </div>
+    </div>
+    @for (item of list; track item; let tindex = $index) {
+      <div class="journalDiv">
+        @for (activity of item.activities; track activity; let i = $index) {
+          @if (i === 0) {
+            <div class="row">
+              <div class="col-3 aJournalDiv" [class.active]="activity.actualTime">
+                <div class="spacer"></div>
+                <div>
+                  <div>{{item.date}}</div>
+                  <div class="sub-text">{{item.day}}</div>
+                </div>
+              </div>
+              <div class="col-9"></div>
+            </div>
+          }
+          @if (activity.event && activity.event.length) {
+            <div class="row">
+              <div class="col-3 controls-row" [class.active]="activity.actualTime">
+                <div class="spacer"></div>
+                @if (activity.type === 'location') {
+                  <div class="location">{{activity.location}}</div>
+                }
+                <i class="sm xx eventIcon" [class]="activity.type || 'event'" [class.active]="activity?.actualTime"></i>
+              </div>
+              <div class="col-9">
+                <div class="row">
+                  <div class="col-4">
+                    @if (activity.type !== 'location') {
+                      <div>{{activity.expectedTime | time: 'hh:mm A'}}</div>
+                    }
+                  </div>
+                  <div class="col-8 controls-row">
+                    <ng-container>
+                      @for (event of activity.event; track event; let i = $index) {
+                        <span>{{event}} {{i < activity.event.length-1?'/ ':''}}</span>
+                      }
+                    </ng-container>
+                    <!-- <ng-container *ngIf="!activity.event">{{activity.formattedEventStr}}</ng-container> -->
+                  </div>
+                </div>
+              </div>
+            </div>
+          }
+        }
+      </div>
+    }
+  </div>
+}
+
+@if (!list.length) {
+  <oa-no-data-found [message]="' No Tracking Found'">
+  </oa-no-data-found>
+}

@@ -1,0 +1,124 @@
+{
+    "layout": {
+        "sections": [
+            {
+                "class": "container",
+                "code": "collection-container",
+                "container": {
+                    "title": {
+                        "text": "<h3>Insight<span class='highlight'> Features</span></h3>"
+                    },
+                    "description": "Platform for building and sharing visual data through reports"
+                }
+            },
+            {
+                "class": "container",
+                "code": "directory-container",
+                "container": {
+                    "body": {
+                        "class": "flex-row two"
+                    }
+                }
+            },
+            {
+                "code": "domains-container",
+                "container": {
+                    "description": {
+                        "text": "<h4>Not just limited to the below <span class='highlight'>domains</span></h4>"
+                    },
+                    "body": {
+                        "class": "flex-row seven domains"
+                    }
+                }
+            }
+        ]
+    },
+    "components": [
+        {
+            "section": "directory-container",
+            "control": "html",
+            "container": {
+                "class": "card-detail-container"
+            },
+            "value": [
+                "<h1 class='highlight'> Custom Reports</h1>",
+                "<br>",
+                "<h3 class='card-detail-text'><i class='fa fa-check highlight'></i>Create smart-to-use report templates. Define your goals and customize your report accordingly</h3>",
+                "<h3 class='card-detail-text'><i class='fa fa-check highlight'></i>Data can be imported from various third-party sources and outputs can be published online, shared across social media, downloaded for offline viewing or embedded on websites</h3>",
+                "<h3 class='card-detail-text'><i class='fa fa-check highlight'></i>Includes access to a large library of graphics, fonts, as well as professional-grade design templates.</h3>",
+                "<h3 class='card-detail-text'><i class='fa fa-check highlight'></i>Multiple users can be invited to edit and comment on design</h3>"
+            ]
+        },
+        {
+            "section": "directory-container",
+            "control": "html",
+            "container": {
+                "class": "card-detail-container"
+            },
+            "value": [
+                "<h1 class='highlight'>Dashboard</h1>",
+                "<br>",
+                "<h3 class='card-detail-text'><i class='fa fa-check highlight'></i>Turn your analytics data into visual insights through user-friendly interfaces and dashboards.</h3>",
+                "<h3 class='card-detail-text'><i class='fa fa-check highlight'></i>Dashboards can be embedded into existing applications for real-time analytics</h3>",
+                "<h3 class='card-detail-text'><i class='fa fa-check highlight'></i>Create and customize dashboard the way you want</h3>",
+                "<h3 class='card-detail-text'><i class='fa fa-check highlight'></i>Dashboard templates to avoid starting from scratch</h3>"
+            ]
+        },
+        {
+            "section": "domains-container",
+            "control": "html",
+            "value": [
+                "<img class='domainImage' src='/assets/app/applegos/images/domains/education.svg'>",
+                "<h3 class=''>Education</h3>"
+            ]
+        },
+        {
+            "section": "domains-container",
+            "control": "html",
+            "value": [
+                "<img class='domainImage' src='/assets/app/applegos/images/domains/finance.svg'>",
+                "<h3 class=''>Finance</h3>"
+            ]
+        },
+        {
+            "section": "domains-container",
+            "control": "html",
+            "value": [
+                "<img class='' src='/assets/app/applegos/images/domains/government.svg'>",
+                "<h3 class=''>Government</h3>"
+            ]
+        },
+        {
+            "section": "domains-container",
+            "control": "html",
+            "value": [
+                "<img class='' src='/assets/app/applegos/images/domains/health-care.svg'>",
+                "<h3 class=''>Health Care</h3>"
+            ]
+        },
+        {
+            "section": "domains-container",
+            "control": "html",
+            "value": [
+                "<img class='' src='/assets/app/applegos/images/domains/logistics.svg'>",
+                "<h3 class=''>Logistics</h3>"
+            ]
+        },
+        {
+            "section": "domains-container",
+            "control": "html",
+            "value": [
+                "<img class='' src='/assets/app/applegos/images/domains/travel.svg'>",
+                "<h3 class=''>Travel</h3>"
+            ]
+        },
+        {
+            "section": "domains-container",
+            "control": "html",
+            "value": [
+                "<img class='' src='/assets/app/applegos/images/domains/e-commerence.svg'>",
+                "<h3 class=''>E-commerence</h3>"
+            ]
+        }
+    ]
+}

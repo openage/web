@@ -1,0 +1,18 @@
+@if (icon) {
+@if (icon.mat) {
+<div class="{{class}}" [style]="style" [oaTooltip]="title">
+  <span class="material-symbols-outlined">{{icon.mat}}</span>
+</div>
+<!-- <i class="material-icons {{class}}" [oaTooltip]="title">{{icon.mat}}</i> -->
+}
+@if (icon.oa) {
+<i class="oa {{class}} {{icon.oa}}" [oaTooltip]="title"></i>
+}
+@if (icon.fa) {
+<i class="oa {{class}} fa fa-{{icon.fa}}" [oaTooltip]="title"></i>
+}
+@if (icon.url) {
+<div class="oa oa-icon  {{class}}" [style]="style" [oaTooltip]="title">
+</div>
+}
+}

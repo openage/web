@@ -1,0 +1,109 @@
+{
+    "layout": {
+        "sections": [
+            {
+                "class": "container",
+                "code": "collection-container",
+                "container": {
+                    "title": {
+                        "text": "<h3>Send-It<span class='highlight'> Features</span></h3>"
+                    },
+                    "description": "Optimize and send data-driven and mission-critical transactional emails"
+                }
+            },
+            {
+                "class": "container",
+                "code": "pricing-container",
+                "container": {
+                    "body": {
+                        "class": "flex-row one"
+                    }
+                }
+            },
+            {
+                "code": "domains-container",
+                "container": {
+                    "description": {
+                        "text": "<h4>Not just limited to the below <span class='highlight'>domains</span></h4>"
+                    },
+                    "body": {
+                        "class": "flex-row seven domains"
+                    }
+                }
+            }
+        ]
+    },
+    "components": [
+        {
+            "section": "pricing-container",
+            "control": "html",
+            "container": {
+                "class": "card-detail-container"
+            },
+            "value": [
+                "<h1 class='highlight'> Features</h1>",
+                "<br>",
+                "<h3 class='card-detail-text'><i class='fa fa-check highlight'></i>API supports delivering messages via push, chat, email, SMS. </h3>",
+                "<h3 class='card-detail-text'><i class='fa fa-check highlight'></i>AI-powered platform which send, receives and tracks the mail</h3>",
+                "<h3 class='card-detail-text'><i class='fa fa-check highlight'></i>Entity level conversations which are designed to be used as plugins.</h3>",
+                "<h3 class='card-detail-text'><i class='fa fa-check highlight'></i>Generates a document from the given data</h3>"
+            ]
+        },
+        {
+            "section": "domains-container",
+            "control": "html",
+            "value": [
+                "<img class='domainImage' src='/assets/app/applegos/images/domains/education.svg'>",
+                "<h3 class=''>Education</h3>"
+            ]
+        },
+        {
+            "section": "domains-container",
+            "control": "html",
+            "value": [
+                "<img class='domainImage' src='/assets/app/applegos/images/domains/finance.svg'>",
+                "<h3 class=''>Finance</h3>"
+            ]
+        },
+        {
+            "section": "domains-container",
+            "control": "html",
+            "value": [
+                "<img class='' src='/assets/app/applegos/images/domains/government.svg'>",
+                "<h3 class=''>Government</h3>"
+            ]
+        },
+        {
+            "section": "domains-container",
+            "control": "html",
+            "value": [
+                "<img class='' src='/assets/app/applegos/images/domains/health-care.svg'>",
+                "<h3 class=''>Health Care</h3>"
+            ]
+        },
+        {
+            "section": "domains-container",
+            "control": "html",
+            "value": [
+                "<img class='' src='/assets/app/applegos/images/domains/logistics.svg'>",
+                "<h3 class=''>Logistics</h3>"
+            ]
+        },
+        {
+            "section": "domains-container",
+            "control": "html",
+            "value": [
+                "<img class='' src='/assets/app/applegos/images/domains/travel.svg'>",
+                "<h3 class=''>Travel</h3>"
+            ]
+        },
+        {
+            "section": "domains-container",
+            "control": "html",
+            "value": [
+                "<img class='' src='/assets/app/applegos/images/domains/e-commerence.svg'>",
+                "<h3 class=''>E-commerence</h3>"
+            ]
+        }
+    ]
+}

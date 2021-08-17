@@ -1,0 +1,85 @@
+{
+  "page": {
+    "header": {
+      "layout": {
+        "sections": [
+          {
+            "code": "header-container",
+            "class": "container",
+            "container": {
+              "body": {
+                "class": "flex-row"
+              }
+            }
+          }
+        ]
+      },
+      "components": [
+        {
+          "section": "header-container",
+          "control": "branding",
+          "options": {
+            "class": "middle",
+            "logo": {
+              "size": "lg"
+            },
+            "title": {
+              "show": false
+            }
+          }
+        },
+        {
+          "section": "header-container",
+          "control": "spacer"
+        },
+        {
+          "section": "header-container",
+          "permissions": [
+            "user"
+          ],
+          "control": "role",
+          "options": {
+            "branding": {
+              "size": "xx-lg"
+            },
+            "title": {
+              "show": false
+            }
+          }
+        }
+      ]
+    },
+    "sidebar": {
+      "layout": {
+        "sections": [
+          {
+            "code": "nav-container"
+          }
+        ]
+      },
+      "components": [
+        {
+          "section": "nav-container",
+          "control": "nav",
+          "options": {
+            "view": "side",
+            "isExpanded": true
+          }
+        }
+      ]
+    },
+    "layout": {
+      "class": "page",
+      "style": {},
+      "items": [
+        {},
+        {}
+      ]
+    },
+    "styles": {
+      "content": {
+        "class": ""
+      }
+    }
+  }
+}

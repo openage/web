@@ -1,0 +1,231 @@
+/* Mixins */
+@mixin border-box-sizing {
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+}
+
+@mixin flex-wrap {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+@mixin center-align {
+  text-align: center;
+  vertical-align: middle;
+}
+
+@mixin circle($size) {
+  height: $size;
+  width: $size;
+  border-radius: 50%;
+}
+
+@mixin responsive-font-size($size) {
+  @media screen and (min-width: 1900px) {
+    font-size: $size;
+  }
+}
+
+@mixin responsive-height($class, $height) {
+  @media screen and (min-width: 1900px) {
+    .#{$class} {
+      height: $height;
+    }
+  }
+}
+
+@mixin responsive-padding-top($class, $padding-top) {
+  @media screen and (min-width: 1900px) {
+    .#{$class} {
+      padding-top: $padding-top;
+    }
+  }
+}
+
+@mixin colored-box($color) {
+  background-color: $color;
+  color: white;
+}
+
+.month {
+  @include center-align;
+  padding-top: 5px;
+  background: var(--background-light);
+
+  @include responsive-height('month', 57px);
+  @include responsive-padding-top('month', 18px);
+}
+
+.monthYear {
+  vertical-align: top;
+  color: var(--text-secondary);
+  font-weight: 600;
+
+  @include responsive-font-size(16px);
+}
+
+.material-icons {
+  color: var(--icon-color);
+  cursor: pointer;
+
+  &:first-child {
+    @media screen and (min-width: 1900px) {
+      margin-right: 5px;
+    }
+  }
+}
+
+.calendar {
+  border: 1px solid var(--border-color);
+  border-bottom: none;
+  margin-top: 0%;
+}
+
+.weeks {
+  @include flex-wrap;
+
+  >div {
+    float: left;
+    width: 14.28571429%;
+    @include border-box-sizing;
+    font-size: 10px;
+    color: var(--text-muted);
+    @include center-align;
+    height: 35px;
+    line-height: 37px !important;
+    background: var(--background);
+  }
+}
+
+.days {
+  @include flex-wrap;
+
+  .day {
+    float: left;
+    width: 14.28571429%;
+    @include border-box-sizing;
+    border: solid 1px var(--background);
+    font-size: 12px;
+    text-align: right;
+    height: 80px;
+    line-height: 30px !important;
+    vertical-align: middle;
+    background: var(--background);
+    color: var(--text-primary);
+    cursor: pointer;
+
+    &.not-current {
+      background: var(--background-light);
+    }
+
+    &.today .date>div {
+      @include colored-box(var(--primary));
+    }
+
+    &.default .date>div {
+      @include colored-box(var(--default));
+    }
+
+    &.disabled .date>div {
+      @include colored-box(var(--text-disabled));
+    }
+
+    &.success .date>div {
+      border: var(--success) 1px solid;
+      color: var(--success);
+    }
+
+    &.info .date>div {
+      border: var(--accent) 1px solid;
+      color: var(--accent);
+    }
+
+    &.warn .date>div {
+      border: var(--warn) 1px solid;
+      color: var(--warn);
+    }
+
+    @include responsive-height('daycard', 122px);
+    @include responsive-font-size(14px);
+
+    &.today {
+      @include circle(30px);
+      padding-top: 4px;
+    }
+  }
+
+  .date {
+    text-align: right;
+    padding-right: 5px;
+    margin-bottom: 5px;
+
+    >div {
+      @include circle(25px);
+      margin-top: 5px;
+      margin-right: 5px;
+      line-height: 22px;
+      padding-top: 2px;
+      padding-right: 0px;
+      text-align: center;
+      margin-left: auto;
+    }
+  }
+}
+
+.event {
+  text-align: left;
+  padding-left: 5px;
+  height: 22px;
+  line-height: 22px;
+  font-size: 10px;
+
+  @media screen and (min-width: 1900px) {
+    &.eventCard {
+      color: var(--text-light);
+      border-radius: 0px 5px 5px 0px;
+      height: 29px;
+      line-height: 29px;
+      font-size: 12px;
+    }
+  }
+}
+
+.legend {
+  padding-left: 5px;
+
+  >.box {
+    height: 10px;
+    width: 10px;
+    display: inline-block;
+    margin-left: 10px;
+    margin-right: 10px;
+
+    &.success {
+      background-color: var(--success);
+    }
+
+    &.info {
+      background-color: var(--info);
+    }
+
+    &.warn {
+      background-color: var(--warn);
+    }
+
+    &.default {
+      background-color: var(--default);
+    }
+
+    &.disabled {
+      background-color: var(--text-disabled);
+    }
+  }
+}
+
+.footerBox {
+  text-align: right;
+  padding-top: 11px;
+  color: var(--text-secondary);
+  font-weight: 600;
+  font-size: 12px;
+}

@@ -1,0 +1,44 @@
+<!-- eslint-disable @angular-eslint/template/click-events-have-key-events -->
+<!-- eslint-disable @angular-eslint/template/interactive-supports-focus -->
+@if (items && items.length) {
+<div class="progress-items">
+  <div class="header flex-row">
+    <div class="subtle">Done: {{completeCount}}, InProgress: {{inProgressCount}}, Failed: {{erroredCount}}</div>
+    <div class="spacer"></div>
+    <oa-toggler [(value)]="isHidden" code="toggle-details"></oa-toggler>
+    <oa-icon value="close" class="subtle" (click)="clear()"></oa-icon>
+  </div>
+  @if (!isHidden) {
+  <div class="list-container">
+    @for (item of items; track item) {
+    <div class="listitem flex-row" (click)="onSelect(item)">
+      <oa-icon [value]="item?.icon"></oa-icon>
+      <div class="name">{{item.name}}</div>
+      <div class="spacer"></div>
+      <oa-icon [value]="item.status"></oa-icon>
+      @switch (item.status) {
+      @case ('complete') {
+      <oa-icon class="lg x success">check_circle</oa-icon>
+      }
+      @case ('ready') {
+      <oa-icon class="lg x success">check_circle</oa-icon>
+      }
+      @case ('errored') {
+      <oa-icon class="lg x error">error</oa-icon>
+      }
+      @default {
+      @if (item.type === 'upload') {
+      <processing-indicator class="spinner" [view]="'spinner-withBackground'" [progressBarvalue]="item.progress"
+        [diameter]="30"></processing-indicator>
+      }
+      @if (item.type === 'download') {
+      <processing-indicator [view]="'download-indicator'" [inline]="true"></processing-indicator>
+      }
+      }
+      }
+    </div>
+    }
+  </div>
+  }
+</div>
+}

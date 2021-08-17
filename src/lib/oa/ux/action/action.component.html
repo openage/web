@@ -1,0 +1,43 @@
+<!-- eslint-disable @angular-eslint/template/interactive-supports-focus -->
+<!-- eslint-disable @angular-eslint/template/click-events-have-key-events -->
+@if (items.length) {
+@switch (view) {
+@case ('icon') {
+<oa-icon [value]="icon" [title]="item.title" [oaMenu]="items" (oaMenuClose)="onSelect($event)"></oa-icon>
+}
+@case ('toggle') {
+<oa-toggler [(value)]="value" [items]="items"></oa-toggler>
+}
+@case ('button') {
+<button [class]="class" [style]="style" [disabled]="disabled" [oaMenu]="items" (oaMenuClose)="onSelect($event)">
+  @if(icon){
+  <oa-icon [value]="icon"></oa-icon>
+  }
+  {{title}}
+</button>
+}
+}
+}
+@else {
+@switch (view) {
+@case ('link') {
+<a class="link" [class]="class" [style]="style" [href]="item.value" (click)="onClick()">{{item.title}}</a>
+}
+
+@case ('toggle') {
+<div class="toggle" [class]="class" [style]="style" (click)="onClick()">{{title}}</div>
+}
+@case ('icon') {
+<oa-icon [value]="icon" (click)="onClick()" [title]="title" [class]="class" [style]="style"></oa-icon>
+}
+@case ('button') {
+<button [class]="class" [style]="style" [disabled]="disabled" (click)="onClick()" [disabled]="disabled">
+  @if(icon){
+  <oa-icon [value]="icon"></oa-icon>
+  }
+  {{title}}
+</button>
+}
+}
+<div #popupContainer></div>
+}

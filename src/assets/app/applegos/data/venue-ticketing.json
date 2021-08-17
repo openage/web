@@ -1,0 +1,172 @@
+{
+    "layout": {
+        "sections": [
+            {
+                "class": "container",
+                "code": "collection-container",
+                "container": {
+                    "title": {
+                        "text": "<h3>Ticket Booking <span class='highlight'> System</span></h3>"
+                    }
+                }
+            },
+            {
+                "code": "banner-container",
+                "class": "container",
+                "container": {
+                    "body": {
+                        "class": "flex-2-1"
+                    }
+                }
+            },
+            {
+                "class": "container",
+                "code": "pricing-container",
+                "container": {
+                    "body": {
+                        "class": "flex-row three"
+                    }
+                }
+            },
+            {
+                "code": "domains-container",
+                "container": {
+                    "description": {
+                        "text": "<h4>Not just limited to the below <span class='highlight'>domains</span></h4>"
+                    },
+                    "body": {
+                        "class": "flex-row seven domains"
+                    }
+                }
+            }
+        ]
+    },
+    "components": [
+        {
+            "section": "banner-container",
+            "control": "html",
+            "value": []
+        },
+        {
+            "section": "banner-container",
+            "control": "html",
+            "container": {},
+            "value": [
+                "<img class='testimonialImage' src='/assets/app/applegos/images/testimonial/asi.png'>"
+            ]
+        },
+        {
+            "section": "banner-container",
+            "control": "html",
+            "value": [
+                "<h1>Archeological Survey of<span class='highlight'> India</span></h1>",
+                "<br>",
+                "<h3 class='card-detail-text'>Archeological Survey of India was struggling to automate their ticket booking </h3>",
+                "<h3 class='card-detail-text'>process. The footfall was high resulting in long queues for ticketing.. </h3>",
+                "<h3 class='card-detail-text'>We implemented a configurable multi-monument ticket booking platform that was </h3>",
+                "<h3 class='card-detail-text'>designed to perform under stress. In process we were able to identify areas for </h3>",
+                "<h3 class='card-detail-text'>improvement and implement changes to increase efficiency and revenue.</h3>"
+            ]
+        },
+        {
+            "section": "pricing-container",
+            "control": "html",
+            "container": {
+                "class": "card-detail-container "
+            },
+            "value": [
+                "<img class='' src='/assets/app/applegos/images/testimonial/solution.svg'>",
+                "<h1 class='highlight'>Solution</h1>",
+                "<br>",
+                "<h3 class='card-detail-text'><i class='fa fa-check highlight'></i>We implemented a configurable multi-monument ticket booking platform that was designed to perform under stress.</h3>",
+                "<h3 class='card-detail-text'><i class='fa fa-check highlight'></i>In process we were able to identify areas for improvement and implement changes to increase efficiency and revenue.</h3>"
+            ]
+        },
+        {
+            "section": "pricing-container",
+            "control": "html",
+            "container": {
+                "class": "card-detail-container"
+            },
+            "value": [
+                "<img class='' src='/assets/app/applegos/images/testimonial/gear.svg'>",
+                "<h1 class='highlight'>Implementation</h1>",
+                "<br>",
+                "<h3 class='card-detail-text'><i class='fa fa-check highlight'></i>An online ticket booking, an on-premises POS for ticketing and a validation app to digitize the Visitor.</h3>",
+                "<h3 class='card-detail-text'><i class='fa fa-check highlight'></i>Optimized the ticket booking process by streamlining the user interface and simplifying the checkout process.</h3>",
+                "<h3 class='card-detail-text'><i class='fa fa-check highlight'></i>Implemented ticketing gateway for Travel Companies to book tickets from their applications.</h3>"
+            ]
+        },
+        {
+            "section": "pricing-container",
+            "control": "html",
+            "container": {
+                "class": "card-detail-container"
+            },
+            "value": [
+                "<img class='' src='/assets/app/applegos/images/testimonial/analysis.svg'>",
+                "<h1 class='highlight'>Results</h1>",
+                "<br>",
+                "<h3 class='card-detail-text'><i class='fa fa-check highlight'></i>Reduction in loss of revenues due to pilferage</h3>",
+                "<h3 class='card-detail-text'><i class='fa fa-check highlight'></i>220 Monuments and 108 Museums went live on the system.</h3>",
+                "<h3 class='card-detail-text'><i class='fa fa-check highlight'></i>90% of Venues were able to redeploy their regular counter booking staff to other functions.</h3>"
+            ]
+        },
+        {
+            "section": "domains-container",
+            "control": "html",
+            "value": [
+                "<img class='domainImage' src='/assets/app/applegos/images/domains/education.svg'>",
+                "<h3 class=''>Education</h3>"
+            ]
+        },
+        {
+            "section": "domains-container",
+            "control": "html",
+            "value": [
+                "<img class='domainImage' src='/assets/app/applegos/images/domains/finance.svg'>",
+                "<h3 class=''>Finance</h3>"
+            ]
+        },
+        {
+            "section": "domains-container",
+            "control": "html",
+            "value": [
+                "<img class='' src='/assets/app/applegos/images/domains/government.svg'>",
+                "<h3 class=''>Government</h3>"
+            ]
+        },
+        {
+            "section": "domains-container",
+            "control": "html",
+            "value": [
+                "<img class='' src='/assets/app/applegos/images/domains/health-care.svg'>",
+                "<h3 class=''>Health Care</h3>"
+            ]
+        },
+        {
+            "section": "domains-container",
+            "control": "html",
+            "value": [
+                "<img class='' src='/assets/app/applegos/images/domains/logistics.svg'>",
+                "<h3 class=''>Logistics</h3>"
+            ]
+        },
+        {
+            "section": "domains-container",
+            "control": "html",
+            "value": [
+                "<img class='' src='/assets/app/applegos/images/domains/travel.svg'>",
+                "<h3 class=''>Travel</h3>"
+            ]
+        },
+        {
+            "section": "domains-container",
+            "control": "html",
+            "value": [
+                "<img class='' src='/assets/app/applegos/images/domains/e-commerence.svg'>",
+                "<h3 class=''>E-commerence</h3>"
+            ]
+        }
+    ]
+}

@@ -1,0 +1,218 @@
+{
+    "layout": {
+        "sections": [
+            {
+                "class": "container",
+                "code": "collection-container",
+                "container": {
+                    "title": {
+                        "text": "<h3>Hospital-Provider Contract <span class='highlight'> Management System -OPOS</span></h3>"
+                    },
+                    "description": "Enables you to analyse patient activities based on a report generated 24-hours before the patient appointment. Get efficient patient-prescriber appointments supervision. Generate a medical report of patients with our app in a faster, easier and time-bound manner."
+                }
+            },
+            {
+                "code": "banner-container",
+                "class": "container",
+                "container": {
+                    "body": {
+                        "class": "flex-2-1"
+                    }
+                }
+            },
+            {
+                "class": "container",
+                "code": "pricing-container",
+                "container": {
+                    "body": {
+                        "class": "flex-row three"
+                    }
+                }
+            },
+            {
+                "code": "features-container",
+                "class": "container",
+                "container": {
+                    "title": {
+                        "text": "<h2>Hospital Management <span class='highlight'> System</span></h2>"
+                    },
+                    "body": {
+                        "class": "flex-row two"
+                    }
+                }
+            },
+            {
+                "code": "domains-container",
+                "container": {
+                    "description": {
+                        "text": "<h4>Not just limited to the below <span class='highlight'>domains</span></h4>"
+                    },
+                    "body": {
+                        "class": "flex-row seven domains"
+                    }
+                }
+            }
+        ]
+    },
+    "components": [
+        {
+            "section": "banner-container",
+            "control": "html",
+            "value": []
+        },
+        {
+            "section": "banner-container",
+            "control": "html",
+            "container": {},
+            "value": [
+                "<img class='testimonialImage' src='/assets/app/applegos/images/testimonial/opos.png'>"
+            ]
+        },
+        {
+            "section": "banner-container",
+            "control": "html",
+            "value": [
+                "<h1><span class='highlight'>OPOS</span></h1>",
+                "<br>",
+                "<h3 class='card-detail-text'>Enables you to analyse patient activities based on a report generated 24-hours before the patient appointment.</h3>",
+                "<h3 class='card-detail-text'>Get efficient patient-prescriber appointments supervision. Generate a medical report of patients with our app in a faster, easier and time-bound manner.</h3>"
+            ]
+        },
+        {
+            "section": "pricing-container",
+            "control": "html",
+            "container": {
+                "class": "card-detail-container"
+            },
+            "value": [
+                "<h1 class='highlight'>Appointment Management</h1>",
+                "<br>",
+                "<h3 class='card-detail-text'><i class='fa fa-check highlight'></i>Enables efficient patient-prescriber appointments.</h3>",
+                "<h3 class='card-detail-text'><i class='fa fa-check highlight'></i>Generates report within 24 hours prior to the patient appointment by analyzing activities of patient</h3>"
+            ]
+        },
+        {
+            "section": "pricing-container",
+            "control": "html",
+            "container": {
+                "class": "card-detail-container"
+            },
+            "value": [
+                "<h1 class='highlight'>Video Management</h1>",
+                "<br>",
+                "<h3 class='card-detail-text'><i class='fa fa-check highlight'></i>Get in touch with patients directly through high-quality video interaction. </h3>"
+            ]
+        },
+        {
+            "section": "pricing-container",
+            "control": "html",
+            "container": {
+                "class": "card-detail-container"
+            },
+            "value": [
+                "<h1 class='highlight'>Cures Integration</h1>",
+                "<br>",
+                "<h3 class='card-detail-text'><i class='fa fa-check highlight'></i>Verify the list of patients within minutes through CURES integration</h3>"
+            ]
+        },
+        {
+            "section": "features-container",
+            "control": "html",
+            "container": {
+                "class": "card-features-detail-container"
+            },
+            "value": [
+                "<h1 class='highlight'>Axon for Doctor and Patients</h1>",
+                "<br>",
+                "<h3 class='card-detail-text'><i class='fa fa-check highlight'></i>Signup with details and add hospital</h3>",
+                "<h3 class='card-detail-text'><i class='fa fa-check highlight'></i>Doctors can add qualification and basic information.</h3>",
+                "<h3 class='card-detail-text'><i class='fa fa-check highlight'></i>Doctors can put their specialization and experience along with information regarding their awards in surgery</h3>",
+                "<h3 class='card-detail-text'><i class='fa fa-check highlight'></i>Signup for patients through otp, add address details, basic information and then unique id gets generated. </h3>",
+                "<h3 class='card-detail-text'><i class='fa fa-check highlight'></i>Patients can add family details</h3>",
+                "<h3 class='card-detail-text'><i class='fa fa-check highlight'></i>Dashboard shows different types of  hospital, clinic, laboratory, diagnostic centre and ambulance along with their rankings</h3>",
+                "<h3 class='card-detail-text'><i class='fa fa-check highlight'></i>Search by specific location different types of  hospital, clinic, laboratory, diagnostic centre and ambulance nearby your location </h3>",
+                "<h3 class='card-detail-text'><i class='fa fa-check highlight'></i>Patient can select the doctor from a particular hospital and then schedule, cancel or reschedule their appointment with him</h3>",
+                "<h3 class='card-detail-text'><i class='fa fa-check highlight'></i>Patient can select appointment date and time and make payment</h3>",
+                "<h3 class='card-detail-text'><i class='fa fa-check highlight'></i>Receptionist sets an appointment for the patient</h3>",
+                "<h3 class='card-detail-text'><i class='fa fa-check highlight'></i>Patient can view his documents and discharges</h3>"
+            ]
+        },
+        {
+            "section": "features-container",
+            "control": "html",
+            "container": {
+                "class": "card-features-detail-container"
+            },
+            "value": [
+                "<h1 class='highlight'>Hospital Admin </h1>",
+                "<br>",
+                "<h3 class='card-detail-text'><i class='fa fa-check highlight'></i>Register hospital, clinic, pharmacy, laboratory, diagnostic centre and ambulance</h3>",
+                "<h3 class='card-detail-text'><i class='fa fa-check highlight'></i>Admin can manage hospital profile</h3>",
+                "<h3 class='card-detail-text'><i class='fa fa-check highlight'></i>Sign up through otp and enter basic details </h3>",
+                "<h3 class='card-detail-text'><i class='fa fa-check highlight'></i>Add hospital by providing information and image of it</h3>",
+                "<h3 class='card-detail-text'><i class='fa fa-check highlight'></i>Can add more information of hospital</h3>",
+                "<h3 class='card-detail-text'><i class='fa fa-check highlight'></i>Add a hospital in the Admin panel specialists, photos and id proof</h3>",
+                "<h3 class='card-detail-text'><i class='fa fa-check highlight'></i>Add a new doctor and sort through different categories</h3>",
+                "<h3 class='card-detail-text'><i class='fa fa-check highlight'></i>Add unique id of doctor or scan  it will autodetect doctor profile</h3>",
+                "<h3 class='card-detail-text'><i class='fa fa-check highlight'></i>Leave Management</h3>",
+                "<h3 class='card-detail-text'><i class='fa fa-check highlight'></i>Review or Approval Rating</h3>"
+            ]
+        },
+        {
+            "section": "domains-container",
+            "control": "html",
+            "value": [
+                "<img class='domainImage' src='/assets/app/applegos/images/domains/education.svg'>",
+                "<h3 class=''>Education</h3>"
+            ]
+        },
+        {
+            "section": "domains-container",
+            "control": "html",
+            "value": [
+                "<img class='domainImage' src='/assets/app/applegos/images/domains/finance.svg'>",
+                "<h3 class=''>Finance</h3>"
+            ]
+        },
+        {
+            "section": "domains-container",
+            "control": "html",
+            "value": [
+                "<img class='' src='/assets/app/applegos/images/domains/government.svg'>",
+                "<h3 class=''>Government</h3>"
+            ]
+        },
+        {
+            "section": "domains-container",
+            "control": "html",
+            "value": [
+                "<img class='' src='/assets/app/applegos/images/domains/health-care.svg'>",
+                "<h3 class=''>Health Care</h3>"
+            ]
+        },
+        {
+            "section": "domains-container",
+            "control": "html",
+            "value": [
+                "<img class='' src='/assets/app/applegos/images/domains/logistics.svg'>",
+                "<h3 class=''>Logistics</h3>"
+            ]
+        },
+        {
+            "section": "domains-container",
+            "control": "html",
+            "value": [
+                "<img class='' src='/assets/app/applegos/images/domains/travel.svg'>",
+                "<h3 class=''>Travel</h3>"
+            ]
+        },
+        {
+            "section": "domains-container",
+            "control": "html",
+            "value": [
+                "<img class='' src='/assets/app/applegos/images/domains/e-commerence.svg'>",
+                "<h3 class=''>E-commerence</h3>"
+            ]
+        }
+    ]
+}

@@ -1,0 +1,15 @@
+@if(layout && isInitialized) {
+<div [id]="page?.code" [class.hidden]="!isCurrent">
+  <oa-layout [layout]="layout" [params]="params" [components]="components" [templates]="templates"></oa-layout>
+</div>
+}
+<router-outlet></router-outlet>
+
+<!--
+<ng-template #htmlComponent let-item="item">
+  <oa-html-viewer [value]="item.value" [options]="item.options"></oa-html-viewer>
+</ng-template>
+
+<ng-template #videoComponent let-item="item">
+  <oa-video-viewer [value]="item.value" [options]="item.options"></oa-video-viewer>
+</ng-template> -->

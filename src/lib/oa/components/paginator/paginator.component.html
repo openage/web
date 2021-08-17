@@ -1,0 +1,80 @@
+@if (pager.total > 1) {
+@switch (view) {
+@case ('pager-bar') {
+<div class="pager-bar">
+  <div class="controls-row">
+    <div class="spacer"></div>
+    <div>
+      <!-- <mat-select [(ngModel)]="size" (ngModelChange)="setPageItems(size)">
+              <mat-option [value]="10">10</mat-option>
+              <mat-option [value]="20">20</mat-option>
+              <mat-option [value]="50">50</mat-option>
+              <mat-option [value]="100">100</mat-option>
+            </mat-select> -->
+    </div>
+    <div>
+      @if (title) {
+      <h5>{{title}}</h5>
+      }
+      @if (pager.total && pages?.length) {
+      <div class="pagination">
+        <button [hidden]="!showFirstLast" mat-flat-button [disabled]="pager.currentPageNo === 1"
+          (click)="showPage(1)">First
+        </button>
+        <button mat-flat-button [disabled]="pager.currentPageNo === 1" (click)="showPage(pager.currentPageNo - 1)">
+          Previous
+        </button>
+        @for (page of pages; track page) {
+        <button mat-flat-button class="numbers" [class.active]="pager.currentPageNo === page" (click)="showPage(page)">
+          @if (page < 0) { <span>...</span>
+            }
+            @if (page > 0) {
+            <span>{{page}}</span>
+            }
+        </button>
+        }
+        <button mat-flat-button [disabled]="pager.currentPageNo === pager.totalPages"
+          (click)="showPage(pager.currentPageNo + 1)">Next
+        </button>
+        <button [hidden]="!showFirstLast" mat-flat-button [disabled]="pager.currentPageNo === pager.totalPages"
+          (click)="showPage(pager.totalPages)">Last
+        </button>
+      </div>
+      }
+    </div>
+  </div>
+</div>
+}
+<!-- @case ('up') {
+@if (pager.currentPageNo > 1) {
+<a (onClick)="showPage(pager.currentPageNo - 1)">
+  <mat-icon> arrow_drop_up</mat-icon>
+</a>
+}
+} -->
+@case ('previous') {
+@if (pager.currentPageNo > 1) {
+<a (onClick)="showPage(pager.currentPageNo - 1)">
+  Show {{(pager.currentPageNo-2)*size + 1}} to {{(pager.currentPageNo-1)*size}}
+</a>
+}
+}
+<!-- @case ('down') {
+@if (pager.currentPageNo < pager.totalPages) { <a (onClick)="showPage(pager.currentPageNo + 1)">
+  <mat-icon> arrow_drop_down</mat-icon>
+  </a>
+  }
+  } -->
+@case ('next') {
+@if (pager.currentPageNo < pager.totalPages) { <a (onClick)="showPage(pager.currentPageNo + 1)">
+  Show {{pager.currentPageNo*size + 1}} to @if ((pager.currentPageNo+1)*size < pager.total) { <span>
+    {{(pager.currentPageNo+1)*size}} of
+    {{pager.total}}</span>
+    }@if ((pager.currentPageNo+1)*size >= pager.total) {
+    <span>{{pager.total}}</span>
+    }
+    </a>
+    }
+    }
+    }
+    }

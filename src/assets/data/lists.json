@@ -1,0 +1,58 @@
+{
+  "items": [
+    {
+      "code": "toggle-details",
+      "title": "Toggle Details",
+      "view": "icon",
+      "value": false,
+      "items": [
+        {
+          "icon": "expand",
+          "label": "Show Details",
+          "value": true
+        },
+        {
+          "icon": "collapse",
+          "lable": "Hide Details",
+          "value": false
+        }
+      ]
+    },
+    {
+      "code": "nav-toggler",
+      "title": "Toggle Nav",
+      "view": "icon",
+      "value": false,
+      "items": [
+        {
+          "icon": "expand",
+          "label": "Show Nav",
+          "value": true
+        },
+        {
+          "icon": "collapse",
+          "lable": "Hide Nav",
+          "value": false
+        }
+      ]
+    },
+    {
+      "code": "expand-r",
+      "title": "Toggle Section",
+      "view": "icon",
+      "value": false,
+      "items": [
+        {
+          "icon": "expand",
+          "label": "Show Details",
+          "value": true
+        },
+        {
+          "icon": "collapse",
+          "lable": "Hide Details",
+          "value": false
+        }
+      ]
+    }
+  ]
+}

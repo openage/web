@@ -1,0 +1,126 @@
+.dropdown {
+  display: none;
+}
+
+.autocomplete {
+  position: relative;
+  z-index: 99;
+
+  &.dropdown {
+    display: block;
+    background-color: var(--background);
+    position: absolute;
+    transition: all 0.5s ease;
+    box-shadow: var(--box-shadow);
+    border-radius: var(--border-radius);
+    z-index: 10000;
+    max-height: 350px;
+    padding: 0.5em;
+    min-width: max-content;
+    width: 100%;
+
+    &.up {
+      bottom: 32px;
+    }
+
+    &.down {
+      top: 35px;
+    }
+
+    button:hover {
+      background-color: var(--hover-background);
+      cursor: pointer;
+    }
+  }
+
+  .search-input {
+    position: relative;
+    top: 0;
+    width: 100%;
+    z-index: 1;
+    background-color: var(--background);
+    padding-bottom: 0.5rem;
+  }
+
+  .item-list {
+    overflow-y: auto;
+    max-height: 250px;
+  }
+}
+
+.search-box {
+  margin: 5px 10px 0px 10px;
+}
+
+.search {
+  border-bottom: 1px solid var(--primary);
+  height: 30px;
+  background: var(--background);
+  padding-left: 10px;
+  overflow: hidden;
+}
+
+.search-label {
+  padding: 0.5rem 0 0.5rem 0;
+  text-align: center;
+}
+
+.value>.search {
+  padding-top: 5px;
+}
+
+.search>.form-control {
+  border: none;
+  padding: 0;
+  font-size: small;
+  background: none;
+}
+
+.search>.append,
+.search>.prepend {
+  margin: auto;
+  color: var(--text-disabled);
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+.dropdown>button {
+  margin-left: 0px !important;
+  height: 48px !important;
+  box-shadow: none !important;
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
+.placeholder label {
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
+button {
+  outline: none;
+}
+
+button:focus {
+  background-color: var(--focus-background);
+}
+
+@media only screen and (max-width:568px) {
+  .autocomplete>.dropdown {
+    min-width: fit-content;
+  }
+
+  .mat-list-base .mat-list-item {
+    height: auto !important;
+  }
+}
+
+@media only screen and (min-width:768px) and (max-width:1023px) {
+  .autocomplete>.dropdown {
+    min-width: fit-content;
+  }
+
+  .mat-list-base .mat-list-item {
+    height: auto !important;
+  }
+}

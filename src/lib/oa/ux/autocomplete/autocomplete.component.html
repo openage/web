@@ -1,0 +1,135 @@
+@if (!value || isEditing) {
+<!-- <oa-input [label]="label" [showLabel]="showLabel" [style]="style" [class]="class"
+  [placeholder]="placeholder || (showLabel? 'Search': label)" [required]="required" [readonly]="readonly"
+  [disabled]="disabled" [id]="id" [value]="value" [preFix]="preFix" [postFix]="postFix" (changed)="onTextChange($event)"
+  [options]="options.input" (canceled)="onShowOptions(false)" (selected)="checkSelection($event)"
+  [matMenuTriggerFor]="menu"></oa-input> -->
+} @else {
+<div [class]="class" [style]="style">
+  @if (label && showLabel) {
+  <label [attr.for]="id" [class.required]="required">{{label}}</label>
+  }
+  <button class="oa-input" class="w-100 text-left oa-input" [class.pointer]="!(disabled || readonly)"
+    (click)="onShowOptions(!showOptions)" [class.inline]="options?.inline">
+    @if (preFix) {
+    <oa-action [item]="preFix"></oa-action>
+    }
+    <div class="input text-left">
+      @if (!options.templates?.value) {
+      {{ options.displayFn(value) }}
+      }
+      @if (options.templates?.value) {
+      <ng-container *ngTemplateOutlet="options.templates.value; context: { value: value }"></ng-container>
+      }
+    </div>
+    @if (!(disabled || readonly)) {
+    <oa-action class="subtle ml-auto" [item]="postFix"></oa-action>
+    }
+  </button>
+</div>
+}
+
+<!-- <mat-menu #menu="matMenu"> -->
+<div class="search-box">
+  <!-- <oa-input [id]="id" #inputContainer [preFix]="{ code: 'search' }"
+      [placeholder]="placeholder || (showLabel? 'Search': label)" [disabled]="disabled" [readonly]="readonly"
+      (changed)="onTextChange($event)" [options]="options.input" (canceled)="onShowOptions(false)" [value]="search"
+      (selected)="checkSelection($event)" (click)="$event.stopPropagation();">
+    </oa-input> -->
+</div>
+
+@if (items.length) {
+@if (options.search.limit && pager.totalPages >1 && pager.currentPageNo > 1) {
+<button mat-menu-item>
+  <div class="controls-row">
+    <span class="spacer"></span>
+    {{pager.totalPages}} {{pager.currentPageNo}}
+    <app-paginator [pager]="pager" [total]="pager.total" [fetchByLimit]="false" [size]="options.search.limit"
+      view="previous">
+    </app-paginator>
+    <span class="spacer"></span>
+  </div>
+</button>
+}
+@for (item of items; track item) {
+<button mat-menu-item class="w-100" (click)="onSelect(item)">
+  @if (options.templates.item) {
+  <div *ngTemplateOutlet="
+            options.templates.item;
+            context: { value: item }
+          "></div>
+  }
+  @if (!options.templates.item) {
+  {{ options.displayFn(item) }}
+  }
+</button>
+}
+@if (options.search.limit && pager.totalPages >1 && pager.currentPageNo < pager.totalPages) { <button mat-menu-item>
+  <div class="controls-row">
+    <span class="spacer"></span>
+    <app-paginator [pager]="pager" [total]="pager.total" [fetchByLimit]="false" [size]="options.search.limit"
+      view="next">
+    </app-paginator>
+    <span class="spacer"></span>
+  </div>
+  </button>
+  }
+  }
+  <!-- </mat-menu> -->
+
+  <!--
+<div [class]="class" [style]="style" [class.autocomplete]="showOptions" (clickOutside)="onShowOptions(false)">
+  <label *ngIf="label && showLabel" [attr.for]="id" [class.required]="required">{{label}}</label>
+  <ng-container *ngIf="value; then valueViewer; else placeholderViewer"></ng-container>
+  <div id="{{ optionsId }}" class="{{ ddlType }} {{ ddlPosition }}" tabindex="0">
+    <div class="search-input">
+      <div class="controls-row">
+        <label>{{ options.placeholder || "Search" }} {{ options.label }}</label>
+        <span class="spacer"></span>
+        <mat-icon class="subtle" oaTooltip="Clear" (click)="onShowOptions(false)">close</mat-icon>
+      </div>
+      <oa-input [id]="id" #inputContainer [preFix]="{ code: 'search' }" [disabled]="disabled" [readonly]="readonly"
+        (changed)="onTextChange($event)" [options]="options.input" (canceled)="onShowOptions(false)" [value]="search"
+        (selected)="checkSelection($event)">
+      </oa-input>
+    </div>
+
+    <div class="item-list">
+      <processing-indicator *ngIf="isProcessing"></processing-indicator>
+      <div class="controls-row" *ngIf="options.search.limit">
+        <span class="spacer"></span>
+        <app-paginator [pager]="pager" [total]="pager.total" [fetchByLimit]="false" [size]="options.search.limit"
+          view="previous">
+        </app-paginator>
+        <span class="spacer"></span>
+      </div>
+      <div class="controls-row" *ngIf="error">
+        <span class="spacer"></span><span>{{ error }}</span><span class="spacer"></span>
+      </div>
+      <mat-action-list *ngFor="let item of items">
+        <button class="w-100" (click)="onSelect(item)">
+          <mat-list-item>
+            <ng-container *ngIf="options.templates.item">
+              <div *ngTemplateOutlet="
+                options.templates.item;
+                context: { value: item }
+              "></div>
+            </ng-container>
+            <ng-container *ngIf="!options.templates.item">
+              {{ options.displayFn(item) }}
+            </ng-container>
+          </mat-list-item>
+        </button>
+      </mat-action-list>
+
+      <div class="controls-row" *ngIf="options.search.limit">
+        <span class="spacer"></span>
+        <app-paginator [pager]="pager" [total]="pager.total" [fetchByLimit]="false" [size]="options.search.limit"
+          view="next">
+        </app-paginator>
+        <span class="spacer"></span>
+      </div>
+    </div>
+  </div>
+</div>
+-->

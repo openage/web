@@ -1,0 +1,206 @@
+{
+    "layout": {
+        "sections": [
+            {
+                "class": "container",
+                "code": "collection-container",
+                "container": {
+                    "title": {
+                        "text": "<h3>Quote Management <span class='highlight'> Solution</span></h3>"
+                    },
+                    "description": "It is Contract management and  RFQ  tool between providers and hospitals. The hospitals can create RFQ from RFQ/RFP tab and invite providers for bids. It also provides tool for comparing the bids and awarding the contract."
+                }
+            },
+            {
+                "code": "banner-container",
+                "class": "container",
+                "container": {
+                    "body": {
+                        "class": "flex-2-1"
+                    }
+                }
+            },
+            {
+                "class": "container",
+                "code": "pricing-container",
+                "container": {
+                    "body": {
+                        "class": "flex-row three"
+                    }
+                }
+            },
+            {
+                "code": "domains-container",
+                "container": {
+                    "description": {
+                        "text": "<h4>Not just limited to the below <span class='highlight'>domains</span></h4>"
+                    },
+                    "body": {
+                        "class": "flex-row seven domains"
+                    }
+                }
+            }
+        ]
+    },
+    "components": [
+        {
+            "section": "banner-container",
+            "control": "html",
+            "value": []
+        },
+        {
+            "section": "banner-container",
+            "control": "html",
+            "container": {},
+            "value": [
+                "<img class='testimonialImage' src='/assets/app/applegos/images/testimonial/servana-bg.png'>"
+            ]
+        },
+        {
+            "section": "banner-container",
+            "control": "html",
+            "value": [
+                "<h1><span class='highlight'>Servana</span></h1>",
+                "<br>",
+                "<h3 class='card-detail-text'>A veteran healthcare supply chain leader working with multiple institutions across the US wanted to to reduce delays and costs in service procurement.</h3>",
+                "<h3 class='card-detail-text'>Using AppLegos platform, we developed an end to RFQ and Bid management solution that connected Healthcare providers to Service providers.</h3>"
+            ]
+        },
+        {
+            "section": "pricing-container",
+            "control": "html",
+            "container": {
+                "class": "card-detail-container"
+            },
+            "value": [
+                "<h1 class='highlight'>Dashboard</h1>",
+                "<br>",
+                "<h3 class='card-detail-text'><i class='fa fa-check highlight'></i>Provides RFQ summary for buyers.</h3>",
+                "<h3 class='card-detail-text'><i class='fa fa-check highlight'></i>Bids summary for providers.</h3>",
+                "<h3 class='card-detail-text'><i class='fa fa-check highlight'></i>Contract summary for buyers and providers. </h3>",
+                "<h3 class='card-detail-text'><i class='fa fa-check highlight'></i>Organizes Activity Summary and  Pending action alerts</h3>"
+            ]
+        },
+        {
+            "section": "pricing-container",
+            "control": "html",
+            "container": {
+                "class": "card-detail-container"
+            },
+            "value": [
+                "<h1 class='highlight'>RFQ/RFP</h1>",
+                "<br>",
+                "<h3 class='card-detail-text'><i class='fa fa-check highlight'></i>Create RFQ using RFQ/REP tab.</h3>",
+                "<h3 class='card-detail-text'><i class='fa fa-check highlight'></i> Provides information regarding number of bids,  highest and lowest bid. </h3>",
+                "<h3 class='card-detail-text'><i class='fa fa-check highlight'></i>You can also pause or archive it.</h3>",
+                "<h3 class='card-detail-text'><i class='fa fa-check highlight'></i> Comprises of details of the contract regarding its start date , removal or expiry date. </h3>",
+                "<h3 class='card-detail-text'><i class='fa fa-check highlight'></i> Consists of Provider Invitation and Communication </h3>"
+            ]
+        },
+        {
+            "section": "pricing-container",
+            "control": "html",
+            "container": {
+                "class": "card-detail-container"
+            },
+            "value": [
+                "<h1 class='highlight'>Contract</h1>",
+                "<br>",
+                "<h3 class='card-detail-text'><i class='fa fa-check highlight'></i>Manages list of Contracts along with its duration and their amounts with respective Bid id. </h3>",
+                "<h3 class='card-detail-text'><i class='fa fa-check highlight'></i>Displays contract signed date along with active or expired status</h3>"
+            ]
+        },
+        {
+            "section": "pricing-container",
+            "control": "html",
+            "container": {
+                "class": "card-detail-container"
+            },
+            "value": [
+                "<h1 class='highlight'>Calendar</h1>",
+                "<br>",
+                "<h3 class='card-detail-text'><i class='fa fa-check highlight'></i>Manages contract details starting from its award date and final submission to work commencement and its expiry date.</h3>"
+            ]
+        },
+        {
+            "section": "pricing-container",
+            "control": "html",
+            "container": {
+                "class": "card-detail-container"
+            },
+            "value": [
+                "<h1 class='highlight'>Service Providers </h1>",
+                "<br>",
+                "<h3 class='card-detail-text'><i class='fa fa-check highlight'></i>Compare the bid and award the contract</h3>"
+            ]
+        },
+        {
+            "section": "pricing-container",
+            "control": "html",
+            "container": {
+                "class": "card-detail-container"
+            },
+            "value": [
+                "<h1 class='highlight'>Analytics </h1>",
+                "<br>",
+                "<h3 class='card-detail-text'><i class='fa fa-check highlight'></i>Comparison of Total RFQs, Total Bids, Total Contracts, and Total Contract Cost over the years through line and bar graphical representation</h3>"
+            ]
+        },
+        {
+            "section": "domains-container",
+            "control": "html",
+            "value": [
+                "<img class='domainImage' src='/assets/app/applegos/images/domains/education.svg'>",
+                "<h3 class=''>Education</h3>"
+            ]
+        },
+        {
+            "section": "domains-container",
+            "control": "html",
+            "value": [
+                "<img class='domainImage' src='/assets/app/applegos/images/domains/finance.svg'>",
+                "<h3 class=''>Finance</h3>"
+            ]
+        },
+        {
+            "section": "domains-container",
+            "control": "html",
+            "value": [
+                "<img class='' src='/assets/app/applegos/images/domains/government.svg'>",
+                "<h3 class=''>Government</h3>"
+            ]
+        },
+        {
+            "section": "domains-container",
+            "control": "html",
+            "value": [
+                "<img class='' src='/assets/app/applegos/images/domains/health-care.svg'>",
+                "<h3 class=''>Health Care</h3>"
+            ]
+        },
+        {
+            "section": "domains-container",
+            "control": "html",
+            "value": [
+                "<img class='' src='/assets/app/applegos/images/domains/logistics.svg'>",
+                "<h3 class=''>Logistics</h3>"
+            ]
+        },
+        {
+            "section": "domains-container",
+            "control": "html",
+            "value": [
+                "<img class='' src='/assets/app/applegos/images/domains/travel.svg'>",
+                "<h3 class=''>Travel</h3>"
+            ]
+        },
+        {
+            "section": "domains-container",
+            "control": "html",
+            "value": [
+                "<img class='' src='/assets/app/applegos/images/domains/e-commerence.svg'>",
+                "<h3 class=''>E-commerence</h3>"
+            ]
+        }
+    ]
+}

@@ -1,0 +1,19 @@
+.content {
+    position: relative;
+}
+
+.modes {
+    position: absolute;
+    display: flex;
+    background: white;
+    right: 10px;
+    margin-top: 5px;
+    padding: 10px 0px 10px 10px;
+    border-radius: 5px;
+    box-shadow: 3px 3px #ded8ce;
+    border: 1px solid var(--neutral);
+}
+
+.m-r-10 {
+    margin-right: 10px !important;
+}

@@ -1,0 +1,19 @@
+@switch (view) {
+@case ('raised') {
+<button mat-raised-button color="primary" (click)="onClick()" [oaTooltip]="message">{{title}}</button>
+}
+@case ('stroked') {
+<button mat-stroked-button color="primary" (click)="onClick()" [oaTooltip]="message">{{title}}</button>
+}
+@case ('flat') {
+<button mat-flat-button (click)="onClick()" [oaTooltip]="message">{{title}}</button>
+}
+@case ('icon') {
+<button mat-icon-button (click)="onClick()" [oaTooltip]="message">
+  <mat-icon>cloud_upload</mat-icon>
+</button>
+}
+@default {
+<button mat-button (click)="onClick()" [oaTooltip]="message">{{title}}</button>
+}
+}

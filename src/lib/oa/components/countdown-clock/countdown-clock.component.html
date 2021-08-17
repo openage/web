@@ -1,0 +1,18 @@
+<div class="timer">
+  @if (!from) {
+    <div>
+      <button mat-button (click)="start()">Start</button>
+    </div>
+  }
+  @if (from && secondsLeft > 0) {
+    <div [class.warn]="secondsLeft < 60">
+      {{timeLeft}}
+    </div>
+  }
+
+  @if (from && secondsLeft <= 0) {
+    <div>
+      <button mat-button (click)="finish()">Finish</button>
+    </div>
+  }
+</div>

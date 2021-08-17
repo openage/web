@@ -1,0 +1,10 @@
+<div class="controls-row stepper">
+  @for (item of items; track item; let i = $index) {
+    <div class="hr-line spacer {{item.style}}"></div>
+    <div class="step styled {{item.active ? 'active-step' : 'inactive-step'}}" [class.done]="item.active"
+      [class.in-progress]="item.active" [class.not-started]="!item.active" (click)="onSelect(item)">
+      <span class="index">{{i+1}}</span><span>{{item.title|name}} </span>
+    </div>
+    <div class="hr-line spacer {{item.style}}"></div>
+  }
+</div>

@@ -1,0 +1,7 @@
+.material-icons{ 
+    cursor: pointer;
+}
+
+mat-raised-button{
+    text-transform: capitalize;
+}

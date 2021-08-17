@@ -1,0 +1,139 @@
+.sectionQuestion {
+  margin-top: 20px;
+  margin-bottom: 8px;
+  color: var(--primary);
+}
+
+.inputSection {
+  padding: 5px 10px;
+  background: var(--surface);
+  border-radius: 4px;
+  box-shadow: 0 0px 0px 0px var(--shadow), 0 0px 0px 0 var(--shadow), 0 1px 4px 0 var(--shadow);
+}
+
+.row {
+  margin: 0px;
+}
+
+.col-3 {
+  padding: 0px 10px 0px 0px;
+  text-align: right;
+  font-size: 15px;
+  font-weight: 500;
+  border-right: 2px dashed rgba(0, 0, 0, 0.1);
+  padding-bottom: 10px;
+  color: var(--text-primary);
+}
+
+.col-9 {
+  padding: 0px;
+  padding-left: 8px;
+  font-size: 15px;
+}
+
+.journalDiv {
+  border-bottom: 1px solid var(--background);
+  margin-bottom: 4px;
+
+  .row {
+    .col-9 {
+      padding-bottom: 15px;
+    }
+  }
+
+  &:last-child {
+    border: unset !important;
+
+    .row {
+      &:last-child {
+        .aJournalDiv {
+          &::before {
+            right: -4px;
+          }
+        }
+      }
+    }
+  }
+}
+
+.aJournalDiv {
+  &::before {
+    content: '';
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    right: -6px;
+    background-color: var(--neutral);
+    top: 0px;
+    border-radius: 50%;
+    z-index: 1;
+  }
+}
+
+.active {
+  &::before {
+    right: -8px !important;
+    width: 16px;
+    height: 16px;
+    background-color: var(--success) !important;
+  }
+}
+
+.headingDiv {
+
+  .col-3,
+  .col-9 {
+    padding-bottom: 0px !important;
+    padding-top: 15px;
+  }
+
+  .col-3 {
+    div {
+      label {
+        margin: 0px;
+      }
+    }
+  }
+
+  .col-9 {
+    div {
+      label {
+        margin: 0px;
+      }
+    }
+  }
+}
+
+.first {
+  .headingDiv {
+    .col-3 {
+      border: unset !important;
+    }
+  }
+}
+
+.journalDiv {
+  &:last-child {
+    .row {
+      &:last-child {
+        .aJournalDiv {
+          border: unset !important;
+        }
+      }
+    }
+  }
+}
+
+.heading {
+  font-weight: bold;
+}
+
+.eventIcon {
+  margin-right: -18px;
+}
+
+.location {
+  width: 90%;
+  word-break: break-word;
+  padding-right: 8px;
+}

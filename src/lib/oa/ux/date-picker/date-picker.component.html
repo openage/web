@@ -1,0 +1,138 @@
+@switch (view) {
+@case ('date') {
+<div class="oa-input" [class.readonly]="readonly" [style]="style" [oaDatePicker]="date" (select)="updated($event)">
+  <div class="input">
+    @if(date) {
+    <span>{{date}}</span>
+    } @else {
+    <span class="sub-text">{{placeholder}}</span>
+    }
+  </div>
+  <oa-icon class="postfix" value="date"></oa-icon>
+</div>
+}
+@case ('icon') {
+<div class="oa-icon md x" [class.active]="value" [min]="minDate" [max]="maxDate" [oaDatePicker]="date"
+  (select)="updated($event)">
+  <div class="month">{{value| format: 'MMM'}}</div>
+  <div class="day">{{value | format: 'd'}}</div>
+</div>
+}
+
+@case ('range') {
+<div class="oa-input" [class.readonly]="readonly" [style]="style">
+  <div class="input from" [oaDatePicker]="range?.start" (select)="updatedStart($event)">
+    @if(range?.start) {
+    <span>{{range?.start}}</span>
+    } @else {
+    <span class="sub-text">From</span>
+    }
+  </div>
+  <span>-</span>
+  <div class="input till" [class.readonly]="readonly" [oaDatePicker]="range?.finish" (select)="updatedFinish($event)">
+    @if(range?.finish) {
+    <span>{{range?.finish}}</span>
+    } @else {
+    <span class="sub-text">Till</span>
+    }
+  </div>
+</div>
+}
+<!--
+@case ('week') {
+<div class="week">
+  <div>
+    {{ month }}</div>
+  <div class="controls-row">
+    <button mat-icon-button (click)="showPreviousWeek()">
+      <mat-icon class="subtle">arrow_back</mat-icon>
+    </button>
+
+    @for (item of dates; track item) {
+    <div class="oa-icon md x" (click)="click(item)" [class.active]="item === value">
+      <div class="month">{{item | time: "ddd"}}</div>
+      <div class="day">{{item | time: "DD" }}</div>
+    </div>
+    }
+    <button mat-icon-button (click)="showNextWeek()">
+      <mat-icon class="subtle">arrow_forward</mat-icon>
+    </button>
+  </div>
+</div>
+}
+@case ('day') {
+<div class="day">
+  <div class="controls-row">
+    <button mat-icon-button (click)="showPreviousDate()">
+      <mat-icon class="subtle">arrow_back</mat-icon>
+    </button>
+    <span style="margin-top: 10px;
+          white-space: nowrap;">{{date | date: 'dd/MM/yyyy'}}</span>
+    <input matInput class="form-control" [matDatepicker]="picker" (dateInput)="updated($event)"
+      (dateChange)="updated($event)">
+    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-datepicker #picker></mat-datepicker>
+    <button mat-icon-button (click)="showNextDate()">
+      <mat-icon class="subtle">arrow_forward</mat-icon>
+    </button>
+  </div>
+</div>
+}
+@case ('month') {
+<div class="controls-row month">
+  <button mat-icon-button (click)="showPreviousMonth()">
+    <mat-icon class="subtle">arrow_back</mat-icon>
+  </button>
+  <div class="bor">
+    <input class="form-control" type="month" [value]="month" (change)="updated($event)" />
+  </div>
+  <button mat-icon-button (click)="showNextMonth()">
+    <mat-icon class="subtle">arrow_forward</mat-icon>
+  </button>
+</div>
+}
+@case ('inline') {
+<div class="oa-input" [class.inline]="options?.inline" [ngStyle]="options?.style" [ngClass]="options?.class"
+  (click)="openPicker()" (mouseover)="isSelected=true" (mouseout)="isSelected=false">
+  <input #inputContainer class="hidden" [class.selected]="isSelected" [readonly]="readonly" [min]="minDate"
+    [max]="maxDate" [matDatepicker]="picker" (dateInput)="updated($event)">
+  @if (placeholder && !date) {
+  <label>{{placeholder}}</label>
+  }
+  <div class="input">{{date}}</div>
+  <mat-icon [class]="isSelected?'subtle inline-date-picker':'inline-date-picker'">date_range</mat-icon>
+  <mat-datepicker #picker></mat-datepicker>
+</div>
+}
+@case ('readonly') {
+<div class="dateText">{{date ? date : value | date: format}}</div>
+}
+@case ('weekAndData') {
+<div class="weekAndData">
+  <div class="controls-row">
+    <button mat-icon-button (click)="showPreviousSeven()">
+      <mat-icon class="subtle">chevron_left</mat-icon>
+    </button>
+    @for (item of dates; track item) {
+    <div class="oa-icon xx-md" (click)="click(item)" [class.minDate]="item?.getTime() < minDate?.getTime()"
+      [class.active]="isCurrent(item)">
+      @if (getPopulateData(item)) {
+      <div class="weekBage">{{getPopulateData(item)}}</div>
+      }
+      <div class="day">{{item | time: "DD" }}</div>
+      <div class="month">{{item | time: "MMM"}}</div>
+    </div>
+    }
+    <button mat-icon-button (click)="showNextSeven()">
+      <mat-icon class="subtle">chevron_right</mat-icon>
+    </button>
+  </div>
+</div>
+}
+-->
+@default {
+<p>
+  {{view}} NOT SUPPORTED
+</p>
+}
+}

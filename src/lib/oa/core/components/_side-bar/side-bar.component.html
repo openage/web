@@ -1,0 +1,133 @@
+<mat-sidenav-container>
+  @if (entity) {
+  <mat-sidenav class="mat-elevation-z1" [opened]="opened" [mode]="mode" position="end">
+    <div class="sections">
+      @if (opened && !scrolled) {
+      <mat-icon class="close" [oaTooltip]="'Hide Sidebar'" (click)="close()">chevron_right
+      </mat-icon>
+      }
+      <!-- <div class="defaultSection" *ngIf="!membersSection && !messagesSection && !activitiesSection">
+        <oa-no-data-found [message]="'No Section Selected'"></oa-no-data-found>
+      </div> -->
+      @if (opened || isInitialized) {
+      @if (memberByRoles.length && task) {
+      <div class="section">
+        <div class="header" [class.active]="membersSection">
+          <i class="members" (click)="membersSection=!membersSection" [class.active]="membersSection"></i>
+          <label (click)="membersSection=!membersSection">Members</label>
+        </div>
+        <div class="body" [class.hidden]="!membersSection">
+          <!-- <gateway-task-section *ngIf="task" [view]="'owner'" [properties]="task"></gateway-task-section>
+              <gateway-task-section *ngIf="task" [view]="'assignee'" [properties]="task"></gateway-task-section> -->
+          @for (role of memberByRoles; track role) {
+          <gateway-member-list [role]="role.roleType" [values]="role.members" (selected)="sendEmail($event)"
+            (changed)="onSaveMembers($event)">
+          </gateway-member-list>
+          }
+        </div>
+      </div>
+      }
+      @if (task) {
+      <div class="section">
+        <div class="header" [class.active]="tasksSection">
+          <i class="task" (click)="tasksSection=!tasksSection"></i>
+          <label class="spacer" (click)="tasksSection=!tasksSection">Action Items</label>
+          @if (tasksSection) {
+          <mat-icon class="subtle" (click)="onRefreshTasks()">refresh</mat-icon>
+          }
+        </div>
+        <div class="body" [class.hidden]="!tasksSection">
+          @if (task) {
+          <gateway-task-list #taskList [parent]="task" [view]="'sideBar'"></gateway-task-list>
+          }
+        </div>
+      </div>
+      }
+      <div class="section">
+        <div class="header" [class.active]="tagSection">
+          <i class="tags" (click)="tagSection=!tagSection"></i>
+          <label class="spacer" (click)="tagSection=!tagSection">Tags</label>
+          @if (tagSection) {
+          <mat-icon class="subtle" (click)="chipsDetail.ngOnInit()">refresh</mat-icon>
+          }
+        </div>
+        @if (entity) {
+        <div class="body" [class.hidden]="!tagSection">
+          <insight-tag-detail #chipsDetail [view]="'chips'" (showSelecter)="tagSectionAdd = $event" [entity]="entity">
+          </insight-tag-detail>
+          <div class="selectorDiv">
+            @if (tagSectionAdd) {
+            <insight-tag-types-selector [type]="entity.type" (changed)="addTag($event)">
+            </insight-tag-types-selector>
+            }
+          </div>
+        </div>
+        }
+      </div>
+      @if (conversation) {
+      <div class="section">
+        <div class="header" [class.active]="messagesSection">
+          <i class="notes" (click)="messagesSection=!messagesSection"></i>
+          <label (click)="messagesSection=!messagesSection">Notes</label>
+        </div>
+        <div class="body" [class.hidden]="!messagesSection">
+          <send-it-new-message [modes]="{chat: true}" [conversation]="conversation"></send-it-new-message>
+          <send-it-conversation-detail [view]="'line'" [conversation]="conversation">
+          </send-it-conversation-detail>
+        </div>
+      </div>
+      }
+      <div class="section">
+        <div class="header" [class.active]="activitiesSection">
+          <i class="activities" (click)="activitiesSection=!activitiesSection"></i>
+          <label class="spacer">Activities</label>
+          @for (item of icons; track item; let i = $index) {
+          <mat-icon class="lg subtle pointer filter-icons" oaTooltip="{{item.label}}" (click)="onFilter(item,i)"
+            [class.active]="selectedIndex === i">{{item.icon}}
+          </mat-icon>
+          }
+          @if (activitiesSection) {
+          <mat-icon class="subtle" (click)="onRefreshActivities()">refresh</mat-icon>
+          }
+        </div>
+        <div class="body" [class.hidden]="!activitiesSection">
+          <insight-journal-list [entity]="entity" [type]="selectedType" [field]="setField" #activityList>
+          </insight-journal-list>
+        </div>
+      </div>
+      }
+    </div>
+  </mat-sidenav>
+  }
+  <div class="controls-row">
+    <div class="spacer">
+      <ng-content></ng-content>
+    </div>
+    @if (entity && !opened) {
+    <div class="side-bar-toggler mat-elevation-z1 scrollable">
+      <ng-container *ngTemplateOutlet="togglerTemplate"></ng-container>
+    </div>
+    }
+  </div>
+</mat-sidenav-container>
+
+<ng-template #togglerTemplate>
+  <div [class.opened]="opened">
+    <button class="openBtn" mat-icon-button>
+      @if (!opened) {
+      <mat-icon [oaTooltip]="'Collapse Sidebar'" (click)="open()">chevron_left</mat-icon>
+      }
+      @if (opened) {
+      <mat-icon [oaTooltip]="'Expand Sidebar'" (click)="close()">chevron_right</mat-icon>
+      }
+    </button>
+    @for (section of sections; track section) {
+    @if (section.show) {
+    <div class="marginTopBottom">
+      <i [oaTooltip]="section.name" class="md {{section.code}} cursorPointer" [class.active]="section.isSelected"
+        (click)="open()"></i>
+    </div>
+    }
+    }
+  </div>
+</ng-template>

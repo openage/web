@@ -1,0 +1,54 @@
+.progress-items {
+    position: fixed;
+    bottom: 10px;
+    z-index: 1000;
+    right: 40px;
+    background: white;
+    box-shadow: 5px 10px 8px 5px #8888;
+    width: 460px;
+    border-radius: 4px
+}
+
+.header {
+    background: #202124;
+    padding: 20px;
+    color: white;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px
+}
+
+.list-container {
+    max-height: 255px;
+    overflow-y: auto
+}
+
+.listitem {
+    padding: 20px;
+    border-top: 1.5px solid var(--background);
+    align-items: center;
+}
+
+.listitem:hover {
+    cursor: pointer;
+    background: #F1F3F4
+}
+
+.name {
+    width: 320px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+mat-icon.success {
+    color: green
+}
+
+mat-icon.error {
+    color: var(--primary)
+}
+
+.spinner {
+    margin-right: 30px;
+    margin-bottom: 25px
+}

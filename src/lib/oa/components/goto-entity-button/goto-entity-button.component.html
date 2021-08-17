@@ -1,0 +1,6 @@
+@if (view === 'button') {
+  <button mat-raised-button color="primary" (click)="goto()">{{title}}</button>
+}
+@if (view === 'icon') {
+  <span class="material-icons" (click)="goto()">keyboard_arrow_right</span>
+}

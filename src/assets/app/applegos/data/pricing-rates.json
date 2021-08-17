@@ -1,0 +1,25 @@
+{
+    "items": [
+        {
+            "code": "starter ",
+            "icon": "/assets/app/applegos/images/use-cases/admin_panels.webp",
+            "image": "/assets/app/applegos/images/use-cases/admin_panels.webp",
+            "name": "Starter",
+            "description": "For individuals and agile startups with simple needs for web and mobile apps, but skipping the boilerplate."
+        },
+        {
+            "code": "business ",
+            "icon": "/assets/app/applegos/images/use-cases/admin_panels.webp",
+            "image": "/assets/app/applegos/images/use-cases/admin_panels.webp",
+            "name": "Business",
+            "description": "For fast-growth scaleups that want to grow by building branded operational apps and internal tooling across teams."
+        },
+        {
+            "code": "enterprise ",
+            "icon": "/assets/app/applegos/images/use-cases/admin_panels.webp",
+            "image": "/assets/app/applegos/images/use-cases/admin_panels.webp",
+            "name": "Enterprise",
+            "description": "For large businesses who need SSO/AD enabled enterprise-class apps with advance security and control and support."
+        }
+    ]
+}

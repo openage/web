@@ -1,0 +1,117 @@
+@switch (type) {
+@case ('cover-bars') {
+<div class="cover">
+  <div class="outer">
+    <div class="middle">
+      <!-- <div class="inner"> -->
+      <div class="lds-facebook">
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
+    </div>
+    <!-- </div> -->
+  </div>
+</div>
+}
+@case ('inline-spinner') {
+<div class="inline">
+  <div class="outer">
+    <div class="middle">
+      <!-- <mat-spinner></mat-spinner> -->
+    </div>
+  </div>
+</div>
+}
+@case ('inline-spinball') {
+<div class="inline">
+  <div class="middleallign">
+    <!-- <div class="middleallign"> -->
+    <div class="lds-ellipsis">
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
+    <!-- </div> -->
+  </div>
+</div>
+}
+@case ('cover-spinner') {
+<!-- <mat-spinner [diameter]="diameter"></mat-spinner> -->
+}
+@case ('cover-progress-bar') {
+<div class="cover">
+  <div class="outer">
+    <div class="middle">
+      @if (!progressError) {
+      <!-- <mat-progress-bar class="cover-progress-bar" [color]="'primary'" [mode]="progressBarMode"
+            [value]="progressBarvalue" [bufferValue]="progressBarBufferValue">
+          </mat-progress-bar> -->
+      }
+      @if (!progressError) {
+      <div class="controls-row">
+        <div class="spacer"></div>
+        <div>{{progressBarvalue}}%</div>
+        <div class="spacer"></div>
+      </div>
+      }
+      @if (progressError) {
+      <div class="controls-row">
+        <div class="spacer"></div>
+        <div>System got stuck at {{progressBarvalue}}%. Please contact to the tech team </div>
+        <div class="spacer"></div>
+      </div>
+      }
+    </div>
+  </div>
+</div>
+}
+@case ('cover-stepper') {
+<div class="cover cover-stepper">
+  <div class="controls-row stepper">
+    @for (item of steps; track item; let i = $index) {
+    <div class="hr-line {{item.status}} spacer "></div>
+    <div class="circle styled {{item.style || 'default'}} {{item.status}}" [class.done]="item.status === 'completed'"
+      [class.not-started]="item.status !== 'completed'">
+      @if (item.status !== 'completed') {
+      <span>{{i+1}}</span>
+      }
+      @if (item.status === 'completed') {
+      <oa-icon color="primary">check</oa-icon>
+      }
+      <div class="text {{item.status}}">{{item.label}}</div>
+    </div>
+    <div class="hr-line {{item.rightBar?item.status:'default'}} spacer"></div>
+    }
+  </div>
+</div>
+}
+@case ('cover-spinner-withBackground') {
+<div class="spinner-background">
+  <!-- <mat-spinner class="background" mode="determinate" value="100" [diameter]="diameter" [color]="'grey'">
+    </mat-spinner>
+    <mat-spinner [value]="progressBarvalue" [diameter]="diameter" mode="determinate"></mat-spinner> -->
+</div>
+}
+@case ('inline-progress-bar') {
+<div>
+  @if (progressBarMode === 'determinate') {
+  <div class="controls-row">
+    <div class="spacer"></div>
+    <div>{{(progressBarvalue || 0) }}%</div>
+  </div>
+  }
+  <!-- <mat-progress-bar class="inline-progress-bar" [value]="progressBarvalue" [color]="'primary'"
+      [mode]="progressBarMode">
+    </mat-progress-bar> -->
+</div>
+}
+@case ('inline-download-indicator') {
+<div>
+  <div class="download">
+    <oa-icon class="md download-icon" color="primary">arrow_downward</oa-icon>
+  </div>
+</div>
+}
+}

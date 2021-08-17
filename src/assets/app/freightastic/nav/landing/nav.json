@@ -1,0 +1,13 @@
+{
+  "code": "home",
+  "title": "Home",
+  "url": "/landing",
+  "icon": "mat-dashboard",
+  "meta": {
+    "ref": "/assets/app/freightastic/nav/landing/index.json"
+  },
+  "permissions": [
+    "user"
+  ],
+  "items": []
+}

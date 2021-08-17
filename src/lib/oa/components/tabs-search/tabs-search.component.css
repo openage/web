@@ -1,0 +1,11 @@
+.tabs-bar {
+    margin-bottom: 10px;
+}
+
+@media only screen and (max-width:568px) {
+    .tabs-bar {
+        margin-bottom: 10px;
+        overflow-x: auto;
+        margin-top: 20px;
+    }
+}

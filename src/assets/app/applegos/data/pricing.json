@@ -1,0 +1,25 @@
+{
+  "items": [
+    {
+      "code": "userBased ",
+      "icon": "/assets/app/applegos/images/use-cases/admin_panels.webp",
+      "image": "/assets/app/applegos/images/use-cases/admin_panels.webp",
+      "title": "User based plans",
+      "description": "Unlimited appsStarts at $10 per user per month. Ideal for multiple apps for fixed set of users."
+    },
+    {
+      "code": "usageBased ",
+      "icon": "/assets/app/applegos/images/use-cases/admin_panels.webp",
+      "image": "/assets/app/applegos/images/use-cases/admin_panels.webp",
+      "title": "Usage based plans",
+      "description": "Unlimited users Starts at $100 per month. Tasks are API calls, database queries, automation task"
+    },
+    {
+      "code": "developer ",
+      "icon": "/assets/app/applegos/images/use-cases/admin_panels.webp",
+      "image": "/assets/app/applegos/images/use-cases/admin_panels.webp",
+      "title": "Developer only plans",
+      "description": "Unlimited apps For self-hosted plans on enterprise contract."
+    }
+  ]
+}

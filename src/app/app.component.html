@@ -1,0 +1,82 @@
+<div class="oa-app {{theme?.type}} {{theme?.code}} {{layoutType}}">
+
+  @switch (layoutType) {
+  @case ('sticky-header') {
+  <ng-container *ngTemplateOutlet="stickyHeaderLayout"></ng-container>
+  }
+  @case ('sticky-sidebar') {
+  <ng-container *ngTemplateOutlet="stickySidebarLayout"></ng-container>
+  }
+  @default {
+  <ng-container *ngTemplateOutlet="layoutNotAvailable; context:{type: layoutType}"></ng-container>
+  }
+  }
+
+  @if (envName) {
+  <div class="env">{{envName}}</div>
+  }
+</div>
+
+<div [class.hidden]="!isProcessing" class="oa-app {{theme?.type}} {{theme?.code}}">
+  <div class="overlay">
+    <div class="processing">
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
+  </div>
+</div>
+
+<ng-template #stickySidebarLayout>
+  @if(sidebar) {
+  <page-side-bar></page-side-bar>
+  }
+  <div class="page-body {{styles?.content?.class}}" [style]="styles?.content?.style" [class.with-header]="header">
+    @if (header) {
+    <page-header></page-header>
+    }
+    <ng-container *ngTemplateOutlet="bodyTemplate"></ng-container>
+    @if (footer) {
+    <page-footer></page-footer>
+    }
+  </div>
+</ng-template>
+
+<ng-template #stickyHeaderLayout>
+  @if (header) {
+  <page-header></page-header>
+  }
+  <div class="page-body {{styles?.content?.class}}" [style]="styles?.content?.style" [class.with-header]="header"
+    [class.with-side-bar]="sidebar">
+    @if(sidebar) {
+    <page-side-bar></page-side-bar>
+    <ng-container *ngTemplateOutlet="bodyTemplate"></ng-container>
+    } @else {
+    <ng-container *ngTemplateOutlet="bodyTemplate"></ng-container>
+    }
+  </div>
+  @if (footer) {
+  <page-footer></page-footer>
+  }
+</ng-template>
+
+<ng-template #layoutNotAvailable let-type="type">
+  <oa-not-available code="not-available" title="Layout '{{type}}' is not available"
+    icon="error-coming-soon"></oa-not-available>
+</ng-template>
+
+
+<ng-template #bodyTemplate>
+  <div #pageBody class="page-content">
+    <oa-context-menu></oa-context-menu>
+    <oa-core-tasks-progress-footer></oa-core-tasks-progress-footer>
+    <router-outlet></router-outlet>
+    @if (underMaintenance) {
+    <oa-not-available code="maintenance"></oa-not-available>
+    } @else {
+    <router-outlet></router-outlet>
+    }
+  </div>
+</ng-template>

@@ -1,0 +1,32 @@
+{
+    "items": [
+        {
+            "code": "gateway",
+            "icon": "/assets/app/applegos/images/icons/services/gateway.png",
+            "image": "/assets/app/applegos/images/icons/services/gateway.png",
+            "title": "gateway",
+            "description": "Gateway is a powerful tool designed to streamline workﬂow and state management processes within organizations."
+        },
+        {
+            "code": "welcome",
+            "icon": "/assets/app/applegos/images/icons/services/welcome.svg",
+            "image": "/assets/app/applegos/images/icons/services/welcome.svg",
+            "title": "Welcome",
+            "description": "Automating tasks, optimizing resource allocation, enhancing productivity, and ensuring efficient time management for streamlined operations."
+        },
+        {
+            "code": "sendIt",
+            "icon": "/assets/app/applegos/images/icons/services/send-it.png",
+            "image": "/assets/app/applegos/images/icons/services/send-it.png",
+            "title": "Send-It",
+            "description": "Efficiently manage conversations and messages by grouping them based on conversation or entity attributes."
+        },
+        {
+            "code": "drive",
+            "icon": "/assets/app/applegos/images/icons/services/drive.svg",
+            "image": "/assets/app/applegos/images/icons/services/drive.svg",
+            "title": "Drive",
+            "description": "Simplifying document management, facilitating collaboration, ensuring compliance, and enhancing efficiency through automated processes and tools."
+        }
+    ]
+}

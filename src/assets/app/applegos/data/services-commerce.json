@@ -1,0 +1,32 @@
+{
+    "items": [
+        {
+            "code": "sell",
+            "icon": "/assets/app/applegos/images/icons/services/sell.svg",
+            "image": "/assets/app/applegos/images/icons/services/sell.svg",
+            "title": "Sell",
+            "description": "Suggestion Engine"
+        },
+        {
+            "code": "buy",
+            "icon": "/assets/app/applegos/images/icons/services/buy.svg",
+            "image": "/assets/app/applegos/images/icons/services/buy.svg",
+            "title": "Buy",
+            "description": "Suggestion Engine"
+        },
+        {
+            "code": "Fulfilment",
+            "icon": "/assets/app/applegos/images/icons/services/fulfillment.svg",
+            "image": "/assets/app/applegos/images/icons/services/fulfillment.svg",
+            "title": "Fulfilment",
+            "description": "Application Engine"
+        },
+        {
+            "code": "Billing",
+            "icon": "/assets/app/applegos/images/icons/services/billing.svg",
+            "image": "/assets/app/applegos/images/icons/services/billing.svg",
+            "title": "Billing",
+            "description": "PI Engine"
+        }
+    ]
+}

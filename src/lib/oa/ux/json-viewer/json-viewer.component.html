@@ -1,0 +1,36 @@
+<ng-container *ngTemplateOutlet="renderJson; context: {items: items}"> </ng-container>
+
+<ng-template #renderJson let-items="items">
+
+  <ul class="tree">
+    @for (item of items; track item) {
+    <li>
+      <span class="label">{{item.key}}</span>
+      @if(!item.isComplex) {
+      <span class="value">{{item.value}}</span>
+      } @else {
+
+      <span class="value">
+        @if(item.isArray) {
+        Array[{{item.value.length}}]
+        } @else {
+        Object
+        }
+
+        <button (click)="item.isCollaped = !item.isCollaped"><i>+</i></button>
+
+      </span>
+      <!-- <oa-toggler code="expand-r" view="mini-fab" [(value)]="item.isCollaped"></oa-toggler> -->
+
+      {{item.isCollaped}}
+      @if(!item.isCollapsed) {
+      expanded
+      <ng-container *ngTemplateOutlet="renderJson; context: {items: item.items}"> </ng-container>
+      }
+
+      }
+    </li>
+    }
+  </ul>
+
+</ng-template>

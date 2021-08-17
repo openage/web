@@ -1,0 +1,32 @@
+{
+    "items": [
+        {
+            "code": "directory",
+            "icon": "/assets/app/applegos/images/icons/services/directory.png",
+            "image": "/assets/app/applegos/images/icons/services/directory.png",
+            "title": "Directory",
+            "description": "Enhancing Security and Access Control: Comprehensive Solutions for User Management and Authentication."
+        },
+        {
+            "code": "discovery",
+            "icon": "/assets/app/applegos/images/icons/services/discovery.svg",
+            "image": "/assets/app/applegos/images/icons/services/discovery.svg",
+            "title": "Discovery",
+            "description": "Leveraging data insights to deliver personalized recommendations, foster engagement, drive conversions, and enhance user satisfaction."
+        },
+        {
+            "code": "system",
+            "icon": "/assets/app/applegos/images/icons/services/system.svg",
+            "image": "/assets/app/applegos/images/icons/services/system.svg",
+            "title": "System",
+            "description": "Optimizing operations, speeding up development, improving UX, and integrating seamlessly for peak efficiency and performance."
+        },
+        {
+            "code": "vault",
+            "icon": "/assets/app/applegos/images/icons/services/vault.svg",
+            "image": "/assets/app/applegos/images/icons/services/vault.svg",
+            "title": "Vault",
+            "description": "Empowering businesses with innovative AI solutions, optimizing processes, enhancing decision-making, and driving transformative growth."
+        }
+    ]
+}

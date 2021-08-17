@@ -1,0 +1,12 @@
+@if(value) {
+<div class="flex-row gaps middle">
+  <span class="spacer"></span>
+  <button class="previous" [class]="value.index !== 0 ? 'primary': 'disabled'" [disabled]="value.index === 0"
+    (click)="value.previous()">&laquo;</button>
+  <span class="info">Page {{ value.index + 1 }} of {{ value.count }}</span>
+  <button class="next" [class]="value.index < value.count - 1? 'primary': 'disabled'"
+    [disabled]="value.index === value.count - 1" (click)="value.next()">&raquo;</button>
+  <input class="goto oa-input" type="number" [(ngModel)]="inputPage" (keydown.enter)="value.goto((inputPage || 1) -1)"
+    min="1" [max]="value.count" placeholder="Go to" />
+</div>
+}

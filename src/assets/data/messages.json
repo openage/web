@@ -1,0 +1,54 @@
+{
+  "items": [
+    {
+      "code": "DATA_NDF",
+      "message": "No Data Found",
+      "icon": "error-no-data"
+    },
+    {
+      "code": "TIMELOGS_NDF",
+      "message": "No Time Log Found",
+      "icon": "error-no-data"
+    },
+    {
+      "code": "TASKS_DONE",
+      "icon": "message-enjoy",
+      "message": "All done for the day"
+    },
+    {
+      "code": "TASKS_PLAN",
+      "icon": "error-no-data",
+      "message": "What do you plan to do next"
+    },
+    {
+      "code": "TASKS_ADD",
+      "icon": "error-no-data",
+      "message": "Add some tasks"
+    },
+    {
+      "code": "nothing-pending",
+      "icon": "message-enjoy",
+      "message": "You wrapped up everything"
+    },
+    {
+      "code": "comming-soon",
+      "message": "This feature will be launched soon",
+      "icon": "error-coming-soon"
+    },
+    {
+      "code": "not-available",
+      "message": "This feature is under construction",
+      "icon": "error-coming-soon"
+    },
+    {
+      "code": "maintenance",
+      "message": "System is not available at this time",
+      "icon": "error-wip"
+    },
+    {
+      "code": "wip",
+      "message": "Feature is not available at this time",
+      "icon": "error-wip"
+    }
+  ]
+}

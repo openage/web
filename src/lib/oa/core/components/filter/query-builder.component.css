@@ -1,0 +1,57 @@
+.form-group {
+  padding: 0 5px;
+}
+
+label.section {
+  width: 100%;
+  text-align: center;
+  border-bottom: 1px solid var(--border-color);
+  color: var(--text-color-secondary);
+  font-weight: 100;
+}
+
+label {
+  font-size: 13px;
+  font-weight: bold;
+}
+
+.more {
+  position: absolute;
+  right: 0px;
+  top: 45px;
+}
+
+.hide {
+  display: none
+}
+
+.form-control {
+  height: 34px;
+  border: none !important;
+  border-radius: 0px !important;
+  background: var(--background-color);
+  font-family: 'Poppins' !important;
+  font-size: 12px;
+  padding-top: 8px;
+  padding-left: 8px;
+  outline: none;
+  box-shadow: none;
+}
+
+.resetbtn {
+  margin-right: 20px;
+}
+
+.marginName {
+  text-align: -webkit-center;
+  margin-left: 440px;
+}
+
+.margin {
+  margin-left: 410px;
+  margin-top: -50px;
+}
+
+.inlineFilters {
+  width: 190px;
+}

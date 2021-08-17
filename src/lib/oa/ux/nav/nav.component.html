@@ -1,0 +1,76 @@
+<!-- eslint-disable @angular-eslint/template/click-events-have-key-events -->
+<ul class="content {{view}} {{class}}" [class.extended]="isExpanded">
+
+  @switch (view) {
+
+  @case ('top') {
+  @for (nav of value; track nav) {
+  <li class="item" (click)="select(nav)" tabindex="-1" [class.active]="nav.isActive">
+    <a [href]="nav.url">
+      <!-- <oa-icon [value]="nav.icon" class="md x"></oa-icon> -->
+      <span class="spacer">{{nav.title}}</span>
+    </a>
+
+    <!-- <div *ngIf="nav.icon.url" class="main-menu-icon"
+          [style.background.url]="'url('+ nav.icon.activeUrl + ')'"></div> -->
+  </li>
+  <!-- {{nav.title}} -->
+  <!-- <i *ngIf="!nav.current" class="material-icons leftIcon">keyboard_arrow_right</i>
+        <i *ngIf="nav.current" class="material-icons leftIcon">keyboard_arrow_down</i> -->
+  <!-- <div class="list-items" *ngIf="nav.current">
+        <ng-container *ngFor="let item of nav.items">
+          <a *ngIf="auth.hasPermission(item.permissions)" [routerLink]="item.routerLink" mat-list-item
+            routerLinkActive="active-link" #rla9="routerLinkActive">
+            <h5>{{item.title}}</h5>
+          </a>
+        </ng-container>
+      </div> -->
+
+  }
+  }
+
+  @case('side') {
+  @for (nav of value; track nav) {
+  <li class="item" (click)="select(nav)" tabindex="-1" [class.active]="nav.isActive">
+    @if (!isExpanded) {
+    <span class="spacer"></span>
+    <oa-icon [value]="nav.icon" class="md" [title]="nav.title"></oa-icon>
+    <span class="spacer"></span>
+    } @else {
+    <oa-icon [value]="nav.icon" class="md x"></oa-icon>
+    <a class="spacer">{{nav.title}}</a>
+    }
+
+    <!-- <div *ngIf="nav.icon.url" class="main-menu-icon"
+          [style.background.url]="'url('+ nav.icon.activeUrl + ')'"></div> -->
+  </li>
+  <!-- {{nav.title}} -->
+  <!-- <i *ngIf="!nav.current" class="material-icons leftIcon">keyboard_arrow_right</i>
+        <i *ngIf="nav.current" class="material-icons leftIcon">keyboard_arrow_down</i> -->
+  <!-- <div class="list-items" *ngIf="nav.current">
+        <ng-container *ngFor="let item of nav.items">
+          <a *ngIf="auth.hasPermission(item.permissions)" [routerLink]="item.routerLink" mat-list-item
+            routerLinkActive="active-link" #rla9="routerLinkActive">
+            <h5>{{item.title}}</h5>
+          </a>
+        </ng-container>
+      </div> -->
+
+  }
+  }
+  @default {
+  @for (nav of value; track nav) {
+  <li class="item" (click)="select(nav)" tabindex="-1" [class.active]="nav.isActive">
+
+    <a [href]="nav.url">
+      <oa-icon [value]="nav.icon" class="md x"></oa-icon>
+      <span>{{nav.title}}</span>
+    </a>
+    <!-- {{nav.code}}
+    <oa-html-viewer [value]="nav" [options]="options"></oa-html-viewer> -->
+  </li>
+  }
+  }
+
+  }
+</ul>

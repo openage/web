@@ -1,0 +1,82 @@
+.btn-pair {
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.btn-pair>button {
+    background-color: var(--background);
+    background-repeat: no-repeat;
+    display: inline-block;
+    fill: currentColor;
+    border-radius: 5px;
+    color: var(--primary);
+    line-height: inherit;
+    height: 24px;
+    width: 24px;
+}
+
+.btn-pair>button:disabled {
+    background-color: var(--subtle);
+    color: var(--neutral);
+}
+
+.btn-pair>button mat-icon {
+    font-size: 13px;
+    font-size: 13px;
+    padding-left: 4px;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.btn-pair>button:not(:last-child) {
+    margin-right: 10px;
+}
+
+
+@media only screen and (max-width: 500px) {
+    .mat-icon-button {
+        font-size: 10px;
+    }
+
+    .btn-pair>button .mat-icon {
+        font-size: 13px;
+        font-size: 13px;
+        padding-left: 2px;
+        text-align: center;
+        vertical-align: middle;
+    }
+}
+
+@media only screen and (min-width: 1900px) {
+
+    /* .btn-pair>button:not(:last-child) {
+        margin-right: 4px;
+    }
+
+    .btn-pair>button {
+        background-color: var(--background);
+        background-repeat: no-repeat;
+        display: inline-block;
+        fill: currentColor;
+        border-radius: 5px;
+        color: var(--primary);
+        background-color: white;
+        border: 1px solid;
+        line-height: inherit;
+        height: 30px;
+        width: 70px;
+    }
+    .btn-pair .numbers{
+        background-color: var(--background);
+        background-repeat: no-repeat;
+        display: inline-block;
+        fill: currentColor;
+        border-radius: 5px;
+        color: var(--primary);
+        background-color: white;
+        border: 1px solid;
+        line-height: inherit;
+        height: 30px;
+        width: 30px;
+    } */
+}

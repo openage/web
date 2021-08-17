@@ -1,0 +1,147 @@
+{
+    "layout": {
+        "sections": [
+            {
+                "class": "container",
+                "code": "collection-container",
+                "container": {
+                    "title": {
+                        "text": "<h3>Directory<span class='highlight'> Features</span></h3>"
+                    },
+                    "description": "Access your preferences, privacy and personalization controls from any device."
+                }
+            },
+            {
+                "class": "container",
+                "code": "directory-container",
+                "container": {
+                    "body": {
+                        "class": "flex-row three"
+                    }
+                }
+            },
+            {
+                "code": "domains-container",
+                "container": {
+                    "description": {
+                        "text": "<h4>Not just limited to the below <span class='highlight'>domains</span></h4>"
+                    },
+                    "body": {
+                        "class": "flex-row seven domains"
+                    }
+                }
+            }
+        ]
+    },
+    "components": [
+        {
+            "section": "directory-container",
+            "control": "html",
+            "container": {
+                "class": "card-features-detail-container"
+            },
+            "value": [
+                "<h1 class='highlight'> Access Management</h1>",
+                "<br>",
+                "<h3 class='card-detail-text'><i class='fa fa-check highlight'></i>Tenant Level </h3>",
+                "<h3 class='card-detail-text'><i class='fa fa-check highlight'></i>Organization Level</h3>",
+                "<h3 class='card-detail-text'><i class='fa fa-check highlight'></i>Department Level</h3>",
+                "<h3 class='card-detail-text'><i class='fa fa-check highlight'></i>Designation Level</h3>",
+                "<h3 class='card-detail-text'><i class='fa fa-check highlight'></i>Supervisor Over Employees or Students</h3>"
+            ]
+        },
+        {
+            "section": "directory-container",
+            "control": "html",
+            "container": {
+                "class": "card-features-detail-container"
+            },
+            "value": [
+                "<h1 class='highlight'>Security and Authentication</h1>",
+                "<br>",
+                "<h3 class='card-detail-text'><i class='fa fa-check highlight'></i>Google OAuth 2.0</h3>",
+                "<h3 class='card-detail-text'><i class='fa fa-check highlight'></i>Facebook Auth</h3>",
+                "<h3 class='card-detail-text'><i class='fa fa-check highlight'></i>Apple Sign In</h3>",
+                "<h3 class='card-detail-text'><i class='fa fa-check highlight'></i>JWT Token</h3>",
+                "<h3 class='card-detail-text'><i class='fa fa-check highlight'></i>Custom Directory Access Token</h3>",
+                "<h3 class='card-detail-text'><i class='fa fa-check highlight'></i>OTP Based</h3>",
+                "<h3 class='card-detail-text'><i class='fa fa-check highlight'></i>Biometric Login</h3>",
+                "<h3 class='card-detail-text'><i class='fa fa-check highlight'></i>Multi-Factor Authentication</h3>",
+                "<h3 class='card-detail-text'><i class='fa fa-check highlight'></i>Token-based Authentication</h3>"
+            ]
+        },
+        {
+            "section": "directory-container",
+            "control": "html",
+            "container": {
+                "class": "card-features-detail-container"
+            },
+            "value": [
+                "<h1 class='highlight'>User Management</h1>",
+                "<br>",
+                "<h3 class='card-detail-text'><i class='fa fa-check highlight'></i>User</h3>",
+                "<ul><li><h3 class='card-detail-text'>Account</h3></li><li><h3 class='card-detail-text'>Migration</h3></li><li><h3 class='card-detail-text'>Advanced Search</h3></li><li><h3 class='card-detail-text'>Session</h3></li><li><h3 class='card-detail-text'>Role-Based Control</h3></li></ul>",
+                "<h3 class='card-detail-text'><i class='fa fa-check highlight'></i>Employee</h3>",
+                "<ul><li><h3 class='card-detail-text'>Account</h3></li><li><h3 class='card-detail-text'>Migration</h3></li><li><h3 class='card-detail-text'>Advanced Search</h3></li></ul>",
+                "<h3 class='card-detail-text'><i class='fa fa-check highlight'></i>Student</h3>",
+                "<ul><li><h3 class='card-detail-text'>Account</h3></li><h3 class='card-detail-text'>Migration</h3></li><li><h3 class='card-detail-text'>Advanced Search</h3></li></ul>"
+            ]
+        },
+        {
+            "section": "domains-container",
+            "control": "html",
+            "value": [
+                "<img class='domainImage' src='/assets/app/applegos/images/domains/education.svg'>",
+                "<h3 class=''>Education</h3>"
+            ]
+        },
+        {
+            "section": "domains-container",
+            "control": "html",
+            "value": [
+                "<img class='domainImage' src='/assets/app/applegos/images/domains/finance.svg'>",
+                "<h3 class=''>Finance</h3>"
+            ]
+        },
+        {
+            "section": "domains-container",
+            "control": "html",
+            "value": [
+                "<img class='' src='/assets/app/applegos/images/domains/government.svg'>",
+                "<h3 class=''>Government</h3>"
+            ]
+        },
+        {
+            "section": "domains-container",
+            "control": "html",
+            "value": [
+                "<img class='' src='/assets/app/applegos/images/domains/health-care.svg'>",
+                "<h3 class=''>Health Care</h3>"
+            ]
+        },
+        {
+            "section": "domains-container",
+            "control": "html",
+            "value": [
+                "<img class='' src='/assets/app/applegos/images/domains/logistics.svg'>",
+                "<h3 class=''>Logistics</h3>"
+            ]
+        },
+        {
+            "section": "domains-container",
+            "control": "html",
+            "value": [
+                "<img class='' src='/assets/app/applegos/images/domains/travel.svg'>",
+                "<h3 class=''>Travel</h3>"
+            ]
+        },
+        {
+            "section": "domains-container",
+            "control": "html",
+            "value": [
+                "<img class='' src='/assets/app/applegos/images/domains/e-commerence.svg'>",
+                "<h3 class=''>E-commerence</h3>"
+            ]
+        }
+    ]
+}

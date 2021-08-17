@@ -1,0 +1,17 @@
+:host {
+  display: block;
+}
+
+.container {
+  align-items: center;
+  min-height: 100px;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--surface);
+  box-shadow: 0 0 5px var(--shadow);
+  border-radius: 5px;
+}
+
+.serverDown {
+  margin-top: 10%;
+}

@@ -1,0 +1,186 @@
+{
+    "items": [
+        {
+            "code": "mh-2324-tu-001-1",
+            "parent": {
+                "code": "mh-2324-tu-001"
+            },
+            "description": "Development Services",
+            "status": "new",
+            "type": "sales/purchase/custom",
+            "customer": {
+                "code": "tu-inc",
+                "name": "Transunion Incorportion"
+            },
+            "vendor": {
+                "code": "one-cloud",
+                "name": "One Cloud Pvt. Ltd."
+            },
+            "skus": [
+                {
+                    "code": "21212",
+                    "type": "employee",
+                    "description": "Mohit Sharma (21212)",
+                    "date": "2023-05-25T07:47:51.031Z",
+                    "comments": "",
+                    "total": 8,
+                    "unit": "hours",
+                    "sell": {
+                        "customer": {
+                            "code": "tu-inc"
+                        },
+                        "contract": {
+                            "code": "sow-migrations-1"
+                        },
+                        "rate": {
+                            "value": 12,
+                            "currency": "USD"
+                        }
+                    },
+                    "buy": {
+                        "vendor": {
+                            "code": "one-cloud"
+                        },
+                        "contract": {
+                            "code": "oc-mh-partership-1"
+                        },
+                        "rate": {
+                            "value": 10,
+                            "currency": "USD"
+                        }
+                    },
+                    "meta": {}
+                }
+            ],
+            "delivery": {
+                "date": "25/11/24",
+                "address": {
+                    "line1": "Plot 301",
+                    "line2": "Sector 75",
+                    "city": "Mohali",
+                    "state": "Punjab",
+                    "postalCode": "160031",
+                    "country": "India"
+                }
+            },
+            "createdAt": "25/10/24",
+            "timeStamp": "2023-05-25T07:48:07.457Z",
+            "user": {
+                "code": "Mukesh Kumar",
+                "profile": {
+                    "firstName": "mukesh",
+                    "lastName": "kumar"
+                }
+            },
+            "assignee": {
+                "code": "Ramesh Kumar",
+                "profile": {
+                    "firstName": "ramesh",
+                    "lastName": "kumar"
+                }
+            },
+            "meta": {
+                "sku": {
+                    "period": "week",
+                    "columns": [
+                        "2024-11-04T07:47:51.031Z",
+                        "2024-11-05T07:47:51.031Z",
+                        "2024-11-06T07:47:51.031Z",
+                        "2024-11-07T07:47:51.031Z",
+                        "2024-11-08T07:47:51.031Z",
+                        "2024-11-09T07:47:51.031Z",
+                        "2024-11-10T07:47:51.031Z"
+                    ],
+                    "rows": [
+                        {
+                            "code": "21212",
+                            "type": "employee",
+                            "description": "Mohit Sharma (21212)",
+                            "unit": "hours",
+                            "sell": {
+                                "customer": {
+                                    "code": "tu-inc"
+                                },
+                                "contract": {
+                                    "code": "sow-migrations-1"
+                                },
+                                "rate": {
+                                    "value": 12,
+                                    "currency": "USD"
+                                }
+                            },
+                            "buy": {
+                                "vendor": {
+                                    "code": "one-cloud"
+                                },
+                                "contract": {
+                                    "code": "oc-mh-partership-1"
+                                },
+                                "rate": {
+                                    "value": 10,
+                                    "currency": "USD"
+                                }
+                            }
+                        }
+                    ]
+                },
+                "shipment": {
+                    "type": "export",
+                    "shipper": {
+                        "code": "oc-mh-partership-1",
+                        "name": "One Cloud Pvt. Ltd."
+                    },
+                    "consignee": {
+                        "code": "tu-inc",
+                        "name": "Transunion Incorportion"
+                    },
+                    "transits": [
+                        {
+                            "date": "2023-05-25T07:47:51.031Z",
+                            "location": {
+                                "code": "oc-mh-partership-1",
+                                "name": "One Cloud Pvt. Ltd."
+                            }
+                        }
+                    ]
+                },
+                "billing": {
+                    "credit": {
+                        "amount": {
+                            "value": 1000000,
+                            "currency": "USD"
+                        },
+                        "duration": {
+                            "value": 30,
+                            "unit": "days"
+                        }
+                    }
+                },
+                "contract": {
+                    "code": "sow-migrations-1",
+                    "status": "accepted",
+                    "preferences": {
+                        "carriers": [],
+                        "freeDaysDestination": 12,
+                        "rate": {
+                            "currency": "INR",
+                            "value": 0
+                        }
+                    },
+                    "amount": {
+                        "value": 12,
+                        "currency": "USD"
+                    },
+                    "discount": {
+                        "value": 0,
+                        "currency": "USD"
+                    },
+                    "validity": {
+                        "start": "2024-08-08T08:02:48.248Z",
+                        "end": null
+                    }
+                }
+            }
+        }
+    ]
+}

@@ -1,0 +1,171 @@
+{
+    "layout": {
+        "sections": [
+            {
+                "class": "container",
+                "code": "collection-container",
+                "container": {
+                    "title": {
+                        "text": "<h3>Attendance Management <span class='highlight'> Solution</span></h3>"
+                    }
+                }
+            },
+            {
+                "code": "banner-container",
+                "class": "container",
+                "container": {
+                    "body": {
+                        "class": "flex-2-1"
+                    }
+                }
+            },
+            {
+                "class": "container",
+                "code": "pricing-container",
+                "container": {
+                    "body": {
+                        "class": "flex-row three"
+                    }
+                }
+            },
+            {
+                "code": "domains-container",
+                "container": {
+                    "description": {
+                        "text": "<h4>Not just limited to the below <span class='highlight'>domains</span></h4>"
+                    },
+                    "body": {
+                        "class": "flex-row seven domains"
+                    }
+                }
+            }
+        ]
+    },
+    "components": [
+        {
+            "section": "banner-container",
+            "control": "html",
+            "value": []
+        },
+        {
+            "section": "banner-container",
+            "control": "html",
+            "container": {},
+            "value": [
+                "<img class='testimonialImage' src='/assets/app/applegos/images/testimonial/attandence.png'>"
+            ]
+        },
+        {
+            "section": "banner-container",
+            "control": "html",
+            "value": [
+                "<h1><span class='highlight'>HRMS</span></h1>",
+                "<br>",
+                "<h3 class='card-detail-text'>A large multinational corporation with over 10,000 employees across several </h3>",
+                "<h3 class='card-detail-text'>locations was facing inefficiencies and errors in HR processes due to difficult to use legacy AMS</h3>",
+                "<h3 class='card-detail-text'>Replaced the legacy system with user-friendly, customizable, </h3>",
+                "<h3 class='card-detail-text'>and scalable Aqua Teams which met the organization's needs of growing workforce</h3>"
+            ]
+        },
+        {
+            "section": "pricing-container",
+            "control": "html",
+            "container": {
+                "class": "card-detail-container"
+            },
+            "value": [
+                "<img class='' src='/assets/app/applegos/images/testimonial/solution.svg'>",
+                "<h1 class='highlight'>Solution</h1>",
+                "<br>",
+                "<h3 class='card-detail-text'><i class='fa fa-check highlight'></i>Replaced the legacy system with user-friendly, customizable, and scalable </h3>",
+                "<h3 class='card-detail-text'><i class='fa fa-check highlight'></i>Aqua Teams which met the organization's needs of growing workforce</h3>"
+            ]
+        },
+        {
+            "section": "pricing-container",
+            "control": "html",
+            "container": {
+                "class": "card-detail-container"
+            },
+            "value": [
+                "<img class='' src='/assets/app/applegos/images/testimonial/gear.svg'>",
+                "<h1 class='highlight'>Implementation</h1>",
+                "<br>",
+                "<h3 class='card-detail-text'><i class='fa fa-check highlight'></i>Conducted a detailed analysis of the client's HR processes to identify pain points and areas for improvement.</h3>",
+                "<h3 class='card-detail-text'><i class='fa fa-check highlight'></i>Customized the HRMS software to meet the specific needs of the organization, including integration with existing systems and workflows.</h3>",
+                "<h3 class='card-detail-text'><i class='fa fa-check highlight'></i> Provided extensive training to HR staff including best practices for data entry and reporting.</h3>"
+            ]
+        },
+        {
+            "section": "pricing-container",
+            "control": "html",
+            "container": {
+                "class": "card-detail-container"
+            },
+            "value": [
+                "<img class='' src='/assets/app/applegos/images/testimonial/analysis.svg'>",
+                "<h1 class='highlight'>Results</h1>",
+                "<br>",
+                "<h3 class='card-detail-text'><i class='fa fa-check highlight'></i>Improved efficiency in HR processes, resulting in a 20% reduction in time spent on administrative tasks.</h3>",
+                "<h3 class='card-detail-text'><i class='fa fa-check highlight'></i>Increased accuracy in HR data, reducing errors and improving compliance with regulations.</h3>",
+                "<h3 class='card-detail-text'><i class='fa fa-check highlight'></i>Improved employee satisfaction, resulting lower turnover and improved morale.</h3>"
+            ]
+        },
+        {
+            "section": "domains-container",
+            "control": "html",
+            "value": [
+                "<img class='domainImage' src='/assets/app/applegos/images/domains/education.svg'>",
+                "<h3 class=''>Education</h3>"
+            ]
+        },
+        {
+            "section": "domains-container",
+            "control": "html",
+            "value": [
+                "<img class='domainImage' src='/assets/app/applegos/images/domains/finance.svg'>",
+                "<h3 class=''>Finance</h3>"
+            ]
+        },
+        {
+            "section": "domains-container",
+            "control": "html",
+            "value": [
+                "<img class='' src='/assets/app/applegos/images/domains/government.svg'>",
+                "<h3 class=''>Government</h3>"
+            ]
+        },
+        {
+            "section": "domains-container",
+            "control": "html",
+            "value": [
+                "<img class='' src='/assets/app/applegos/images/domains/health-care.svg'>",
+                "<h3 class=''>Health Care</h3>"
+            ]
+        },
+        {
+            "section": "domains-container",
+            "control": "html",
+            "value": [
+                "<img class='' src='/assets/app/applegos/images/domains/logistics.svg'>",
+                "<h3 class=''>Logistics</h3>"
+            ]
+        },
+        {
+            "section": "domains-container",
+            "control": "html",
+            "value": [
+                "<img class='' src='/assets/app/applegos/images/domains/travel.svg'>",
+                "<h3 class=''>Travel</h3>"
+            ]
+        },
+        {
+            "section": "domains-container",
+            "control": "html",
+            "value": [
+                "<img class='' src='/assets/app/applegos/images/domains/e-commerence.svg'>",
+                "<h3 class=''>E-commerence</h3>"
+            ]
+        }
+    ]
+}

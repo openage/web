@@ -1,0 +1,16 @@
+.file-input {
+  display: none;
+}
+
+label {
+  cursor: pointer;
+  width: 100%;
+}
+
+
+@media only screen and (max-width:568px) {
+  .attachment-icon {
+  font-size:x-large !important;
+  margin-top:0px;
+  }
+}

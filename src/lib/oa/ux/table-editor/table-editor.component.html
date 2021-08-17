@@ -1,0 +1,187 @@
+<!-- eslint-disable @angular-eslint/template/click-events-have-key-events -->
+<!-- eslint-disable @angular-eslint/template/interactive-supports-focus -->
+<!-- eslint-disable @angular-eslint/template/label-has-associated-control -->
+<!-- eslint-disable @angular-eslint/template/table-scope -->
+<div class="table">
+  <ng-container *ngTemplateOutlet="headerRow;"></ng-container>
+  @for (item of rows; track item; let i = $index) {
+  <ng-container *ngTemplateOutlet="dataRow; context: {
+      index: i,
+      item: item
+    }"></ng-container>
+  }
+</div>
+
+<ng-template #headerRow>
+  @if (!headerTemplate) {
+  <div class="header text{{options?.style?.header?.class}}" [style]="options?.style?.header?.style">
+    @for (field of cols; track field) {
+    @if (!field.isHidden) {
+    <div scope="col" class="col {{field.key}} {{field.class}}" [style]="field.style">
+      <div [innerHTML]="getLabel(field)"></div>
+    </div>
+    }
+    }
+  </div>
+  } @else {
+  <ng-template [ngTemplateOutlet]="headerTemplate"></ng-template>
+  }
+</ng-template>
+
+<ng-template #dataRow let-item="item" let-index="index">
+  <div class="data-row" [class.expanded]="item.isSelected">
+    @for (field of cols; track field) {
+    @switch (field.key) {
+
+    @case ('index') {
+    <ng-container *ngTemplateOutlet="indexCell; context: { field: field, index: index, item: item }"></ng-container>
+    }
+    @case ('action') {
+    <ng-container *ngTemplateOutlet="actionCell; context: { field: field, index: index, item: item }"></ng-container>
+    }
+    @default {
+    <ng-container *ngTemplateOutlet="valueCell; context: { field: field, index: index, item: item }"></ng-container>
+    }
+    }
+    }
+  </div>
+</ng-template>
+
+<ng-template #dataRowX let-item="item" let-index="index">
+  @if (rowTemplate) {
+  <ng-container *ngTemplateOutlet="rowTemplate; context: {
+      index: index,
+      item: item
+      }">
+  </ng-container>
+  } @else {
+  <div [class.expanded]="item.isSelected">
+    <div class="data-row">
+      @if (item.isEditMode) {
+      <div class="edit-popup">
+        <div class="popup-content">
+          <h3>Edit Details</h3>
+          <div class="grid-container">
+            @for (field of cols; track cols)
+            {
+            <div class="grid-item">
+              @if (field.key === 'index') {
+              <ng-container>
+                <label>{{ field.label || 'Index' }}</label>
+                <input [(ngModel)]="item[field.key]" placeholder="Enter index" />
+              </ng-container>
+              }
+              @if (field.key === 'action') {
+              <ng-container>
+                <label>{{ field.label || 'Action' }}</label>
+                <input [(ngModel)]="item[field.key]" placeholder="Enter action" />
+              </ng-container>
+              }
+              @if (field.key && field.key !== 'action' && field.key !== 'index') {
+              <ng-container>
+                <label>{{ field.label || 'Value' }}</label>
+                <input [(ngModel)]="item[field.key]" placeholder="Enter value" />
+              </ng-container>
+              }
+            </div>
+            }
+          </div>
+          <div class="popup-actions">
+            <button (click)="saveEdit(item)">Save</button>
+            <button (click)="cancelEdit(item)">Cancel</button>
+          </div>
+        </div>
+      </div>
+      @if (!item.isEditMode) {
+      <div class="action-buttons">
+        <oa-icon class="edit" value="edit" (click)="enableEditMode(item)"></oa-icon>
+        <oa-icon class="delete" value="delete" (click)="onRemove(item)"></oa-icon>
+      </div>
+      }
+      } @else {
+      @for (field of cols; track field) {
+      @switch (field.key) {
+      @case ('index') {
+      <ng-container *ngTemplateOutlet="indexCell; context: { field: field, index: index, item: item }"></ng-container>
+      }
+      @case ('action') {
+      <ng-container *ngTemplateOutlet="actionCell; context: { field: field, index: index, item: item }"></ng-container>
+      }
+      @default {
+      <ng-container *ngTemplateOutlet="valueCell; context: { field: field, index: index, item: item }"></ng-container>
+      }
+      }
+      }
+      <div class="action-buttons">
+        <oa-icon class="edit" value="edit" (click)="select(item)"></oa-icon>
+        <oa-icon class="delete" value="delete" (click)="onRemove(item)"></oa-icon>
+      </div>
+      }
+    </div>
+    @if (item.isSelected && detailsTemplate) {
+    <div class="details">
+      <ng-container *ngTemplateOutlet="detailsTemplate; context: {
+            index: index,
+            item: item
+            }">
+      </ng-container>
+    </div>
+    }
+  </div>
+  }
+</ng-template>
+
+<ng-template #indexCell let-item="item" let-field="field" let-index="index">
+  <div class="col index" [class]="field.class" [style]="field.style">
+    @if (indexTemplate) {
+    <ng-container *ngTemplateOutlet="indexTemplate; context: {
+        field: field,
+        index: index,
+        item: item
+        }">
+    </ng-container>
+    }
+    @if (!indexTemplate) {
+    {{index + 1}}
+    }
+  </div>
+</ng-template>
+
+<ng-template #valueCell let-item="item" let-field="field" let-index="index">
+  <div class="col {{field.key}} value {{getClass(field, item)}}" [class.editing]="item?.isEditing"
+    [style]="getStyle(field, item)" [class.clickable]="isCellClickable(field)" (onClick)="onCellClick(field, item)">
+    @if (cellTemplate && field.template) {
+    <ng-container *ngTemplateOutlet="cellTemplate; context: {
+        field: field,
+        index: index,
+        item: item
+        }">
+    </ng-container>
+    } @else {
+    @if (item.isEditing) {
+    <oa-field-editor [item]="field" [value]="item[field.key]">
+    </oa-field-editor>
+    } @else {
+    <div [innerHTML]="getValue(field, item)"></div>
+    }
+    }
+  </div>
+</ng-template>
+
+<ng-template #actionCell let-item="item" let-field="field" let-index="index">
+  <div class="controls-row col actions" [class]="field.class" [style]="field.style">
+
+    @if (actionTemplate) {
+    <ng-container *ngTemplateOutlet="actionTemplate; context: {
+        field: field,
+        index: index,
+        item: item
+        }">
+    </ng-container>
+    } @else {
+    @for (action of actions; track action) {
+    <oa-action [item]="action" [value]="item"></oa-action>
+    }
+    }
+  </div>
+</ng-template>

@@ -1,0 +1,16 @@
+<!-- eslint-disable @angular-eslint/template/alt-text -->
+<div class="image-container">
+    <label class="hoverable" for="fileInput">
+        <img [src]="url ? url : '/assets/app/aquateams/images/img_avatar.png'" />
+        <div class="hover-text">Choose file</div>
+        <div class="background"></div>
+    </label>
+    <br />
+    <input id="fileInput" type="file" [(ngModel)]="url" class="select-profile-picture"
+        (change)="onSelectFile($event)" />
+    <span class="message">Tap here to select your picture</span>
+</div>
+<br />
+@if(url){
+<button class="primary" (click)="delete()">Delete</button>
+}

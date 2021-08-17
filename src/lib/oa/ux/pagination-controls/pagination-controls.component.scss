@@ -1,0 +1,19 @@
+.info {
+  font-size: 14px;
+  color: var(--text-primary);
+}
+
+.goto {
+  flex-grow: unset;
+  width: 60px;
+  // padding: 5px;
+  // border: 1px solid var(--border);
+  // border-radius: 3px;
+  // text-align: center;
+  // font-size: 14px;
+}
+
+.goto:focus {
+  border-color: var(--primary);
+  outline: none;
+}

@@ -1,0 +1,68 @@
+{
+  "items": [
+    {
+      "code": "venue-ticketing",
+      "icon": "/assets/app/applegos/images/testimonial/asi.svg",
+      "image": "/assets/app/applegos/images/testimonial/asi.svg",
+      "title": "Archeological Survey of India",
+      "url": "/landing/use-cases/venue-ticketing",
+      "domains": [
+        "travel"
+      ],
+      "description": "We implemented a configurable multi-monument ticket booking platform that was designed to perform under stress. In process we were able to identify areas for improvement and implement changes to increase efficiency and revenue."
+    },
+    {
+      "code": "university-management",
+      "icon": "/assets/app/applegos/images/testimonial/guru-kashi.svg",
+      "image": "/assets/app/applegos/images/testimonial/guru-kashi.svg",
+      "title": "Guru Kashi University",
+      "url": "/landing/use-cases/university-management",
+      "domain": "education",
+      "description": "Implemented a university management solution that included modules for student information, course scheduling, faculty information, and financial management. "
+    },
+    {
+      "code": "attandence-management",
+      "icon": "/assets/app/applegos/images/testimonial/attandence.svg",
+      "image": "/assets/app/applegos/images/testimonial/attandence.svg",
+      "title": "HRMS",
+      "url": "/landing/use-cases/attandence-management",
+      "domains": [
+        "hrms"
+      ],
+      "description": "Replaced the legacy system with user-friendly, customizable, and scalable Aqua Teams which met the organization's needs of growing workforce"
+    },
+    {
+      "code": "servana",
+      "icon": "/assets/app/applegos/images/testimonial/servana.svg",
+      "image": "/assets/app/applegos/images/testimonial/servana.svg",
+      "title": "Servana",
+      "url": "/landing/use-cases/servana",
+      "domains": [
+        "healthcare"
+      ],
+      "description": "Using AppLegos platform, we developed an end to RFQ and Bid management solution that connected Healthcare providers to Service providers."
+    },
+    {
+      "code": "opos",
+      "icon": "/assets/app/applegos/images/testimonial/opos.svg",
+      "image": "/assets/app/applegos/images/testimonial/opos.svg",
+      "title": "Opos",
+      "url": "/landing/use-cases/opos",
+      "domains": [
+        "healthcare"
+      ],
+      "description": "Analyze patient activities, supervise appointments, and generate medical reports efficiently with our time-bound app."
+    },
+    {
+      "code": "aqua",
+      "icon": "/assets/app/applegos/images/testimonial/aqua.svg",
+      "image": "/assets/app/applegos/images/testimonial/aqua.svg",
+      "url": "/landing/use-cases/aqua",
+      "title": "AQUA Teams",
+      "domains": [
+        ""
+      ],
+      "description": "Cloud-based AQUA: Time tracking, Attendance Management, Payroll processing with biometrics, mobile app, and SSID location."
+    }
+  ]
+}

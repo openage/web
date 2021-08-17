@@ -1,0 +1,22 @@
+.icon-toggler {
+    color: var(--default);
+}
+
+.tab-label-before {
+    margin-left: 10px;
+}
+
+.tab-label-after {
+    margin-right: 10px;
+}
+
+.tab-stat {
+    background-color: var(--default);
+    color: white;
+    width: 50px;
+    border-radius: 50px;
+}
+
+.active > .tab-stat {
+    background-color: var(--primary);
+}

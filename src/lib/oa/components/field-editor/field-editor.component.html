@@ -1,0 +1,108 @@
+@switch (control) {
+@case ('oa-autocomplete') {
+<oa-autocomplete [label]="label" [style]="style" [class]="class" [placeholder]="placeholder" [value]="value"
+  [url]="config.url" [readonly]="readonly" [disabled]="disabled" (changed)="onAutoCompleteSelect($event)" [options]="{
+      search: config.search,
+      templates: {
+      value: valueTemplate
+      },
+      prefixItem: config.prefixItem
+    }"></oa-autocomplete>
+<ng-container *ngTemplateOutlet="errorTemplate; context:{item: item}"></ng-container>
+}
+@case ('selector') {
+<div [style]="style" [class]="class">
+  @if (showLabel) {
+  <label [for]="label">{{label}}</label>
+  }
+  <mat-select placeholder="placeholder" [(ngModel)]="item.value" (selectionChange)="onSelectorChange($event)"
+    [disabled]="disabled">
+    @for (option of items; track option) {
+    <!-- <mat-option [value]="option.value || option">
+      {{option.label || option.value || option}}
+    </mat-option> -->
+    }
+  </mat-select>
+  <ng-container *ngTemplateOutlet="errorTemplate; context:{item: item}"></ng-container>
+</div>
+}
+@case ('select') {
+<div [style]="style" [class]="class">
+  @if (showLabel) {
+  <label [for]="label">{{label}}</label>
+  }
+  <!-- <mat-select placeholder="placeholder" [value]="value" (selectionChange)="onReportSelectorChange($event)"
+    [disabled]="disabled">
+    @for (option of items; track option) {
+    <mat-option [value]="option.value || option">
+      {{option.label || option.value || option}}
+    </mat-option>
+    }
+  </mat-select> -->
+  <ng-container *ngTemplateOutlet="errorTemplate; context:{item: item}"></ng-container>
+</div>
+}
+@case ('oa-icon-toggler') {
+<!-- <oa-icon-toggler [value]="item.value" [type]="type" [items]="items" (changed)="onToggle($event)">
+</oa-icon-toggler> -->
+}
+@case ('showIconOnly') {
+<div class="controls-row">
+  <div class="spacer"></div>
+  <div>
+    <!-- <mat-icon>{{(item?.value?.code === 'automatic') ? 'auto_mode' : 'engineering'}}</mat-icon> -->
+  </div>
+  <div class="spacer"></div>
+</div>
+}
+@case ('oa-unit-picker') {
+<!-- <oa-unit-picker [type]="type" [value]="item.value" (changed)="setUnit($event)" [readonly]="readonly">
+</oa-unit-picker> -->
+}
+@case ('oa-input-selector') {
+<oa-input-selector [label]="label" [showLabel]="showLabel" [style]="style" [class]="class" [placeholder]="placeholder"
+  [view]="type" [value]="item.value" [items]="items" (valueChange)="onValueChange($event)" [required]="required"
+  [readonly]="readonly" [validate]="item.validations" [disabled]="disabled" [options]="{ }">
+</oa-input-selector>
+}
+@case ('oa-input-range') {
+<oa-input-range [label]="label" [showLabel]="showLabel" [style]="style" [class]="class" [type]="type"
+  [value]="item.value" (valueChange)="onValueChange($event)" [required]="required" [readonly]="readonly"
+  [validate]="item.validations" [disabled]="disabled" (errored)="error = $event" [options]="{ format: format }">
+</oa-input-range>
+}
+@default {
+<oa-text-input [label]="label" [showLabel]="showLabel" [style]="style" [class]="class" [placeholder]="placeholder"
+  [type]="type" [value]="item.value?.value" (valueChange)="onValueChange($event)" [required]="required"
+  [readonly]="readonly" [validate]="item.validations" [disabled]="disabled" (errored)="error = $event" [options]="{
+      format: format
+    }"></oa-text-input>
+}
+}
+
+<ng-template #errorTemplate let-item="item">
+  <app-error>
+  </app-error>
+</ng-template>
+
+<ng-template #valueTemplate let-value="value">
+  <ng-container [class.readonly]="readonly">
+    @switch (config?.templates?.value) {
+    @case ('portValueViewer') {
+    <div class="controls-row">
+      @if (value?.address?.countryFlag) {
+      <div class="win protFlag">{{value?.address?.countryFlag}}</div>
+      }
+      <div class="capitalize">{{value.code}}</div>
+    </div>
+    }
+    @case ('iconNameViewer') {
+    <oa-avatar [url]="value?.logo?.url || value?.pic?.url" [view]="'avatar'" [value]="value?.name"></oa-avatar>
+    }
+    @default {
+    {{value.label || value.name || value.code || value || ''}}
+    }
+    }
+  </ng-container>
+
+</ng-template>

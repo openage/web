@@ -1,0 +1,320 @@
+.lds-facebook,
+.lds-roller,
+.lds-ellipsis {
+  display: inline-block;
+  position: relative;
+  margin: auto;
+}
+
+.lds-facebook {
+  width: 64px;
+  height: 64px;
+}
+
+.lds-facebook div,
+.lds-roller div,
+.lds-ellipsis div {
+  position: absolute;
+  background: var(--primary);
+}
+
+.lds-facebook div {
+  width: 13px;
+  animation: lds-facebook 1.2s cubic-bezier(0, 0.5, 0.5, 1) infinite;
+}
+
+.lds-facebook div:nth-child(1) {
+  left: 6px;
+  animation-delay: -0.24s;
+}
+
+.lds-facebook div:nth-child(2) {
+  left: 26px;
+  animation-delay: -0.12s;
+}
+
+.lds-facebook div:nth-child(3) {
+  left: 45px;
+  animation-delay: 0;
+}
+
+@keyframes lds-facebook {
+  0% {
+    top: 6px;
+    height: 51px;
+  }
+
+  50%,
+  100% {
+    top: 19px;
+    height: 26px;
+  }
+}
+
+.lds-roller {
+  padding-bottom: 20px;
+}
+
+.lds-roller div {
+  animation: lds-roller 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+  transform-origin: 16px 16px;
+}
+
+.lds-roller div:after {
+  content: " ";
+  display: block;
+  width: 2px;
+  height: 2px;
+  border-radius: 50%;
+  background: #6934B4;
+  margin: -3px 0 0 -3px;
+}
+
+@keyframes lds-roller {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.lds-ellipsis {
+  width: 80px;
+  height: 80px;
+}
+
+.lds-ellipsis div {
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  animation-timing-function: cubic-bezier(0, 1, 1, 0);
+}
+
+.lds-ellipsis div:nth-child(1) {
+  left: 8px;
+  animation: lds-ellipsis1 0.6s infinite;
+}
+
+.lds-ellipsis div:nth-child(2),
+.lds-ellipsis div:nth-child(3) {
+  left: 8px;
+  animation: lds-ellipsis2 0.6s infinite;
+}
+
+.lds-ellipsis div:nth-child(4) {
+  left: 56px;
+  animation: lds-ellipsis3 0.6s infinite;
+}
+
+@keyframes lds-ellipsis1 {
+  0% {
+    transform: scale(0);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes lds-ellipsis2 {
+  0% {
+    transform: translate(0, 0);
+  }
+
+  100% {
+    transform: translate(24px, 0);
+  }
+}
+
+@keyframes lds-ellipsis3 {
+  0% {
+    transform: scale(1);
+  }
+
+  100% {
+    transform: scale(0);
+  }
+}
+
+.cover-progress-bar,
+.inline-progress-bar {
+  margin: auto;
+}
+
+.cover-progress-bar {
+  width: 70% !important;
+}
+
+.inline-progress-bar {
+  margin: 20px auto !important;
+}
+
+.inline,
+.cover {
+  display: block;
+  width: 100%;
+  z-index: 1111;
+}
+
+.cover {
+  top: 0;
+  position: absolute;
+  height: 100%;
+  background-color: var(--background);
+}
+
+.inline {
+  top: 38%;
+  position: relative;
+}
+
+.outer,
+.middle,
+.inner {
+  display: table;
+  width: 100%;
+  position: absolute;
+  height: 100%;
+}
+
+.outer {
+  background-color: rgba(256, 256, 256, 0.8);
+  border-radius: 10px;
+}
+
+.inline .outer {
+  height: inherit;
+  width: inherit;
+}
+
+.middle {
+  display: flex;
+  vertical-align: middle;
+}
+
+.inner {
+  margin: auto;
+  width: 400px;
+}
+
+.stepper {
+  background-color: white;
+  padding: 34px;
+  margin: auto;
+  width: 60%;
+  border-radius: 2px;
+}
+
+.circle {
+  border-radius: 50%;
+  height: 50px;
+  width: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+.hr-line {
+  margin: auto 0;
+}
+
+.hr-line.default {
+  border-top: 3px solid var(--backdrop);
+}
+
+.hr-line.active,
+.hr-line.completed {
+  border-top: 3px solid var(--primary);
+}
+
+.text {
+  position: absolute;
+  margin-top: 80px;
+  font-size: large;
+  text-transform: capitalize;
+}
+
+.text.default {
+  color: var(--text-disabled);
+}
+
+.text.active,
+.text.completed {
+  color: var(--primary);
+}
+
+span {
+  font-size: large;
+}
+
+.circle.styled.active {
+  animation: activeStep 2s infinite;
+}
+
+.download {
+  border-radius: 50%;
+  height: 30px;
+  width: 30px;
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  border: 1px solid var(--background);
+  animation: activeStep 1s infinite;
+}
+
+.download-icon {
+  opacity: 1;
+  animation: fade-in-out 1s infinite;
+}
+
+.spinner-background .mat-progress-spinner {
+  display: inline;
+}
+
+@keyframes fade-in-out {
+  0% {
+    opacity: 0;
+    transform: translateY(0);
+  }
+
+  50% {
+    opacity: 1;
+    transform: translateY(6px);
+  }
+
+  100% {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+}
+
+@keyframes activeStep {
+  0% {
+    box-shadow: 0 0 0 0 rgba(33, 131, 221, 0.4);
+  }
+
+  70% {
+    box-shadow: 0 0 0 10px rgba(33, 131, 221, 0);
+  }
+
+  100% {
+    box-shadow: 0 0 0 0 rgba(33, 131, 221, 0);
+  }
+}
+
+@media only screen and (max-width: 568px) {
+  .stepper {
+    padding: 5px 0 10px;
+  }
+}
+
+.middleallign {
+  height: inherit;
+  max-height: 100%;
+  width: 100%;
+  text-align: center;
+  vertical-align: middle;
+}

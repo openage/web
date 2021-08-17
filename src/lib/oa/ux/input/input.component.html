@@ -1,0 +1,57 @@
+<div class="oa-input" [class]="class" [style]="style" [class.selected]="isSelected" [class.inline]="options?.inline">
+  @if (preFix) {
+  <oa-action [disabled]="disabled" [item]="preFix" class="subtle"></oa-action>
+  }
+  @switch (view) {
+  @case ('text') {
+
+  <input [type]="type" #inputContainer [disabled]="disabled" [readonly]="readonly" [value]="content"
+    [placeholder]="placeholder" (focus)="onFocus()" (change)="onChange($event)" (blur)="onBlur()"
+    (keyup)="onKeyUp($event)" />
+
+  }
+  @case ('password') {
+  <input type="{{hidden ? 'password': 'text'}}" #inputContainer [disabled]="disabled" [readonly]="readonly"
+    [value]="content" (focus)="onFocus()" (change)="onChange($event)" (blur)="onBlur()" (keyup)="onKeyUp($event)" />
+  <!-- <mat-icon class="subtle pointer" (click)="hidden = !hidden">{{hidden ? 'visibility': 'visibility_off'}}
+            </mat-icon> -->
+  }
+  @case ('code') {
+  <div class="code">
+    <input [oaAutofocus]="true" type="text" #char1 (keyup)="focusToNext(char1, char2)" minlength="1" maxlength="1"
+      [(ngModel)]="otp.char_1" name="char_1" required />
+    <input type="text" #char2 (keyup)="focusToNext(char2, char3)" minlength="1" maxlength="1" [(ngModel)]="otp.char_2"
+      name="char_2" required />
+    <input type="text" #char3 (keyup)="focusToNext(char3, char4)" minlength="1" maxlength="1" [(ngModel)]="otp.char_3"
+      name="char_3" required />
+    <input type="text" #char4 (keyup)="focusToNext(char4, char5)" minlength="1" maxlength="1" [(ngModel)]="otp.char_4"
+      name="char_4" required />
+    <input type="text" #char5 (keyup)="focusToNext(char5, char6)" minlength="1" maxlength="1" [(ngModel)]="otp.char_5"
+      name="char_5" required />
+    <input type="text" #char6 (keyup)="focusToNext(char6)" minlength="1" maxlength="1" [(ngModel)]="otp.char_6"
+      name="char_6" required />
+  </div>
+  }
+
+  @case ('multi-line') {
+  <textarea [id]="label" [placeholder]="placeholder" rows="4" [value]="content" [disabled]="disabled"
+    (focus)="onFocus()" (change)="onChange($event)" (blur)="onBlur()" (keyup)="onKeyUp($event)"></textarea>
+  }
+  <!-- @case ('rich') {
+  <oa-content-editor [value]="value" (changed)="changed.next($event)">
+  </oa-content-editor>
+  }
+  @case ('json') {
+  <oa-json-editor [value]="value" (changed)="changed.next($event)"></oa-json-editor>
+  } -->
+  }
+
+  @if (postFix && !readonly) {
+  <oa-action [disabled]="disabled" [item]="postFix"></oa-action>
+  }
+</div>
+@if (validate || required) {
+<oa-error [dirty]="isDirty" [type]="type" [value]="content" [label]="options.label" [validate]="validate"
+  [required]="required" (errored)="onValidate($event)">
+</oa-error>
+}

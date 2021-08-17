@@ -1,0 +1,13 @@
+@if (value && value.length) {
+  <mat-card class="banner {{class}}">
+    <mat-icon (click)="onClose()" class="close pointer">close</mat-icon>
+    @for (item of value; track item) {
+      <div>
+        <div class="warning">
+          <mat-icon>warning</mat-icon>
+          <span>{{item}}</span>
+        </div>
+      </div>
+    }
+  </mat-card>
+}

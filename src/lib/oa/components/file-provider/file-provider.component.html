@@ -1,0 +1,41 @@
+<!-- eslint-disable @angular-eslint/template/click-events-have-key-events -->
+<!-- eslint-disable @angular-eslint/template/interactive-supports-focus -->
+<!-- <ng-component [ngSwitch]="view">
+<div *ngSwitchCase="'input'">
+  <label [attr.for]="inputId" *ngIf="label">{{label}}</label>
+  <div [class.ready-for-drop]="readyForDrop" class="oa-input drop-zone" (click)="fileInput.click()">
+    <div class="input" [attr.for]="inputId">{{value? value.name: ''}}</div>
+    <mat-icon class="subtle sm">attach_file</mat-icon>
+  </div>
+</div>
+<div *ngIf="'zone'" [attr.for]="inputId" [class.ready-for-drop]="readyForDrop" class="drop-zone"
+  (click)="fileInput.click()">
+  <ng-content></ng-content>
+</div>
+</ng-component>
+
+<input autocomplete="off" class="file-input" [accept]="accept" [attr.id]="inputId" #fileInput type="file"
+  (change)="onFileSelected($event)"> -->
+
+@switch (view) {
+@case ('input') {
+@if (label) {
+<label [attr.for]="inputId">{{label}}</label>
+}
+<div [class.ready-for-drop]="readyForDrop" class="oa-input drop-zone" (click)="fileInput.click()">
+  <div class="input" [attr.for]="inputId">{{value? value.name: ''}}</div>
+  <oa-icon class="subtle x-lg attachment-icon">attachment</oa-icon>
+  <input autocomplete="off" class="file-input" [accept]="accept" [attr.id]="inputId" #fileInput type="file"
+    (change)="onFileSelected($event)">
+</div>
+}
+@case ('layout') {
+<div [class.ready-for-drop]="readyForDrop" class="drop-zone ">
+  <div [attr.for]="inputId" (click)="fileInput.click()">
+    <ng-content></ng-content>
+  </div>
+  <input class="file-input" [accept]="accept" #fileInput [attr.id]="inputId" type="file"
+    (change)="onFileSelected($event)">
+</div>
+}
+}

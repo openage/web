@@ -1,0 +1,195 @@
+{
+  "items": [
+    {
+      "code": "add",
+      "title": "New",
+      "mat": "add"
+    },
+    {
+      "code": "save",
+      "title": "Save",
+      "mat": "save"
+    },
+    {
+      "code": "expand",
+      "title": "Expand",
+      "mat": "expand_less"
+    },
+    {
+      "code": "collapse",
+      "title": "Collapse",
+      "mat": "expand_more"
+    },
+    {
+      "code": "remove",
+      "title": "Remove",
+      "mat": "remove_circle_outline"
+    },
+    {
+      "code": "start",
+      "title": "Start",
+      "mat": "play_arrow"
+    },
+    {
+      "code": "pause",
+      "title": "Pause",
+      "mat": "pause"
+    },
+    {
+      "code": "team",
+      "title": "Team",
+      "mat": "people"
+    },
+    {
+      "code": "remove",
+      "title": "Remove",
+      "mat": "remove_circle_outline"
+    },
+    {
+      "code": "expand",
+      "title": "Expand",
+      "mat": "expand_more"
+    },
+    {
+      "code": "collapse",
+      "title": "Collapse",
+      "mat": "expand_less"
+    },
+    {
+      "code": "done",
+      "title": "Show Done",
+      "mat": "done_all"
+    },
+    {
+      "code": "draft",
+      "title": "Show Draft",
+      "mat": "edit"
+    },
+    {
+      "code": "busy",
+      "title": "Processing",
+      "fa": "fa-spinner fa-spin"
+    },
+    {
+      "code": "error",
+      "title": "Errored",
+      "mat": "warning"
+    },
+    {
+      "code": "edit",
+      "title": "edit",
+      "mat": "edit"
+    },
+    {
+      "code": "details",
+      "title": "Details",
+      "mat": "chevron_right"
+    },
+    {
+      "code": "automatic",
+      "title": "Automatic",
+      "mat": "auto_mode"
+    },
+    {
+      "code": "more",
+      "title": "More",
+      "mat": "more_vert"
+    },
+    {
+      "code": "copy",
+      "title": "Copy",
+      "mat": "content_copy"
+    },
+    {
+      "code": "download",
+      "title": "Download",
+      "mat": "download"
+    },
+    {
+      "code": "clear",
+      "title": "Clear",
+      "mat": "close"
+    },
+    {
+      "code": "close",
+      "title": "Close",
+      "mat": "close"
+    },
+    {
+      "code": "back",
+      "title": "Back",
+      "mat": "arrow_back"
+    },
+    {
+      "code": "search",
+      "title": "Search",
+      "mat": "search"
+    },
+    {
+      "code": "activities",
+      "title": "Activities",
+      "mat": "history"
+    },
+    {
+      "code": "filter",
+      "title": "Toggle Filters",
+      "mat": "filter_list"
+    },
+    {
+      "code": "filters",
+      "title": "Toggle Filters",
+      "mat": "filter_list"
+    },
+    {
+      "code": "grid",
+      "title": "Grid",
+      "mat": "grid_view"
+    },
+    {
+      "code": "table",
+      "title": "Table",
+      "mat": "table_view"
+    },
+    {
+      "code": "columns",
+      "title": "Column",
+      "mat": "view_column"
+    },
+    {
+      "code": "rows",
+      "title": "Rows",
+      "mat": "view_list"
+    },
+    {
+      "code": "list",
+      "title": "List",
+      "mat": "view_list"
+    },
+    {
+      "code": "reset",
+      "title": "Reset",
+      "mat": "restart_alt"
+    },
+    {
+      "code": "restart",
+      "title": "Reset",
+      "mat": "restart_alt"
+    },
+    {
+      "code": "refresh",
+      "title": "Reload",
+      "mat": "refresh"
+    },
+    {
+      "code": "help",
+      "title": "Help",
+      "mat": "help_outline"
+    },
+    {
+      "code": "upload",
+      "title": "Upload",
+      "oa": "file-upload",
+      "class": "xx-lg"
+    }
+  ]
+}

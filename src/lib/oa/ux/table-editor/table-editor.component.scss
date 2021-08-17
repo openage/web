@@ -1,0 +1,71 @@
+.tableDiv {
+  overflow-x: scroll;
+}
+
+.table {
+
+  td,
+  th {
+    padding: 4px;
+    border: 1px solid var(--border);
+    position: relative;
+  }
+
+  th {
+    text-align: center;
+    background: var(--background);
+  }
+}
+
+.header {
+  background-color: var(--surface-light);
+  border-bottom: 1px solid var(--border);
+  padding: 10px 15px;
+  font-weight: bold;
+  display: flex;
+
+  .col {
+    flex: 1;
+    padding: 10px;
+    text-align: left;
+    font-size: 14px;
+    color: var(--text-secondary);
+  }
+}
+
+.flex_data {
+  display: flex;
+  /* margin-left: 20px; */
+}
+
+::ng-deep .card-container {
+  >*:hover::before {
+    background: var(--surface) !important;
+    right: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 0px;
+  }
+
+  >*::before {
+    content: none !important;
+    position: absolute;
+    background: var(--surface) !important;
+    right: -60px;
+    top: -40px;
+    width: 100px;
+    height: 100px;
+    border-radius: 50px;
+    transition: all 0.3s;
+    z-index: -1;
+  }
+}
+
+.action-buttons {
+  width: 0%;
+  display: flex;
+  justify-content: end;
+  gap: 8px;
+  margin-top: 8px;
+}

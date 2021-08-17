@@ -1,0 +1,24 @@
+.timer {
+    height: 100px;
+    width: 100px;
+    border: 2px solid var(--primary);
+    border-radius: 50%;
+    display: table;
+    margin: auto;
+    background-color: var(--accent);
+    box-shadow: 0 1px 5px rgba(27, 31, 35, .15);
+}
+
+.timer>button,
+.timer>div {
+    display: table-cell;
+    vertical-align: middle;
+    text-align: center;
+    color: var(--neutral);
+    font-weight: bolder;
+    font-size: large;
+}
+
+.timer>div.warn {
+    color: var(--warn);
+}

@@ -1,0 +1,46 @@
+{
+  "items": [
+    {
+      "code": "directory",
+      "icon": "/assets/app/applegos/images/icons/services/directory.png",
+      "image": "/assets/app/applegos/images/icons/services/directory.png",
+      "title": "Directory",
+      "description": "Enhancing Security and Access Control: Comprehensive Solutions for User Management and Authentication."
+    },
+    {
+      "code": "sendIt",
+      "icon": "/assets/app/applegos/images/icons/services/send-it.png",
+      "image": "/assets/app/applegos/images/icons/services/send-it.png",
+      "title": "Send-It",
+      "description": "Efficiently manage conversations and messages by grouping them based on conversation or entity attributes."
+    },
+    {
+      "code": "connect",
+      "icon": "/assets/app/applegos/images/icons/services/connect.png",
+      "image": "/assets/app/applegos/images/icons/services/connect.png",
+      "title": "Connect",
+      "description": "Streamlined real-time data integration for cloud, analytics, and reporting, optimizing performance without network strain."
+    },
+    {
+      "code": "composer",
+      "icon": "/assets/app/applegos/images/icons/services/composer.png",
+      "image": "/assets/app/applegos/images/icons/services/composer.png",
+      "title": "Composer",
+      "description": "Empower your system with optimized action sequencing to enhance performance, efficiency, and productivity effectively."
+    },
+    {
+      "code": "insight",
+      "icon": "/assets/app/applegos/images/icons/services/template.svg",
+      "image": "/assets/app/applegos/images/icons/services/template.svg",
+      "title": "Insight",
+      "description": "Platform for building and sharing visual data through reports"
+    },
+    {
+      "code": "gateway",
+      "icon": "/assets/app/applegos/images/icons/services/gateway.png",
+      "image": "/assets/app/applegos/images/icons/services/gateway.png",
+      "title": "gateway",
+      "description": "Platform for building and sharing visual data through reports"
+    }
+  ]
+}

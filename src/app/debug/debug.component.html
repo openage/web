@@ -1,0 +1,42 @@
+<div class="container cards">
+  <div class="section">
+    <div class="header">
+      <h5>Application</h5>
+    </div>
+    <div class="body">
+      <oa-json-viewer [value]="context.application()" [options]="options"></oa-json-viewer>
+    </div>
+  </div>
+  <div class="section">
+    <div class="header">
+      <h5>Tenant</h5>
+    </div>
+    <div class="body">
+      <oa-json-viewer [value]="context.tenant()" [options]="options"></oa-json-viewer>
+    </div>
+  </div>
+  <div class="section">
+    <div class="header">
+      <h5>Organization</h5>
+    </div>
+    <div class="body">
+      <oa-json-viewer [value]="context.organization()" [options]="options"></oa-json-viewer>
+    </div>
+  </div>
+  <div class="section">
+    <div class="header">
+      <h5>Session</h5>
+    </div>
+    <div class="body">
+      <oa-json-viewer [value]="context.session()" [options]="options"></oa-json-viewer>
+    </div>
+  </div>
+  <div class="section">
+    <div class="header">
+      <h5>Role</h5>
+    </div>
+    <div class="body">
+      <oa-json-viewer [value]="context.role()" [options]="options"></oa-json-viewer>
+    </div>
+  </div>
+</div>

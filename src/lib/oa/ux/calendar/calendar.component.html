@@ -1,0 +1,57 @@
+<div class="calendar">
+  <div class="header">
+    @if (!options?.header?.previous) {
+    <oa-icon code="next" (click)="previousMonth()"></oa-icon>
+    }
+    @if(options?.header?.title) {
+    <span class="title">{{options?.header?.title}}</span>
+    } @else {
+    <span class="title">{{month| format: 'MMMM, yyyy'}}</span>
+    }
+    @if (!options?.header?.next) {
+    <oa-icon code="next" (click)="nextMonth()"></oa-icon>
+    }
+  </div>
+
+  <div class="body">
+    <div class="weeks">
+      <div>SUN</div>
+      <div>MON</div>
+      <div>TUE</div>
+      <div>WED</div>
+      <div>THU</div>
+      <div>FRI</div>
+      <div>SAT</div>
+    </div>
+    <div class="days">
+      @for (day of days; track day) {
+      <div class="day {{day.class}}" (click)="onSelect(day)" [class.not-current]="!day.canSelect"
+        [class.today]="isToday(day.date)" [class.selected]="isSelected(day.date)">
+        <div class="date">
+          <div>{{day.date | format: 'dd'}}</div>
+        </div>
+        @if (day.events && day.events.length) {
+        <div class="events">
+          @for (e of day.events; track e) {
+          <div class="event">
+            <div class="{{e.start.status}}">{{e.start.title}}: {{e.start.time | format: 'h:mm a'}}</div>
+            <div class="{{e.end.status}}">{{e.end.title}}: {{e.end.time | format: 'h:mm a'}}</div>
+          </div>
+          }
+        </div>
+        }
+      </div>
+      }
+    </div>
+  </div>
+
+  <div class="footer">
+    @for (item of legends; track item) {
+    <div class="legend {{item.status}}">
+      <span class="box"></span> {{item.label}}
+    </div>
+    }
+    <span class="spacer"></span>
+  </div>
+
+</div>

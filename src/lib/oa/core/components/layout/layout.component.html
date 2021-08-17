@@ -1,0 +1,218 @@
+<!-- eslint-disable @angular-eslint/template/click-events-have-key-events -->
+<!-- eslint-disable @angular-eslint/template/interactive-supports-focus -->
+<!-- eslint-disable @angular-eslint/template/elements-content -->
+<!-- @if (isProcessing) {
+<processing-indicator></processing-indicator>
+} -->
+
+<ng-container *ngTemplateOutlet="sectionTemplate; context: { item: content}">
+</ng-container>
+
+<ng-template #sectionTemplate let-item="item" let-class="class">
+  <div [id]="item.code" class="section {{item.code}} {{class}} {{item.type}}" [ngStyle]="item.style"
+    [ngClass]="item.class" [class.hidden]="item.selected === false">
+    <!-- (click)="selectSection(item)" -->
+    @if(item.container) {
+    <ng-container *ngTemplateOutlet="renderContainer; context: { item: item, type: 'section' }">
+    </ng-container>
+    } @else {
+    <ng-container *ngTemplateOutlet="renderSection; context: { item: item }"> </ng-container>
+    }
+  </div>
+</ng-template>
+
+<ng-template #renderHeader let-header="header">
+  <div class="header flex-row" [ngClass]="header.class" [ngStyle]="header.style">
+    @if (header.icon) {
+    <oa-icon [value]="header.icon"></oa-icon>
+    }
+
+    @if (header.title) {
+    <h2 class="title" [ngStyle]="header.title.style" [ngClass]="header.title.class" [innerHtml]="header.title.text">
+    </h2>
+    }
+
+    @if (header.link) {
+    <span class="spacer"></span>
+    <a class="link" [ngStyle]="header.link.style" [ngClass]="header.link.class" [routerLink]="header.link.url">
+      {{header.link.text}}
+    </a>
+    }
+
+    @if (header.description) {
+    <div class="description" [ngStyle]="header.description.style" [ngClass]="header.description.class"
+      [innerHtml]="header.description.text">
+    </div>
+    }
+  </div>
+</ng-template>
+
+<ng-template #renderContainer let-item="item" let-type="type">
+  @switch (item.type) {
+  @case ('tabbed') {
+  <div class="header tabs" [ngClass]="item.container.header?.class" [ngStyle]="item.container.header?.style">
+    @for (tab of item.sections; track $index) {
+    <div [class.active]="tab.selected" (click)="selectSection(tab)">
+      <ng-container *ngTemplateOutlet="renderHeader; context: { header: tab.container.header }"> </ng-container>
+    </div>
+    }
+  </div>
+  }
+
+  @case ('slider') {
+  <div class="header navs" [ngClass]="item.container.header?.class" [ngStyle]="item.container.header?.style">
+    <oa-action [item]="item.actions.previous"></oa-action>
+    <oa-action [item]="item.actions.next"></oa-action>
+  </div>
+  }
+  @default {
+  @if (item.container.header && !item.bodyOnly){
+  <ng-container *ngTemplateOutlet="renderHeader; context: { header: item.container.header }"> </ng-container>
+  }
+  }
+  }
+  <div class="body" [ngClass]="item.container.body.class" [ngStyle]="item.container.body.style">
+    @if(type === 'section'){
+    <ng-container *ngTemplateOutlet="renderSection; context: { item: item }"> </ng-container>
+    }@else {
+    <ng-container *ngTemplateOutlet="renderComponent; context: { item: item }"> </ng-container>
+    }
+  </div>
+</ng-template>
+
+<ng-template #renderSection let-item="item">
+  @for (c of item.components; track c; let odd = $odd ) {
+  <ng-container *ngTemplateOutlet="componentTemplate; context: { item: c, class: odd?'odd': 'even' }"></ng-container>
+  }
+
+  @for (s of item.sections; track s; let odd = $odd) {
+  <ng-container *ngTemplateOutlet="sectionTemplate; context: { item: s, class: odd?'odd': 'even' }"></ng-container>
+  }
+</ng-template>
+
+<ng-template #componentTemplate let-item="item" let-class="class">
+  @if(item.container) {
+  <div class="component {{class}}" [ngClass]="item.container.class" [ngStyle]="item.container.style">
+    <ng-container *ngTemplateOutlet="renderContainer; context: { item: item, type: 'component' }">
+    </ng-container>
+  </div>
+  } @else {
+  <ng-container *ngTemplateOutlet="renderComponent; context: { item: item }"> </ng-container>
+  }
+</ng-template>
+
+<ng-template #renderComponent let-item="item">
+  <!-- <span class="diagnostics">Control {{item.control}}</span> -->
+
+  @if (templates[item.control]) {
+  <ng-container *ngTemplateOutlet="templates[item.control]; context: { item: item }">
+  </ng-container>
+  } @else {
+  @switch (item.control) {
+  <!-- @case ('collection') {
+  @for (c of item.items; track c; let odd = $odd) {
+  <ng-container *ngTemplateOutlet="componentTemplate; context: { item: c, class: odd?'odd': 'even' }"></ng-container>
+  }
+  } -->
+
+  @case ('branding') {
+  <page-branding [ngClass]="item.class" [ngStyle]="item.style" [options]="item.options"></page-branding>
+  }
+
+  @case ('notification') {
+  <!-- <send-it-new-notification [from]="'!me'" [apiLimit]="5" [autoRefreshTime]="300"></send-it-new-notification>
+  <send-it-desktop-notification></send-it-desktop-notification> -->
+  }
+
+  @case ('search') {
+  <!-- <oa-search view="text"></oa-search>   -->
+  }
+
+
+  @case ('role') {
+  <page-role [ngClass]="item.class" [ngStyle]="item.style" [options]="item.options"></page-role>
+  }
+  @case ('breadcrumb') {
+  <page-breadcrumb [ngClass]="item.class" [ngStyle]="item.style" [options]="item.options"></page-breadcrumb>
+  }
+
+  @case ('html') {
+  <oa-html-viewer [ngClass]="item.class" [ngStyle]="item.style" [value]="item.value"
+    [options]="item.options"></oa-html-viewer>
+  }
+  @case ('form') {
+  <oa-form [ngClass]="item.class" [ngStyle]="item.style" [value]="item.value" [options]="item.options"></oa-form>
+  }
+
+  @case ('action') {
+  <oa-action [ngClass]="item.class" [ngStyle]="item.style" [value]="item.value" [item]="item.options"></oa-action>
+  }
+
+  @case ('nav') {
+  <oa-nav [ngClass]="item.class" [ngStyle]="item.style" [value]="item.value" [options]="item.options"></oa-nav>
+  }
+
+  @case ('json') {
+  <oa-json-editor [ngClass]="item.class" [ngStyle]="item.style" [value]="item.value"
+    [options]="item.options"></oa-json-editor>
+  }
+
+  @case ('video') {
+  <oa-video-viewer [ngClass]="item.class" [ngStyle]="item.style" [value]="item.value"
+    [options]="item.options"></oa-video-viewer>
+  }
+
+  @case ('uploader') {
+  <button class="uploader-button" (click)="toggleUploaderVisibility(item)"><oa-icon class="uploadIcon"
+      value="file_upload"></oa-icon>
+    Uploader</button>
+  @if(item.isUploaderVisible){
+  <div class="uploader-overlay show">
+    <div class="uploader-popup">
+      <span class="uploader-popup-close" (click)="toggleUploaderVisibility(item)"><oa-icon
+          value="close"></oa-icon></span>
+      <oa-file-uploader [ngClass]="item.class" [ngStyle]="item.style" [options]="item.options">
+      </oa-file-uploader>
+    </div>
+  </div>
+  }
+  }
+  @case ('thumbnail-picker') {
+  <oa-thumbnail-selector [ngClass]="item.class" [ngStyle]="item.style"></oa-thumbnail-selector>
+  }
+  @case ('table') {
+  <oa-table [ngClass]="item.class" [ngStyle]="item.style" [value]="item.value" [options]="item.options">
+  </oa-table>
+  <div *ngIf="!item.value?.length" class="no-data">
+    No data available
+  </div>
+  }
+
+  @case ('calendar') {
+  <oa-calendar [ngClass]="item.class" [ngStyle]="item.style" [value]="item.value" [options]="item.options">
+  </oa-calendar>
+  }
+  @case ('file-uploader') {
+  <oa-document-uploader [ngClass]="item.class" [ngStyle]="item.style" [options]="item.options">
+  </oa-document-uploader>
+  }
+
+  @case ('pagination') {
+  <oa-pagination [ngClass]="item.class" [ngStyle]="item.style" [value]="item.value" [options]="item.options">
+  </oa-pagination>
+  }
+
+  @case ('spacer') {
+  <div class="spacer"></div>
+  }
+  @default {
+  <ng-container *ngTemplateOutlet="tempateNotFound; context: { item: item }"> </ng-container>
+  }
+  }
+  }
+</ng-template>
+
+<ng-template #tempateNotFound let-item="item">
+  <oa-not-found [ngClass]="item.class" [ngStyle]="item.style" [code]="'component-not-found'"
+    [value]="item.control"></oa-not-found>
+</ng-template>

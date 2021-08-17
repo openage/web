@@ -1,0 +1,125 @@
+<!-- eslint-disable @angular-eslint/template/label-has-associated-control -->
+@if(initialized) {
+@switch (view) {
+<!--
+@case ('table') {
+<oa-table [options]="options" [value]="value" (save)="save.emit($event)" (delete)="delete.emit($event)">
+</oa-table>
+}
+-->
+@default {
+<ng-container *ngTemplateOutlet="sectionTemplate; context: { item: content, class: 'form'}">
+</ng-container>
+}
+}
+}
+
+<ng-template #sectionTemplate let-item="item" let-class="class">
+  <div [id]="item.code" class="group {{item.code}} {{class}}" [ngStyle]="item.style" [ngClass]="item.class">
+    <!-- (click)="selectSection(item)" -->
+    @if(item.container) {
+    <ng-container *ngTemplateOutlet="renderContainer; context: { item: item }">
+    </ng-container>
+    } @else {
+    <ng-container *ngTemplateOutlet="renderSection; context: { item: item }"> </ng-container>
+    }
+  </div>
+</ng-template>
+
+<ng-template #renderHeader let-header="header">
+  <div class="header flex-row" [ngClass]="header.class" [ngStyle]="header.style">
+    @if (header.icon) {
+    <oa-icon [value]="header.icon"></oa-icon>
+    }
+
+    @if (header.title) {
+    <h2 class="title" [ngStyle]="header.title.style" [ngClass]="header.title.class" [innerHtml]="header.title.text">
+    </h2>
+    }
+
+    <!-- @if (header.link) {
+    <span class="spacer"></span>
+    <a class="link" [ngStyle]="header.link.style" [ngClass]="header.link.class" [routerLink]="header.link.url">
+      {{header.link.text}}
+    </a>
+    } -->
+
+    @if (header.description) {
+    <div class="description" [ngStyle]="header.description.style" [ngClass]="header.description.class"
+      [innerHtml]="header.description.text">
+    </div>
+    }
+  </div>
+</ng-template>
+
+<ng-template #renderContainer let-item="item">
+  @if (item.container.header){
+  <ng-container *ngTemplateOutlet="renderHeader; context: { header: item.container.header }"> </ng-container>
+  }
+
+
+  <div class="body" [ngClass]="item.container.body.class" [ngStyle]="item.container.body.style">
+    <ng-container *ngTemplateOutlet="renderSection; context: { item: item }"> </ng-container>
+
+  </div>
+
+</ng-template>
+
+<ng-template #renderSection let-item="item">
+  @for (i of item.fields; track $index) {
+  <ng-container *ngTemplateOutlet="renderField; context: { item: i }"> </ng-container>
+  }
+
+  @for (i of item.actions; track $index) {
+  <ng-container *ngTemplateOutlet="renderAction; context: { item: i }"> </ng-container>
+  }
+
+  @for (s of item.sections; track s; let odd = $odd) {
+  <ng-container *ngTemplateOutlet="sectionTemplate; context: { item: s, class: odd?'odd': 'even' }"></ng-container>
+  }
+</ng-template>
+
+<ng-template #renderField let-item="item">
+  <div [ngClass]="item.class" [ngStyle]="item.style" style="width: 20rem;">
+    @if (item.label) {
+    <div class="labelFields">
+      <label [for]="item.label">{{item.label}}</label>
+    </div>
+    <!-- Call this to show the detail page because the case input not work so call this here -->
+    <oa-text-input [options]="item" [value]="item.value" [placeholder]="item.label"
+      (valueChange)="setValue(item, $event)" class="textFields"></oa-text-input>
+    }
+    <div class="oa-field">
+      @switch (item.control) {
+      @case('input'){
+      <oa-text-input [options]="item" [value]="item.value" (valueChange)="setValue( item, $event)"></oa-text-input>
+      }
+      @default {
+      <!-- <oa-field-editor [item]="item" [(value)]="item.value" [isFormSubmit]="isFormSubmit"
+        (errored)="errors=$event"></oa-field-editor> -->
+      }
+      }
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #renderAction let-item="item">
+  <oa-action [item]="item"></oa-action>
+</ng-template>
+
+<ng-template #renderFooter let-footer="footer">
+  <div class="footer flex-row" [ngClass]="footer.class" [ngStyle]="footer.style">
+    @if (footer.icon) {
+    <oa-icon [value]="footer.icon"></oa-icon>
+    }
+
+    @if (footer.reset) {
+    <button class="reset" [ngStyle]="footer.reset.style" [ngClass]="footer.reset.class"
+      (click)="onReset()">{{footer.reset.text}}</button>
+    }
+    @if (footer.submit) {
+    <button class="submit" [ngStyle]="footer.submit.style" [ngClass]="footer.submit.class"
+      (click)="onSubmit(options?.fields)">{{footer.submit.text}}</button>
+    }
+  </div>
+</ng-template>

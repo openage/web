@@ -1,0 +1,11 @@
+@if (items.length) {
+<div layout="row" layout-align="end center" class="menu flex-row">
+  @for (item of items; track $index) {
+  @if(item.code === 'spacer') {
+  <span class="spacer"></span>
+  } @else {
+  <oa-action [item]="item"></oa-action>
+  }
+  }
+</div>
+}

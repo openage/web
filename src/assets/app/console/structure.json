@@ -1,0 +1,69 @@
+{
+  "app": {
+    "layout": "sticky-header"
+  },
+  "page": {
+    "layout": {
+      "class": "page",
+      "style": {}
+    },
+    "header": {
+      "layout": {
+        "sections": [
+          {
+            "code": "header-container",
+            "class": "container sticky-top",
+            "container": {
+              "body": {
+                "class": "flex-row"
+              }
+            },
+            "components": [
+              {
+                "control": "branding",
+                "options": {
+                  "class": "middle",
+                  "logo": {
+                    "type": "tenant",
+                    "size": "lg"
+                  },
+                  "title": {
+                    "type": "application"
+                  }
+                }
+              },
+              {
+                "control": "spacer"
+              },
+              {
+                "control": "nav",
+                "options": {
+                  "view": "top"
+                }
+              },
+              {
+                "permissions": [
+                  "user"
+                ],
+                "control": "role",
+                "options": {
+                  "branding": {
+                    "size": "xx-lg"
+                  },
+                  "title": {
+                    "show": false
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "styles": {
+      "content": {
+        "class": ""
+      }
+    }
+  }
+}

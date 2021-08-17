@@ -1,0 +1,25 @@
+{
+    "items": [
+        {
+            "code": "insight",
+            "icon": "/assets/app/applegos/images/icons/services/template.svg",
+            "image": "/assets/app/applegos/images/icons/services/template.svg",
+            "title": "Insight",
+            "description": " Empowering users to create and share insightful reports, enhancing data communication and decision-making processes efficiently."
+        },
+        {
+            "code": "connect",
+            "icon": "/assets/app/applegos/images/icons/services/connect.png",
+            "image": "/assets/app/applegos/images/icons/services/connect.png",
+            "title": "Connect",
+            "description": "Streamlined real-time data integration for cloud, analytics, and reporting, optimizing performance without network strain."
+        },
+        {
+            "code": "composer",
+            "icon": "/assets/app/applegos/images/icons/services/composer.png",
+            "image": "/assets/app/applegos/images/icons/services/composer.png",
+            "title": "Composer",
+            "description": "Empower your system with optimized action sequencing to enhance performance, efficiency, and productivity effectively."
+        }
+    ]
+}

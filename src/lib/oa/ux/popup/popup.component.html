@@ -1,0 +1,19 @@
+<div class="oa-popup">
+  @switch (type) {
+  @case ('tooltip') {
+  <div class="tooltip" [class]="['tooltip--'+position, 'tooltip--'+theme]" [class.tooltip--visible]="visible"
+    [style.left]="left + 'px'" [style.top]="top + 'px'">
+    {{title}}
+  </div>
+  } @case ('menu') {
+  @for (i of data; track i) {
+  <button class="oa-menu-item" (click)="i?.event()">{{i.title}}</button>
+  }
+  } @case ('dialog') {
+  @if(template) {
+  <ng-container *ngTemplateOutlet="template; context: { data: data }">
+  </ng-container>
+  }
+  }
+  }
+</div>

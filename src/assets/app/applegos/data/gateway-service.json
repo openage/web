@@ -1,0 +1,372 @@
+{
+    "layout": {
+        "sections": [
+            {
+                "class": "container",
+                "code": "collection-container",
+                "container": {
+                    "title": {
+                        "text": "<h3>Gateway<span class='highlight'> Features</span></h3>"
+                    },
+                    "description": "Empower system with optimized action sequencing for enhanced performance and efficiency."
+                }
+            },
+            {
+                "class": "container",
+                "code": "pricing-container",
+                "container": {
+                    "body": {
+                        "class": "flex-row three"
+                    }
+                }
+            },
+            {
+                "code": "detail-board-container-first",
+                "container": {
+                    "style": {
+                        "background-color": "#f2f7fa"
+                    },
+                    "body": {
+                        "class": "flex-1-2"
+                    }
+                }
+            },
+            {
+                "code": "detail-board-container-second",
+                "container": {
+                    "body": {
+                        "class": "flex-1-2"
+                    }
+                }
+            },
+            {
+                "code": "detail-board-container-third",
+                "container": {
+                    "style": {
+                        "background-color": "#f2f7fa"
+                    },
+                    "body": {
+                        "class": "flex-1-2"
+                    }
+                }
+            },
+            {
+                "code": "detail-board-container-fourth",
+                "container": {
+                    "body": {
+                        "class": "flex-1-2"
+                    }
+                }
+            },
+            {
+                "code": "detail-board-container-fifth",
+                "container": {
+                    "style": {
+                        "background-color": "#f2f7fa"
+                    },
+                    "body": {
+                        "class": "flex-1-2"
+                    }
+                }
+            },
+            {
+                "code": "detail-board-container-sixth",
+                "container": {
+                    "body": {
+                        "class": "flex-1-2"
+                    }
+                }
+            },
+            {
+                "code": "detail-board-container-seventh",
+                "container": {
+                    "style": {
+                        "background-color": "#f2f7fa"
+                    },
+                    "body": {
+                        "class": "flex-1-2"
+                    }
+                }
+            },
+            {
+                "code": "domains-container",
+                "container": {
+                    "description": {
+                        "text": "<h4>Not just limited to the below <span class='highlight'>domains</span></h4>"
+                    },
+                    "body": {
+                        "class": "flex-row seven domains"
+                    }
+                }
+            }
+        ]
+    },
+    "components": [
+        {
+            "section": "pricing-container",
+            "control": "html",
+            "container": {
+                "class": "card-gateway-detail-container"
+            },
+            "value": [
+                "<h1>What is<span class='highlight'> it?</span></h1>",
+                "<br>",
+                "<h3 class='card-detail-text'><i class='fa fa-check highlight'></i>Gateway is a powerful tool designed to streamline workﬂow and state management processes within organizations.</h3>",
+                "<h3 class='card-detail-text'><i class='fa fa-check highlight'></i>It provides a structured framework that tracks tasks from creation to completion, making work management more eﬃcient.</h3>",
+                "<h3 class='card-detail-text'><i class='fa fa-check highlight'></i>It automates approval processes and triggers auto notiﬁcations, enabling eﬃcient task allocation and reassignment.</h3>",
+                "<h3 class='card-detail-text'><i class='fa fa-check highlight'></i>With a built-in rule engine, tasks are automatically assigned based on predeﬁned rules, ensuring optimal resource allocation.</h3>",
+                "<h3 class='card-detail-text'><i class='fa fa-check highlight'></i>Additionally, it allows dynamic task creation and assignment during state movement, enhancing agility and productivity.</h3>"
+            ]
+        },
+        {
+            "section": "pricing-container",
+            "control": "html",
+            "container": {
+                "class": "card-gateway-detail-container"
+            },
+            "value": [
+                "<h1>Why did we <span class='highlight'> create it?</span></h1>",
+                "<br>",
+                "<h3 class='card-detail-text'><i class='fa fa-check highlight'></i><span class='textBold'>Eﬃcient Workﬂow and State Management:</span> Gateway was created to implement a robust framework for eﬃcient workﬂow and state management, eliminating bottlenecks and improving productivity.</h3>",
+                "<h3 class='card-detail-text'><i class='fa fa-check highlight'></i><span class='textBold'>Automated Approval Processes:</span> Our objective in creating Gateway was to automate approval processes, reducing manual effort and expediting decision-making.</h3>",
+                "<h3 class='card-detail-text'><i class='fa fa-check highlight'></i><span class='textBold'>Enhanced Communication:</span> With Gateway, automated email triggers ensure timely notiﬁcations and communication throughout the approval process, fostering collaboration and eﬃciency</h3>",
+                "<h3 class='card-detail-text'><i class='fa fa-check highlight'></i><span class='textBold'>Enhanced Visibility:</span> Predeﬁned workﬂows offer stakeholders better visibility into task statuses,helping them track progress and make informed decisions.</h3>",
+                "<h3 class='card-detail-text'><i class='fa fa-check highlight'></i><span class='textBold'>Rule-Based Task Assignment:</span> The implementation of a rule engine automates task assignment based on predeﬁned rules, optimizing resource utilization and workﬂow eﬃciency.</h3>"
+            ]
+        },
+        {
+            "section": "pricing-container",
+            "control": "html",
+            "container": {
+                "class": "card-gateway-detail-container"
+            },
+            "value": [
+                "<h1>How does <span class='highlight'> it works?</span></h1>",
+                "<br>",
+                "<h3 class='card-detail-text'><i class='fa fa-check highlight'></i><span class='textBold'>Workﬂow Design:</span> Users can easily design workﬂows using an intuitive interface, deﬁning statuses,transitions, and conditions that govern task ﬂow. </h3>",
+                "<h3 class='card-detail-text'><i class='fa fa-check highlight'></i><span class='textBold'>Transitions and Conditions:</span> Transitions signify task movement between statuses, while conditions ensure tasks move through the workﬂow appropriately by deﬁning criteria.</h3>",
+                "<h3 class='card-detail-text'><i class='fa fa-check highlight'></i><span class='textBold'>Email Notiﬁcations and Automation:</span> Workﬂows can be conﬁgured to send notiﬁcations or automate actions based on speciﬁc events or transitions, keeping stakeholders informed and reducing manual effort.</h3>",
+                "<h3 class='card-detail-text'><i class='fa fa-check highlight'></i><span class='textBold'>Pre- and Post-Approval Actions:</span> Users can deﬁne and execute a set of actions before or after approval within workﬂow, providing ﬂexibility and customization options to meet speciﬁc organizational needs.</h3>",
+                "<h3 class='card-detail-text'><i class='fa fa-check highlight'></i><span class='textBold'>Dynamic Task Creation with Dynamic Forms:</span> During state movement, it allows the creation of new tasks with dynamic forms based on speciﬁc conditions, facilitating customized task creation and assignment to designated individuals.</h3>"
+            ]
+        },
+        {
+            "section": "detail-board-container-first",
+            "control": "html",
+            "container": {
+                "class": "container"
+            },
+            "value": [
+                "<img class='gatewayImages' src='/assets/app/applegos/images/services/flowchart.png'>"
+            ]
+        },
+        {
+            "section": "detail-board-container-first",
+            "control": "html",
+            "container": {
+                "class": "container"
+            },
+            "value": [
+                "<h1>Sample Workflow :  <span class='highlight'> Flowchart</span></h1>",
+                "<h1>Screen 1:</h1>",
+                "<br>",
+                "<h3 class='card-detail-text'><i class='fa fa-check highlight'></i>Readonly freight order(ocean) sample workflow with all stages (Diagram mode)</h3>",
+                "<h3 class='card-detail-text'><i class='fa fa-check highlight'></i>Users have capability to design customized workflows with various permissions, validations, actions, and more, precisely tailored to their business needs. This flexibility ensures that workflows align perfectly with organizational requirements, promoting efficiency and adaptability.</h3>"
+            ]
+        },
+        {
+            "section": "detail-board-container-second",
+            "control": "html",
+            "container": {
+                "class": "container"
+            },
+            "value": [
+                "<h1>Sample Workflow :  <span class='highlight'> State Properties</span></h1>",
+                "<h1>Screen 2 & 3:</h1>",
+                "<br>",
+                "<h3 class='card-detail-text'><i class='fa fa-check highlight'></i>It includes summary of a particular stage like name, icon, estimate,assignee, next actions etc.</h3>",
+                "<h3 class='card-detail-text'><i class='fa fa-check highlight'></i>From here users can manage permissions, as well as deﬁne pre and post-stage actions, ensuring precise control over each stage of the process.</h3>"
+            ]
+        },
+        {
+            "section": "detail-board-container-second",
+            "control": "html",
+            "container": {
+                "class": "container"
+            },
+            "value": [
+                "<img class='gatewayImages' src='/assets/app/applegos/images/services/state-property.png'>"
+            ]
+        },
+        {
+            "section": "detail-board-container-third",
+            "control": "html",
+            "container": {
+                "class": "container"
+            },
+            "value": [
+                "<img class='gatewayImages' src='/assets/app/applegos/images/services/state-property-1.png'>"
+            ]
+        },
+        {
+            "section": "detail-board-container-third",
+            "control": "html",
+            "container": {
+                "class": "container"
+            },
+            "value": [
+                "<h1>Sample Workflow :  <span class='highlight'> State Properties</span></h1>",
+                "<h1>Screen 4 & 5:</h1>",
+                "<br>",
+                "<h3 class='card-detail-text'><i class='fa fa-check highlight'></i>It includes assignment rules that facilitate task allocation on condition basis for particular stage.</h3>",
+                "<h3 class='card-detail-text'><i class='fa fa-check highlight'></i>It includes some miscellaneous information like email templates and some meta data.</h3>"
+            ]
+        },
+        {
+            "section": "detail-board-container-fourth",
+            "control": "html",
+            "container": {
+                "class": "container"
+            },
+            "value": [
+                "<h1>Sample <span class='highlight'> Task template</span></h1>",
+                "<h1>Screen 1:</h1>",
+                "<br>",
+                "<h3 class='card-detail-text'><i class='fa fa-check highlight'></i>Users have the capability to design task templates for automated task generation, featuring dynamic forms, while transitioning between workflow stages. The displayed screen showcases default properties of the task template, such as code, name, assignee, and data.</h3>"
+            ]
+        },
+        {
+            "section": "detail-board-container-fourth",
+            "control": "html",
+            "container": {
+                "class": "container"
+            },
+            "value": [
+                "<img class='gatewayImages' src='/assets/app/applegos/images/services/task-template.png'>"
+            ]
+        },
+        {
+            "section": "detail-board-container-fifth",
+            "control": "html",
+            "container": {
+                "class": "container"
+            },
+            "value": [
+                "<img class='gatewayImages' src='/assets/app/applegos/images/services/dynamic-form.png'>"
+            ]
+        },
+        {
+            "section": "detail-board-container-fifth",
+            "control": "html",
+            "container": {
+                "class": "container"
+            },
+            "value": [
+                "<h1>Sample Task template:  <span class='highlight'> Dynamic form</span></h1>",
+                "<h1>Screen 2:</h1>",
+                "<br>",
+                "<h3 class='card-detail-text'><i class='fa fa-check highlight'></i>Utilizing the task template, dynamic forms can be swiftly constructed via drag-and-drop functionality. Subsequently, tasks generated with this template display the corresponding form within task itself, requiring users to complete it for task fulﬁllment.</h3>"
+            ]
+        },
+        {
+            "section": "detail-board-container-sixth",
+            "control": "html",
+            "container": {
+                "class": "container"
+            },
+            "value": [
+                "<h1>Example: <span class='highlight'> Freight Order(ocean)</span></h1>",
+                "<br>",
+                "<h3 class='card-detail-text'><i class='fa fa-check highlight'></i>Here is the working example of order workflow with all transitions, current state, next set of actions on permission basis, current assignee, priority, start date, due date etc.</h3>"
+            ]
+        },
+        {
+            "section": "detail-board-container-sixth",
+            "control": "html",
+            "container": {
+                "class": "container"
+            },
+            "value": [
+                "<img class='gatewayImages' src='/assets/app/applegos/images/services/freight-order.png'>"
+            ]
+        },
+        {
+            "section": "detail-board-container-seventh",
+            "control": "html",
+            "container": {
+                "class": "container"
+            },
+            "value": [
+                "<img class='gatewayImages' src='/assets/app/applegos/images/services/freight-kpi.png'>"
+            ]
+        },
+        {
+            "section": "detail-board-container-seventh",
+            "control": "html",
+            "container": {
+                "class": "container"
+            },
+            "value": [
+                "<h1>Example:  <span class='highlight'> Freight Order(ocean) KPI’s</span></h1>",
+                "<br>",
+                "<h3 class='card-detail-text'><i class='fa fa-check highlight'></i>Upon transitioning an order task to the ongoing state, a list of tasks is automatically generated including dynamic forms. These tasks are prioritized and assigned to operators, who are required to ﬁll in the necessary information before closing them.</h3>"
+            ]
+        },
+        {
+            "section": "domains-container",
+            "control": "html",
+            "value": [
+                "<img class='domainImage' src='/assets/app/applegos/images/domains/education.svg'>",
+                "<h3 class=''>Education</h3>"
+            ]
+        },
+        {
+            "section": "domains-container",
+            "control": "html",
+            "value": [
+                "<img class='domainImage' src='/assets/app/applegos/images/domains/finance.svg'>",
+                "<h3 class=''>Finance</h3>"
+            ]
+        },
+        {
+            "section": "domains-container",
+            "control": "html",
+            "value": [
+                "<img class='' src='/assets/app/applegos/images/domains/government.svg'>",
+                "<h3 class=''>Government</h3>"
+            ]
+        },
+        {
+            "section": "domains-container",
+            "control": "html",
+            "value": [
+                "<img class='' src='/assets/app/applegos/images/domains/health-care.svg'>",
+                "<h3 class=''>Health Care</h3>"
+            ]
+        },
+        {
+            "section": "domains-container",
+            "control": "html",
+            "value": [
+                "<img class='' src='/assets/app/applegos/images/domains/logistics.svg'>",
+                "<h3 class=''>Logistics</h3>"
+            ]
+        },
+        {
+            "section": "domains-container",
+            "control": "html",
+            "value": [
+                "<img class='' src='/assets/app/applegos/images/domains/travel.svg'>",
+                "<h3 class=''>Travel</h3>"
+            ]
+        },
+        {
+            "section": "domains-container",
+            "control": "html",
+            "value": [
+                "<img class='' src='/assets/app/applegos/images/domains/e-commerence.svg'>",
+                "<h3 class=''>E-commerence</h3>"
+            ]
+        }
+    ]
+}

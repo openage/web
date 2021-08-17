@@ -1,0 +1,40 @@
+.breadcrumb {
+  background-color: inherit;
+  margin-bottom: 0px;
+  padding: 0 5px 0 5px;
+
+  img {
+    height: 15px;
+    width: 15px;
+    margin-right: 12px;
+  }
+
+  span {
+    margin-top: 3px;
+    color: var(--text-disabled);
+    margin-left: 2px;
+    margin-right: 2px;
+  }
+
+  a,
+  a:hover {
+    text-decoration: none;
+    color: var(--text-disabled);
+    font-size: smaller;
+    padding: 5px 0 5px 0;
+    font-weight: normal;
+    line-height: 1.1;
+    text-transform: uppercase;
+
+    &.active {
+      color: var(--default);
+      /* font-size: 15px; */
+      /* font-weight: bold; */
+    }
+  }
+
+  span:last-child {
+    display: none;
+  }
+
+}

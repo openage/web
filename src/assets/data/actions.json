@@ -1,0 +1,104 @@
+{
+  "items": [
+    {
+      "code": "view",
+      "title": "Views",
+      "type": "toggle",
+      "config": {
+        "items": [
+          {
+            "code": "rows"
+          },
+          {
+            "code": "columns"
+          }
+        ]
+      }
+    },
+    {
+      "code": "email",
+      "title": "Email",
+      "icon": {
+        "oa": "email"
+      }
+    },
+    {
+      "code": "chat",
+      "title": "Slack",
+      "provider": "slack",
+      "icon": {
+        "oa": "slack"
+      },
+      "config": {
+        "url": "https://app.slack.com/client"
+      }
+    },
+    {
+      "code": "whatsapp",
+      "title": "WhatsApp",
+      "provider": "whatsapp",
+      "icon": {
+        "oa": "whatsapp"
+      },
+      "config": {
+        "url": "https://api.whatsapp.com/send"
+      }
+    },
+    {
+      "code": "copy",
+      "title": "Copy",
+      "icon": {
+        "oa": "copy"
+      }
+    },
+    {
+      "code": "remove",
+      "title": "Remove",
+      "icon": {
+        "mat": "delete_outline"
+      }
+    },
+    {
+      "code": "save",
+      "title": "Save",
+      "icon": {
+        "mat": "save"
+      }
+    },
+    {
+      "code": "next",
+      "title": "Next",
+      "icon": {
+        "mat": "chevron_right"
+      }
+    },
+    {
+      "code": "previous",
+      "title": "Previous",
+      "icon": {
+        "mat": "chevron_left"
+      }
+    },
+    {
+      "code": "undo",
+      "title": "Undo",
+      "icon": {
+        "mat": "undo"
+      }
+    },
+    {
+      "code": "redo",
+      "title": "Redo",
+      "icon": {
+        "mat": "redo"
+      }
+    },
+    {
+      "code": "close",
+      "title": "Close",
+      "icon": {
+        "mat": "close"
+      }
+    }
+  ]
+}

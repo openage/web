@@ -1,0 +1,1083 @@
+{
+  "params": {},
+  "actions": [],
+  "layout": {
+    "sections": [
+      {
+        "style": {
+          "background-image": "url(/assets/app/freightastic/images/busy-shipping.svg)",
+          "background-size": "cover",
+          "height": "735px"
+        },
+        "code": "banner-container",
+        "container": {
+          "body": {
+            "class": "flex-row"
+          }
+        },
+        "sections": [
+          {
+            "code": "info-container",
+            "class": "container",
+            "container": {
+              "body": {
+                "class": "flex-row  middle"
+              }
+            }
+          },
+          {
+            "code": "tabbed-container",
+            "class": "container",
+            "type": "tabbed",
+            "options": {
+              "view": "horizontal"
+            },
+            "container": {
+              "class": "tab-section"
+            },
+            "sections": [
+              {
+                "code": "tabbed-container-subSection",
+                "type": "tabbed",
+                "options": {
+                  "view": "horizontal"
+                },
+                "container": {
+                  "icon": "fa-home",
+                  "title": "OCEAN",
+                  "class": "tab-section"
+                },
+                "sections": [
+                  {
+                    "container": {
+                      "icon": "fa-home",
+                      "title": "Schedules"
+                    },
+                    "components": [
+                      {
+                        "control": "form",
+                        "options": {
+                          "sections": [
+                            {
+                              "code": "r-1",
+                              "container": {
+                                "body": {
+                                  "class": "flex-row two"
+                                }
+                              }
+                            },
+                            {
+                              "code": "r-2"
+                            },
+                            {
+                              "code": "r-3",
+                              "class": "controls-row right"
+                            }
+                          ],
+                          "fields": [
+                            {
+                              "control": "input",
+                              "group": "r-1",
+                              "label": "Origin",
+                              "key": "form.originName"
+                            },
+                            {
+                              "control": "input",
+                              "group": "r-1",
+                              "label": "Destination",
+                              "key": "form.destinationName"
+                            },
+                            {
+                              "control": "date",
+                              "group": "r-2",
+                              "label": "Sailing Date",
+                              "key": "form.sailingDate"
+                            }
+                          ],
+                          "actions": [
+                            {
+                              "code": "submit",
+                              "group": "r-3",
+                              "handler": "service",
+                              "view": "button",
+                              "class": "primary",
+                              "icon": "mat-search",
+                              "title": "Search",
+                              "config": {
+                                "target": {
+                                  "service": "send-it",
+                                  "collection": "messages",
+                                  "method": "create"
+                                }
+                              }
+                            },
+                            {
+                              "code": "reset",
+                              "group": "r-3",
+                              "handler": "form",
+                              "view": "button",
+                              "class": "default",
+                              "title": "Reset",
+                              "config": {}
+                            }
+                          ]
+                        },
+                        "value": {
+                          "form": {
+                            "originName": "Search",
+                            "destinationName": "Search",
+                            "sailingDate": ""
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "container": {
+                      "icon": "fa-users",
+                      "title": "Request Quote"
+                    },
+                    "components": [
+                      {
+                        "control": "form",
+                        "options": {
+                          "sections": [
+                            {
+                              "code": "r-1",
+                              "container": {
+                                "body": {
+                                  "class": "flex-row two"
+                                }
+                              }
+                            },
+                            {
+                              "code": "r-2"
+                            },
+                            {
+                              "code": "r-3",
+                              "class": "controls-row right"
+                            }
+                          ],
+                          "fields": [
+                            {
+                              "control": "input",
+                              "group": "r-1",
+                              "label": "From Port",
+                              "key": "form.fromPort"
+                            },
+                            {
+                              "control": "input",
+                              "group": "r-1",
+                              "label": "To Port",
+                              "key": "form.toPort"
+                            },
+                            {
+                              "control": "date",
+                              "group": "r-2",
+                              "label": "Sailing Date",
+                              "key": "form.sailingDate"
+                            },
+                            {
+                              "control": "input",
+                              "group": "r-1",
+                              "label": "Commodity Type",
+                              "key": "form.commodityType"
+                            },
+                            {
+                              "control": "input",
+                              "group": "r-1",
+                              "label": "Commodity Category",
+                              "key": "form.commodityCategory"
+                            },
+                            {
+                              "control": "input",
+                              "group": "r-2",
+                              "label": "Description of goods",
+                              "key": "description"
+                            },
+                            {
+                              "control": "input",
+                              "group": "r-2",
+                              "label": "Remarks",
+                              "key": "remarks"
+                            }
+                          ],
+                          "actions": [
+                            {
+                              "code": "submit",
+                              "group": "r-3",
+                              "handler": "service",
+                              "view": "button",
+                              "class": "primary",
+                              "icon": "mat-search",
+                              "title": "Search",
+                              "config": {
+                                "target": {
+                                  "service": "send-it",
+                                  "collection": "messages",
+                                  "method": "create"
+                                }
+                              }
+                            },
+                            {
+                              "code": "reset",
+                              "group": "r-3",
+                              "handler": "form",
+                              "view": "button",
+                              "class": "default",
+                              "title": "Reset",
+                              "config": {}
+                            }
+                          ]
+                        },
+                        "value": {
+                          "form": {
+                            "originName": "Search",
+                            "destinationName": "Search",
+                            "fromPort": "Search",
+                            "toPort": "Search",
+                            "commodityType": "Search",
+                            "commodityCategory": "Search"
+                          },
+                          "description": "Description",
+                          "remarks": "Remarks"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "container": {
+                      "icon": "fa-users",
+                      "title": "Tracking"
+                    },
+                    "components": [
+                      {
+                        "control": "form",
+                        "options": {
+                          "sections": [
+                            {
+                              "code": "r-1",
+                              "container": {
+                                "body": {
+                                  "class": "flex-row two"
+                                }
+                              }
+                            },
+                            {
+                              "code": "r-2"
+                            },
+                            {
+                              "code": "r-3",
+                              "class": "controls-row right"
+                            }
+                          ],
+                          "fields": [
+                            {
+                              "control": "input",
+                              "group": "r-1",
+                              "label": "Enter Booking. B/L or Container Number",
+                              "key": "form.containerName"
+                            }
+                          ],
+                          "actions": [
+                            {
+                              "code": "submit",
+                              "group": "r-3",
+                              "handler": "service",
+                              "view": "button",
+                              "class": "primary",
+                              "icon": "mat-search",
+                              "title": "Track Shipment",
+                              "config": {
+                                "target": {
+                                  "service": "send-it",
+                                  "collection": "messages",
+                                  "method": "create"
+                                }
+                              }
+                            },
+                            {
+                              "code": "reset",
+                              "group": "r-3",
+                              "handler": "form",
+                              "view": "button",
+                              "class": "default",
+                              "title": "Reset",
+                              "config": {}
+                            }
+                          ]
+                        },
+                        "value": {
+                          "form": {
+                            "containerName": "Search"
+                          }
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "code": "tabbed-container-subSection",
+                "type": "tabbed",
+                "options": {
+                  "view": "horizontal"
+                },
+                "container": {
+                  "icon": "fa-home",
+                  "title": "Air",
+                  "class": "tab-section"
+                },
+                "sections": [
+                  {
+                    "container": {
+                      "icon": "fa-home",
+                      "title": "Schedules"
+                    },
+                    "components": [
+                      {
+                        "control": "form",
+                        "options": {
+                          "sections": [
+                            {
+                              "code": "r-1",
+                              "container": {
+                                "body": {
+                                  "class": "flex-row two"
+                                }
+                              }
+                            },
+                            {
+                              "code": "r-2"
+                            },
+                            {
+                              "code": "r-3",
+                              "class": "controls-row right"
+                            }
+                          ],
+                          "fields": [
+                            {
+                              "control": "input",
+                              "group": "r-1",
+                              "label": "Origin",
+                              "key": "form.originName"
+                            },
+                            {
+                              "control": "input",
+                              "group": "r-1",
+                              "label": "Destination",
+                              "key": "form.destinationName"
+                            },
+                            {
+                              "control": "date",
+                              "group": "r-2",
+                              "label": "Sailing Date",
+                              "key": "form.sailingDate"
+                            }
+                          ],
+                          "actions": [
+                            {
+                              "code": "submit",
+                              "group": "r-3",
+                              "handler": "service",
+                              "view": "button",
+                              "class": "primary",
+                              "icon": "mat-search",
+                              "title": "Search",
+                              "config": {
+                                "target": {
+                                  "service": "send-it",
+                                  "collection": "messages",
+                                  "method": "create"
+                                }
+                              }
+                            },
+                            {
+                              "code": "reset",
+                              "group": "r-3",
+                              "handler": "form",
+                              "view": "button",
+                              "class": "default",
+                              "title": "Reset",
+                              "config": {}
+                            }
+                          ]
+                        },
+                        "value": {
+                          "form": {
+                            "originName": "Search",
+                            "destinationName": "Search"
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "container": {
+                      "icon": "fa-users",
+                      "title": "Request Quote"
+                    },
+                    "components": [
+                      {
+                        "control": "form",
+                        "options": {
+                          "sections": [
+                            {
+                              "code": "r-1",
+                              "container": {
+                                "body": {
+                                  "class": "flex-row two"
+                                }
+                              }
+                            },
+                            {
+                              "code": "r-2"
+                            },
+                            {
+                              "code": "r-3",
+                              "class": "controls-row right"
+                            }
+                          ],
+                          "fields": [
+                            {
+                              "control": "input",
+                              "group": "r-1",
+                              "label": "From Port",
+                              "key": "form.fromPort"
+                            },
+                            {
+                              "control": "input",
+                              "group": "r-1",
+                              "label": "To Port",
+                              "key": "form.toPort"
+                            },
+                            {
+                              "control": "date",
+                              "group": "r-2",
+                              "label": "Sailing Date",
+                              "key": "form.sailingDate"
+                            },
+                            {
+                              "control": "input",
+                              "group": "r-1",
+                              "label": "Commodity Type",
+                              "key": "form.commodityType"
+                            },
+                            {
+                              "control": "input",
+                              "group": "r-1",
+                              "label": "Commodity Category",
+                              "key": "form.commodityCategory"
+                            },
+                            {
+                              "control": "input",
+                              "group": "r-2",
+                              "label": "Description of goods",
+                              "key": "description"
+                            },
+                            {
+                              "control": "input",
+                              "group": "r-2",
+                              "label": "Remarks",
+                              "key": "remarks"
+                            }
+                          ],
+                          "actions": [
+                            {
+                              "code": "submit",
+                              "group": "r-3",
+                              "handler": "service",
+                              "view": "button",
+                              "class": "primary",
+                              "icon": "mat-search",
+                              "title": "Search",
+                              "config": {
+                                "target": {
+                                  "service": "send-it",
+                                  "collection": "messages",
+                                  "method": "create"
+                                }
+                              }
+                            },
+                            {
+                              "code": "reset",
+                              "group": "r-3",
+                              "handler": "form",
+                              "view": "button",
+                              "class": "default",
+                              "title": "Reset",
+                              "config": {}
+                            }
+                          ]
+                        },
+                        "value": {
+                          "form": {
+                            "originName": "Search",
+                            "destinationName": "Search",
+                            "fromPort": "Search",
+                            "toPort": "Search",
+                            "commodityType": "Search",
+                            "commodityCategory": "Search"
+                          },
+                          "description": "Description",
+                          "remarks": "Remarks"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "container": {
+                      "icon": "fa-users",
+                      "title": "Tracking"
+                    },
+                    "components": [
+                      {
+                        "control": "form",
+                        "options": {
+                          "sections": [
+                            {
+                              "code": "r-1",
+                              "container": {
+                                "body": {
+                                  "class": "flex-row two"
+                                }
+                              }
+                            },
+                            {
+                              "code": "r-2"
+                            },
+                            {
+                              "code": "r-3",
+                              "class": "controls-row right"
+                            }
+                          ],
+                          "fields": [
+                            {
+                              "control": "input",
+                              "group": "r-1",
+                              "label": "Enter Booking. B/L or Container Number",
+                              "key": "form.containerName"
+                            }
+                          ],
+                          "actions": [
+                            {
+                              "code": "submit",
+                              "group": "r-3",
+                              "handler": "service",
+                              "view": "button",
+                              "class": "primary",
+                              "icon": "mat-search",
+                              "title": "Track Shipment",
+                              "config": {
+                                "target": {
+                                  "service": "send-it",
+                                  "collection": "messages",
+                                  "method": "create"
+                                }
+                              }
+                            },
+                            {
+                              "code": "reset",
+                              "group": "r-3",
+                              "handler": "form",
+                              "view": "button",
+                              "class": "default",
+                              "title": "Reset",
+                              "config": {}
+                            }
+                          ]
+                        },
+                        "value": {
+                          "form": {
+                            "containerName": "Search"
+                          }
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "code": "domains-container",
+        "container": {
+          "title": {
+            "text": "<h4>We Provide Service <span class='highlight'> Across The Globe</span></h4>"
+          },
+          "description": "We offer a Global Logistics Network with our worldwide offices and also high quality distribution facilities which are staffed by dedicated teams of the top of experts. We have more than 30 years of experiences in this field.",
+          "body": {
+            "class": "flex-row seven domains"
+          }
+        }
+      },
+      {
+        "code": "quote-container",
+        "class": "container",
+        "container": {
+          "body": {
+            "class": "flex-row two"
+          }
+        }
+      },
+      {
+        "code": "offer-container",
+        "container": {
+          "title": {
+            "text": "<h4>What We <span class='highlight'>  Offer For You</span></h4>"
+          },
+          "description": "There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some slightly believable If you are going",
+          "body": {
+            "class": "flex-row seven domains"
+          }
+        }
+      },
+      {
+        "code": "detail-board-container-first",
+        "class": "container",
+        "container": {
+          "body": {
+            "class": "flex-1-2"
+          }
+        }
+      },
+      {
+        "code": "detail-board-container-second",
+        "class": "container",
+        "container": {
+          "body": {
+            "class": "flex-1-2"
+          }
+        }
+      },
+      {
+        "code": "detail-board-container-third",
+        "class": "container",
+        "container": {
+          "body": {
+            "class": "flex-1-2"
+          }
+        }
+      },
+      {
+        "code": "detail-board-container-four",
+        "class": "container",
+        "container": {
+          "body": {
+            "class": "flex-1-2"
+          }
+        }
+      },
+      {
+        "code": "trusted-customer-container",
+        "container": {}
+      }
+    ]
+  },
+  "footer": {
+    "layout": {
+      "sections": [
+        {
+          "code": "footer-container",
+          "control": "collection",
+          "options": {
+            "control": "html",
+            "options": {
+              "view": "summary"
+            },
+            "container": {
+              "class": "card-container"
+            },
+            "body": {
+              "class": "flex-row five"
+            }
+          }
+        }
+      ]
+    }
+  },
+  "components": [
+    {
+      "section": "info-container",
+      "control": "html",
+      "style": {
+        "text-align": "center",
+        "color": "#ffff"
+      },
+      "value": [
+        "<h1 class='main-title'>Welcome to </h1>",
+        "<h1 class='main-title-subText'>Freightastic</h1>",
+        "<br>",
+        "<h2 >An End-to-End Digital Freight Forwarder Platform</h2>"
+      ]
+    },
+    {
+      "section": "domains-container",
+      "control": "html",
+      "value": [
+        "<img class='domainImage' src='/assets/app/freightastic/images/services/transparent-rates.svg'>",
+        "<h3 class=''>Instant and Transparent Rates</h3>"
+      ]
+    },
+    {
+      "section": "domains-container",
+      "control": "html",
+      "value": [
+        "<img class='domainImage' src='/assets/app/freightastic/images/services/tracking.svg'>",
+        "<h3 class=''>Real-time Container Tracking</h3>"
+      ]
+    },
+    {
+      "section": "domains-container",
+      "control": "html",
+      "value": [
+        "<img class='domainImage' src='/assets/app/freightastic/images/services/digital-doucmentation.svg'>",
+        "<h3 class=''>Digital Documentation</h3>"
+      ]
+    },
+    {
+      "section": "domains-container",
+      "control": "html",
+      "value": [
+        "<img class='domainImage' src='/assets/app/freightastic/images/services/personalized-dashboard.svg'>",
+        "<h3 class=''>Personalized Dashboard</h3>"
+      ]
+    },
+    {
+      "section": "domains-container",
+      "control": "html",
+      "value": [
+        "<img class='domainImage' src='/assets/app/freightastic/images/services/support.svg'>",
+        "<h3 class=''>Centralized Expert Support 24*7</h3>"
+      ]
+    },
+    {
+      "section": "quote-container",
+      "control": "html",
+      "container": {},
+      "value": [
+        "<h2 class='scoreText'>One of India's leading online travel platform now offers freight forwarding </h3>",
+        "<h3 class='scoreText'>platform to customers for a seamless booking experience</h3>"
+      ]
+    },
+    {
+      "section": "quote-container",
+      "control": "html",
+      "container": {},
+      "value": [
+        "<a class='button filled primary cta'>Get A Quote</a>"
+      ]
+    },
+    {
+      "section": "offer-container",
+      "control": "html",
+      "value": [
+        "<img class='domainImage' src='/assets/app/freightastic/images/services/vehicle-ship.svg'>",
+        "<h3 class=''>Ocean Freight</h3>"
+      ]
+    },
+    {
+      "section": "offer-container",
+      "control": "html",
+      "value": [
+        "<img class='domainImage' src='/assets/app/freightastic/images/services/airplane-engine.svg'>",
+        "<h3 class=''>Air Freight</h3>"
+      ]
+    },
+    {
+      "section": "offer-container",
+      "control": "html",
+      "value": [
+        "<img class='domainImage' src='/assets/app/freightastic/images/services/delivery-truck.svg'>",
+        "<h3 class=''>Surface Transport</h3>"
+      ]
+    },
+    {
+      "section": "offer-container",
+      "control": "html",
+      "value": [
+        "<img class='domainImage' src='/assets/app/freightastic/images/services/warehouse.svg'>",
+        "<h3 class=''>CHA activities Warehousing</h3>"
+      ]
+    },
+    {
+      "section": "detail-board-container-first",
+      "class": "container",
+      "control": "html",
+      "container": {},
+      "value": [
+        "<img class='infoImage' src='/assets/app/freightastic/images/ware-house/aerial-cargo-ship.svg'>"
+      ]
+    },
+    {
+      "section": "detail-board-container-first",
+      "control": "html",
+      "container": {
+        "class": "container",
+        "header": {
+          "title": {
+            "text": "<h3>Ocean <span class='highlight'> Freight</span> (Export and Import) </h3>"
+          }
+        }
+      },
+      "value": [
+        "<h3 class='discoverText-flex'>Connections with ports across the globe and dedicated staff to ensure safe and on-time delivery of your shipment.</h3",
+        "<h3 class='discoverText-flex'>With our services exporters and importers can easily connect with logistics providers and collaborate,</h3>",
+        "<h3 class='discoverText-flex'>with them to efficiently manage their trade internationally.</h3>"
+      ]
+    },
+    {
+      "section": "detail-board-container-second",
+      "control": "html",
+      "container": {
+        "class": "container",
+        "header": {
+          "title": {
+            "text": "<h3>Air <span class='highlight'> Freight</span> (Export, Import and Domestic) </h3>"
+          }
+        }
+      },
+      "value": [
+        "<h3 class='discoverText-flex'>Most convenient and fastest way or all your international and domestic freight forwarding requirements.</h3>",
+        "<h3 class='discoverText-flex'><i class='fa fa-check highlight'></i>Air freight services are designed to give your product a wider reach around the world at a quicker pace</h3>",
+        "<h3 class='discoverText-flex'><i class='fa fa-check highlight'></i>Make your product available to places where other means of transportation is limited</h3>",
+        "<h3 class='discoverText-flex'><i class='fa fa-check highlight'></i>Minimal warehousing requirement leads to Cost Savings</h3>"
+      ]
+    },
+    {
+      "section": "detail-board-container-second",
+      "control": "html",
+      "container": {
+        "class": "container"
+      },
+      "value": [
+        "<img class='infoImage' src='/assets/app/freightastic/images/ware-house/industrial-port-yard.svg'>"
+      ]
+    },
+    {
+      "section": "detail-board-container-third",
+      "control": "html",
+      "container": {},
+      "value": [
+        "<img class='infoImage' src='/assets/app/freightastic/images/ware-house/truck-trailers.svg'>"
+      ]
+    },
+    {
+      "section": "detail-board-container-third",
+      "control": "html",
+      "container": {
+        "class": "container",
+        "header": {
+          "title": {
+            "text": "<h3>Surface <span class='highlight'> Transport</span> (Trucking and Rail) </h3>"
+          }
+        }
+      },
+      "value": [
+        "<h3 class='discoverText-flex'>Our surface transport network is streamlined and a well connected cross-border service.</h3>",
+        "<h3 class='discoverText-flex'><i class='fa fa-check highlight'></i>Team of experts with a virtue of local know-how to expedite your cargo, ensure safe & on-time delivery.</h3>",
+        "<h3 class='discoverText-flex'><i class='fa fa-check highlight'></i>Increase visibility of products using digital and innovative solutions.</h3>",
+        "<h3 class='discoverText-flex'><i class='fa fa-check highlight'></i>Transparency further helps you to track and manage your assets more efficiently.</h3>",
+        "<h3 class='discoverText-flex'><i class='fa fa-check highlight'></i>Reach your markets faster with reliable services coupled with direct connections.</h3>"
+      ]
+    },
+    {
+      "section": "detail-board-container-four",
+      "control": "html",
+      "container": {
+        "class": "container",
+        "header": {
+          "title": {
+            "text": "<h3>CHA activities <span class='highlight'> Warehousing</span> (Trucking and Rail) </h3>"
+          }
+        }
+      },
+      "value": [
+        "<h3 class='discoverText-flex'>The most cumbersome process is now made easy with our customised offerings.</h3>",
+        "<h3 class='discoverText-flex'><i class='fa fa-check highlight'></i>Assistance for custom clearance and warehousing facilities</h3>",
+        "<h3 class='discoverText-flex'><i class='fa fa-check highlight'></i>No restriction on scale & scope of consignment</h3>",
+        "<h3 class='discoverText-flex'><i class='fa fa-check highlight'></i>Benefit from our close-knitted global network</h3>",
+        "<h3 class='discoverText-flex'><i class='fa fa-check highlight'></i>Custom expertise with the right people, licenses, and permits to assist with clearance for shipments on schedule.</h3>"
+      ]
+    },
+    {
+      "section": "detail-board-container-four",
+      "control": "html",
+      "container": {
+        "class": "container"
+      },
+      "value": [
+        "<img class='infoImage' src='/assets/app/freightastic/images/ware-house/cardboard-warehouse.svg'>"
+      ]
+    },
+    {
+      "section": "trusted-customer-container",
+      "control": "html",
+      "container": {
+        "class": "container"
+      },
+      "value": [
+        "<br>",
+        "<img class='trustedCustomerImage' src='/assets/app/freightastic/images/partner.svg'>"
+      ]
+    },
+    {
+      "section": "cta-container",
+      "container": {
+        "class": "center",
+        "body": {
+          "class": "flex-row"
+        }
+      },
+      "control": "html",
+      "options": {},
+      "value": []
+    },
+    {
+      "section": "footer-container",
+      "code": "footer-container",
+      "control": "html",
+      "container": {
+        "class": "footer-container-first container",
+        "header": {
+          "title": {
+            "class": "footer-container-text",
+            "text": "Action Items"
+          }
+        }
+      },
+      "value": [
+        "<br>"
+      ]
+    },
+    {
+      "section": "footer-container",
+      "code": "footer-container",
+      "control": "html",
+      "container": {
+        "class": "footer-container-second",
+        "header": {
+          "title": {
+            "class": "footer-container-text",
+            "text": "PRODUCTS"
+          }
+        }
+      },
+      "value": [
+        "<br>",
+        "<a class='footerAnchor'>Jira Software</a>",
+        "<br>",
+        "<a class='footerAnchor'>Jira Align</a>",
+        "<br>",
+        "<a class='footerAnchor'>Jira Service Management</a>",
+        "<br>",
+        "<a class='footerAnchor'>Jira Work Management</a>",
+        "<br>",
+        "<a class='footerAnchor'>Jira Product Discovery</a>",
+        "<br>",
+        "<a class='footerAnchor'>Confluence</a>",
+        "<br>",
+        "<a class='footerAnchor'>Trello</a>",
+        "<br>",
+        "<a class='footerAnchor'>Bitbucket</a>",
+        "<br>",
+        "<a class='footerAnchorLinks'>View all products</a>",
+        "<br>"
+      ]
+    },
+    {
+      "section": "footer-container",
+      "code": "footer-container",
+      "control": "html",
+      "container": {
+        "class": "footer-container-third",
+        "header": {
+          "title": {
+            "class": "footer-container-text",
+            "text": "RESOURCES"
+          }
+        }
+      },
+      "value": [
+        "<br>",
+        "<a class='footerAnchor'>Technical Support</a>",
+        "<br>",
+        "<a class='footerAnchor'>Purchasing & licensing</a>",
+        "<br>",
+        "<a class='footerAnchor'>Atlassian Community</a>",
+        "<br>",
+        "<a class='footerAnchor'>Knowledge base</a>",
+        "<br>",
+        "<a class='footerAnchor'>Marketplace</a>",
+        "<br>",
+        "<a class='footerAnchor'>My Account</a>",
+        "<br>",
+        "<a class='footerAnchorLinks'>Create support ticket</a>",
+        "<br>"
+      ]
+    },
+    {
+      "section": "footer-container",
+      "code": "footer-container",
+      "control": "html",
+      "container": {
+        "class": "footer-container-four",
+        "header": {
+          "title": {
+            "class": "footer-container-text",
+            "text": "EXPAND & LEARN"
+          }
+        }
+      },
+      "value": [
+        "<br>",
+        "<a class='footerAnchor'>Partners</a>",
+        "<br>",
+        "<a class='footerAnchor'>Training & Certification</a>",
+        "<br>",
+        "<a class='footerAnchor'>Documentation</a>",
+        "<br>",
+        "<a class='footerAnchor'>Developer Resources</a>",
+        "<br>",
+        "<a class='footerAnchor'>Enterprise services</a>",
+        "<br>",
+        "<a class='footerAnchorLinks'>View all resources</a>"
+      ]
+    },
+    {
+      "section": "footer-container",
+      "code": "footer-container",
+      "control": "html",
+      "container": {
+        "class": "footer-container-five",
+        "header": {
+          "title": {
+            "class": "footer-container-text",
+            "text": "ABOUT Action Items"
+          }
+        }
+      },
+      "value": [
+        "<br>",
+        "<a class='footerAnchor'>Company</a>",
+        "<br>",
+        "<a class='footerAnchor'>Careers</a>",
+        "<br>",
+        "<a class='footerAnchor'>Events</a>",
+        "<br>",
+        "<a class='footerAnchor'>Blogs</a>",
+        "<br>",
+        "<a class='footerAnchor'>Atlassian Foundation</a>",
+        "<br>",
+        "<a class='footerAnchor'>Investor Relations</a>",
+        "<br>",
+        "<a class='footerAnchor'>Trust & Security</a>",
+        "<br>",
+        "<a class='footerAnchorLinks'>Contact us</a>",
+        "<br>"
+      ]
+    }
+  ]
+}

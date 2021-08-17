@@ -1,0 +1,65 @@
+<!-- eslint-disable @angular-eslint/template/label-has-associated-control -->
+@if (isProcessing) {
+<processing-indicator></processing-indicator>
+}
+<h2 class="centerAlign">Import a File</h2>
+<div class="file">
+    <div class="fileSection">
+        @if (file) {
+        <div class="removePad">
+            <div class="controls-row">
+                <div class="controls-row">
+                    <div><span class="material-icons icon-color">attach_file</span></div>
+                    <div class="chooseText">{{file.name}}</div>
+                </div>
+                <div class="spacer"></div>
+            </div>
+            <hr class="divider">
+        </div>
+        }
+        <oa-icon-file-picker [view]="'layout'" [accept]="accept" (change)="onFileSelect($event)">
+            <div class="icon-wrapper">
+                <span class="material-icons large-icon">description</span>
+                <div class="add-icon">+</div>
+            </div>
+        </oa-icon-file-picker>
+
+    </div>
+    @if (mappers && mappers.length) {
+    <div class="mappers">
+        <label>Format/Mapper</label>
+        <div>
+        </div>
+    </div>
+    }
+    @if (samples && samples.length) {
+    <div>
+        @for (sample of samples; track sample) {
+        <div class="sample">
+            <a [href]="sample.url" target="_blank ">{{sample.name}}</a>
+        </div>
+        }
+    </div>
+    }
+    @if (errorMessage) {
+    <div class="error">
+        <label>Error</label>
+        <p>
+            {{errorMessage}}
+        </p>
+    </div>
+    }
+    @if(showSuccessDialog){
+    <div class="dialog-overlay">
+        <div class="dialog-box">
+            <h2>Success</h2>
+            <p>{{ successMessage }}</p>
+            <button (click)="closeDialog()">Close</button>
+        </div>
+    </div>
+    }
+    <div class="button-container">
+        <button mat-raised-button color="primary" class="btn" [disabled]="isDisabled" (click)="uploadFile()"> Upload
+        </button>
+    </div>
+</div>

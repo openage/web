@@ -1,0 +1,51 @@
+<div class="editor">
+  <div class="slide">
+    <!-- <drive-file-uploader-zone [view]="'container'" [entity]="entity" [folder]="folder" (created)="onDocAdd($event)"> -->
+    <div class="container">
+      <mat-icon class="menu" [matMenuTriggerFor]="menu">more_vert</mat-icon>
+      <mat-menu #menu="matMenu">
+        <button mat-menu-item (click)="onDelete()">
+          <mat-icon>delete</mat-icon>
+          <span>Remove</span>
+        </button>
+        <button mat-menu-item (click)="showToolbar = !showToolbar">
+          <mat-icon>edit</mat-icon>
+          <span>Edit</span>
+        </button>
+      </mat-menu>
+      <div>
+        @if (!showToolbar) {
+          <div class="content" contenteditable="true" (blur)="onUpdate($event)"
+          (keyup)="onUpdate($event)" [innerHTML]="selected.description"></div>
+        }
+        @if (showToolbar) {
+          <oa-content-editor [toolbar]="toolbar" [value]="selected.description"
+            (changed)="onUpdate($event)">
+          </oa-content-editor>
+        }
+      </div>
+    </div>
+  <!-- </drive-file-uploader-zone> -->
+</div>
+<div class="thumbnails">
+  @for (slide of slides; track slide; let i = $index) {
+    <div (click)="onSelect(slide)">
+      <div [innerHTML]="slide.description"></div>
+    </div>
+  }
+  <div class="flex-row centered" (click)="onAdd()">
+    <i class="fa fa-plus"></i>
+  </div>
+</div>
+<!-- <div class="content" contenteditable="true" (blur)="onUpdate($event)" (keyup)="onUpdate($event)"
+[innerHTML]="selected.description"></div> -->
+<!-- <div class="slide spacer">
+
+
+
+</div> -->
+
+<!-- <button mat-icon-button (click)="showEditor = !showEditor">
+<mat-icon>edit</mat-icon>
+</button> -->
+</div>

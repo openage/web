@@ -1,0 +1,60 @@
+{
+    "items": [
+        {
+            "code": "",
+            "icon": "/assets/app/applegos/images/development/drag_drop_ui.webp",
+            "image": "/assets/app/applegos/images/development/drag_drop_ui.webp",
+            "title": "Connect layers to screens",
+            "description": "Drag connectors from any layer on your artboard. When synced from a design tool, all layers are transferred without the need to create hotspots."
+        },
+        {
+            "code": "",
+            "icon": "/assets/app/applegos/images/development/integrations.webp",
+            "image": "/assets/app/applegos/images/development/integrations.webp",
+            "title": "Fully customizable connectors",
+            "description": "Change connectors to match your brand identity or personal style. You can edit colors, starting and ending points, labels, and more."
+        },
+        {
+            "code": "",
+            "icon": "/assets/app/applegos/images/development/frontend.webp",
+            "image": "/assets/app/applegos/images/development/frontend.webp",
+            "title": "Create logical flows",
+            "description": "Use shapes to illustrate decision trees and conditional flows."
+        },
+        {
+            "code": "",
+            "icon": "/assets/app/applegos/images/development/customized.webp",
+            "image": "/assets/app/applegos/images/development/customized.webp",
+            "title": "Speed up your work with styles",
+            "description": "The Overflow styles editor allows you to maintain consistency across your designs by globally updating the styles of connectors, texts, shapes and device skins."
+        },
+        {
+            "code": "",
+            "icon": "/assets/app/applegos/images/development/debug.webp",
+            "image": "/assets/app/applegos/images/development/debug.webp",
+            "title": "Annotate and add context",
+            "description": "Use text and shapes to add detail to your presentation and make it more intuitive for your audience to follow."
+        },
+        {
+            "code": "",
+            "icon": "/assets/app/applegos/images/development/secure.webp",
+            "image": "/assets/app/applegos/images/development/secure.webp",
+            "title": "Apply device skins with one click",
+            "description": "Increase presentability and consistency by wrapping your artboards with device skins. Overflow automatically detects the most applicable skin for commonly used devices."
+        },
+        {
+            "code": "",
+            "icon": "/assets/app/applegos/images/development/publish.webp",
+            "image": "/assets/app/applegos/images/development/publish.webp",
+            "title": "Draw hotspots",
+            "description": "Mark interaction areas on imported screenshots by drawing hotspots and apply connectors to other screens."
+        },
+        {
+            "code": "",
+            "icon": "/assets/app/applegos/images/development/premium_support.webp",
+            "image": "/assets/app/applegos/images/development/premium_support.webp",
+            "title": "Use boards to organize your flows",
+            "description": "Create user flow diagrams of any size. Organize them into subflows and split them into multiple boards for easier presentation and navigation."
+        }
+    ]
+}

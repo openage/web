@@ -1,0 +1,4 @@
+<div class="tabs-bar"*ngIf="tabs?.length">
+    <oa-input-selector [value]="param.value" (changed)="onSelectValue($event)" [type]="param.config.type" [items]="tabs">
+    </oa-input-selector>
+</div>

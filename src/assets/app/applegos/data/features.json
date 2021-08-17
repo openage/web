@@ -1,0 +1,52 @@
+{
+  "items": [
+    {
+      "code": "built-in-security",
+      "icon": "/assets/app/applegos/images/use-cases/cyber-security.svg",
+      "image": "/assets/app/applegos/images/use-cases/cyber-security.svg",
+      "title": "Built in Security",
+      "url": "/landing/features/built-in-security",
+      "description": "Single Sign On​​  Role based access Compliance audit logs"
+    },
+    {
+      "code": "branding",
+      "icon": "/assets/app/applegos/images/use-cases/megaphone.svg",
+      "image": "/assets/app/applegos/images/use-cases/megaphone.svg",
+      "title": "Branding",
+      "url": "/landing/features/branding",
+      "description": "White labeling​​ Out of Box multi-tenant  Hierarchal Configuration"
+    },
+    {
+      "code": "ready-to-use",
+      "icon": "/assets/app/applegos/images/use-cases/template.svg",
+      "image": "/assets/app/applegos/images/use-cases/template.svg",
+      "title": "Ready to Use",
+      "url": "/landing/features/ready-to-use",
+      "description": "Applications/Portlets​​ Process Templates​​ Integration Templates"
+    },
+    {
+      "code": "scalable",
+      "icon": "/assets/app/applegos/images/use-cases/configure.svg",
+      "image": "/assets/app/applegos/images/use-cases/configure.svg",
+      "title": "Scalable",
+      "url": "/landing/features/scalable",
+      "description": "Cloud elastic compute  Pub-Sub and Microservices    ​​Extensible and configurable"
+    },
+    {
+      "code": "tooling",
+      "icon": "/assets/app/applegos/images/use-cases/illustration.svg",
+      "image": "/assets/app/applegos/images/use-cases/illustration.svg",
+      "title": "Tooling",
+      "url": "/landing/features/tooling",
+      "description": "Admin Panel CLI to run scripts Desktop agents Manage script deployment for Desktop."
+    },
+    {
+      "code": "process-control",
+      "icon": "/assets/app/applegos/images/use-cases/reporting.svg",
+      "image": "/assets/app/applegos/images/use-cases/reporting.svg",
+      "title": "Process Control",
+      "url": "/landing/features/process-control",
+      "description": "KPI driven task list with aging control​​ Reporting with actionable data​​ "
+    }
+  ]
+}

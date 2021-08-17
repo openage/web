@@ -1,0 +1,8 @@
+<div class="controls-row" [class.pointer]="!readonly" (click)="openEditor()">
+  @for (item of items; track item) {
+    <div class="pill-box with-value">
+      <span class="key">{{item.currency}}</span>
+      <span class="value">{{item.ratio | value:'comma'}} &nbsp; {{value.name}}</span>
+    </div>
+  }
+</div>

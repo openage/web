@@ -1,0 +1,178 @@
+{
+  "page": {
+    "header": {
+      "layout": {
+        "sections": [
+          {
+            "code": "header-container",
+            "class": "container",
+            "container": {
+              "body": {
+                "class": "flex-row"
+              }
+            }
+          }
+        ]
+      },
+      "components": [
+        {
+          "section": "header-container",
+          "control": "branding",
+          "options": {
+            "class": "middle",
+            "logo": {
+              "size": "lg"
+            },
+            "title": {
+              "show": false
+            }
+          }
+        },
+        {
+          "section": "header-container",
+          "control": "spacer"
+        },
+        {
+          "section": "header-container",
+          "control": "html",
+          "class": "flex-row",
+          "value": [
+            "<a class='button filled primary cta' href='https://id.applegos.in/landing/login'>Login</a>",
+            "<a class='button primary cta' href='https://id.applegos.in/landing/signup'>Sign Up</a>"
+          ]
+        },
+        {
+          "control": "nav",
+          "options": {
+            "view": "top"
+          }
+        },
+        {
+          "control": "role",
+          "options": {
+            "branding": {
+              "size": "xx-lg"
+            },
+            "title": {
+              "show": false
+            }
+          }
+        }
+      ]
+    },
+    "layout": {
+      "class": "page",
+      "style": {},
+      "items": [
+        {},
+        {}
+      ]
+    },
+    "footer": {
+      "class": "page",
+      "style": {},
+      "layout": {
+        "sections": [
+          {
+            "code": "footer-container",
+            "class": "flex-row five"
+          }
+        ]
+      },
+      "data": [
+        {
+          "code": "sitemap",
+          "src": "/assets/app/applegos/data/site-map.json"
+        },
+        {
+          "code": "use-cases",
+          "src": "/assets/app/applegos/data/use-cases/index.json"
+        },
+        {
+          "code": "features",
+          "src": "/assets/app/applegos/data/features/index.json"
+        },
+        {
+          "code": "resources",
+          "src": "/assets/app/applegos/data/resources/index.json"
+        }
+      ],
+      "components": [
+        {
+          "section": "footer-container",
+          "code": "sitemap",
+          "control": "collection",
+          "container": {
+            "title": {
+              "text": "Applegos"
+            },
+            "body": {
+              "class": "stacked"
+            }
+          },
+          "options": {
+            "control": "html",
+            "options": {
+              "view": "link"
+            }
+          }
+        },
+        {
+          "section": "footer-container",
+          "code": "use-cases",
+          "control": "collection",
+          "container": {
+            "title": {
+              "text": "Use Case"
+            },
+            "body": {
+              "class": "stacked"
+            }
+          },
+          "options": {
+            "control": "html",
+            "options": {
+              "view": "link"
+            }
+          }
+        },
+        {
+          "section": "footer-container",
+          "code": "features",
+          "control": "collection",
+          "container": {
+            "title": {
+              "text": "Platform"
+            },
+            "body": {
+              "class": "stacked"
+            }
+          },
+          "options": {
+            "control": "html",
+            "options": {
+              "view": "link"
+            }
+          }
+        },
+        {
+          "section": "footer-container",
+          "code": "resources",
+          "control": "collection",
+          "container": {
+            "title": {
+              "text": "Resources"
+            }
+          },
+          "options": {
+            "control": "html",
+            "options": {
+              "view": "link"
+            }
+          }
+        }
+      ]
+    },
+    "styles": {}
+  }
+}

@@ -1,0 +1,33 @@
+
+@switch (view) {
+  @case ('circle') {
+    <div class="circle" [attr.data-progress]="progressContent" style="--progress: {{progress}}%;--size:{{size}}px;">
+    </div>
+  }
+  @case ('bar') {
+    <mat-progress-bar class="example-margin" color="primary" mode="determinate" [value]="progress">
+    </mat-progress-bar>
+  }
+  @case ('pill') {
+    @if (value || total) {
+      <div class="pill-box" [class.with-value]="total" [class.warn]="value > total">
+        @switch (type) {
+          @case ('effort') {
+            @if (value) {
+              <span>{{value*60 |time: 'clockWiseShort'}}</span>
+              @if (total) {
+                <span class="value">{{total*60 |time: 'clockWiseShort'}}</span>
+              }
+            }
+            @if (!value) {
+              <span>0</span>
+              @if (total) {
+                <span class="value">{{total*60 |time: 'clockWiseShort'}}</span>
+              }
+            }
+          }
+        }
+      </div>
+    }
+  }
+}

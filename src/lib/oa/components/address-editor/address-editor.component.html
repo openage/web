@@ -1,0 +1,168 @@
+<div>
+  @switch (view) {
+    @case ('full') {
+      <div>
+        <div class="flex-row one">
+          <div>
+            <label for="line1">Line 1</label>
+            <div class="oa-input">
+              <input [readonly]="readonly" name="line1" id="line1" [required]="required" maxlength="130"
+                [(ngModel)]="value.line1" (change)="onChange()">
+              </div>
+            </div>
+            <div>
+              <label for="line2">Line 2</label>
+              <div class="oa-input">
+                <input placeholder="" [readonly]="readonly" id="line2" name="line2" [required]="required"
+                  maxlength="130" [(ngModel)]="value.line2" (change)="onChange()">
+                </div>
+              </div>
+            </div>
+            <div class="flex-row two">
+              <div>
+                <label for="city">City</label>
+                <div class="oa-input">
+                  <input name="city" [readonly]="readonly" id="city" placeholder="" maxlength="100" [required]="required"
+                    [(ngModel)]="value.city" (change)="onChange()">
+                  </div>
+                </div>
+                <div>
+                  <label for="district">District</label>
+                  <div class="oa-input">
+                    <input name="district" [readonly]="readonly" id="district" [required]="required" maxlength="100"
+                      [(ngModel)]="value.district" (change)="onChange()">
+                    </div>
+                  </div>
+                  <div>
+                    <label for="state">State</label>
+                    <div class="oa-input">
+                      <input [readonly]="readonly" name="state" id="state" [required]="required" maxlength="100"
+                        [(ngModel)]="value.state" (change)="onChange()">
+                      </div>
+                    </div>
+                    <div>
+                      <label for="country">Country</label>
+                      <div class="oa-input">
+                        <input [readonly]="readonly" name="country" id="country" [required]="required" maxlength="100"
+                          [(ngModel)]="value.country" (change)="onChange()">
+                        </div>
+                      </div>
+                      <div>
+                        <label for="pin">Postal Code</label>
+                        <div class="oa-input">
+                          <input id="pin" maxlength="6" [readonly]="readonly" [required]="required" [(ngModel)]="value.pinCode"
+                            (change)="onPinCodeChange()">
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  }
+                  @case ('org') {
+                    <div>
+                      <div>
+                        <label for="line1">{{lineLabel}}<span class="mandatory">*</span></label>
+                        <div class="oa-input">
+                          <input [readonly]="readonly" name="line1" id="line1" [required]="required" maxlength="100"
+                            [(ngModel)]="value.line1" (change)="onChange()">
+                          </div>
+                        </div>
+                        <div class="flex-row three">
+                          <div>
+                            <label for="state">State<span class="mandatory">*</span></label>
+                            <div class="oa-input">
+                              <input [readonly]="readonly" name="state" id="state" [required]="required" maxlength="100"
+                                [(ngModel)]="value.state" (change)="onChange()">
+                              </div>
+                            </div>
+                            <div>
+                              <label for="city">City<span class="mandatory">*</span></label>
+                              <div class="oa-input">
+                                <input name="city" [readonly]="readonly" id="city" maxlength="100" [required]="required"
+                                  [(ngModel)]="value.city" (change)="onChange()">
+                                </div>
+                              </div>
+                              <div>
+                                <label for="pin">Postal Code<span class="mandatory">*</span></label>
+                                <div class="oa-input">
+                                  <input id="pin" maxlength="6" [readonly]="readonly" [required]="required" [(ngModel)]="value.pinCode"
+                                    (change)="onPinCodeChange()">
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          }
+                          @case ('short') {
+                            <div>
+                              <div>
+                                <label for="line1">{{lineLabel}}</label>
+                                <div class="oa-input">
+                                  <input [readonly]="readonly" name="line1" id="line1" [required]="required" maxlength="100"
+                                    [(ngModel)]="value.line1" (change)="onChange()">
+                                  </div>
+                                </div>
+                                <div>
+                                  <label for="pin">Postal Code</label>
+                                  <div class="oa-input">
+                                    <input id="pin" maxlength="6" [readonly]="readonly" [required]="required" [(ngModel)]="value.pinCode"
+                                      (change)="onPinCodeChange()">
+                                    </div>
+                                  </div>
+                                  <div>
+                                    <label for="state">State</label>
+                                    <div class="oa-input">
+                                      <input [readonly]="readonly" name="state" id="state" [required]="required" maxlength="100"
+                                        [(ngModel)]="value.state" (change)="onChange()">
+                                      </div>
+                                    </div>
+                                    <div>
+                                      <label for="city">City</label>
+                                      <div class="oa-input">
+                                        <input name="city" [readonly]="readonly" id="city" maxlength="100" [required]="required"
+                                          [(ngModel)]="value.city" (change)="onChange()">
+                                        </div>
+                                      </div>
+                                    </div>
+                                  }
+                                  @case ('task') {
+                                    <div>
+                                      <div>
+                                        <label for="line1">{{lineLabel}}</label>
+                                        <div class="oa-input">
+                                          <input [readonly]="readonly" name="line1" id="line1" [required]="required" maxlength="100"
+                                            [(ngModel)]="value.line1" (change)="onChange()">
+                                          </div>
+                                        </div>
+                                        <div class="flex-row two">
+                                          <div>
+                                            <label for="state">State</label>
+                                            <div class="oa-input">
+                                              <input [readonly]="readonly" name="state" id="state" [required]="required" maxlength="100"
+                                                [(ngModel)]="value.state" (change)="onChange()">
+                                              </div>
+                                            </div>
+                                            <div>
+                                              <label for="city">City</label>
+                                              <div class="oa-input">
+                                                <input name="city" [readonly]="readonly" id="city" maxlength="100" [required]="required"
+                                                  [(ngModel)]="value.city" (change)="onChange()">
+                                                </div>
+                                              </div>
+                                              <div>
+                                                <label for="country">Country</label>
+                                                <div class="oa-input">
+                                                  <input [readonly]="readonly" name="country" id="country" [required]="required" maxlength="100"
+                                                    [(ngModel)]="value.country" (change)="onChange()">
+                                                  </div>
+                                                </div>
+                                                <div>
+                                                  <label for="pin">Postal Code</label>
+                                                  <div class="oa-input">
+                                                    <input id="pin" maxlength="6" [readonly]="readonly" [required]="required" [(ngModel)]="value.pinCode"
+                                                      (change)="onPinCodeChange()">
+                                                    </div>
+                                                  </div>
+                                                </div>
+                                              </div>
+                                            }
+                                          }
+                                        </div>

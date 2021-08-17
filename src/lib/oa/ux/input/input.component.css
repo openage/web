@@ -1,0 +1,40 @@
+:host {
+  -webkit-box-flex: 1;
+  -ms-flex-positive: 1;
+  flex-grow: 1;
+}
+
+.otp input {
+  width: 12%;
+  /* border-radius: 2px !important; */
+  /* border: solid var(--neutral-light) 1px; */
+  font-size: 205%;
+  margin: 1px;
+  text-align: center;
+  height: 40px;
+  outline: none;
+  border-bottom: 2px solid var(--neutral-light);
+  border-left: none;
+  border-right: none;
+  border-top: none;
+}
+
+.otp input:focus {
+  outline: none;
+  border-bottom: 2px solid var(--primary-dark);
+}
+
+.oa-input {
+  height: 40px;
+  display: flex;
+  flex-direction: row;
+  padding-right: 10px;
+  padding-left: 10px;
+  border: 1px solid var(--neutral);
+  border-radius: 3px;
+  background-color: var(--surface);
+  overflow: hidden;
+  width: 25%;
+  margin-left: auto;
+  margin-right: auto;
+}

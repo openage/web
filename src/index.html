@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>Pages</title>
+  <base href="/">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/x-icon" id="favicon" href="favicon.ico">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+    rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+</head>
+<style>
+  :root {
+    --primary: #0793CC;
+    --text-primary: #ffffff;
+    --background: #F4F8FC;
+  }
+
+  .powered-by {
+    color: var(--default);
+    position: absolute;
+    left: 50%;
+    bottom: 10%;
+    transform: translate(-50%, -10%);
+  }
+
+  .splash {
+    text-align: center;
+    position: fixed;
+    /* width: 100%; */
+    right: 0;
+    top: 0px;
+    left: 0;
+    height: 100%;
+    /* background-color: var(--background) !important; */
+    background-image: radial-gradient(circle farthest-side, var(--background), var(--primary));
+    overflow-y: auto;
+    margin: auto;
+
+  }
+
+  .splash>div {
+    height: 300px;
+    width: 400px;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    /* background-color: var(--text-secondary); */
+    border-radius: 5px;
+    padding: 50px 20px;
+  }
+
+  .splash img {
+    max-height: 80%;
+    min-height: 75px;
+  }
+
+  .splash h1 {
+    color: var(--primary);
+    font-size: 15px;
+    font-weight: 400;
+    letter-spacing: 0.05em;
+    margin: 40px auto;
+    text-transform: uppercase;
+  }
+
+  .splash .progress {
+    height: 6px;
+    margin-top: 20%;
+
+    transform: translate(-50%, -50%);
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 180px;
+
+    padding: 1px;
+    background: rgba(0, 0, 0, 0.25);
+    border-radius: 6px;
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.25), 0 1px rgba(255, 255, 255, 0.08);
+  }
+
+  .splash .progress-bar {
+    height: 4px;
+    border-radius: 2px;
+    transition: 0.4s linear;
+    transition-property: width, background-color;
+
+    background-color: var(--text-primary);
+    width: 90%;
+    animation: progressAnimationStrike 10s;
+  }
+
+  @keyframes progressAnimationStrike {
+    from {
+      width: 0
+    }
+
+    to {
+      width: 90%
+    }
+  }
+</style>
+
+<body class="mat-typography">
+  <div>
+    <app-root>
+      <div class="splash">
+        <div>
+          <img id="tenant-splash" src="" alt="splash" style="visibility: hidden;">
+          <div class="progress progress-striped">
+            <div class="progress-bar">
+            </div>
+          </div>
+        </div>
+      </div>
+    </app-root>
+  </div>
+  <script>
+
+    (function () {
+      let app = window.sessionStorage.getItem('application');
+
+      if (!app) {
+        app = window.localStorage.getItem('application');
+      }
+
+      if (!app) {
+        return
+      }
+
+      app = JSON.parse(app);
+      let splash = document.getElementById('tenant-splash');
+      if (splash) {
+        let splashUrl = app.logo.url;
+        if (app.splash && app.splash.url) {
+          splashUrl = app.splash.url;
+        }
+        splash.src = splashUrl;
+        splash.style.visibility = 'visible';
+      }
+      document.title = app.title;
+      let fav = document.getElementById('favicon');
+      let faviconUrl = app.logo.url;
+      if (app.favicon && app.favicon.url) {
+        faviconUrl = app.favicon.url;
+      }
+      fav.setAttribute('href', faviconUrl);
+    })();
+    (function (i, s, o, g, r, a, m) {
+      i['GoogleAnalyticsObject'] = r;
+      i[r] = i[r] || function () {
+        (i[r].q = i[r].q || []).push(arguments)
+      }, i[r].l = 1 * new Date();
+      a = s.createElement(o),
+        m = s.getElementsByTagName(o)[0];
+      a.async = 1;
+      a.src = g;
+      m.parentNode.insertBefore(a, m)
+    })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+
+    ga('create', 'UA-85934219-6', 'auto');
+    // ga('create', 'UA-85934219-6', 'none'); // 'none' while you are working on localhost
+    // ga('send', 'pageview');
+  </script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <!-- <script src="https://www.google.com/recaptcha/api.js" async defer></script> -->
+</body>
+
+</html>

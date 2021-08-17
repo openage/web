@@ -1,0 +1,106 @@
+.section>.body {
+  min-height: 200px;
+}
+
+.container {
+  height: 100%;
+}
+
+.sidebar {
+  position: fixed;
+  right: 5px;
+  top: 110px;
+  display: block !important;
+}
+
+mat-sidenav {
+  width: 375px;
+  margin-top: 2px;
+}
+
+.sidebar.opened>button.mat-primary {
+  color: var(--primary);
+  border-right: 2px solid var(--primary);
+  border-radius: 0;
+}
+
+.row {
+  margin: 0px;
+}
+
+.side-bar-toggler {
+  margin-top: 2px;
+  min-height: 500px;
+  width: 60px;
+  height: auto;
+  background: var(--background-color);
+  text-align: center;
+  border-radius: 5px 0px 0 0;
+}
+
+.sideBarSection {
+  margin-top: 2px;
+  min-height: 500px;
+  width: 60px;
+  height: auto;
+  background: var(--background-color);
+  text-align: center;
+  border-radius: 5px 0px 0 0;
+  box-shadow: var(--box-shadow);
+}
+
+.marginTopBottom {
+  margin: 15px 0px;
+}
+
+.defaultSection {
+  text-align: center;
+}
+
+.defaultSection>label {
+  font-size: 18px;
+}
+
+.sellIcon {
+  color: var(--text-disabled);
+}
+
+.activeIcon {
+  color: var(--primary);
+}
+
+.selectorDiv {
+  margin-top: 15px;
+}
+
+/* width */
+::-webkit-scrollbar {
+  width: 8px !important;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1 !important;
+  border-radius: 15px !important;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #c1c1c1 !important;
+  border-radius: 15px !important;
+}
+
+.list-icons {
+  margin-top: 5px;
+  margin-right: 0px;
+}
+
+.filter-icons {
+  height: 12px !important
+}
+
+@media only screen and (max-width:568px) {
+  mat-sidenav {
+    width: 100%;
+  }
+}

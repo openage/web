@@ -1,0 +1,65 @@
+<!-- eslint-disable @angular-eslint/template/click-events-have-key-events -->
+<!-- eslint-disable @angular-eslint/template/interactive-supports-focus -->
+<div class="subtle controls-row">
+  <div class="profile-row" [oaDialog]="profileMenu" oaPosition="below">
+    <oa-avatar [value]="currentRole?.profile" type="thumbnail"></oa-avatar>
+    <div class="content">
+      <h3>{{currentRole?.profile | format: 'title'}}</h3>
+      <span class="sub-text designation">
+        @if (isImpersonateSession) {
+        <span>Impersonating as </span>
+        }
+        <span>{{currentRole?.type?.name}}</span>
+      </span>
+    </div>
+    <oa-icon value="keyboard_arrow_down"></oa-icon>
+  </div>
+</div>
+<ng-template #profileMenu yPosition="below">
+  <div class="profile-menu section">
+    <div class="header">
+      <page-branding [options]="options?.branding"></page-branding>
+      <div class="application">{{currentRole?.organization?.name || currentApplication?.title || currentTenant?.name}}
+      </div>
+    </div>
+    <div class="body">
+      <oa-avatar [value]="currentRole?.profile" type="thumbnail" [size]="50"></oa-avatar>
+      <h6 class="title"><b>{{currentRole?.profile | format: 'title'}}</b></h6>
+      <div class="role">
+        <span>{{currentRole?.type?.name}}</span>
+        @if (isImpersonateSession) {
+        <div class="sub-text">Impersonating</div>
+        }
+      </div>
+    </div>
+    <div class="footer">
+      <div class="oa-button settings">
+        <oa-icon value="settings"></oa-icon>
+        <span class="label">Settings</span>
+      </div>
+      <div class="oa-button logout">
+        <oa-icon value="logout" (click)="endSession()"></oa-icon>
+        <span class="label" (click)="endSession()">{{isImpersonateSession?'End Impersonation': 'Log Out'}}</span>
+      </div>
+    </div>
+
+  </div>
+</ng-template>
+
+<ng-template #roles>
+  <!-- <div class="role-list" *ngIf="currentUser && currentUser.roles && currentUser.roles.length > 1 ">
+      <ng-container *ngFor="let role of currentUser.roles">
+        <div style="text-align: left; cursor: pointer;" class="profile-row" *ngIf="currentRole.id !== role.id"
+          (click)="selectRole(role)">
+          <hr>
+            <oa-avatar [value]="getUrl(role) || role"></oa-avatar>
+            <div class="content">
+              <h6 *ngIf="role.organization"><b>{{role.organization.name}}</b></h6>
+              <h6 *ngIf="!role.organization"><b>{{currentTenant.name}}</b></h6>
+              <span class="sub-text designation">
+              {{role.type.name || '--'}}</span>
+            </div>
+          </div>
+        </ng-container>
+      </div> -->
+</ng-template>

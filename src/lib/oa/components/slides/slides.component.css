@@ -1,0 +1,48 @@
+.editor {
+  height: 90vh;
+}
+
+.slide {
+  height: 80%;
+  overflow: hidden;
+  position: relative;
+}
+
+.container,
+.container>div {
+  height: 100%;
+}
+
+.container>.menu {
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+
+.container .content {
+  height: inherit;
+  outline: none;
+}
+
+
+.thumbnails {
+  width: 100%;
+  height: 20%;
+  display: flex;
+  overflow-x: auto;
+  flex-wrap: nowrap;
+}
+
+.thumbnails>div {
+  flex: 0 0 auto;
+  border: solid 1px var(--text-disabled);
+  margin: 0px 5px 5px 0px;
+  padding: 5px;
+  width: 150px;
+  height: 100px;
+  overflow: hidden;
+}
+
+.thumbnails>div>div {
+  transform: scale(0.3);
+}

@@ -1,0 +1,14 @@
+<div class="container">
+  <i class="{{class || 'x-lg'}} {{icon || 'error-no-data'}}"></i>
+  <div class="text-capitalize">{{message}}</div>
+  @if (actions && actions.length) {
+    <div class="row">
+      <span class="spacer"></span>
+      @for (action of actions; track action) {
+        <oa-action [value]="action"></oa-action>
+      }
+      <span class="spacer"></span>
+    </div>
+  }
+  <ng-content></ng-content>
+</div>

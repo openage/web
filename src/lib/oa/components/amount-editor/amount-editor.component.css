@@ -1,0 +1,69 @@
+.currency {
+  text-align: right;
+}
+
+.active {
+  color: var(--primary);
+}
+
+.switchOptions {
+  font-size: 11px;
+}
+
+.amountOptions,
+.amountSlab {
+  margin-bottom: 5px;
+}
+
+.addCustomSpace {
+  width: 26px;
+}
+
+.charge-value {
+  color: var(--primary);
+}
+
+.custom-margin {
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
+.amout-editor-semicolon {
+  padding: 2px 2px;
+}
+
+.value-div {
+  display: inline-block;
+  align-items: baseline;
+  margin: 0 1rem;
+
+}
+
+.afterDecimal {
+  font-size: 10px;
+  color: var(--neutral);
+}
+
+.readonly {
+  padding-right: 10px;
+}
+
+.unit>span {
+  padding-left: 1px;
+  color: var(--text-disabled);
+}
+
+.unit.clickable>span {
+  border: 1px solid var(--primary);
+  padding: 1px 5px 1px 5px;
+  color: var(--primary);
+  border-radius: 4px;
+  cursor: pointer;
+  /* margin-right: 5px; */
+}
+
+.unit.disabled {
+  color: var(--text-disabled);
+  padding-left: 1px;
+  pointer-events: none;
+}

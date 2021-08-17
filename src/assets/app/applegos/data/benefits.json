@@ -1,0 +1,62 @@
+{
+    "items": [
+        {
+            "class": "",
+            "code": "",
+            "icon": "/assets/app/applegos/images/benefits/target.svg",
+            "image": "/assets/app/applegos/images/benefits/target.svg",
+            "title": "",
+            "url": "/benefits/",
+            "description": "Measurable Business Outcomes in Days (not months) Rapid measurable business outcomes achieved."
+        },
+        {
+            "class": "",
+            "code": "",
+            "icon": "/assets/app/applegos/images/benefits/layers.svg",
+            "image": "/assets/app/applegos/images/benefits/layers.svg",
+            "title": "",
+            "url": "/benefits/",
+            "description": "Minimal or No Technical Skill required drag and drop builders"
+        },
+        {
+            "code": "",
+            "icon": "/assets/app/applegos/images/benefits/idea.svg",
+            "image": "/assets/app/applegos/images/benefits/idea.svg",
+            "title": "",
+            "url": "/benefits/",
+            "description": "Evolves and adapts to business dynamics using AI/ML "
+        },
+        {
+            "code": "",
+            "icon": "/assets/app/applegos/images/benefits/application.svg",
+            "image": "/assets/app/applegos/images/benefits/application.svg",
+            "title": "",
+            "url": "/benefits/",
+            "description": "Standardized Process Library of Process Templates "
+        },
+        {
+            "code": "",
+            "icon": "/assets/app/applegos/images/benefits/gears.svg",
+            "image": "/assets/app/applegos/images/benefits/gears.svg",
+            "title": "",
+            "url": "/benefits/",
+            "description": "Automates and Integrates using Web 4.0 concepts"
+        },
+        {
+            "code": "",
+            "icon": "/assets/app/applegos/images/benefits/secure.svg",
+            "image": "/assets/app/applegos/images/benefits/secure.svg",
+            "title": "",
+            "url": "/benefits/",
+            "description": "Secure, Compliant Tested and Trusted Platform​ "
+        },
+        {
+            "code": "",
+            "icon": "/assets/app/applegos/images/benefits/cloud.svg",
+            "image": "/assets/app/applegos/images/benefits/cloud.svg",
+            "title": "",
+            "url": "/benefits/",
+            "description": "Flexible hosting with Deploy Anywhere strategy​ "
+        }
+    ]
+}

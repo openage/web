@@ -1,0 +1,22 @@
+:host {
+  display: block;
+  margin-top: auto;
+  margin-bottom: auto;
+
+  /* min-width: 100px;
+  border: 1px solid var(--backdrop);
+  border-radius: 15px;
+  height: 28px; */
+}
+
+.oa-input {
+  min-width: 100px;
+
+  &:hover {
+    background-color: var(--surface) !important;
+  }
+
+  &>input {
+    min-width: 20px;
+  }
+}

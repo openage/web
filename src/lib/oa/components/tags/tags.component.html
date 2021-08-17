@@ -1,0 +1,20 @@
+
+@switch (readonly) {
+  @case (true) {
+    <div class="tags pointer">
+      @for (item of values; track item) {
+        <span class="tag-inline" (click)="selected.emit(item)">{{item}}</span>
+      }
+    </div>
+  }
+  @case (false) {
+    <div class="oa-input">
+      <div class="tags controls-row">
+        @for (item of values; track item; let i = $index) {
+          <span (click)="removeTag(i)">{{item}}</span>
+        }
+      </div>
+      <input type="text" [(ngModel)]="newTag" (change)="addTag($event)">
+    </div>
+  }
+}

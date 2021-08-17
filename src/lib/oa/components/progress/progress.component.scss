@@ -1,0 +1,22 @@
+.circle {
+  display: flex;
+  width: var(--size);
+  height: var(--size);
+  padding: 4px;
+  border-radius: 50%;
+  background: conic-gradient(var(--primary), var(--progress), var(--neutral) 0%);
+  font-size: 0;
+}
+
+.circle::after {
+  content: attr(data-progress);
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  width: 100%;
+  // margin: 4px;
+  border-radius: 50%;
+  background: white;
+  font-size: 10px;
+  text-align: center;
+}

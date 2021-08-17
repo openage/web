@@ -1,0 +1,25 @@
+{
+    "items": [
+        {
+            "code": "ams",
+            "icon": "/assets/app/applegos/images/icons/services/ams.svg",
+            "image": "/assets/app/applegos/images/icons/services/ams.svg",
+            "title": "AMS",
+            "description": "Attendance Engine"
+        },
+        {
+            "code": "car",
+            "icon": "/assets/app/applegos/images/icons/services/car.svg",
+            "image": "/assets/app/applegos/images/icons/services/car.svg",
+            "title": "Car",
+            "description": "Compensation Engine"
+        },
+        {
+            "code": "posession",
+            "icon": "/assets/app/applegos/images/icons/services/posession.svg",
+            "image": "/assets/app/applegos/images/icons/services/posession.svg",
+            "title": "Posession",
+            "description": "Asset Management Engine"
+        }
+    ]
+}

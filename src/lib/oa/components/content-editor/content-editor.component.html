@@ -1,0 +1,7 @@
+@if (toolbar) {
+  <div class="quill-editor"></div>
+}
+@if (!toolbar) {
+  <div class="oa-textarea scrollable" contenteditable="true" [innerHTML]="content" (blur)="onChange($event)">
+  </div>
+}

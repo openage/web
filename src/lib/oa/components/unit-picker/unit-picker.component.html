@@ -1,0 +1,17 @@
+@if (!readonly) {
+  <div class="unit clickable" [class.not-default]="value.isDefault"
+    (clickOutside)="onShowOptions(false)" #valueContainer>
+    <span [class.not-default]="!value.isDefault" (click)="onClick()">{{value.name}}</span>
+    <div class="dropdown {{ddlPosition}}" [class.show]="showOptions" tabindex="0" [id]="id">
+      @for (item of items; track item) {
+        <button mat-menu-item (click)="onSelect(item)"> {{item.name}}</button>
+      }
+    </div>
+  </div>
+}
+
+@if (readonly) {
+  <span class="unit" [class.not-default]="value.isDefault" #valueContainer>
+    <span [class.not-default]="!value.isDefault">{{value.name}}</span>
+  </span>
+}

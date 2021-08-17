@@ -1,0 +1,19 @@
+<div [class]="class" [style]="style">
+  <label [attr.for]="id" NgIf="label && !options.inline" [class.required]="required">{{label}}</label>
+  <ng-container [ngSwitch]="control">
+
+    <div class="oa-input flex-row two">
+      <ng-container *ngSwitchCase="'number'">
+        <input type="number" placeholder="From" [disabled]="disabled" (keyup)="onValueChange($event, 'from')">
+        <input type="number" placeholder="Till" [disabled]="disabled" (keyup)="onValueChange($event, 'till')">
+      </ng-container>
+
+      <ng-container *ngSwitchCase="'date'">
+        <oa-date-picker [disabled]="disabled" placeholder="From"
+          (change)="onValueChange($event, 'from')"></oa-date-picker>
+        <oa-date-picker [disabled]="disabled" placeholder="Till"
+          (change)="onValueChange($event, 'till')"></oa-date-picker>
+      </ng-container>
+    </div>
+  </ng-container>
+</div>

@@ -1,0 +1,60 @@
+<div [ngSwitch]="view">
+  <div *ngSwitchCase="'fixed'">
+    <div class="oa-input" *ngIf="!contentOnly">
+      <input class="currency" [value]="value.value" (change)="setValue($event)" type="number" 
+	  [readonly]="readonly" >
+      <oa-unit-picker [type]="type" [value]="value.unit" (changed)="setUnit($event)" [readonly]="readonly" #unitPicker>
+      </oa-unit-picker>
+    </div>
+    <ng-container *ngIf="contentOnly">
+      <div class="controls-row charge-value">
+        <div>
+          {{value.value}}
+        </div>
+        <span class="custom-margin">{{value.unit}}</span>
+      </div>
+    </ng-container>
+  </div>
+  <div *ngSwitchCase="'options'">
+    <div *ngFor="let item of optionsArray; let i = index" class="controls-row amountOptions">
+      <div class="oa-input">
+        <input [(ngModel)]="item.option" (change)="setOptionsValue()" [readonly]="readonly">
+        <span>:</span>
+        <input [(ngModel)]="item.value" (change)="setOptionsValue()" [readonly]="readonly">
+        <oa-unit-picker [type]="type" [value]="value.unit" (changed)="setUnit($event)" [readonly]="readonly"
+          #unitPicker>
+        </oa-unit-picker>
+      </div>
+      <mat-icon class="subtle" *ngIf="i !== 0" (click)="removeOption(i)">remove_circle_outline</mat-icon>
+    </div>
+  </div>
+  <div *ngSwitchCase="'slab'">
+    <div *ngFor="let item of value.value; let i = index" class="controls-row amountSlab">
+      <div class="oa-input">
+        <input [(ngModel)]="item.from" type="number" (change)="setValue(value)" [readonly]="readonly">
+        <span>-</span>
+        <input [(ngModel)]="item.to" type="number" (change)="setValue(value)" [readonly]="readonly">
+        <span>:</span>
+        <input [(ngModel)]="item.value" type="number" (change)="setValue(value)" [readonly]="readonly">
+        <oa-unit-picker [type]="type" [value]="value.unit" (changed)="setUnit($event)" [readonly]="readonly"
+          #unitPicker>
+        </oa-unit-picker>
+      </div>
+      <mat-icon class="subtle" *ngIf="i !== 0" (click)="removeFromValue(i)">remove_circle_outline</mat-icon>
+    </div>
+  </div>
+  <div *ngSwitchCase="'inline'" class="readonly">
+    <span>{{value.value | value:'comma'}} </span>
+    <oa-unit-picker [type]="type" [value]="value.unit" (changed)="setUnit($event)" [readonly]="true" #unitPicker>
+    </oa-unit-picker>
+  </div>
+  <div class="flex-row three" *ngIf="switchOptions">
+    <label class="cursorPointer switchOptions" [class.active]="view === 'slab'" (click)="changeChargeMood('slab')">Add
+      Slab</label>
+    <label class="cursorPointer switchOptions" [class.active]="view === 'fixed'"
+      (click)="changeChargeMood('fixed')">Fixed</label>
+    <label class="cursorPointer switchOptions" [class.active]="view === 'options'"
+      (click)="changeChargeMood('options')">Add
+      Options</label>
+  </div>
+</div>

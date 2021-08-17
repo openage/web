@@ -1,0 +1,25 @@
+{
+  "items": [
+    {
+      "code": "scalesInternal",
+      "icon": "/assets/app/applegos/images/use-cases/admin_panels.webp",
+      "image": "/assets/app/applegos/images/use-cases/admin_panels.webp",
+      "title": "Scales internal operations 10x faster",
+      "description": "“Going with DronaHQ was an easy decision, it is helping us cut down the time to launch tools from a few weeks to a few days. Support for unlimited end-users was cherry on top.”"
+    },
+    {
+      "code": "mobileApps",
+      "icon": "/assets/app/applegos/images/use-cases/dashboards.webp",
+      "image": "/assets/app/applegos/images/use-cases/dashboards.webp",
+      "title": "Mobile apps for field force",
+      "description": "“Where we’ve really enjoyed success with DronaHQ is that we can turn things around, now, from an idea to a real thing in five weeks, which for us is wonderful.”"
+    },
+    {
+      "code": "UIBuilding",
+      "icon": "/assets/app/applegos/images/use-cases/demo_forms.webp",
+      "image": "/assets/app/applegos/images/use-cases/demo_forms.webp",
+      "title": "Very smooth UI building experience",
+      "description": "“The DronaHQ platform is helping us enable our backend engineers to build UIs, utilize existing APIs and backend services and essentially become full-stack engineers.”"
+    }
+  ]
+}

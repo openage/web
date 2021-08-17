@@ -1,0 +1,47 @@
+<div class="row main-card">
+  @if (selectedFile) {
+    <div>
+      @if ((selectedFile.mimeType === 'image/png' || 'image/jpeg' || 'image/jpg') && (selectedFile.mimeType !== 'video/mp4')) {
+        <div class="row background-img"
+          [style.backgroundImage]="'url(' + selectedFile?.url + ')'">
+          <button mat-icon-button class="background-icon">
+            <mat-icon>favorite</mat-icon>
+          </button>
+        </div>
+      }
+      @if (selectedFile.mimeType === 'video/mp4') {
+        <div class="row background-img">
+          <video controls class="background-video">
+            <source class="video" type="video/mp4" [src]="selectedFile?.url">
+          </video>
+          <!-- <button mat-icon-button class="background-icon">
+          <mat-icon>favorite</mat-icon>
+        </button> -->
+      </div>
+    }
+  </div>
+}
+<div class="row slider">
+  <div class="col-lg-9 col-md-9 col-sm-9">
+    <div class="dots">
+      @for (item of files; track item; let i = $index) {
+        <a (click)="onDotClick(i)">
+          <mat-icon [ngClass]="{active: item.id === selectedFile.id}">
+            fiber_manual_record
+          </mat-icon>
+        </a>
+      }
+    </div>
+  </div>
+  @if (files && files.length > 1) {
+    <div class="col-lg-3 col-md-3 col-sm-3">
+      <button mat-icon-button (click)="previous()">
+        <mat-icon>keyboard_arrow_left</mat-icon>
+      </button>
+      <button mat-icon-button (click)="next()">
+        <mat-icon>keyboard_arrow_right</mat-icon>
+      </button>
+    </div>
+  }
+</div>
+</div>
