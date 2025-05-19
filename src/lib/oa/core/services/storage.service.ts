@@ -1,8 +1,8 @@
-import { Inject, Injectable } from '@angular/core';
+import { Inject, Injectable, DOCUMENT } from '@angular/core';
 import { Link } from '../models/link.model';
 import { InProcessStorage } from './in-process-storage';
 import { environment } from '../../../../environments/environment';
-import { DOCUMENT } from '@angular/common';
+
 import { Logger } from '../models';
 
 // eslint-disable-next-line max-classes-per-file

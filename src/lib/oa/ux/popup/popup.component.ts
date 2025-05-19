@@ -3,11 +3,10 @@ import { PopupPosition, PopupTheme, PopupType } from '../../core/models/popup.en
 import { CommonModule } from '@angular/common';
 
 @Component({
-  selector: 'oa-popup',
-  standalone: true,
-  imports: [CommonModule],
-  templateUrl: './popup.component.html',
-  styleUrls: ['./popup.component.scss']
+    selector: 'oa-popup',
+    imports: [CommonModule],
+    templateUrl: './popup.component.html',
+    styleUrls: ['./popup.component.scss']
 })
 export class PopupComponent implements OnInit {
 

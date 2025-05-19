@@ -1,11 +1,11 @@
-import { EventEmitter, Inject, Injectable, TemplateRef } from '@angular/core';
+import { EventEmitter, Inject, Injectable, TemplateRef, DOCUMENT } from '@angular/core';
 import { Subject } from 'rxjs';
 import { NavService } from './nav.service';
 import { ErrorService } from './error.service';
 import { Logger, Pic } from '../models';
 import { ContextService } from './context.service';
 import { AlertService } from './alert.service';
-import { DOCUMENT } from '@angular/common';
+
 import { Action } from '../models/action.model';
 
 @Injectable({

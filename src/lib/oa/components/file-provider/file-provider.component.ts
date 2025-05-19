@@ -1,16 +1,15 @@
 import { Component, EventEmitter, HostListener, Input, OnInit, Output } from '@angular/core';
 import { UxService } from '../../core/services/ux.service';
-import { CommonModule } from '@angular/common';
+
 import { FormsModule } from '@angular/forms';
 import { IconComponent } from "../../ux/icon/icon.component";
 
 
 @Component({
-  selector: 'oa-icon-file-picker',
-  standalone: true,
-  imports: [CommonModule, FormsModule, IconComponent],
-  templateUrl: './file-provider.component.html',
-  styleUrls: ['./file-provider.component.css']
+    selector: 'oa-icon-file-picker',
+    imports: [FormsModule, IconComponent],
+    templateUrl: './file-provider.component.html',
+    styleUrls: ['./file-provider.component.css']
 })
 export class FileProviderComponent implements OnInit {
 

@@ -4,13 +4,12 @@ import { ConstantService } from '../../core/services/constant.service';
 import { TooltipDirective } from '../../directives/tooltip.directive';
 
 @Component({
-  selector: 'oa-icon',
-  standalone: true,
-  imports: [
-    TooltipDirective
-  ],
-  templateUrl: './icon.component.html',
-  styleUrls: ['./icon.component.scss']
+    selector: 'oa-icon',
+    imports: [
+        TooltipDirective
+    ],
+    templateUrl: './icon.component.html',
+    styleUrls: ['./icon.component.scss']
 })
 export class IconComponent implements OnChanges {
 

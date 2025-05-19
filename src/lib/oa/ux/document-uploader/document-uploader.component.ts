@@ -1,19 +1,14 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { DataService } from '../../core/services/data.service';
 import { UxService } from '../../core/services/ux.service';
 import { FormsModule } from '@angular/forms';
 import { FileProviderComponent } from "../../components/file-provider/file-provider.component";
-import { TasksProgressFooterComponent } from "../../core/components/tasks-progress-footer/tasks-progress-footer.component";
 import { ProcessingIndicatorComponent } from "../processing-indicator/processing-indicator.component";
-import { IconComponent } from "../icon/icon.component";
-import { Router } from '@angular/router';
 import { PageBaseComponent } from '../../core/components/page-base.component';
 
 @Component({
   selector: 'oa-document-uploader',
-  standalone: true,
-  imports: [CommonModule, FormsModule, FileProviderComponent, TasksProgressFooterComponent, ProcessingIndicatorComponent, IconComponent],
+  imports: [FormsModule, FileProviderComponent, ProcessingIndicatorComponent],
   templateUrl: './document-uploader.component.html',
   styleUrl: './document-uploader.component.scss'
 })
@@ -47,7 +42,7 @@ export class DocumentUploaderComponent extends PageBaseComponent implements OnIn
   constructor(
     private dataService: DataService,
     private uxService: UxService
-  ) {super() }
+  ) { super() }
 
   //  ngOnInit() {
   //   this.samples = this.samples || this.options.templates || [];
@@ -92,7 +87,7 @@ export class DocumentUploaderComponent extends PageBaseComponent implements OnIn
       this.isDisabled = false;
     });
   }
-  
+
   closeDialog() {
     this.showSuccessDialog = false;
   }

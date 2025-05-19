@@ -2,10 +2,11 @@ import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChange
 import * as moment from 'moment';
 
 @Component({
-  // eslint-disable-next-line @angular-eslint/component-selector
-  selector: 'countdown-clock',
-  templateUrl: './countdown-clock.component.html',
-  styleUrls: ['./countdown-clock.component.css']
+    // eslint-disable-next-line @angular-eslint/component-selector
+    selector: 'countdown-clock',
+    templateUrl: './countdown-clock.component.html',
+    styleUrls: ['./countdown-clock.component.css'],
+    standalone: false
 })
 export class CountdownClockComponent implements OnInit, OnChanges {
 

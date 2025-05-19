@@ -8,7 +8,8 @@ import { ConstantService } from '../services/constant.service';
 import { NavService } from '../services/nav.service';
 
 @Component({
-  template: ''
+    template: '',
+    standalone: false
 })
 export abstract class PageBaseComponent implements OnInit, OnDestroy {
 

@@ -10,12 +10,10 @@ import { InputErrorComponent } from '../input-error/input-error.component';
 
 @Component({
   selector: 'oa-text-input',
-  standalone: true,
   imports: [
     ActionComponent,
     FormsModule,
     AutofocusDirective,
-    DatePickerComponent,
     InputErrorComponent
   ],
   templateUrl: './input.component.html',

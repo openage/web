@@ -1,24 +1,20 @@
-import { Component, ComponentRef, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild, viewChild, ViewChildren, ViewContainerRef } from '@angular/core';
+import { Component, ComponentRef, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild, ViewContainerRef } from '@angular/core';
 import { Action } from '../../core/models/action.model';
 import { ConstantService } from '../../core/services/constant.service';
 import { NavService } from '../../core/services/nav.service';
 import { ContextService } from '../../core/services/context.service';
 import { IconComponent } from '../icon/icon.component';
 import { MenuDirective } from '../../directives/menu.directive';
-import { TooltipDirective } from '../../directives/tooltip.directive';
 import { TogglerComponent } from '../toggler/toggler.component';
 import { AddFormPopUpComponent } from '../add-form-pop-up/add-form-pop-up.component';
 
 
 @Component({
   selector: 'oa-action',
-  standalone: true,
   imports: [
     IconComponent,
     TogglerComponent,
     MenuDirective,
-    TooltipDirective,
-    AddFormPopUpComponent
   ],
   templateUrl: './action.component.html',
   styleUrls: ['./action.component.css']
@@ -62,10 +58,10 @@ export class ActionComponent implements OnInit, OnChanges {
   selected: EventEmitter<any> = new EventEmitter();
 
   showList: boolean = false;
-@ViewChild('add')
-add!:AddFormPopUpComponent
-@ViewChild('popupContainer', { read: ViewContainerRef }) popupContainer!: ViewContainerRef;
-popupRef!: ComponentRef<AddFormPopUpComponent>;
+  @ViewChild('add')
+  add!: AddFormPopUpComponent
+  @ViewChild('popupContainer', { read: ViewContainerRef }) popupContainer!: ViewContainerRef;
+  popupRef!: ComponentRef<AddFormPopUpComponent>;
 
   constructor(
     private constantService: ConstantService,
@@ -245,10 +241,10 @@ popupRef!: ComponentRef<AddFormPopUpComponent>;
       case 'close':
         item.event = item.event || (() => this.navService.back());
         break;
-        case 'add':
-          item.event = item.event || (() => this.openPopup());
-          
-          break;
+      case 'add':
+        item.event = item.event || (() => this.openPopup());
+
+        break;
       case 'help':
         item.event = item.event || (() => this.navService.goto('help.sections.details', { path: { code: this.value } }))
         break;
@@ -271,7 +267,7 @@ popupRef!: ComponentRef<AddFormPopUpComponent>;
     if (this.item.event) {
       this.item.event(this.value, this.item.config);
     }
-    if(this.item.config ==='add-page'){
+    if (this.item.config === 'add-page') {
       this.openPopup()
     }
     this.selected.emit(this.value);

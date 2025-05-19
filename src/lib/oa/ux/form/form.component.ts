@@ -1,7 +1,5 @@
 /* eslint-disable no-prototype-builtins */
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
-import { FieldEditorComponent } from '../../components/field-editor/field-editor.component';
-import { TableEditorComponent } from '../table-editor/table-editor.component';
 import { CommonModule } from '@angular/common';
 import { FormOptions } from './form.options';
 import { IconComponent } from "../icon/icon.component";
@@ -18,12 +16,9 @@ import { DataService } from '../../core/services/data.service';
 
 @Component({
   selector: 'oa-form',
-  standalone: true,
   templateUrl: './form.component.html',
   styleUrls: ['./form.component.scss'],
   imports: [
-    FieldEditorComponent,
-    TableEditorComponent,
     CommonModule,
     IconComponent,
     InputTextComponent,

@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+
 import { Component, Input, OnInit } from '@angular/core';
 import { DataService } from '../../core/services/data.service';
 import { UxService } from '../../core/services/ux.service';
@@ -10,8 +10,11 @@ import { IconComponent } from "../icon/icon.component";
 
 @Component({
   selector: 'oa-file-uploader',
-  standalone: true,
-  imports: [CommonModule, FormsModule, FileProviderComponent, TasksProgressFooterComponent, ProcessingIndicatorComponent, IconComponent],
+  imports: [
+    FormsModule,
+    FileProviderComponent,
+    ProcessingIndicatorComponent,
+    IconComponent],
   templateUrl: './file-uploader.component.html',
   styleUrls: ['./file-uploader.component.scss']
 })

@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@angular/core';
+import { Inject, Injectable, DOCUMENT } from '@angular/core';
 import { Application, Entity, ErrorModel, Link, Logger, Organization, Pic, Tenant, Theme, User } from '../models';
 import { Role } from '../models/role.model';
 import { Session } from '../models/session.model';
@@ -10,7 +10,7 @@ import { environment } from '../../../../environments/environment';
 import { Action } from '../models/action.model';
 import { ObservableObject, ObservableStack } from '../models/observable.model';
 import { SearchOptions } from '../models/search.options';
-import { DOCUMENT } from '@angular/common';
+
 import { Progress } from '../models/progress.model';
 import { HttpHeaders } from '@angular/common/http';
 

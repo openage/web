@@ -5,11 +5,10 @@ import { Link } from '../../models';
 import { RouterModule } from '@angular/router';
 
 @Component({
-  selector: 'page-breadcrumb',
-  standalone: true,
-  imports: [RouterModule],
-  templateUrl: './breadcrumb.component.html',
-  styleUrls: ['./breadcrumb.component.scss']
+    selector: 'page-breadcrumb',
+    imports: [RouterModule],
+    templateUrl: './breadcrumb.component.html',
+    styleUrls: ['./breadcrumb.component.scss']
 })
 export class BreadcrumbComponent implements OnInit {
 

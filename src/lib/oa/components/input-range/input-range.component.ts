@@ -5,11 +5,10 @@ import { DatePickerComponent } from '../../ux/date-picker/date-picker.component'
 
 
 @Component({
-  selector: 'oa-input-range',
-  standalone: true,
-  imports: [CommonModule, DatePickerComponent],
-  templateUrl: './input-range.component.html',
-  styleUrls: ['./input-range.component.css']
+    selector: 'oa-input-range',
+    imports: [CommonModule, DatePickerComponent],
+    templateUrl: './input-range.component.html',
+    styleUrls: ['./input-range.component.css']
 })
 export class InputRangeComponent implements OnInit, OnChanges {
 

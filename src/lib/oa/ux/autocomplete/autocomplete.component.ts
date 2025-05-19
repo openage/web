@@ -20,17 +20,18 @@ import { ContextService } from '../../core/services/context.service';
 import { DataService } from '../../core/services/data.service';
 import { UxService } from '../../core/services/ux.service';
 import { ActionComponent } from "../action/action.component";
-import { InputTextComponent } from '../input/input.component';
 import { AutoCompleteOptions } from './autocomplete.options';
+import { NgTemplateOutlet } from '@angular/common';
 
 
 @Component({
   selector: 'oa-autocomplete',
-  standalone: true,
   templateUrl: './autocomplete.component.html',
   styleUrls: ['./autocomplete.component.scss'],
-  imports: [PaginatorComponent,
-    InputTextComponent, ActionComponent]
+  imports: [
+    PaginatorComponent,
+    NgTemplateOutlet,
+    ActionComponent]
 })
 export class AutocompleteComponent implements OnInit, OnChanges {
 

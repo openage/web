@@ -1,10 +1,10 @@
 import { HttpClient } from '@angular/common/http';
-import { ErrorHandler, Inject, Injectable } from '@angular/core';
+import { ErrorHandler, Inject, Injectable, DOCUMENT } from '@angular/core';
 import { AuthService } from './auth.service';
 import { NavService } from './nav.service';
 import { ErrorModel, Logger } from '../models';
 import { Subject } from 'rxjs';
-import { DOCUMENT } from '@angular/common';
+
 
 
 @Injectable({

@@ -5,14 +5,13 @@ import { PageBaseComponent } from '../../lib/oa/core/components/page-base.compon
 import { Logger } from '../../lib/oa/core/models';
 
 @Component({
-  selector: 'app-landing',
-  templateUrl: './landing.component.html',
-  styleUrl: './landing.component.scss',
-  standalone: true,
-  imports: [
-    RouterOutlet,
-    LayoutComponent
-  ]
+    selector: 'app-landing',
+    templateUrl: './landing.component.html',
+    styleUrl: './landing.component.scss',
+    imports: [
+        RouterOutlet,
+        LayoutComponent
+    ]
 })
 export class LandingComponent extends PageBaseComponent implements AfterViewInit {
 

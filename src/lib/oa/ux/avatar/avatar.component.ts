@@ -4,16 +4,14 @@ import { Profile } from '../../core/models/profile.model';
 import { ContentService } from '../../core/services/content.service';
 import { TooltipDirective } from '../../directives/tooltip.directive';
 import { CommonModule, TitleCasePipe } from '@angular/common';
-import { AvatarModule } from 'ngx-avatars';
 
 @Component({
   selector: 'oa-avatar',
-  standalone: true,
   imports: [
     TooltipDirective,
     TitleCasePipe,
-    AvatarModule,
-    CommonModule],
+    CommonModule
+  ],
   templateUrl: './avatar.component.html',
   styleUrls: ['./avatar.component.scss']
 })

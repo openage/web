@@ -6,9 +6,10 @@ import { StorageService, StringService } from '../../core/services';
 import { ContextService } from '../../core/services/context.service';
 
 @Component({
-  selector: 'oa-input-with-http',
-  templateUrl: './input-with-http.component.html',
-  styleUrls: ['./input-with-http.component.css']
+    selector: 'oa-input-with-http',
+    templateUrl: './input-with-http.component.html',
+    styleUrls: ['./input-with-http.component.css'],
+    standalone: false
 })
 export class InputWithHttpComponent implements OnInit {
   @Input()

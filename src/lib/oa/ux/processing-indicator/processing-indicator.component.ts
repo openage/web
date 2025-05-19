@@ -1,14 +1,13 @@
 /* eslint-disable no-prototype-builtins */
-import { CommonModule } from '@angular/common';
+
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { IconComponent } from "../icon/icon.component";
 
 @Component({
-  selector: 'processing-indicator',
-  templateUrl: './processing-indicator.component.html',
-  styleUrls: ['./processing-indicator.component.scss'],
-  standalone: true,
-  imports: [CommonModule, IconComponent]
+    selector: 'processing-indicator',
+    templateUrl: './processing-indicator.component.html',
+    styleUrls: ['./processing-indicator.component.scss'],
+    imports: [IconComponent]
 })
 export class ProcessingIndicatorComponent implements OnInit, OnChanges {
 

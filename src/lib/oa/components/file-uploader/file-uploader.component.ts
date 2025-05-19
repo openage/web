@@ -3,9 +3,10 @@ import { Subject } from 'rxjs';
 import { IUploader } from 'src/lib/oa/core/services/uploader.interface';
 
 @Component({
-  selector: 'shared-file-uploader',
-  templateUrl: './file-uploader.component.html',
-  styleUrls: ['./file-uploader.component.css']
+    selector: 'shared-file-uploader',
+    templateUrl: './file-uploader.component.html',
+    styleUrls: ['./file-uploader.component.css'],
+    standalone: false
 })
 export class FileUploaderComponent implements OnInit {
 

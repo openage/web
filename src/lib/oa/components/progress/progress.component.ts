@@ -1,9 +1,10 @@
 import { Component, Input, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'oa-progress',
-  templateUrl: './progress.component.html',
-  styleUrls: ['./progress.component.scss']
+    selector: 'oa-progress',
+    templateUrl: './progress.component.html',
+    styleUrls: ['./progress.component.scss'],
+    standalone: false
 })
 export class ProgressComponent implements OnInit {
 

@@ -4,8 +4,9 @@ import { ContextService } from '../core/services/context.service';
 import { Logger } from '../core/models';
 
 @Pipe({
-  name: 'hasPermission',
-  pure: true
+    name: 'hasPermission',
+    pure: true,
+    standalone: false
 })
 export class HasPermissionPipe implements PipeTransform {
 

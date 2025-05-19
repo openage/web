@@ -14,14 +14,13 @@ import { TogglerComponent } from '../../../ux/toggler/toggler.component';
 import { DataService } from '../../services/data.service';
 import { ProcessingIndicatorComponent } from "../../../ux/processing-indicator/processing-indicator.component";
 @Component({
-  selector: 'oa-core-tasks-progress-footer',
-  standalone: true,
-  imports: [
-    IconComponent, TogglerComponent,
-    ProcessingIndicatorComponent
-  ],
-  templateUrl: './tasks-progress-footer.component.html',
-  styleUrls: ['./tasks-progress-footer.component.css']
+    selector: 'oa-core-tasks-progress-footer',
+    imports: [
+        IconComponent, TogglerComponent,
+        ProcessingIndicatorComponent
+    ],
+    templateUrl: './tasks-progress-footer.component.html',
+    styleUrls: ['./tasks-progress-footer.component.css']
 })
 export class TasksProgressFooterComponent implements OnInit {
 

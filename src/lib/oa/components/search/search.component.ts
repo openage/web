@@ -12,9 +12,10 @@ import { DataService } from '../../core/services/data.service';
 import { FieldModel } from '../../core/models/field.model';
 
 @Component({
-  selector: 'oa-search',
-  templateUrl: './search.component.html',
-  styleUrls: ['./search.component.scss']
+    selector: 'oa-search',
+    templateUrl: './search.component.html',
+    styleUrls: ['./search.component.scss'],
+    standalone: false
 })
 export class SearchComponent implements OnInit, OnChanges, OnDestroy {
 

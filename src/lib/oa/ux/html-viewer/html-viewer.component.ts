@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, inject, Input, OnInit } from '@angular/core';
 import { ViewerOptions } from '../../core/models/viewer.options';
 import { StringService } from '../../core/services';
 import { ContextService } from '../../core/services/context.service';
@@ -6,7 +6,6 @@ import { DataService } from '../../core/services/data.service';
 
 @Component({
   selector: 'oa-html-viewer',
-  standalone: true,
   imports: [],
   templateUrl: './html-viewer.component.html',
   styleUrl: './html-viewer.component.scss'
@@ -36,11 +35,9 @@ export class HtmlViewerComponent implements OnInit {
   content?: any;
   initialized = false;
 
-  constructor(
-    private stringService: StringService,
-    public context: ContextService,
-    public dataService: DataService,
-  ) { }
+  stringService = inject(StringService);
+  context = inject(ContextService);
+  dataService = inject(DataService);
 
   ngOnInit(): void {
     this.options = this.options || {};

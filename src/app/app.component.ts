@@ -1,6 +1,6 @@
 import { Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
 
-import { ActivatedRoute, NavigationEnd, Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { ActivatedRoute, Router, RouterOutlet } from '@angular/router';
 import { environment } from '../environments/environment';
 import { FooterComponent } from '../lib/oa/core/components/footer/footer.component';
 import { HeaderComponent } from '../lib/oa/core/components/header/header.component';
@@ -16,11 +16,8 @@ import { ContextMenuComponent } from "../lib/oa/core/components/context-menu/con
 
 @Component({
   selector: 'app-root',
-  standalone: true,
   imports: [
     RouterOutlet,
-    RouterLink,
-    RouterLinkActive,
     HeaderComponent,
     FooterComponent,
     NotAvailableComponent,

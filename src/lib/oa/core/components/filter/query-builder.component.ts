@@ -12,14 +12,14 @@ import { TogglerComponent } from '../../../ux/toggler/toggler.component';
 
 
 @Component({
-  selector: 'page-filter',
-  standalone: true,
-  imports: [
-    DatePickerComponent,
-    InputTextComponent,
-    TogglerComponent],
-  templateUrl: './query-builder.component.html',
-  styleUrls: ['./query-builder.component.css']
+    selector: 'page-filter',
+    imports: [
+        DatePickerComponent,
+        InputTextComponent,
+        TogglerComponent
+    ],
+    templateUrl: './query-builder.component.html',
+    styleUrls: ['./query-builder.component.css']
 })
 export class FilterComponent implements OnInit, OnChanges {
 

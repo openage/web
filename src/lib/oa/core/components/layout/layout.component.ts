@@ -34,10 +34,10 @@ import { JsonViewerComponent } from "../../../ux/json-viewer/json-viewer.compone
 import { BrandingComponent } from "../branding/branding.component";
 import { BreadcrumbComponent } from "../breadcrumb/breadcrumb.component";
 import { CurrentRoleComponent } from "../current-role/current-role.component";
+import { MarkdownComponent } from "../../../ux/markdown/markdown.component";
 
 @Component({
   selector: "oa-layout",
-  standalone: true,
   templateUrl: "./layout.component.html",
   styleUrls: ["./layout.component.scss"],
   imports: [
@@ -60,7 +60,7 @@ import { CurrentRoleComponent } from "../current-role/current-role.component";
     BrandingComponent,
     BreadcrumbComponent,
     CurrentRoleComponent,
-    // JsonViewerComponent
+    MarkdownComponent
   ]
 })
 export class LayoutComponent implements OnInit, OnChanges {

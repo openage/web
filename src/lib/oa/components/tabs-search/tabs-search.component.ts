@@ -9,9 +9,10 @@ import { DataService } from '../../core/services/data.service';
 
 
 @Component({
-  selector: 'oa-tabs-search',
-  templateUrl: './tabs-search.component.html',
-  styleUrls: ['./tabs-search.component.css']
+    selector: 'oa-tabs-search',
+    templateUrl: './tabs-search.component.html',
+    styleUrls: ['./tabs-search.component.css'],
+    standalone: false
 })
 export class TabsSearchComponent implements OnInit, OnChanges {
 

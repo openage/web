@@ -2,9 +2,10 @@ import { Component, EventEmitter, Input, OnChanges, OnInit, Output, ViewChild } 
 import { UnitPickerComponent } from '../unit-picker/unit-picker.component';
 
 @Component({
-  selector: 'oa-value-editor',
-  templateUrl: './amount-editor.component.html',
-  styleUrls: ['./amount-editor.component.css']
+    selector: 'oa-value-editor',
+    templateUrl: './amount-editor.component.html',
+    styleUrls: ['./amount-editor.component.css'],
+    standalone: false
 })
 export class AmountEditorComponent implements OnInit, OnChanges {
 

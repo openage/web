@@ -2,9 +2,10 @@ import { Component, Input, OnChanges, OnInit } from '@angular/core';
 import { Doc } from 'src/lib/oa/drive/models';
 
 @Component({
-  selector: 'app-show-carousel',
-  templateUrl: './show-carousel.component.html',
-  styleUrls: ['./show-carousel.component.css']
+    selector: 'app-show-carousel',
+    templateUrl: './show-carousel.component.html',
+    styleUrls: ['./show-carousel.component.css'],
+    standalone: false
 })
 export class ShowCarouselComponent implements OnInit, OnChanges {
 

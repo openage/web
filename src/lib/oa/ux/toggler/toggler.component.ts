@@ -5,14 +5,13 @@ import { ConstantService } from '../../core/services/constant.service';
 import { TogglerOptions } from './toggler.options';
 
 @Component({
-  selector: 'oa-toggler',
-  standalone: true,
-  imports: [
-    IconComponent,
-    TooltipDirective
-  ],
-  templateUrl: './toggler.component.html',
-  styleUrls: ['./toggler.component.scss']
+    selector: 'oa-toggler',
+    imports: [
+        IconComponent,
+        TooltipDirective
+    ],
+    templateUrl: './toggler.component.html',
+    styleUrls: ['./toggler.component.scss']
 })
 export class TogglerComponent implements OnInit, OnChanges {
 

@@ -3,9 +3,10 @@ import { NavService } from 'src/app/core/services';
 import { Entity } from 'src/lib/oa/core/models/entity.model';
 
 @Component({
-  selector: 'oa-goto-entity-button',
-  templateUrl: './goto-entity-button.component.html',
-  styleUrls: ['./goto-entity-button.component.css']
+    selector: 'oa-goto-entity-button',
+    templateUrl: './goto-entity-button.component.html',
+    styleUrls: ['./goto-entity-button.component.css'],
+    standalone: false
 })
 export class GotoEntityButtonComponent implements OnInit {
 

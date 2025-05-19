@@ -20,19 +20,18 @@ import { ContentService } from '../../core/services/content.service';
 import { NavService } from '../../core/services/nav.service';
 
 @Component({
-  selector: 'oa-table',
-  standalone: true,
-  templateUrl: './table-editor.component.html',
-  styleUrls: ['./table-editor.component.scss'],
-  imports: [
-    ActionComponent,
-    FieldEditorComponent,
-    CommonModule,
-    FormsModule,
-    IconComponent
-    // PaginatorComponent,
-    // PaginationControlsComponent
-  ]
+    selector: 'oa-table',
+    templateUrl: './table-editor.component.html',
+    styleUrls: ['./table-editor.component.scss'],
+    imports: [
+        ActionComponent,
+        FieldEditorComponent,
+        CommonModule,
+        FormsModule,
+        IconComponent
+        // PaginatorComponent,
+        // PaginationControlsComponent
+    ]
 })
 export class TableEditorComponent implements OnInit {
 

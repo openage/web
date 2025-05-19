@@ -5,9 +5,10 @@ import { GenericDialogComponent } from '../../dialogs/generic-dialog/generic-dia
 import { DialogOptions } from '../../models/dialog-options.model';
 
 @Component({
-  selector: 'oa-dialog',
-  templateUrl: './dialog.component.html',
-  styleUrls: ['./dialog.component.scss']
+    selector: 'oa-dialog',
+    templateUrl: './dialog.component.html',
+    styleUrls: ['./dialog.component.scss'],
+    standalone: false
 })
 export class DialogComponent implements OnInit, OnChanges {
 

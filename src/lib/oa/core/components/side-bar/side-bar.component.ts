@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+
 import { AfterViewInit, Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { NavComponent } from '../../../ux/nav/nav.component';
@@ -13,15 +13,13 @@ import { CurrentRoleComponent } from '../current-role/current-role.component';
 import { LayoutComponent } from '../layout/layout.component';
 
 @Component({
-  selector: 'page-side-bar',
-  standalone: true,
-  imports: [
+    selector: 'page-side-bar',
+    imports: [
     RouterModule,
-    CommonModule,
     LayoutComponent
-  ],
-  templateUrl: './side-bar.component.html',
-  styleUrl: './side-bar.component.scss'
+],
+    templateUrl: './side-bar.component.html',
+    styleUrl: './side-bar.component.scss'
 })
 export class SideBarComponent implements OnInit, AfterViewInit {
 

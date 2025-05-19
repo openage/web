@@ -7,11 +7,10 @@ import { ActionComponent } from '../../../ux/action/action.component';
 import { LayoutComponent } from "../layout/layout.component";
 
 @Component({
-  selector: 'oa-context-menu',
-  standalone: true,
-  imports: [ActionComponent],
-  templateUrl: './context-menu.component.html',
-  styleUrls: ['./context-menu.component.css']
+    selector: 'oa-context-menu',
+    imports: [ActionComponent],
+    templateUrl: './context-menu.component.html',
+    styleUrls: ['./context-menu.component.css']
 })
 export class ContextMenuComponent implements OnInit {
 

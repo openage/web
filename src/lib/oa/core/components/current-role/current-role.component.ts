@@ -12,11 +12,10 @@ import { IconComponent } from '../../../ux/icon/icon.component';
 import { DialogDirective } from '../../../directives/dialog.directive';
 
 @Component({
-  selector: 'page-role',
-  standalone: true,
-  imports: [AvatarComponent, FormatPipe, BrandingComponent, IconComponent, DialogDirective],
-  templateUrl: './current-role.component.html',
-  styleUrls: ['./current-role.component.scss']
+    selector: 'page-role',
+    imports: [AvatarComponent, FormatPipe, BrandingComponent, IconComponent, DialogDirective],
+    templateUrl: './current-role.component.html',
+    styleUrls: ['./current-role.component.scss']
 })
 export class CurrentRoleComponent implements OnInit {
   isImpersonateSession: boolean = false

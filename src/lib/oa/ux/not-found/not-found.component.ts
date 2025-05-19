@@ -3,11 +3,10 @@ import { ConstantService } from '../../core/services/constant.service';
 import { ActionComponent } from '../action/action.component';
 
 @Component({
-  selector: 'oa-not-found',
-  standalone: true,
-  imports: [ActionComponent],
-  templateUrl: './not-found.component.html',
-  styleUrls: ['./not-found.component.css']
+    selector: 'oa-not-found',
+    imports: [ActionComponent],
+    templateUrl: './not-found.component.html',
+    styleUrls: ['./not-found.component.css']
 })
 export class NotFoundComponent implements OnInit {
 

@@ -1,9 +1,10 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
 @Component({
-  selector: 'shared-stepper',
-  templateUrl: './stepper.component.html',
-  styleUrls: ['./stepper.component.scss']
+    selector: 'shared-stepper',
+    templateUrl: './stepper.component.html',
+    styleUrls: ['./stepper.component.scss'],
+    standalone: false
 })
 export class StepperComponent implements OnInit {
 

@@ -23,20 +23,10 @@ import { FormatPipe } from '../../pipes/format.pipe';
 //   },
 // };
 @Component({
-  selector: 'oa-date-picker',
-  standalone: true,
-  imports: [DatePickerDirective, IconComponent, FormatPipe],
-  templateUrl: './date-picker.component.html',
-  styleUrls: ['./date-picker.component.scss'],
-  // providers: [
-  //   {
-  //     provide: DateAdapter,
-  //     useClass: MomentDateAdapter,
-  //     deps: [MAT_DATE_LOCALE, MAT_MOMENT_DATE_ADAPTER_OPTIONS]
-  //   },
-
-  //   { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
-  // ],
+    selector: 'oa-date-picker',
+    imports: [DatePickerDirective, IconComponent, FormatPipe],
+    templateUrl: './date-picker.component.html',
+    styleUrls: ['./date-picker.component.scss']
 })
 export class DatePickerComponent implements OnInit, OnChanges {
 

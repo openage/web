@@ -4,13 +4,12 @@ import { YouTubePlayer } from '@angular/youtube-player';
 import { ConstantService } from '../../core/services/constant.service';
 
 @Component({
-  selector: 'oa-video-viewer',
-  standalone: true,
-  imports: [
-    YouTubePlayer
-  ],
-  templateUrl: './video-viewer.component.html',
-  styleUrl: './video-viewer.component.scss'
+    selector: 'oa-video-viewer',
+    imports: [
+        YouTubePlayer
+    ],
+    templateUrl: './video-viewer.component.html',
+    styleUrl: './video-viewer.component.scss'
 })
 export class VideoViewerComponent implements OnInit {
 

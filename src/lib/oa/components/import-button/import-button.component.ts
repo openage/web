@@ -4,9 +4,10 @@ import { IUploader } from 'src/lib/oa/core/services/uploader.interface';
 import { ImporterComponent } from '../../dialogs/importer/importer.component';
 
 @Component({
-  selector: 'oa-import-button',
-  templateUrl: './import-button.component.html',
-  styleUrls: ['./import-button.component.css']
+    selector: 'oa-import-button',
+    templateUrl: './import-button.component.html',
+    styleUrls: ['./import-button.component.css'],
+    standalone: false
 })
 export class ImportButtonComponent implements OnInit {
 

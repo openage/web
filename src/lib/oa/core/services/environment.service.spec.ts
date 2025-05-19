@@ -6,7 +6,7 @@ describe('EnvironmentService', () => {
   beforeEach(() => TestBed.configureTestingModule({}));
 
   it('should be created', () => {
-    const service: EnvironmentService = TestBed.get(EnvironmentService);
+    const service: EnvironmentService = TestBed.inject(EnvironmentService);
     expect(service).toBeTruthy();
   });
 });

@@ -4,21 +4,19 @@ import { ContextService } from '../../services/context.service';
 import { ErrorModel, Logger } from '../../models';
 
 import { ConstantService } from '../../services/constant.service';
-import { CommonModule } from '@angular/common';
+
 import { RouterModule } from '@angular/router';
 import { LayoutComponent } from '../layout/layout.component';
 
 
 @Component({
-  selector: 'page-header',
-  standalone: true,
-  imports: [
+    selector: 'page-header',
+    imports: [
     RouterModule,
-    CommonModule,
     LayoutComponent
-  ],
-  templateUrl: './header.component.html',
-  styleUrls: ['./header.component.scss'],
+],
+    templateUrl: './header.component.html',
+    styleUrls: ['./header.component.scss']
 })
 export class HeaderComponent implements OnInit, AfterViewInit {
 

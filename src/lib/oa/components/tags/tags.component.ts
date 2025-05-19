@@ -2,9 +2,10 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { UxService } from 'src/app/core/services';
 
 @Component({
-  selector: 'oa-tags',
-  templateUrl: './tags.component.html',
-  styleUrls: ['./tags.component.scss']
+    selector: 'oa-tags',
+    templateUrl: './tags.component.html',
+    styleUrls: ['./tags.component.scss'],
+    standalone: false
 })
 export class TagsComponent implements OnInit {
 

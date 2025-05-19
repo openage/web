@@ -5,9 +5,10 @@ import { Folder } from 'src/lib/oa/drive/models';
 import { Doc } from 'src/lib/oa/drive/models/doc.model';
 
 @Component({
-  selector: 'oa-slides',
-  templateUrl: './slides.component.html',
-  styleUrls: ['./slides.component.css']
+    selector: 'oa-slides',
+    templateUrl: './slides.component.html',
+    styleUrls: ['./slides.component.css'],
+    standalone: false
 })
 export class SlidesComponent implements OnInit {
 

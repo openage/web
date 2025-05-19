@@ -1,17 +1,14 @@
-import { CommonModule } from '@angular/common';
+
 import { Component, Input, OnInit } from '@angular/core';
 import { ContextService } from '../../core/services/context.service';
 import { DataService } from '../../core/services/data.service';
 import { UxService } from '../../core/services/ux.service';
 
 @Component({
-  selector: 'oa-collection',
-  standalone: true,
-  templateUrl: './collection.component.html',
-  styleUrls: ['./collection.component.css'],
-  imports: [
-    CommonModule
-  ]
+    selector: 'oa-collection',
+    templateUrl: './collection.component.html',
+    styleUrls: ['./collection.component.css'],
+    imports: []
 })
 export class CollectionComponent implements OnInit {
 

@@ -5,9 +5,10 @@ import { UxService } from '../../core/services/ux.service';
 
 
 @Component({
-  selector: 'oa-share',
-  templateUrl: './share.component.html',
-  styleUrls: ['./share.component.css']
+    selector: 'oa-share',
+    templateUrl: './share.component.html',
+    styleUrls: ['./share.component.css'],
+    standalone: false
 })
 export class ShareComponent implements OnInit {
 

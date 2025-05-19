@@ -110,10 +110,10 @@
   } @else {
   @switch (item.control) {
   <!-- @case ('collection') {
-  @for (c of item.items; track c; let odd = $odd) {
-  <ng-container *ngTemplateOutlet="componentTemplate; context: { item: c, class: odd?'odd': 'even' }"></ng-container>
-  }
-  } -->
+      @for (c of item.items; track c; let odd = $odd) {
+        <ng-container *ngTemplateOutlet="componentTemplate; context: { item: c, class: odd?'odd': 'even' }"></ng-container>
+      }
+      } -->
 
   @case ('branding') {
   <page-branding [ngClass]="item.class" [ngStyle]="item.style" [options]="item.options"></page-branding>
@@ -121,7 +121,7 @@
 
   @case ('notification') {
   <!-- <send-it-new-notification [from]="'!me'" [apiLimit]="5" [autoRefreshTime]="300"></send-it-new-notification>
-  <send-it-desktop-notification></send-it-desktop-notification> -->
+        <send-it-desktop-notification></send-it-desktop-notification> -->
   }
 
   @case ('search') {
@@ -183,9 +183,11 @@
   @case ('table') {
   <oa-table [ngClass]="item.class" [ngStyle]="item.style" [value]="item.value" [options]="item.options">
   </oa-table>
-  <div *ngIf="!item.value?.length" class="no-data">
+  @if (!item.value?.length) {
+  <div class="no-data">
     No data available
   </div>
+  }
   }
 
   @case ('calendar') {
@@ -200,6 +202,11 @@
   @case ('pagination') {
   <oa-pagination [ngClass]="item.class" [ngStyle]="item.style" [value]="item.value" [options]="item.options">
   </oa-pagination>
+  }
+
+  @case ('markdown') {
+  <oa-markdown [ngClass]="item.class" [ngStyle]="item.style" [value]="item.value" [options]="item.options">
+  </oa-markdown>
   }
 
   @case ('spacer') {

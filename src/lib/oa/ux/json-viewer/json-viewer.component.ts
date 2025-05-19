@@ -2,14 +2,11 @@ import { CommonModule } from '@angular/common';
 import { Component, Input, OnChanges, OnInit } from '@angular/core';
 import { ContextService } from '../../core/services/context.service';
 import { DataService } from '../../core/services/data.service';
-import { TogglerComponent } from "../toggler/toggler.component";
 
 @Component({
   selector: 'oa-json-viewer',
-  standalone: true,
   imports: [
-    CommonModule,
-    TogglerComponent
+    CommonModule
   ],
   templateUrl: './json-viewer.component.html',
   styleUrl: './json-viewer.component.scss'

@@ -5,21 +5,14 @@ import { UxService } from '../../core/services/ux.service';
 import { ContextService } from '../../core/services/context.service';
 import { Link } from '../../core/models';
 import { IconComponent } from '../icon/icon.component';
-import { TogglerComponent } from '../toggler/toggler.component';
-import { ActionComponent } from '../action/action.component';
-import { HtmlViewerComponent } from "../html-viewer/html-viewer.component";
-import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'oa-nav',
-  standalone: true,
   imports: [
-    IconComponent,
-    HtmlViewerComponent,
-    CommonModule
+    IconComponent
   ],
   templateUrl: './nav.component.html',
-  styleUrls: ['./nav.component.scss'],
+  styleUrls: ['./nav.component.scss']
 })
 export class NavComponent implements OnInit, OnDestroy {
 

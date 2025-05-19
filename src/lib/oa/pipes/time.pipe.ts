@@ -3,7 +3,8 @@ import moment from 'moment';
 import { DateService } from '../core/services/date.service';
 
 @Pipe({
-  name: 'time'
+    name: 'time',
+    standalone: false
 })
 export class TimePipe implements PipeTransform {
 

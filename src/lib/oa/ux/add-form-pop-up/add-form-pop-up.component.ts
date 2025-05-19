@@ -10,11 +10,10 @@ import { Link } from '../../core/models';
 import { FormsModule, NgForm } from '@angular/forms';
 
 @Component({
-  selector: 'app-add-form-pop-up',
-  standalone: true,
-  imports: [FormsModule],
-  templateUrl: './add-form-pop-up.component.html',
-  styleUrl: './add-form-pop-up.component.scss',
+    selector: 'app-add-form-pop-up',
+    imports: [FormsModule],
+    templateUrl: './add-form-pop-up.component.html',
+    styleUrl: './add-form-pop-up.component.scss'
 })
 export class AddFormPopUpComponent implements OnInit {
   isModalOpen: boolean = true;

@@ -6,12 +6,10 @@ import { Logger } from '../../lib/oa/core/models';
 
 @Component({
   selector: 'app-debug',
-  standalone: true,
   templateUrl: './debug.component.html',
   styleUrl: './debug.component.scss',
   imports: [
     JsonViewerComponent,
-    NgTemplateOutlet
   ]
 })
 export class DebugComponent {

@@ -1,17 +1,16 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ContextService } from '../../services/context.service';
 import { Link } from '../../models';
-import { CommonModule } from '@angular/common';
+
 import { BrandingOptions } from './branding.options';
 import { environment } from '../../../../../environments/environment';
 
 
 @Component({
-  selector: 'page-branding',
-  standalone: true,
-  imports: [CommonModule],
-  templateUrl: './branding.component.html',
-  styleUrls: ['./branding.component.scss']
+    selector: 'page-branding',
+    imports: [],
+    templateUrl: './branding.component.html',
+    styleUrls: ['./branding.component.scss']
 })
 export class BrandingComponent implements OnInit {
 

@@ -3,9 +3,10 @@ import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import { CurrencyExchangeDialogComponent } from '../../dialogs/currency-exchange-dialog/currency-exchange-dialog.component';
 
 @Component({
-  selector: 'oa-currency-ratio-editor',
-  templateUrl: './currency-ratio-editor.component.html',
-  styleUrls: ['./currency-ratio-editor.component.css']
+    selector: 'oa-currency-ratio-editor',
+    templateUrl: './currency-ratio-editor.component.html',
+    styleUrls: ['./currency-ratio-editor.component.css'],
+    standalone: false
 })
 export class CurrencyRatioEditorComponent implements OnInit {
 

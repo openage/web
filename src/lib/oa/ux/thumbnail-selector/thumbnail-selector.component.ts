@@ -3,11 +3,10 @@ import { FormsModule } from '@angular/forms';
 import { Logger } from '../../core/models';
 
 @Component({
-  selector: 'oa-thumbnail-selector',
-  standalone: true,
-  imports: [FormsModule],
-  templateUrl: './thumbnail-selector.component.html',
-  styleUrl: './thumbnail-selector.component.scss'
+    selector: 'oa-thumbnail-selector',
+    imports: [FormsModule],
+    templateUrl: './thumbnail-selector.component.html',
+    styleUrl: './thumbnail-selector.component.scss'
 })
 export class ThumbnailSelectorComponent {
   url: any = '';

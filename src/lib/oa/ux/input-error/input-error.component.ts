@@ -8,11 +8,10 @@ import { ActionComponent } from "../action/action.component";
 
 
 @Component({
-  selector: 'oa-error',
-  standalone: true,
-  templateUrl: './input-error.component.html',
-  styleUrls: ['./input-error.component.scss'],
-  imports: [TooltipDirective, ActionComponent]
+    selector: 'oa-error',
+    templateUrl: './input-error.component.html',
+    styleUrls: ['./input-error.component.scss'],
+    imports: [TooltipDirective, ActionComponent]
 })
 export class InputErrorComponent implements OnInit, OnChanges {
 

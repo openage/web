@@ -21,23 +21,22 @@ import { FormsModule } from '@angular/forms';
 
 
 @Component({
-  selector: 'oa-field-editor',
-  standalone: true,
-  templateUrl: './field-editor.component.html',
-  styleUrls: ['./field-editor.component.css'],
-  imports: [
-    AutocompleteComponent,
-    AvatarComponent,
-    InputSelectorComponent,
-    InputTextComponent,
-    CommonModule,
-    ErrorComponent,
-    InputRangeComponent,
-    // MatInputModule,
-    // MatIconModule,
-    // MatSelectModule,
-    FormsModule
-  ]
+    selector: 'oa-field-editor',
+    templateUrl: './field-editor.component.html',
+    styleUrls: ['./field-editor.component.css'],
+    imports: [
+        AutocompleteComponent,
+        AvatarComponent,
+        InputSelectorComponent,
+        InputTextComponent,
+        CommonModule,
+        ErrorComponent,
+        InputRangeComponent,
+        // MatInputModule,
+        // MatIconModule,
+        // MatSelectModule,
+        FormsModule
+    ]
 })
 
 export class FieldEditorComponent implements OnInit {

@@ -26,14 +26,13 @@ class Day {
 
 // eslint-disable-next-line max-classes-per-file
 @Component({
-  selector: 'oa-calendar',
-  standalone: true,
-  imports: [
-    FormatPipe,
-    IconComponent
-  ],
-  templateUrl: './calendar.component.html',
-  styleUrls: ['./calendar.component.scss']
+    selector: 'oa-calendar',
+    imports: [
+        FormatPipe,
+        IconComponent
+    ],
+    templateUrl: './calendar.component.html',
+    styleUrls: ['./calendar.component.scss']
 })
 export class CalendarComponent implements OnChanges {
 
