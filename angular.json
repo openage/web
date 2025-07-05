@@ -58,6 +58,8 @@
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": false,
+              "ssr": false,
+              "prerender": false,
               "namedChunks": false,
               "extractLicenses": true,
               "budgets": [
