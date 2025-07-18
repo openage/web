@@ -2,7 +2,7 @@
 /* eslint-disable no-prototype-builtins */
 import { Location } from '@angular/common';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { ActivatedRoute, ActivatedRouteSnapshot, NavigationEnd, Params, Router } from '@angular/router';
 // import { Subject } from 'rxjs';
 import { environment } from '../../../../environments/environment';
@@ -25,16 +25,16 @@ export class NavService {
 
   logger = new Logger(NavService);
 
-  constructor(
-    private http: HttpClient,
-    private router: Router,
-    private route: ActivatedRoute,
-    private location: Location,
-    private context: ContextService,
-    private metaService: MetaService,
-    private storageService: StorageService,
-    // private auth: RoleService
-  ) {
+  private http = inject(HttpClient);
+  private router = inject(Router);
+  private route = inject(ActivatedRoute);
+  private location = inject(Location);
+  private context = inject(ContextService);
+  private metaService = inject(MetaService);
+  private storageService = inject(StorageService);
+  // private auth = inject(RoleService);
+
+  constructor() {
     this.context.applicationChanges.subscribe(() => this.init());
     this.context.roleChanges.subscribe(() => this.init());
     // this.context.page.changes.subscribe(() => this.context.actions.clear());

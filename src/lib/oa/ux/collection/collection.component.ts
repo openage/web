@@ -1,14 +1,14 @@
 
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, inject, Input, OnInit } from '@angular/core';
 import { ContextService } from '../../core/services/context.service';
 import { DataService } from '../../core/services/data.service';
 import { UxService } from '../../core/services/ux.service';
 
 @Component({
-    selector: 'oa-collection',
-    templateUrl: './collection.component.html',
-    styleUrls: ['./collection.component.css'],
-    imports: []
+  selector: 'oa-collection',
+  templateUrl: './collection.component.html',
+  styleUrls: ['./collection.component.css'],
+  imports: []
 })
 export class CollectionComponent implements OnInit {
 
@@ -20,11 +20,9 @@ export class CollectionComponent implements OnInit {
 
   initialized = false;
 
-  constructor(
-    public context: ContextService,
-    public dataService: DataService,
-    private uxService: UxService
-  ) { }
+  context = inject(ContextService);
+  dataService = inject(DataService);
+  uxService = inject(UxService);
 
   ngOnInit() {
     if (typeof this.value === 'string') {
@@ -58,6 +56,13 @@ export class CollectionComponent implements OnInit {
         field.value = this._getValue(this.value, field.key, field.defaultValue);
       }
     }
+  }
+
+  private _getValue(obj: any, key: string, defaultValue: any): any {
+    if (obj && key in obj) {
+      return obj[key];
+    }
+    return defaultValue;
   }
 
 }

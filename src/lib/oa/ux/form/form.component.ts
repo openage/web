@@ -1,5 +1,5 @@
 /* eslint-disable no-prototype-builtins */
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, inject, Input, OnChanges, OnInit, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormOptions } from './form.options';
 import { IconComponent } from "../icon/icon.component";
@@ -67,11 +67,11 @@ export class FormComponent implements OnInit, OnChanges {
   errors: any = {};
   isFormSubmit: boolean = false;
 
-  constructor(
-    public context: ContextService,
-    public dataService: DataService,
-    private uxService: UxService
-  ) { }
+  context = inject(ContextService);
+  dataService = inject(DataService);
+  uxService = inject(UxService);
+
+  constructor() { }
 
   ngOnInit(): void {
 

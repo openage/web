@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { Meta, MetaDefinition, Title } from '@angular/platform-browser';
 import { environment } from '../../../../environments/environment';
 import { ContextService } from './context.service';
@@ -9,11 +9,11 @@ import { ContextService } from './context.service';
 export class MetaService {
   private _title = environment.title;
 
-  constructor(
-    private meta: Meta,
-    private titleService: Title,
-    private context: ContextService
-  ) {
+  private meta = inject(Meta);
+  private titleService = inject(Title);
+  private context = inject(ContextService);
+
+  constructor() {
     this.context.title.changes.subscribe(t => {
       this.titleService.setTitle(t || this._title);
     })

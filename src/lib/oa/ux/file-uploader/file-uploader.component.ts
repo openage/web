@@ -1,12 +1,11 @@
 
-import { Component, Input, OnInit } from '@angular/core';
-import { DataService } from '../../core/services/data.service';
+import { Component, inject, Input, OnInit } from '@angular/core';
 import { UxService } from '../../core/services/ux.service';
 import { FormsModule } from '@angular/forms';
 import { FileProviderComponent } from "../../components/file-provider/file-provider.component";
-import { TasksProgressFooterComponent } from "../../core/components/tasks-progress-footer/tasks-progress-footer.component";
 import { ProcessingIndicatorComponent } from "../processing-indicator/processing-indicator.component";
 import { IconComponent } from "../icon/icon.component";
+import { DocumentService } from '../../core/services/document.service';
 
 @Component({
   selector: 'oa-file-uploader',
@@ -43,10 +42,9 @@ export class FileUploaderComponent implements OnInit {
   file: File | any;
   isDisabled = false;
   taskId: any
-  constructor(
-    private dataService: DataService,
-    private uxService: UxService
-  ) { }
+
+  private documentService = inject(DocumentService);
+  private uxService = inject(UxService);
 
   ngOnInit() {
     this.samples = this.samples || this.options.templates || [];
@@ -81,7 +79,7 @@ export class FileUploaderComponent implements OnInit {
       this.options.query = this.selectedMapper
     }
 
-    this.dataService.upload(this.file, this.options).then((res) => {
+    this.documentService.upload(this.file, this.options).then((res) => {
       this.isDisabled = false;
       this.uxService.showMessage("Done")
       this.successMessage = "Upload successful!";

@@ -1,6 +1,6 @@
 /* eslint-disable no-constant-condition */
 /* eslint-disable no-prototype-builtins */
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, TemplateRef } from '@angular/core';
+import { Component, EventEmitter, inject, Input, OnChanges, OnInit, Output, TemplateRef } from '@angular/core';
 import { FieldEditorModel } from '../../core/models/field-editor.model';
 import { Action } from '../../core/models/action.model';
 import { ActionComponent } from "../action/action.component";
@@ -20,18 +20,18 @@ import { ContentService } from '../../core/services/content.service';
 import { NavService } from '../../core/services/nav.service';
 
 @Component({
-    selector: 'oa-table',
-    templateUrl: './table-editor.component.html',
-    styleUrls: ['./table-editor.component.scss'],
-    imports: [
-        ActionComponent,
-        FieldEditorComponent,
-        CommonModule,
-        FormsModule,
-        IconComponent
-        // PaginatorComponent,
-        // PaginationControlsComponent
-    ]
+  selector: 'oa-table',
+  templateUrl: './table-editor.component.html',
+  styleUrls: ['./table-editor.component.scss'],
+  imports: [
+    ActionComponent,
+    FieldEditorComponent,
+    CommonModule,
+    FormsModule,
+    IconComponent
+    // PaginatorComponent,
+    // PaginationControlsComponent
+  ]
 })
 export class TableEditorComponent implements OnInit {
 
@@ -123,15 +123,15 @@ export class TableEditorComponent implements OnInit {
   initialized = false;
   logger = new Logger(TableEditorComponent);
 
-  constructor(
-    private context: ContextService,
-    private router: Router,
-    private location: Location,
-    private transform: TransformService,
-    private strings: StringService,
-    private content: ContentService,
-    private nav: NavService
-  ) { }
+  context = inject(ContextService);
+  router = inject(Router);
+  location = inject(Location);
+  transform = inject(TransformService);
+  strings = inject(StringService);
+  content = inject(ContentService);
+  nav = inject(NavService);
+
+  constructor() { }
 
   ngOnInit(): void {
 

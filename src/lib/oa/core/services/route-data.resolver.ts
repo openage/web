@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { ActivatedRoute, ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from '@angular/router';
 import { DataService } from './data.service';
 import { from, Observable, of } from 'rxjs';
@@ -13,11 +13,9 @@ import { Application, Link } from '../models';
   providedIn: 'root'
 })
 export class RouteDataResolver implements Resolve<any> {
-  constructor(
-    private _dataService: DataService,
-    private navService: NavService,
-    private context: ContextService
-  ) { }
+  private _dataService = inject(DataService);
+  private navService = inject(NavService);
+  private context = inject(ContextService);
 
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<any> {
 
@@ -106,11 +104,12 @@ export class RouteDataResolver implements Resolve<any> {
           d.config.items = d.items;
         } else if (d.src) {
           d.type = 'remote';
-          d.config.src = d.src
+          d.config.src = d.src;
         }
       }
 
-      switch (d.type) {
+      d.type = d.type || 'REMOTE';
+      switch (d.type.toLowerCase()) {
         case 'data':
           result = this._localData(d, page)
           break;
@@ -147,14 +146,10 @@ export class RouteDataResolver implements Resolve<any> {
     const item = new ObservableObject<any>();
     this.context.data(data.code, item);
 
-    const v = await this._dataService.search(config.query, {
-      page: config.page,
-      config: {
-        src: config.src || config.url,
-        field: config.field,
-        extension: config.extension
-      }
-    })
+    const v = config.id
+      ? await this._dataService.get(config.id, config)
+      : await this._dataService.search(config.query, config)
+
     item.set(v)
     return v;
   }
@@ -192,6 +187,6 @@ export class RouteDataResolver implements Resolve<any> {
     }, this._dataService)
     this.context.data(data.code, result);
     return result.add();
-    
-      }
+
+  }
 }

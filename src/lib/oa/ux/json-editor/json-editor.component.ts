@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, inject, Input, OnChanges, OnInit, Output } from '@angular/core';
 import { EditorOptions } from '../../core/models/editor.options';
 import { ContextService } from '../../core/services/context.service';
 import { DataService } from '../../core/services/data.service';
@@ -29,10 +29,10 @@ export class JsonEditorComponent implements OnInit, OnChanges {
   text?: string;
   initialized = false;
 
-  constructor(
-    public context: ContextService,
-    public dataService: DataService,
-  ) { }
+  context = inject(ContextService);
+  dataService = inject(DataService);
+
+  constructor() { }
 
   ngOnInit() {
 

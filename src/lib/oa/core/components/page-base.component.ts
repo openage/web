@@ -8,17 +8,17 @@ import { ConstantService } from '../services/constant.service';
 import { NavService } from '../services/nav.service';
 
 @Component({
-    template: '',
-    standalone: false
+  template: '',
+  standalone: false
 })
 export abstract class PageBaseComponent implements OnInit, OnDestroy {
 
-  private _ux: UxService = inject(UxService);
-  private constant: ConstantService = inject(ConstantService);
-  private navService: NavService = inject(NavService);
-  private context: ContextService = inject(ContextService);
-  private _route: ActivatedRoute = inject(ActivatedRoute);
-  private storage: StorageService = inject(StorageService);
+  private _ux = inject(UxService);
+  private constant = inject(ConstantService);
+  private navService = inject(NavService);
+  private context = inject(ContextService);
+  private _route = inject(ActivatedRoute);
+  private storage = inject(StorageService);
 
   isCurrent = true;
   isInitialized = false;

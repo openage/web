@@ -1,5 +1,5 @@
 
-import { AfterViewInit, Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, inject, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { NavComponent } from '../../../ux/nav/nav.component';
 import { NotFoundComponent } from '../../../ux/not-found/not-found.component';
@@ -13,13 +13,13 @@ import { CurrentRoleComponent } from '../current-role/current-role.component';
 import { LayoutComponent } from '../layout/layout.component';
 
 @Component({
-    selector: 'page-side-bar',
-    imports: [
+  selector: 'page-side-bar',
+  imports: [
     RouterModule,
     LayoutComponent
-],
-    templateUrl: './side-bar.component.html',
-    styleUrl: './side-bar.component.scss'
+  ],
+  templateUrl: './side-bar.component.html',
+  styleUrl: './side-bar.component.scss'
 })
 export class SideBarComponent implements OnInit, AfterViewInit {
 
@@ -35,11 +35,11 @@ export class SideBarComponent implements OnInit, AfterViewInit {
 
   errors?: ErrorModel[] = [];
 
-  constructor(
-    public context: ContextService,
-    public constant: ConstantService
-  ) {
-    context.errors.changes.subscribe((errors) => {
+  public context = inject(ContextService);
+  public constant = inject(ConstantService);
+
+  constructor() {
+    this.context.errors.changes.subscribe((errors) => {
       // this.snackBar.open(errors, null, { duration: 5000, verticalPosition: 'top', panelClass: 'error' });
       this.errors = errors;
       // this.cleanErrors();

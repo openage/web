@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, inject, Input, OnInit } from '@angular/core';
 import { ContextService } from '../../services/context.service';
 import { Link } from '../../models';
 
@@ -7,10 +7,10 @@ import { environment } from '../../../../../environments/environment';
 
 
 @Component({
-    selector: 'page-branding',
-    imports: [],
-    templateUrl: './branding.component.html',
-    styleUrls: ['./branding.component.scss']
+  selector: 'page-branding',
+  imports: [],
+  templateUrl: './branding.component.html',
+  styleUrls: ['./branding.component.scss']
 })
 export class BrandingComponent implements OnInit {
 
@@ -37,15 +37,13 @@ export class BrandingComponent implements OnInit {
   currentTenant: any;
   currentOrganization: any;
 
-  constructor(
-    // public navService: NavService,
-    // public uxService: UxService,
-    public context: ContextService,
-  ) {
-    context.applicationChanges.subscribe((t) => { this.currentApplication = t; this.init() });
-    context.tenantChanges.subscribe((t) => { this.currentTenant = t; this.init() });
-    context.organizationChanges.subscribe((t) => { this.currentOrganization = t; this.init(); });
-    context.page.changes.subscribe(p => {
+  context = inject(ContextService);
+
+  constructor() {
+    this.context.applicationChanges.subscribe((t) => { this.currentApplication = t; this.init() });
+    this.context.tenantChanges.subscribe((t) => { this.currentTenant = t; this.init() });
+    this.context.organizationChanges.subscribe((t) => { this.currentOrganization = t; this.init(); });
+    this.context.page.changes.subscribe(p => {
       this.currentPage = p;
       this.init();
     });

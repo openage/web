@@ -3,6 +3,7 @@
 import {
   Component,
   EventEmitter,
+  inject,
   Input,
   OnChanges,
   OnInit,
@@ -86,19 +87,27 @@ export class LayoutComponent implements OnInit, OnChanges {
   styles: any = {};
   sections: any = {};
 
-  constructor(
-    public context: ContextService,
-    private navService: NavService,
-    public sanitizer: DomSanitizer
-  ) { }
+  public context = inject(ContextService);
+  public sanitizer = inject(DomSanitizer);
+  private navService = inject(NavService);
 
+  /**
+   * Handles changes to component inputs
+   * @param changes SimpleChanges object containing changed properties
+   */
   ngOnChanges(changes: SimpleChanges): void {
     const log = this.logger.get('ngOnChanges');
     log.silly('changes', changes);
+
+    // Ensure components array is initialized
     this.components = this.components || [];
+
+    // Handle section changes
     if (changes['section']) {
-      this.initSection(changes['section'].currentValue);  // Reset and reinitialize with the new value
+      this.initSection(changes['section'].currentValue);
     }
+
+    // Handle data changes by reinitializing components and layout
     if (changes["data"]) {
       for (const c of this.components) {
         this.initComponent(c);
@@ -107,15 +116,34 @@ export class LayoutComponent implements OnInit, OnChanges {
     }
   }
 
+  /**
+   * Initializes the component on first load
+   */
   ngOnInit() {
     const logger = this.logger.get('ngOnInit');
 
+    // Initialize styles from page metadata
     this.styles = this.context.getPageMeta('styles') || {};
     this.components = this.components || [];
 
+    // Setup templates
+    this.initializeTemplates();
+
+    // Initialize layout with defaults
+    this.initializeLayout();
+
+    logger.silly('content', this.content);
+  }
+
+  /**
+   * Initialize templates configuration
+   */
+  private initializeTemplates(): void {
     if (!this.templates) {
       this.templates = {};
     }
+
+    // Convert array templates to object format
     if (Array.isArray(this.templates)) {
       const templates: any = {};
       this.templates.forEach(t => {
@@ -123,13 +151,16 @@ export class LayoutComponent implements OnInit, OnChanges {
       });
       this.templates = templates;
     }
+  }
 
+  /**
+   * Initialize layout with default values
+   */
+  private initializeLayout(): void {
     this.layout = this.layout || {};
     this.layout.code = this.layout.code || 'content';
     this.layout.class = this.layout.class || 'content';
     this.content = this.initSection(this.layout);
-
-    logger.silly('content', this.content);
   }
 
   /**

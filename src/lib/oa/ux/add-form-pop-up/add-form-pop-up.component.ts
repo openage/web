@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
 import { ContextService } from '../../core/services/context.service';
 import { StringService } from '../../core/services';
 import { ContentService } from '../../core/services/content.service';
@@ -10,10 +10,10 @@ import { Link } from '../../core/models';
 import { FormsModule, NgForm } from '@angular/forms';
 
 @Component({
-    selector: 'app-add-form-pop-up',
-    imports: [FormsModule],
-    templateUrl: './add-form-pop-up.component.html',
-    styleUrl: './add-form-pop-up.component.scss'
+  selector: 'app-add-form-pop-up',
+  imports: [FormsModule],
+  templateUrl: './add-form-pop-up.component.html',
+  styleUrl: './add-form-pop-up.component.scss'
 })
 export class AddFormPopUpComponent implements OnInit {
   isModalOpen: boolean = true;
@@ -23,24 +23,24 @@ export class AddFormPopUpComponent implements OnInit {
 
   data = { type: '' };
   @Output() closePopup = new EventEmitter<void>();
-  constructor(
-    private context: ContextService,
-    private router: Router,
-    private strings: StringService,
-    private content: ContentService,
-    private nav: NavService,
-    private _dataService: DataService
-  ) {}
+
+  context = inject(ContextService);
+  router = inject(Router);
+  strings = inject(StringService);
+  content = inject(ContentService);
+  nav = inject(NavService);
+  _dataService = inject(DataService);
+
   formData: any = {
     name: '',
     description: '',
     code: '',
   };
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 
   async submitForm(form: NgForm) {
     if (form.invalid) {
-      form.form.markAllAsTouched(); 
+      form.form.markAllAsTouched();
       return;
     }
     const items = { ...this.formData };
@@ -49,19 +49,19 @@ export class AddFormPopUpComponent implements OnInit {
     await this.saveModal(items, link);
     this.isModalOpen = false;
   }
-    saveModal = async (data: any, link: any) => {
-      this.isModalOpen = true;
-      console.log('Payload:', data);
-      const payload = {
-        service: 'system',
-        collection: 'navs',
-        page: {
-          limit: 100,
-          skip: 0,
-        },
-      };
-      return this._dataService.create(data, payload);
+  saveModal = async (data: any, link: any) => {
+    this.isModalOpen = true;
+    console.log('Payload:', data);
+    const payload = {
+      service: 'system',
+      collection: 'navs',
+      page: {
+        limit: 100,
+        skip: 0,
+      },
     };
+    return this._dataService.create(data, payload);
+  };
 
   closeModal() {
     this.isModalOpen = false;

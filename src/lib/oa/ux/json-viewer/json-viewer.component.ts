@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input, OnChanges, OnInit } from '@angular/core';
+import { Component, inject, Input, OnChanges, OnInit } from '@angular/core';
 import { ContextService } from '../../core/services/context.service';
 import { DataService } from '../../core/services/data.service';
 
@@ -29,10 +29,9 @@ export class JsonViewerComponent implements OnInit, OnChanges {
   initialized = false;
 
 
-  constructor(
-    public context: ContextService,
-    public dataService: DataService,
-  ) { }
+  context = inject(ContextService);
+  dataService = inject(DataService);
+
   ngOnInit(): void {
     this.options = this.options || {};
     this.class = this.class || this.options.class;

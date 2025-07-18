@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, inject, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 
 import moment from 'moment';
 import { FilterOptions } from './filter.options';
@@ -12,14 +12,14 @@ import { TogglerComponent } from '../../../ux/toggler/toggler.component';
 
 
 @Component({
-    selector: 'page-filter',
-    imports: [
-        DatePickerComponent,
-        InputTextComponent,
-        TogglerComponent
-    ],
-    templateUrl: './query-builder.component.html',
-    styleUrls: ['./query-builder.component.css']
+  selector: 'page-filter',
+  imports: [
+    DatePickerComponent,
+    InputTextComponent,
+    TogglerComponent
+  ],
+  templateUrl: './query-builder.component.html',
+  styleUrls: ['./query-builder.component.css']
 })
 export class FilterComponent implements OnInit, OnChanges {
 
@@ -43,12 +43,12 @@ export class FilterComponent implements OnInit, OnChanges {
   // isReset = false;
   showMore = false;
 
-  constructor(
-    public context: ContextService,
-    // public uxService: UxService,
-    public errorService: ErrorService,
-    private stringService: ContentService
-  ) { }
+  context = inject(ContextService);
+  // uxService = inject(UxService); // Uncomment if needed
+  errorService = inject(ErrorService);
+  stringService = inject(ContentService);
+
+  constructor() { }
 
   ngOnInit() {
     this.init();

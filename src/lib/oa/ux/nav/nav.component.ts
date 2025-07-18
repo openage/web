@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, inject, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { NavigationStart, Router } from '@angular/router';
 import { NavService } from '../../core/services/nav.service';
 import { UxService } from '../../core/services/ux.service';
@@ -39,12 +39,12 @@ export class NavComponent implements OnInit, OnDestroy {
   @Output()
   isExpand: EventEmitter<boolean> = new EventEmitter()
 
-  constructor(
-    public context: ContextService,
-    public navService: NavService,
-    public uxService: UxService,
-    private router: Router
-  ) {
+  context = inject(ContextService);
+  navService = inject(NavService);
+  uxService = inject(UxService);
+  router = inject(Router);
+
+  constructor() {
     // context.navs.changes.subscribe((t) => this.getValues());
   }
 

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { ContextService } from '../../lib/oa/core/services/context.service';
 import { JsonViewerComponent } from "../../lib/oa/ux/json-viewer/json-viewer.component";
 import { NgTemplateOutlet } from '@angular/common';
@@ -34,8 +34,5 @@ export class DebugComponent {
 
   logger = new Logger(DebugComponent);
 
-  constructor(
-    public context: ContextService
-  ) {
-  }
+  context = inject(ContextService);
 }

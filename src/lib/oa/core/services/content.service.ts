@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { Pic } from '../models';
 import { Profile } from '../models/profile.model';
 import moment from 'moment';
@@ -10,9 +10,7 @@ import { ContextService } from './context.service';
 })
 export class ContentService {
 
-  constructor(
-    private context: ContextService
-  ) { }
+  private context = inject(ContextService);
 
   /**
    * Replaces placeholders in a string with corresponding values from a data object.

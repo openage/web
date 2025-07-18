@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, inject, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Subject, Subscription } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
@@ -89,13 +89,13 @@ export class SearchComponent implements OnInit, OnChanges, OnDestroy {
 
   isShowSearchBar?: boolean;
 
-  constructor(
-    private route: ActivatedRoute,
-    private router: Router,
-    public auth: ContextService,
-    private http: HttpClient,
-    private uxService: UxService,
-  ) {
+  auth = inject(ContextService);
+  uxService = inject(UxService);
+  route = inject(ActivatedRoute);
+  router = inject(Router);
+  http = inject(HttpClient);
+
+  constructor() {
     let a = 0;
     let recall: string | boolean = true;
     this.subscription = this.route.queryParams.subscribe((query: any) => {

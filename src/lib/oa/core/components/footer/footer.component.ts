@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { Logger } from '../../models';
 import { ContextService } from '../../services/context.service';
 import { RouterModule } from '@angular/router';
@@ -25,11 +25,8 @@ export class FooterComponent implements OnInit {
   templates: any = {};
   data: any = {};
 
-  constructor(
-    public context: ContextService,
-    public constant: ConstantService,
-  ) {
-  }
+  context = inject(ContextService);
+  constant = inject(ConstantService);
 
   ngOnInit() {
     const logger = this._logger.get('ngOnInit');

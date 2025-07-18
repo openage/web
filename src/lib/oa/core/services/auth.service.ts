@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Subject } from 'rxjs';
 import { Logger, Organization, User } from '../models';
@@ -15,9 +15,13 @@ import { DataService } from './data.service';
 export class AuthService {
 
   private _redirectUrl = '/';
-  private _usersApi: DataService;
-  private _rolesApi: DataService;
-  private _sessionsApi: DataService;
+  private dataService = inject(DataService);
+  private context = inject(ContextService);
+  private route = inject(ActivatedRoute);
+
+  private userApi = ':directory/users';
+  private rolesApi = ':directory/roles';
+  private sessionsApi = ':directory/sessions';
 
   logger: Logger;
 
@@ -26,27 +30,9 @@ export class AuthService {
   }
 
   constructor(
-    private context: ContextService,
-    // private router: Router,
 
-    private route: ActivatedRoute
   ) {
     this.logger = new Logger(AuthService);
-
-    this._rolesApi = new DataService().init({
-      service: 'directory',
-      collection: 'roles'
-    });
-
-    this._usersApi = new DataService().init({
-      service: 'directory',
-      collection: 'users'
-    });
-
-    this._sessionsApi = new DataService().init({
-      service: 'directory',
-      collection: 'sessions'
-    });
   }
 
   private setUserAndRole = async (data: any) => {
@@ -62,7 +48,10 @@ export class AuthService {
     // }
 
 
-    const page = await this._rolesApi.search({ 'user': 'my' }, { headers: { 'x-role-key': defaultRole.key } })
+    const page = await this.dataService.search({ 'user': 'my' }, {
+      headers: { 'x-role-key': defaultRole.key },
+      src: this.rolesApi
+    })
     const roles = page?.items || [];
     let role;
     if (roles.length > 1) {
@@ -105,11 +94,11 @@ export class AuthService {
       }
     };
 
-    return this._usersApi.post(model, 'signUp');
+    return this.dataService.create(model, `${this.userApi}/signUp`);
   }
 
   public sendOtp = async (email: string, mobile: string, code: string, templateCode?: string) => {
-    return this._usersApi.post({ email, mobile, code, templateCode }, 'resend');
+    return this.dataService.create({ email, mobile, code, templateCode }, `${this.userApi}/resend`);
   }
 
   public exists = async (identity: string, type?: string) => {
@@ -127,7 +116,7 @@ export class AuthService {
       }
     }
 
-    return this._usersApi.get(`exists?${type}=${identity}`);
+    return this.dataService.get(`exists?${type}=${identity}`, this.userApi);
   }
 
   public verifyPassword = async (email: string, mobile: string, code: string, password: string,
@@ -144,44 +133,44 @@ export class AuthService {
       }
     };
 
-    const session = await this._usersApi.post(model, 'signIn')
+    const session = await this.dataService.create(model, `${this.userApi}/signIn`)
     return this.context.setSession(session)
   }
 
   public authSuccess = async (token: string, provider: string, applicaton?: string, device?: string) => {
     const subject = new Subject<Role>();
-    const session = await this._usersApi.get(`auth/${provider}/success?app=${this.context.currentApplication()?.code}&code=${token}`)
+    const session = await this.dataService.get(`auth/${provider}/success?app=${this.context.currentApplication()?.code}&code=${token}`, this.userApi)
     return this.context.setSession(session)
   }
 
   public setPassword = async (password: string) => {
-    return this._usersApi.post({ password }, `resetPassword`);
+    return this.dataService.create({ password }, `${this.userApi}/resetPassword`);
   }
 
   public initPassword = async (model: any, otp: string, password: string) => {
     const subject = new Subject<any>();
-    const data = await this._usersApi.post({
+    const data = await this.dataService.create({
       id: model.id || model,
       profile: model.profile,
       otp,
       password
-    }, `setPassword`)
+    }, `${this.userApi}/setPassword`)
     return this.setUserAndRole(data)
   }
 
   public forgotPassword = async (model: any, otp: string, password: string) => {
-    const data = await this._usersApi.post({
+    const data = await this.dataService.create({
       id: model.id || model,
       profile: model.profile,
       otp,
       password
-    }, `setPassword`)
+    }, `${this.userApi}/setPassword`)
     return this.setUserAndRole(data)
   }
 
   public verifyOtp = async (id: string, otp: string) => {
     const subject = new Subject<any>();
-    const data = await this._usersApi.post({ id, otp }, 'confirm')
+    const data = await this.dataService.create({ id, otp }, `${this.userApi}/confirm`)
     return this.setUserAndRole(data)
   }
 
@@ -191,17 +180,26 @@ export class AuthService {
       return
     }
 
-    const data = await this._usersApi.get('my', { headers: { 'x-role-key': currentUser?.roles?.find(r => !r.organization)?.key } })
+    const data = await this.dataService.get('my', {
+      headers: { 'x-role-key': currentUser?.roles?.find(r => !r.organization)?.key },
+      src: this.userApi
+    })
     return this.setUserAndRole(data)
   }
 
   public setRoleKey = async (roleKey: string) => {
-    const data = await this._usersApi.get('my', { headers: { 'x-role-key': roleKey } })
+    const data = await this.dataService.get('my', {
+      headers: { 'x-role-key': roleKey },
+      src: this.userApi
+    })
     return this.setUserAndRole(data)
   }
 
   public setSessionToken = async (token: string) => {
-    const data = await this._sessionsApi.get('my', { headers: { 'x-access-token': token } });
+    const data = await this.dataService.get('my', {
+      headers: { 'x-access-token': token },
+      src: this.sessionsApi
+    });
     return this.context.setSession(data)
   }
 
@@ -219,7 +217,7 @@ export class AuthService {
     //     email: organization.email
     //   });
     // }
-    const role = await this._rolesApi.create(newRole)
+    const role = await this.dataService.create(newRole, this.rolesApi)
     const user = this.context.currentUser();
     user?.roles?.push(role);
     return this.context.role(role);
@@ -228,13 +226,13 @@ export class AuthService {
   public createSession = async () => {
     const session = new Session();
     session.app = this.context.application()?.code;
-    const data = await this._sessionsApi.create(session);
+    const data = await this.dataService.create(session, this.sessionsApi);
     return this.context.setSession(new Session(data));
   }
 
   public getSession = async (id?: string) => {
     if (id) {
-      const data = await this._sessionsApi.get(id)
+      const data = await this.dataService.get(id, this.sessionsApi)
       return this.context.setSession(new Session(data));
     }
 
@@ -260,15 +258,14 @@ export class AuthService {
       token,
       status: 'active'
     };
-    return await this._sessionsApi.update(id, model)
+    return await this.dataService.update(id, model, this.sessionsApi)
   }
 
   public logout = async () => {
     const session = this.context.currentSession();
     if (!session || !session.id) { return; }
     try {
-      const data = await this._usersApi.post({}, `signOut/${session.id}`)
-
+      const data = await this.dataService.create({}, `${this.userApi}/signOut/${session.id}`)
     } finally {
       this.context.clear();
     }

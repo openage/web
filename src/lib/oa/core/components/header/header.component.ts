@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, HostListener, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, HostListener, inject, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { Role } from '../../models/role.model';
 import { ContextService } from '../../services/context.service';
 import { ErrorModel, Logger } from '../../models';
@@ -10,13 +10,13 @@ import { LayoutComponent } from '../layout/layout.component';
 
 
 @Component({
-    selector: 'page-header',
-    imports: [
+  selector: 'page-header',
+  imports: [
     RouterModule,
     LayoutComponent
-],
-    templateUrl: './header.component.html',
-    styleUrls: ['./header.component.scss']
+  ],
+  templateUrl: './header.component.html',
+  styleUrls: ['./header.component.scss']
 })
 export class HeaderComponent implements OnInit, AfterViewInit {
 
@@ -32,20 +32,19 @@ export class HeaderComponent implements OnInit, AfterViewInit {
   currentRole?: Role;
   device?: string;
 
-  constructor(
-    public context: ContextService,
-    public constant: ConstantService
-  ) {
+  context = inject(ContextService);
+  constant = inject(ConstantService);
 
+  constructor() {
 
-    context.errors.changes.subscribe((errors) => {
+    this.context.errors.changes.subscribe((errors) => {
       // this.snackBar.open(errors, null, { duration: 5000, verticalPosition: 'top', panelClass: 'error' });
       this.errors = errors;
       // this.cleanErrors();
     });
 
-    context.roleChanges.subscribe((r) => this.currentRole = r);
-    context.device.changes.subscribe((d) => this.device = d);
+    this.context.roleChanges.subscribe((r) => this.currentRole = r);
+    this.context.device.changes.subscribe((d) => this.device = d);
 
   }
 

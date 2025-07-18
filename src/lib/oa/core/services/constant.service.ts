@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Action } from '../models/action.model';
 import { ContextService } from './context.service';
 
@@ -20,15 +20,15 @@ export class ConstantService {
     ogg: "video/ogg"
   }
 
-  constructor(
-    private http: HttpClient,
-    private context: ContextService
-  ) {
+  private http = inject(HttpClient);
+  private context = inject(ContextService);
+
+  constructor() {
 
     this.http.get('assets/data/messages.json', { responseType: 'text' })
       .subscribe((data) => {
         this._messages = {};
-        JSON.parse(data).items.forEach((item: { code: string; ref: string | number; }) => {
+        JSON.parse(data).forEach((item: { code: string; ref: string | number; }) => {
           this._messages[item.code.toLowerCase()] = item.ref ? this._messages[item.ref] : item;
         });
       });
@@ -36,7 +36,7 @@ export class ConstantService {
     this.http.get('assets/data/errors.json', { responseType: 'text' })
       .subscribe((data) => {
         this._errors = {};
-        JSON.parse(data).items.forEach((item: { code: string; ref: string | number; }) => {
+        JSON.parse(data).forEach((item: { code: string; ref: string | number; }) => {
           this._errors[item.code.toLowerCase()] = item.ref ? this._errors[item.ref] : item;
         });
       });
@@ -44,7 +44,7 @@ export class ConstantService {
     this.http.get('assets/data/actions.json', { responseType: 'text' })
       .subscribe((data) => {
         this._actions = {};
-        JSON.parse(data).items.forEach((item: { code: string; ref: string | number; }) => {
+        JSON.parse(data).forEach((item: { code: string; ref: string | number; }) => {
           this._actions[item.code.toLowerCase()] = item.ref ? this._actions[item.ref] : item;
         });
       });
@@ -52,7 +52,7 @@ export class ConstantService {
     this.http.get('assets/data/icons.json', { responseType: 'text' })
       .subscribe((data) => {
         this._icons = {};
-        JSON.parse(data).items.forEach((item: { code: string; ref: string | number; }) => {
+        JSON.parse(data).forEach((item: { code: string; ref: string | number; }) => {
           this._icons[item.code.toLowerCase()] = item.ref ? this._icons[item.ref] : item;
         });
       });
@@ -60,7 +60,7 @@ export class ConstantService {
     this.http.get('assets/data/lists.json', { responseType: 'text' })
       .subscribe((data) => {
         this._lists = {};
-        JSON.parse(data).items.forEach((item: { code: string; ref: string | number; }) => {
+        JSON.parse(data).forEach((item: { code: string; ref: string | number; }) => {
           this._lists[item.code.toLowerCase()] = item.ref ? this._lists[item.ref] : item;
         });
       });

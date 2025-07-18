@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, inject, Input, OnInit } from '@angular/core';
 import { ContextService } from '../../services/context.service';
 import { Role } from '../../models/role.model';
 import { AuthService } from '../../services';
@@ -12,10 +12,10 @@ import { IconComponent } from '../../../ux/icon/icon.component';
 import { DialogDirective } from '../../../directives/dialog.directive';
 
 @Component({
-    selector: 'page-role',
-    imports: [AvatarComponent, FormatPipe, BrandingComponent, IconComponent, DialogDirective],
-    templateUrl: './current-role.component.html',
-    styleUrls: ['./current-role.component.scss']
+  selector: 'page-role',
+  imports: [AvatarComponent, FormatPipe, BrandingComponent, IconComponent, DialogDirective],
+  templateUrl: './current-role.component.html',
+  styleUrls: ['./current-role.component.scss']
 })
 export class CurrentRoleComponent implements OnInit {
   isImpersonateSession: boolean = false
@@ -27,12 +27,12 @@ export class CurrentRoleComponent implements OnInit {
   options?: CurrentRoleOptions | any;
 
 
-  constructor(
-    public navService: NavService,
-    public context: ContextService,
-    public auth: AuthService
-  ) {
-    context.roleChanges.subscribe((r) => this.currentRole = r);
+  navService = inject(NavService);
+  context = inject(ContextService);
+  auth = inject(AuthService);
+
+  constructor() {
+    this.context.roleChanges.subscribe((r) => this.currentRole = r);
     this.context.impersonateChanges.subscribe(result => {
       this.isImpersonateSession = result
     })

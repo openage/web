@@ -1,6 +1,6 @@
 /* eslint-disable @angular-eslint/use-lifecycle-interface */
 import { HttpClient } from '@angular/common/http';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, inject, Input, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { forkJoin } from 'rxjs';
 import { first } from 'rxjs/operators';
@@ -13,14 +13,15 @@ import { IconComponent } from '../../../ux/icon/icon.component';
 import { TogglerComponent } from '../../../ux/toggler/toggler.component';
 import { DataService } from '../../services/data.service';
 import { ProcessingIndicatorComponent } from "../../../ux/processing-indicator/processing-indicator.component";
+import { DocumentService } from '../../services/document.service';
 @Component({
-    selector: 'oa-core-tasks-progress-footer',
-    imports: [
-        IconComponent, TogglerComponent,
-        ProcessingIndicatorComponent
-    ],
-    templateUrl: './tasks-progress-footer.component.html',
-    styleUrls: ['./tasks-progress-footer.component.css']
+  selector: 'oa-core-tasks-progress-footer',
+  imports: [
+    IconComponent, TogglerComponent,
+    ProcessingIndicatorComponent
+  ],
+  templateUrl: './tasks-progress-footer.component.html',
+  styleUrls: ['./tasks-progress-footer.component.css']
 })
 export class TasksProgressFooterComponent implements OnInit {
 
@@ -36,14 +37,15 @@ export class TasksProgressFooterComponent implements OnInit {
   inProgressCount: number = 0
   erroredCount: number = 0
 
-  constructor(
-    public context: ContextService,
-    public uxService: UxService,
-    public http: HttpClient,
-    public auth: AuthService,
-    private navService: NavService,
-    private dataService: DataService
-  ) {
+  dataService = inject(DataService);
+  documentService = inject(DocumentService);
+  context = inject(ContextService);
+  uxService = inject(UxService);
+  http = inject(HttpClient);
+  auth = inject(AuthService);
+  navService = inject(NavService);
+
+  constructor() {
     this.items = this.items || []
 
     this.data = this.context.tasks.changes.subscribe((tasks: any) => {
@@ -150,8 +152,12 @@ export class TasksProgressFooterComponent implements OnInit {
       item.value = data.value
       item.status = data.status;
 
-      if (item.type === 'download' || item.type === 'upload' && item.status === 'ready') {
-        downloads.push(response.data) || uploads.push(response.data)
+      if (item.type === 'download' && item.status === 'ready') {
+        downloads.push(response.data)
+      }
+
+      if (item.type === 'upload' && item.status === 'ready') {
+        uploads.push(response.data)
       }
     }
 
@@ -210,7 +216,7 @@ export class TasksProgressFooterComponent implements OnInit {
   upload(items: Progress[], i: number) {
     const item = items[i];
     if (item?.url) {
-      this.dataService.upload(item?.type, item?.type?.code)
+      this.documentService.upload(item?.type, item?.type?.code)
     }
 
 

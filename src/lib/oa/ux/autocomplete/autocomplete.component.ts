@@ -3,6 +3,7 @@ import {
   Component,
   ElementRef,
   EventEmitter,
+  inject,
   Input,
   OnChanges,
   OnInit,
@@ -149,12 +150,12 @@ export class AutocompleteComponent implements OnInit, OnChanges {
   ddlWidth = '0px';
   debounceTimer: any;
 
-  constructor(
-    public uxService: UxService,
-    private context: ContextService,
-    private cache: StorageService,
-    private content: ContentService
-  ) {
+  uxService = inject(UxService);
+  context = inject(ContextService);
+  cache = inject(StorageService);
+  content = inject(ContentService);
+
+  constructor() {
     // this.pager = this;
     this.changed = this.valueChange;
   }

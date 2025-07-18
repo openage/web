@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
 import * as moment from 'moment';
 import { Observable, Subject } from 'rxjs';
 import { FieldEditorModel } from '../../core/models/field-editor.model';
@@ -142,12 +142,9 @@ export class FieldEditorComponent implements OnInit {
 
   options: any = {};
 
-  constructor(
-    public auth: ContextService,
-    // private validator: ValidationService,
-    // private errorService: ErrorService,
-    // private dateService: DateService
-  ) {
+  public auth = inject(ContextService);
+
+  constructor() {
   }
 
   ngOnInit(): void {

@@ -1,4 +1,4 @@
-import { Component, ComponentRef, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild, ViewContainerRef } from '@angular/core';
+import { Component, ComponentRef, EventEmitter, inject, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild, ViewContainerRef } from '@angular/core';
 import { Action } from '../../core/models/action.model';
 import { ConstantService } from '../../core/services/constant.service';
 import { NavService } from '../../core/services/nav.service';
@@ -63,12 +63,12 @@ export class ActionComponent implements OnInit, OnChanges {
   @ViewChild('popupContainer', { read: ViewContainerRef }) popupContainer!: ViewContainerRef;
   popupRef!: ComponentRef<AddFormPopUpComponent>;
 
-  constructor(
-    private constantService: ConstantService,
-    private navService: NavService,
-    // private shareService: ShareService,
-    private context: ContextService
-  ) { }
+  constantService = inject(ConstantService);
+  navService = inject(NavService);
+  // shareService = inject(ShareService);
+  context = inject(ContextService);
+
+  constructor() { }
 
   ngOnChanges(changes: SimpleChanges): void {
 

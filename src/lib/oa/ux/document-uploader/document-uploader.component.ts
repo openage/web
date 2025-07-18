@@ -1,10 +1,11 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, inject, Input, OnInit } from '@angular/core';
 import { DataService } from '../../core/services/data.service';
 import { UxService } from '../../core/services/ux.service';
 import { FormsModule } from '@angular/forms';
 import { FileProviderComponent } from "../../components/file-provider/file-provider.component";
 import { ProcessingIndicatorComponent } from "../processing-indicator/processing-indicator.component";
 import { PageBaseComponent } from '../../core/components/page-base.component';
+import { DocumentService } from '../../core/services/document.service';
 
 @Component({
   selector: 'oa-document-uploader',
@@ -22,8 +23,6 @@ export class DocumentUploaderComponent extends PageBaseComponent implements OnIn
   @Input()
   mappers: { name: string; value: string; }[] | undefined;
 
-
-
   @Input()
   options: any;
 
@@ -39,10 +38,10 @@ export class DocumentUploaderComponent extends PageBaseComponent implements OnIn
   successMessage: string = '';
   showSuccessDialog: boolean = false;
 
-  constructor(
-    private dataService: DataService,
-    private uxService: UxService
-  ) { super() }
+  documentService = inject(DocumentService);
+  uxService = inject(UxService);
+
+  constructor() { super() }
 
   //  ngOnInit() {
   //   this.samples = this.samples || this.options.templates || [];
@@ -74,7 +73,7 @@ export class DocumentUploaderComponent extends PageBaseComponent implements OnIn
     const dynamicOptions = {
       query: dynamicQuery
     };
-    this.dataService.uploadFile(this.file, dynamicOptions).then((res: any) => {
+    this.documentService.upload(this.file, dynamicOptions).then((res: any) => {
       this.isDisabled = false;
       this.uxService.showMessage("Done");
       this.successMessage = "File upload successful!";

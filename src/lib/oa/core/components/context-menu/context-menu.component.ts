@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, inject, Input, OnInit } from '@angular/core';
 import { ContextService } from '../../services/context.service';
 import { Action } from '../../models/action.model';
 import { NavService } from '../../services/nav.service';
@@ -7,10 +7,10 @@ import { ActionComponent } from '../../../ux/action/action.component';
 import { LayoutComponent } from "../layout/layout.component";
 
 @Component({
-    selector: 'oa-context-menu',
-    imports: [ActionComponent],
-    templateUrl: './context-menu.component.html',
-    styleUrls: ['./context-menu.component.css']
+  selector: 'oa-context-menu',
+  imports: [ActionComponent],
+  templateUrl: './context-menu.component.html',
+  styleUrls: ['./context-menu.component.css']
 })
 export class ContextMenuComponent implements OnInit {
 
@@ -20,11 +20,11 @@ export class ContextMenuComponent implements OnInit {
   @Input()
   view: 'bar' | 'inline' | 'raised' | 'stroked' | 'flat' | 'icon' | 'fab' | 'mini-fab' = 'flat';
 
-  constructor(
-    private context: ContextService,
-    private navService: NavService,
-    private constantService: ConstantService
-  ) {
+  context = inject(ContextService);
+  navService = inject(NavService);
+  constantService = inject(ConstantService);
+
+  constructor() {
     this.context.actions.changes.subscribe((items: any) => {
       this.items = items;
       this.init()

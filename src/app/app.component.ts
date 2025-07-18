@@ -1,4 +1,4 @@
-import { Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, HostListener, inject, OnInit, ViewChild } from '@angular/core';
 
 import { ActivatedRoute, Router, RouterOutlet } from '@angular/router';
 import { environment } from '../environments/environment';
@@ -48,26 +48,27 @@ export class AppComponent implements OnInit {
   layoutType?: string = 'sticky-header';
 
   logger = new Logger(AppComponent);
-  constructor(
-    public context: ContextService,
-    private uxService: UxService,
-    private navService: NavService,
-    private router: Router,
-    private route: ActivatedRoute
-  ) {
-    const log = this.logger.get('constructor');
-    context.init();
-    navService.init();
 
-    const application = context.currentApplication();
+  context = inject(ContextService);
+  uxService = inject(UxService);
+  navService = inject(NavService);
+  router = inject(Router);
+  route = inject(ActivatedRoute);
+
+  constructor() {
+    const log = this.logger.get('constructor');
+    this.context.init();
+    this.navService.init();
+
+    const application = this.context.currentApplication();
 
     if (application && application.env && application.env !== 'prod') {
       this.envName = application.env;
     }
 
-    context.theme.changes.subscribe(t => { this.theme = t; this.setTheme(); });
-    context.isProcessing.changes.subscribe(t => setTimeout(() => this.isProcessing = !!t));
-    context.underMaintenance.changes.subscribe(t => this.underMaintenance = t);
+    this.context.theme.changes.subscribe(t => { this.theme = t; this.setTheme(); });
+    this.context.isProcessing.changes.subscribe(t => setTimeout(() => this.isProcessing = !!t));
+    this.context.underMaintenance.changes.subscribe(t => this.underMaintenance = t);
   }
 
   ngOnInit(): void {

@@ -1,15 +1,14 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, inject, Input, OnInit } from '@angular/core';
 import { DataService } from '../../core/services/data.service';
 import { UxService } from '../../core/services/ux.service';
 import { StorageService, StringService } from '../../core/services';
 import { ContextService } from '../../core/services/context.service';
 
 @Component({
-    selector: 'oa-input-with-http',
-    templateUrl: './input-with-http.component.html',
-    styleUrls: ['./input-with-http.component.css'],
-    standalone: false
+  selector: 'oa-input-with-http',
+  templateUrl: './input-with-http.component.html',
+  styleUrls: ['./input-with-http.component.css']
 })
 export class InputWithHttpComponent implements OnInit {
   @Input()
@@ -55,13 +54,10 @@ export class InputWithHttpComponent implements OnInit {
   options: any = {}; // target.code, target.key
 
 
-  constructor(
-    public uxService: UxService,
-    public auth: ContextService,
-    private cache: StorageService,
-    private stringService: StringService) {
-
-  }
+  public uxService = inject(UxService);
+  private cache = inject(StorageService);
+  private stringService = inject(StringService);
+  public auth = inject(ContextService);
 
   ngOnInit(): void {
 

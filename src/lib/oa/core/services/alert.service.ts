@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { AlertOptions } from "../models/alert.options";
 import { ContextService } from './context.service';
 import { ErrorModel } from '../models';
@@ -9,8 +9,9 @@ import { Subject } from 'rxjs';
 })
 export class AlertService {
 
-  constructor(private context: ContextService) {
+  private context = inject(ContextService);
 
+  constructor() {
     this.context.errors.changes.subscribe(errors => {
       this.show(errors, new AlertOptions({ title: 'Errors', view: 'dialog', duration: 3000 }))
     });

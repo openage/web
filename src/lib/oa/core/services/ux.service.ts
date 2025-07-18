@@ -1,4 +1,4 @@
-import { EventEmitter, Inject, Injectable, TemplateRef, DOCUMENT } from '@angular/core';
+import { EventEmitter, Inject, Injectable, TemplateRef, DOCUMENT, inject } from '@angular/core';
 import { Subject } from 'rxjs';
 import { NavService } from './nav.service';
 import { ErrorService } from './error.service';
@@ -22,12 +22,8 @@ export class UxService {
   onSearch: EventEmitter<object> = new EventEmitter<object>();
   onTabSelect: EventEmitter<object> = new EventEmitter<object>();
 
-  constructor(
-    @Inject(DOCUMENT)
-    private document: Document,
-    private context: ContextService
-  ) {
-  }
+  private document: Document = inject(DOCUMENT);
+  private context = inject(ContextService);
 
   public init = async () => {
     const log = this.logger.get('init');

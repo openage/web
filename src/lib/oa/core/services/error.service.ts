@@ -35,7 +35,7 @@ export class ErrorService implements ErrorHandler {
     this.http.get('assets/data/errors.json', { responseType: 'text' })
       .subscribe((data) => {
         this._data = {};
-        JSON.parse(data).items.forEach((item: any) => {
+        JSON.parse(data).forEach((item: any) => {
           this._data[item.code] = item.ref ? this._data[item.ref] : item;
         });
       });

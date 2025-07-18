@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, inject, Input, OnChanges, OnInit, Output } from '@angular/core';
 import { Subject } from 'rxjs';
 import { SearchOptions } from '../../core/models/search.options';
 import { ContextService } from '../../core/services/context.service';
@@ -9,10 +9,10 @@ import { DataService } from '../../core/services/data.service';
 
 
 @Component({
-    selector: 'oa-tabs-search',
-    templateUrl: './tabs-search.component.html',
-    styleUrls: ['./tabs-search.component.css'],
-    standalone: false
+  selector: 'oa-tabs-search',
+  templateUrl: './tabs-search.component.html',
+  styleUrls: ['./tabs-search.component.css'],
+  standalone: false
 })
 export class TabsSearchComponent implements OnInit, OnChanges {
 
@@ -27,11 +27,11 @@ export class TabsSearchComponent implements OnInit, OnChanges {
 
   count: any;
 
-  constructor(
-    private http: HttpClient,
-    public auth: ContextService,
-    private uxService: UxService
-  ) { }
+  http = inject(HttpClient);
+  auth = inject(ContextService);
+  uxService = inject(UxService);
+
+  constructor() { }
 
   ngOnInit(): void {
     this.filterTabs();

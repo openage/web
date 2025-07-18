@@ -1,14 +1,14 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, inject, Input, OnInit } from '@angular/core';
 import { ContextService } from '../../services/context.service';
 import { NavService } from '../../services/nav.service';
 import { Link } from '../../models';
 import { RouterModule } from '@angular/router';
 
 @Component({
-    selector: 'page-breadcrumb',
-    imports: [RouterModule],
-    templateUrl: './breadcrumb.component.html',
-    styleUrls: ['./breadcrumb.component.scss']
+  selector: 'page-breadcrumb',
+  imports: [RouterModule],
+  templateUrl: './breadcrumb.component.html',
+  styleUrls: ['./breadcrumb.component.scss']
 })
 export class BreadcrumbComponent implements OnInit {
 
@@ -17,10 +17,10 @@ export class BreadcrumbComponent implements OnInit {
   @Input()
   options?: any;
 
-  constructor(
-    public context: ContextService,
-    public navService: NavService
-  ) {
+  context = inject(ContextService);
+  navService = inject(NavService);
+
+  constructor() {
     this.context.page.changes.subscribe((page) => {
 
       this.breadcrumb = [];
