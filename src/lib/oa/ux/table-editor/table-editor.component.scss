@@ -38,7 +38,7 @@
   /* margin-left: 20px; */
 }
 
-::ng-deep .card-container {
+::ng-deep .card {
   >*:hover::before {
     background: var(--surface) !important;
     right: 0;

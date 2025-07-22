@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { Action } from '../models/action.model';
 import { ContextService } from './context.service';
+import { firstValueFrom } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -13,6 +14,7 @@ export class ConstantService {
   private _actions: any = {};
   private _icons: any = {};
   private _lists: any = {};
+  private _templates: any = {};
 
   private _mimes: any = {
     mp4: "video/mp4",
@@ -77,6 +79,19 @@ export class ConstantService {
     get: (code: string) => {
       if (!code) return;
       return this._messages[code.toLowerCase()];
+    }
+  }
+
+  templates = {
+    get: async (code: string) => {
+      let content = this._templates[code.toLowerCase()];
+
+      if (!content) {
+        content = await firstValueFrom(this.http.get(`assets/templates/${code}.html`, { responseType: 'text' }));
+        this._templates[code.toLowerCase()] = content;
+      }
+
+      return content
     }
   }
 

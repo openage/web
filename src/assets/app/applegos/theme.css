@@ -88,11 +88,14 @@ oa-json-viewer>.tree>* {
   margin-left: 0;
 }
 
-.cards>*,
 .card {
   background-color: var(--surface);
   margin-top: 10px;
   border-radius: 5px;
+}
+
+.card>.body>.text {
+  height: 40px;
 }
 
 .tree {
@@ -589,10 +592,8 @@ a.cta:hover {
   text-align: center;
 }
 
-.card-container>* {
+.card {
   padding: 30px;
-  margin-bottom: 30px;
-  margin-left: 10px;
   position: relative;
   overflow: hidden;
   background: var(--background);
@@ -603,7 +604,7 @@ a.cta:hover {
   display: block;
 }
 
-.card-container>*:hover::before {
+.card:hover::before {
   /* background: var(--primary); */
   background: var(--primary-light);
   right: 0;
@@ -613,7 +614,7 @@ a.cta:hover {
   border-radius: 0px;
 }
 
-.card-container>*::before {
+.card::before {
   content: "";
   position: absolute;
   background: var(--background);

@@ -58,7 +58,6 @@ oa-json-viewer>.tree>* {
   margin-left: 0;
 }
 
-.cards>*,
 .card {
   margin-top: 10px;
   border-radius: 5px;
@@ -417,7 +416,7 @@ a.cta:hover {
   color: var(--primary);
 } */
 
-.card-container>* {
+.card {
   padding: 30px;
   margin-bottom: 30px;
   margin-left: 10px;
@@ -431,7 +430,7 @@ a.cta:hover {
   display: block;
 }
 
-.card-container>* :hover::before {
+.card:hover::before {
   background: #3498db;
   right: 0;
   top: 0;
@@ -440,7 +439,7 @@ a.cta:hover {
   border-radius: 0px;
 }
 
-.card-container>* ::before {
+.card::before {
   content: "";
   position: absolute;
   background: #e1f0fa;

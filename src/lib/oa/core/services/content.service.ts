@@ -1,4 +1,5 @@
 import { inject, Injectable } from '@angular/core';
+import Handlebars from 'handlebars';
 import { Pic } from '../models';
 import { Profile } from '../models/profile.model';
 import moment from 'moment';
@@ -13,15 +14,17 @@ export class ContentService {
   private context = inject(ContextService);
 
   /**
-   * Replaces placeholders in a string with corresponding values from a data object.
-   * Placeholders can be in the format ${key} or {{key}}.
+   * Renders a template string using [Handlebars](https://handlebarsjs.com/).
+   * Placeholders use Handlebars syntax: `{{key}}`, supporting nested keys and helpers.
    *
-   * @param str - The template string containing placeholders in the format ${key} or {{key}}.
-   * @param data - The object containing key-value pairs for replacement.
-   * @returns A string with placeholders replaced by corresponding values from the data object.
+   * @param str - The Handlebars template string.
+   * @param data - The object containing key-value pairs for rendering.
+   * @returns A string rendered using Handlebars.
+   *
+   * @see [Handlebars Documentation](https://handlebarsjs.com/guide/)
    *
    * @example
-   * const templateString = "Hello, ${user.name}! You have {{user.notifications}} new notifications.";
+   * const templateString = "Hello, {{user.name}}! You have {{user.notifications}} new notifications.";
    * const data = {
    *   user: {
    *     name: "Alice",
@@ -29,10 +32,10 @@ export class ContentService {
    *   }
    * };
    * const result = inject(templateString, data);
-   * Output: "Hello, Alice! You have 5 new notifications."
+   * // Output: "Hello, Alice! You have 5 new notifications."
    *
    * @example
-   * const nestedTemplate = "The quick ${animal.type.color} ${animal.type.species} jumps over the lazy {{animal.other.color}} {{animal.other.species}}.";
+   * const nestedTemplate = "The quick {{animal.type.color}} {{animal.type.species}} jumps over the lazy {{animal.other.color}} {{animal.other.species}}.";
    * const nestedData = {
    *   animal: {
    *     type: {
@@ -49,39 +52,9 @@ export class ContentService {
    * // Output: "The quick brown fox jumps over the lazy dog dog."
    */
   inject(str: string, data: object): string {
-    const template = str;
-
-    /**
-     * Recursively retrieves or sets a value in a nested object based on a path.
-     *
-     * @param obj - The object to traverse.
-     * @param is - The path to the value as a string or an array of strings.
-     * @param value - The value to set at the path (optional).
-     * @returns The value at the specified path, or sets the value if provided.
-     */
-    function getValue(obj: any, is: any, value?: any): any {
-      if (typeof is === 'string') {
-        is = is.split('.');
-      }
-      if (is.length === 1 && value !== undefined) {
-        return obj[is[0]] = value;
-      } else if (is.length === 0) {
-        return obj;
-      } else {
-        const prop = is.shift();
-        // Forge a path of nested objects if there is a value to set
-        if (value !== undefined && obj[prop] === undefined) {
-          obj[prop] = {};
-        }
-        return getValue(obj[prop], is, value);
-      }
-    }
-
-    // Replace both ${key} and {{key}} placeholders
-    return template.replace(/\$\{(.+?)\}|\{\{(.+?)\}\}/g, (match, p1, p2) => {
-      const key = p1 || p2; // Determine which placeholder syntax was used
-      return getValue(data, key);
-    });
+    // Compile the Handlebars template and render with data
+    const template = Handlebars.compile(str);
+    return template(data);
   }
 
   /**

@@ -1,10 +1,4 @@
 @if(content)
 {
-@if(content.length) {
-@for (c of content; track $index) {
-<div [class]="c.class" [style]="c.style" [innerHtml]="c.text"></div>
-}
-} @else {
-<div class="{{options?.view}}" [class]="content.class" [style]="content.style" [innerHtml]="content.text"></div>
-}
+<div class="{{options?.view}}" [class]="options.class" [style]="options.style" [innerHtml]="content"></div>
 }
