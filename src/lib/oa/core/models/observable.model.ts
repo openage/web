@@ -1,4 +1,4 @@
-import { Subject } from "rxjs";
+import { firstValueFrom, Subject } from "rxjs";
 
 export class ObservableStack<T> {
   private _items?: T[] = [];
@@ -93,6 +93,10 @@ export class ObservableObject<T> {
 
   public unsubscribe() {
     return this._subject.unsubscribe();
+  }
+
+  public async first(): Promise<T | undefined> {
+    return await firstValueFrom(this.changes);
   }
 
   clear() {

@@ -38,6 +38,9 @@ export class ExtractTransform implements TransformPlugin {
     switch (config.target) {
       case 'headings':
         return this.extractHeading(data, config.depth || 2)
+
+      case 'all':
+        return data;
     }
     return data;
   }

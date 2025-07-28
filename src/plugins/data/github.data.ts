@@ -48,9 +48,6 @@ export class GithubData implements DataSourcePlugin {
     const resource = config?.src?.resource || config?.resource || config?.src?.collection || config?.collection;
     id = id || resource?.id || config?.src?.id || config.id
     const type = resource?.type || resource;
-    // const resource = `${id}`;
-    // https://gist.githubusercontent.com/user/gistId/raw/
-    // const gistId = resource.includes('/') ? resource.split('/')[4] : resource;
     return `https://api.github.com/${resource}/${id}`;
   }
 

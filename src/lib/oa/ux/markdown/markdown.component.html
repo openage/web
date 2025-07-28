@@ -1,2 +1,10 @@
-<div [innerHTML]="compiledMarkdown"></div>
-<ng-template #container></ng-template>
+@for (component of components; track $index) {
+@switch (component.control) {
+@case ('html') {
+<div [innerHTML]="component.value"></div>
+}
+@case ('oa-form') {
+<oa-form [value]="component.value" [options]="component.options"></oa-form>
+}
+}
+}
