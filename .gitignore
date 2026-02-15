@@ -51,3 +51,6 @@ Thumbs.db
 .nx/cache/parsed-lock-file.json
 .nx/cache/project-graph.json
 .nx/cache/nx_files.nxt
+.nx/cache/d/daemon.log
+
+.fake
