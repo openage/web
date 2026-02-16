@@ -5,6 +5,7 @@ import { NgTemplateOutlet } from '@angular/common';
 import { Logger } from '../../lib/oa/core/models';
 
 @Component({
+  // eslint-disable-next-line @angular-eslint/component-selector
   selector: 'app-debug',
   templateUrl: './debug.component.html',
   styleUrl: './debug.component.scss',

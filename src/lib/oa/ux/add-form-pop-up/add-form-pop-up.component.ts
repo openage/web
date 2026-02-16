@@ -10,7 +10,7 @@ import { Link } from '../../core/models';
 import { FormsModule, NgForm } from '@angular/forms';
 
 @Component({
-  selector: 'app-add-form-pop-up',
+  selector: 'oa-add-form-pop-up',
   imports: [FormsModule],
   templateUrl: './add-form-pop-up.component.html',
   styleUrl: './add-form-pop-up.component.scss'

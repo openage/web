@@ -101,10 +101,10 @@ export class FilterComponent implements OnInit, OnChanges {
 
   // addContextFilter() {
   //   const data = {};
-  //   data['user'] = this.context.currentUser();
-  //   data['role'] = this.context.currentRole();
-  //   data['organization'] = this.context.currentOrganization();
-  //   data['tenant'] = this.context.currentTenant();
+  //   data['user'] = this.context.user();
+  //   data['role'] = this.context.role();
+  //   data['organization'] = this.context.organization();
+  //   data['tenant'] = this.context.tenant();
 
   //   this.mainFilters.forEach((filter) => {
   //     if ((filter.control === 'context') && filter.config && filter.config.value) {

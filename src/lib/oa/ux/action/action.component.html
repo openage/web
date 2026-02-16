@@ -3,7 +3,9 @@
 @if (items.length) {
 @switch (view) {
 @case ('icon') {
-<oa-icon [value]="icon" [title]="item.title" [oaMenu]="items" (oaMenuClose)="onSelect($event)"></oa-icon>
+<button type="button" [title]="item.title" [oaMenu]="items" (oaMenuClose)="onSelect($event)" class="icon-trigger">
+  <oa-icon [value]="icon"></oa-icon>
+</button>
 }
 @case ('toggle') {
 <oa-toggler [(value)]="value" [items]="items"></oa-toggler>

@@ -1,4 +1,4 @@
-import { EventEmitter, Inject, Injectable, TemplateRef, DOCUMENT, inject } from '@angular/core';
+import { EventEmitter, Inject, Injectable, TemplateRef, DOCUMENT, inject, effect } from '@angular/core';
 import { Subject } from 'rxjs';
 import { NavService } from './nav.service';
 import { ErrorService } from './error.service';
@@ -19,8 +19,8 @@ export class UxService {
   progressItem = this._progressItem.asObservable();
 
 
-  onSearch: EventEmitter<object> = new EventEmitter<object>();
-  onTabSelect: EventEmitter<object> = new EventEmitter<object>();
+  searchSelected: EventEmitter<object> = new EventEmitter<object>();
+  searchTab: EventEmitter<object> = new EventEmitter<object>();
 
   private document: Document = inject(DOCUMENT);
   private context = inject(ContextService);
@@ -28,45 +28,39 @@ export class UxService {
   public init = async () => {
     const log = this.logger.get('init');
 
-    this.context.tenantChanges.subscribe((t: any) => this._init());
-    this.context.applicationChanges.subscribe((t: any) => this._init());
-    this.context.organizationChanges.subscribe((t: any) => this._init());
-    this.context.roleChanges.subscribe((r: any) => this._init());
-    this.context.page.changes.subscribe((n) => this.context.actions.clear());
-  }
-  private _init = async () => {
-    const log = this.logger.get('init');
+    effect(() => {
 
-    const logo = this.context.organization()?.logo || this.context.tenant()?.logo || new Pic({
-      url: '/asset/images/logo.png'
-    })
-    this.context.logo.set(logo);
+      const logo = this.context.organization()?.logo || this.context.tenant()?.logo || new Pic({
+        url: '/asset/images/logo.png'
+      })
+      this.context.logo.set(logo);
 
-    const application = this.context.application();
-    const theme = application?.theme;
+      const application = this.context.application();
+      const theme = application?.theme;
 
-    if (theme?.style) {
-      this.addStyle('theme', theme.style);
-    }
-
-    if (theme?.icon) {
-      this.addStyle('icon', theme.icon);
-    }
-
-    let styleCount = 0
-
-    if (application?.styles) {
-      for (const style of application.styles) {
-        this.addStyle(`style-${styleCount++}`, style);
+      if (theme?.style) {
+        this.addStyle('theme', theme.style);
       }
-    }
 
-    this.context.theme.set(theme);
-    log.end();
+      if (theme?.icon) {
+        this.addStyle('icon', theme.icon);
+      }
+
+      let styleCount = 0
+
+      if (application?.styles) {
+        for (const style of application.styles) {
+          this.addStyle(`style-${styleCount++}`, style);
+        }
+      }
+
+      this.context.theme.set(theme);
+    })
   }
+
 
   handleItemProgress(item: any) {
-    const url = this.context.currentApplication().services.find((s: any) => s.code === item.api.code).url
+    const url = this.context.getService(item.api.code)?.url
     item.url = `${url}/${item.api.service}/${item.id}`
     item.code = item.id
     return this._progressItem.next(item);
@@ -105,12 +99,12 @@ export class UxService {
   }
 
   reset() {
-    this.context.title.clear()
-    this.context.breadcrumbs.clear();
-    this.context.entity.clear();
-    this.context.actions.clear();
-    this.context.search.clear();
-    this.context.errors.clear()
+    this.context.title.set(undefined)
+    this.context.breadcrumbs.set([])
+    this.context.entity.set(undefined)
+    this.context.actions.set([])
+    this.context.search.set([])
+    this.context.errors.set([])
   }
 
 

@@ -1,15 +1,16 @@
-import { Input, SimpleChanges } from '@angular/core';
+import { inject, Input, SimpleChanges } from '@angular/core';
 import { Component, OnChanges } from '@angular/core';
 import { ConstantService } from '../../core/services/constant.service';
 import { TooltipDirective } from '../../directives/tooltip.directive';
+import { MenuDirective } from '../../directives/menu.directive';
 
 @Component({
-    selector: 'oa-icon',
-    imports: [
-        TooltipDirective
-    ],
-    templateUrl: './icon.component.html',
-    styleUrls: ['./icon.component.scss']
+  selector: 'oa-icon',
+  imports: [
+    TooltipDirective
+  ],
+  templateUrl: './icon.component.html',
+  styleUrls: ['./icon.component.scss']
 })
 export class IconComponent implements OnChanges {
 
@@ -27,9 +28,9 @@ export class IconComponent implements OnChanges {
 
   icon: any;
 
-  constructor(
-    private constantService: ConstantService
-  ) { }
+  private constantService = inject(ConstantService)
+
+  constructor() { }
 
   ngOnChanges(changes: SimpleChanges) {
     this.init();

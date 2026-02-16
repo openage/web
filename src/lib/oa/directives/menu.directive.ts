@@ -1,11 +1,12 @@
-import { ApplicationRef, ComponentFactoryResolver, ComponentRef, Directive, ElementRef, EmbeddedViewRef, EventEmitter, HostListener, Injector, Input, Output, TemplateRef } from '@angular/core';
+import { ApplicationRef, ComponentFactoryResolver, ComponentRef, Directive, ElementRef, EmbeddedViewRef, EventEmitter, HostListener, inject, Injector, Input, Output, TemplateRef } from '@angular/core';
 import { Action } from '../core/models/action.model';
 import { PopupComponent } from '../ux/popup/popup.component';
 import { PopupPosition, PopupTrigger } from '../core/models/popup.enums';
 
 @Directive({
+  // eslint-disable-next-line @angular-eslint/directive-selector
   selector: '[oaMenu]',
-  standalone: true
+  standalone: true,
 })
 export class MenuDirective {
 
@@ -28,12 +29,12 @@ export class MenuDirective {
   oaMenuClose: EventEmitter<Action> = new EventEmitter();
 
   private componentRef: ComponentRef<any> | null = null;
+  private elementRef = inject(ElementRef)
+  private appRef = inject(ApplicationRef)
+  private componentFactoryResolver = inject(ComponentFactoryResolver)
+  private injector = inject(Injector)
 
-
-  constructor(private elementRef: ElementRef,
-    private appRef: ApplicationRef,
-    private componentFactoryResolver: ComponentFactoryResolver,
-    private injector: Injector) { }
+  constructor() { }
 
   @HostListener('click')
   onClick(): void {

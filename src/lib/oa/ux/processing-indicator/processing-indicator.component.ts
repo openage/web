@@ -4,7 +4,7 @@ import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChange
 import { IconComponent } from "../icon/icon.component";
 
 @Component({
-    selector: 'processing-indicator',
+    selector: 'oa-processing-indicator',
     templateUrl: './processing-indicator.component.html',
     styleUrls: ['./processing-indicator.component.scss'],
     imports: [IconComponent]

@@ -1,10 +1,9 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
 @Component({
-    selector: 'app-pager-mini',
-    templateUrl: './previous-next-buttons.component.html',
-    styleUrls: ['./previous-next-buttons.component.css'],
-    standalone: false
+  selector: 'oa-pager-mini',
+  templateUrl: './previous-next-buttons.component.html',
+  styleUrls: ['./previous-next-buttons.component.css']
 })
 export class PreviousNextButtonsComponent {
 

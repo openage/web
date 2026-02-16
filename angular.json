@@ -13,7 +13,7 @@
       "root": "",
       "sourceRoot": "src",
       "projectType": "application",
-      "prefix": "app",
+      "prefix": "oa",
       "schematics": {
         "@schematics/angular:component": {
           "style": "scss"
@@ -26,9 +26,7 @@
             "outputPath": "dist",
             "index": "src/index.html",
             "browser": "src/main.ts",
-            "polyfills": [
-              "zone.js"
-            ],
+            "polyfills": [],
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",
             "assets": [
@@ -135,23 +133,9 @@
           }
         },
         "test": {
-          "builder": "@angular/build:karma",
+          "builder": "@angular/build:unit-test",
           "options": {
-            "polyfills": [
-              "zone.js",
-              "zone.js/testing"
-            ],
-            "tsConfig": "tsconfig.spec.json",
-            "inlineStyleLanguage": "scss",
-            "assets": [
-              "src/favicon.ico",
-              "src/assets"
-            ],
-            "styles": [
-              "node_modules/font-awesome/css/font-awesome.css",
-              "src/styles.scss"
-            ],
-            "scripts": []
+            "tsConfig": "tsconfig.spec.json"
           }
         }
       }

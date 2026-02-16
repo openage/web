@@ -28,7 +28,7 @@ export class PaginationControlsComponent implements OnInit {
 
   ngOnInit(): void {
     if (typeof this.value === 'string') {
-      const value = this.context.data(this.value);
+      const value = this.context.data().get(this.value);
 
       if (value instanceof DomainPage) {
         value.subscribe((p) => {

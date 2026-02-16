@@ -44,7 +44,7 @@ export class JsonEditorComponent implements OnInit, OnChanges {
 
   ngOnChanges(): void {
     if (typeof this.value === 'string') {
-      const value = this.context.data(this.value);
+      const value = this.context.data().get(this.value);
 
       if (value) {
         if (value.subscribe) {

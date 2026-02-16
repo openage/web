@@ -1,4 +1,4 @@
-import { Component, ElementRef, HostListener, inject, OnInit, ViewChild } from '@angular/core';
+import { Component, effect, ElementRef, HostListener, inject, OnInit, ViewChild } from '@angular/core';
 
 import { ActivatedRoute, Router, RouterOutlet } from '@angular/router';
 import { environment } from '../environments/environment';
@@ -15,6 +15,7 @@ import { TasksProgressFooterComponent } from '../lib/oa/core/components/tasks-pr
 import { ContextMenuComponent } from "../lib/oa/core/components/context-menu/context-menu.component";
 
 @Component({
+  // eslint-disable-next-line @angular-eslint/component-selector
   selector: 'app-root',
   imports: [
     RouterOutlet,
@@ -40,7 +41,7 @@ export class AppComponent implements OnInit {
   theme?: Theme;
 
   isProcessing?: boolean = true;
-  underMaintenance?: string;
+  underMaintenance?: boolean;
   isInitialized = true;
   header?: any;
   footer?: any;
@@ -57,32 +58,37 @@ export class AppComponent implements OnInit {
 
   constructor() {
     const log = this.logger.get('constructor');
-    this.context.init();
     this.navService.init();
+    effect(() => {
 
-    const application = this.context.currentApplication();
+      const application = this.context.application();
 
-    if (application && application.env && application.env !== 'prod') {
-      this.envName = application.env;
-    }
+      if (application && application.env && application.env !== 'prod') {
+        this.envName = application.env;
+      }
 
-    this.context.theme.changes.subscribe(t => { this.theme = t; this.setTheme(); });
-    this.context.isProcessing.changes.subscribe(t => setTimeout(() => this.isProcessing = !!t));
-    this.context.underMaintenance.changes.subscribe(t => this.underMaintenance = t);
+      this.theme = this.context.theme();
+      this.setTheme();
+      this.isProcessing = this.context.isProcessing();
+      this.underMaintenance = this.context.underMaintenance();
+
+      console.log('runs with component lifecycle');
+    });
+
+
   }
 
   ngOnInit(): void {
     const log = this.logger.get('ngOnInit')
-    this.theme = this.context.theme.get();
+    this.theme = this.context.theme();
+    this.setTheme();
     this.header = this.context.getPageMeta('header');
     this.sidebar = this.context.getPageMeta('sidebar');
     this.footer = this.context.getPageMeta('footer');
     this.styles = this.context.getPageMeta('styles');
     this.layoutType = this.context.getAppMeta('layout') || 'sticky-header';
-
-    this.setTheme();
-    // this.isProcessing = this.context.isProcessing.get();
-    this.underMaintenance = this.context.underMaintenance.get();
+    this.isProcessing = this.context.isProcessing();
+    this.underMaintenance = this.context.underMaintenance();
 
     log.end()
   }

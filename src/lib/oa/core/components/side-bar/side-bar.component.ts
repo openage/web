@@ -1,5 +1,5 @@
 
-import { AfterViewInit, Component, inject, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, effect, inject, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { NavComponent } from '../../../ux/nav/nav.component';
 import { NotFoundComponent } from '../../../ux/not-found/not-found.component';
@@ -39,11 +39,10 @@ export class SideBarComponent implements OnInit, AfterViewInit {
   public constant = inject(ConstantService);
 
   constructor() {
-    this.context.errors.changes.subscribe((errors) => {
-      // this.snackBar.open(errors, null, { duration: 5000, verticalPosition: 'top', panelClass: 'error' });
-      this.errors = errors;
-      // this.cleanErrors();
-    });
+    effect(() => {
+      this.errors = this.context.errors()
+    })
+
   }
 
   ngOnInit() {

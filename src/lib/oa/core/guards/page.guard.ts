@@ -28,7 +28,7 @@ export const pageGuard: CanActivateFn = async (route: ActivatedRouteSnapshot, st
       return false;
     }
 
-    const role = await context.getRole();
+    const role = context.role();
 
     if (!role) {
       navService.goto('auth.login', {

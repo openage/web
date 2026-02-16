@@ -1,12 +1,11 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
 import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import { CurrencyExchangeDialogComponent } from '../../dialogs/currency-exchange-dialog/currency-exchange-dialog.component';
 
 @Component({
-    selector: 'oa-currency-ratio-editor',
-    templateUrl: './currency-ratio-editor.component.html',
-    styleUrls: ['./currency-ratio-editor.component.css'],
-    standalone: false
+  selector: 'oa-currency-ratio-editor',
+  templateUrl: './currency-ratio-editor.component.html',
+  styleUrls: ['./currency-ratio-editor.component.css']
 })
 export class CurrencyRatioEditorComponent implements OnInit {
 
@@ -24,12 +23,9 @@ export class CurrencyRatioEditorComponent implements OnInit {
 
   items: any[] = [];
 
-  constructor(
-    private dialog: MatDialog,
-  ) { }
+  private readonly dialog = inject(MatDialog);
 
   ngOnInit(): void {
-
     this.populate();
   }
 

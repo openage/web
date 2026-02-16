@@ -6,13 +6,14 @@ import { ContextService } from '../../core/services/context.service';
 import { UxService } from '../../core/services/ux.service';
 import { FieldModel } from '../../core/models/field.model';
 import { DataService } from '../../core/services/data.service';
+import { InputSelectorComponent } from "../input-selector/input-selector.component";
 
 
 @Component({
   selector: 'oa-tabs-search',
   templateUrl: './tabs-search.component.html',
   styleUrls: ['./tabs-search.component.css'],
-  standalone: false
+  imports: [InputSelectorComponent]
 })
 export class TabsSearchComponent implements OnInit, OnChanges {
 
@@ -137,7 +138,7 @@ export class TabsSearchComponent implements OnInit, OnChanges {
 
     if (param.config.stats.options) {
       if (param.config.stats.options.assignee === 'my') {
-        param.config.stats.options.assignee = this.auth.currentUser()?.email;
+        param.config.stats.options.assignee = this.auth.user()?.email;
       }
     }
     new DataService().init(param.config.data.src || {
@@ -160,6 +161,6 @@ export class TabsSearchComponent implements OnInit, OnChanges {
     this.param.value = event;
     const query: any = {};
     query[this.param.key] = event;
-    this.uxService.onTabSelect.emit(query);
+    this.uxService.searchTab.emit(query);
   }
 }

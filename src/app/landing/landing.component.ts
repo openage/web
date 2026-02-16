@@ -5,13 +5,14 @@ import { PageBaseComponent } from '../../lib/oa/core/components/page-base.compon
 import { Logger } from '../../lib/oa/core/models';
 
 @Component({
-    selector: 'app-landing',
-    templateUrl: './landing.component.html',
-    styleUrl: './landing.component.scss',
-    imports: [
-        RouterOutlet,
-        LayoutComponent
-    ]
+  // eslint-disable-next-line @angular-eslint/component-selector
+  selector: 'app-landing',
+  templateUrl: './landing.component.html',
+  styleUrl: './landing.component.scss',
+  imports: [
+    RouterOutlet,
+    LayoutComponent
+  ]
 })
 export class LandingComponent extends PageBaseComponent implements AfterViewInit {
 

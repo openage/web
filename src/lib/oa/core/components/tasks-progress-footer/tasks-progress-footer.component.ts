@@ -1,6 +1,6 @@
 /* eslint-disable @angular-eslint/use-lifecycle-interface */
 import { HttpClient } from '@angular/common/http';
-import { Component, inject, Input, OnInit } from '@angular/core';
+import { Component, effect, inject, Input, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { forkJoin } from 'rxjs';
 import { first } from 'rxjs/operators';
@@ -30,7 +30,6 @@ export class TasksProgressFooterComponent implements OnInit {
 
   isHidden: boolean = false
   isIntervalSet: boolean = false
-  data?: Subscription;
   timeOut: any;
 
   completeCount: number = 0
@@ -48,10 +47,11 @@ export class TasksProgressFooterComponent implements OnInit {
   constructor() {
     this.items = this.items || []
 
-    this.data = this.context.tasks.changes.subscribe((tasks: any) => {
-      this.items = tasks;
-      tasks.type = tasks.type || 'upload';
-      this.items.unshift(tasks);
+    effect(() => {
+      this.items = this.context.tasks();
+
+      // tasks.type = tasks.type || 'upload';
+      // this.items.unshift(tasks);
       this.setCount()
       if (!this.isIntervalSet) {
         this.get()
@@ -61,23 +61,18 @@ export class TasksProgressFooterComponent implements OnInit {
 
       //   }
       // }
-    });
+    })
+
+
     // handleItemProgress(item: any) {
-    //   const url = this.context.currentApplication()?.getService(item.api.code)?.url
+    //   const url = this.context.application()?.getService(item.api.code)?.url
     //   item.url = `${url}/${item.api.service}/${item.id}`
     //   item.code = item.id
 
     //   return this._progressItem.next(item);
     // }
 
-    // this.data = this.uxService.progressItem.subscribe((item: any) => {
-    //   // console.log("1..........", this.items.length)
-    //   item.type = item.type || 'upload';
 
-    //   this.items.unshift(item);
-    //   this.setCount()
-    //   if (!this.isIntervalSet) { this.get() }
-    // });
 
   }
 
@@ -85,7 +80,6 @@ export class TasksProgressFooterComponent implements OnInit {
 
   ngOnDestroy() {
     this.clear()
-    this.data?.unsubscribe();
   }
 
   get() {

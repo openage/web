@@ -1,14 +1,11 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { UxService } from 'src/app/core/services/ux.service';
-import { Entity, Slide } from 'src/lib/oa/core/models';
-import { Folder } from 'src/lib/oa/drive/models';
-import { Doc } from 'src/lib/oa/drive/models/doc.model';
+import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
+import { ContentService } from '../../core/services/content.service';
+import { Entity, Slide, Doc, Folder } from '../../core/models';
 
 @Component({
-    selector: 'oa-slides',
-    templateUrl: './slides.component.html',
-    styleUrls: ['./slides.component.css'],
-    standalone: false
+  selector: 'oa-slides',
+  templateUrl: './slides.component.html',
+  styleUrls: ['./slides.component.css']
 })
 export class SlidesComponent implements OnInit {
 
@@ -16,7 +13,7 @@ export class SlidesComponent implements OnInit {
   slides: Slide[] = [];
 
   @Input()
-  entity: Entity;
+  entity?: Entity;
 
   @Input()
   folder: Folder;
@@ -39,10 +36,7 @@ export class SlidesComponent implements OnInit {
   ];
 
   selected: Slide;
-  constructor(
-    private uxService: UxService
-  ) {
-  }
+  private contentService = inject(ContentService)
 
   ngOnInit() {
     this.slides = this.slides || [];
@@ -60,7 +54,7 @@ export class SlidesComponent implements OnInit {
     let newValue = $event;
 
     if (typeof newValue !== 'string') {
-      newValue = this.uxService.getTextFromEvent($event);
+      newValue = this.contentService.getTextFromEvent($event);
     }
 
     if (!newValue) {

@@ -4,10 +4,10 @@ import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angu
 // import { MatOptionModule } from '@angular/material/core';
 
 @Component({
-    selector: 'oa-input-selector',
-    imports: [CommonModule],
-    templateUrl: './input-selector.component.html',
-    styleUrls: ['./input-selector.component.css']
+  selector: 'oa-input-selector',
+  imports: [CommonModule],
+  templateUrl: './input-selector.component.html',
+  styleUrls: ['./input-selector.component.css']
 })
 export class InputSelectorComponent implements OnInit, OnChanges {
 
@@ -45,10 +45,10 @@ export class InputSelectorComponent implements OnInit, OnChanges {
   items: any[] = [];
 
   @Input()
-  type: 'priority' | 'custom' = 'custom';
+  type?: string = 'custom';
 
   @Input()
-  value: any = 'not-required';
+  value?: any = 'not-required';
 
   @Input()
   options: any = {};

@@ -1,4 +1,4 @@
-import { Component, inject, Input, OnInit } from '@angular/core';
+import { Component, effect, inject, Input, OnInit } from '@angular/core';
 import { ContextService } from '../../services/context.service';
 import { NavService } from '../../services/nav.service';
 import { Link } from '../../models';
@@ -21,8 +21,9 @@ export class BreadcrumbComponent implements OnInit {
   navService = inject(NavService);
 
   constructor() {
-    this.context.page.changes.subscribe((page) => {
 
+    effect(() => {
+      const page = this.context.page();
       this.breadcrumb = [];
 
       const addLink = (p: Link) => {
@@ -40,8 +41,11 @@ export class BreadcrumbComponent implements OnInit {
   }
 
   back() {
-    (this.breadcrumb.length > 1)
-    this.navService.setPage(this.breadcrumb[1]);
+    if (this.breadcrumb.length > 1) {
+      this.navService.setPage(this.breadcrumb[1]);
+    } else {
+      this.navService.goto('home')
+    }
   }
 
   ngOnInit(): void {

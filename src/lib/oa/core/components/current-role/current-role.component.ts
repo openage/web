@@ -1,4 +1,4 @@
-import { Component, inject, Input, OnInit } from '@angular/core';
+import { Component, effect, inject, Input, OnInit } from '@angular/core';
 import { ContextService } from '../../services/context.service';
 import { Role } from '../../models/role.model';
 import { AuthService } from '../../services';
@@ -32,9 +32,9 @@ export class CurrentRoleComponent implements OnInit {
   auth = inject(AuthService);
 
   constructor() {
-    this.context.roleChanges.subscribe((r) => this.currentRole = r);
-    this.context.impersonateChanges.subscribe(result => {
-      this.isImpersonateSession = result
+    effect(() => {
+      this.currentRole = this.context.role();
+      this.isImpersonateSession = this.context.hasPermission('impersonating')
     })
   }
 
@@ -43,8 +43,8 @@ export class CurrentRoleComponent implements OnInit {
     if (this.options! instanceof CurrentRoleOptions) {
       this.options = new CurrentRoleOptions(this.options);
     }
-    this.currentRole = this.context.currentRole();
-    this.currentTenant = this.context.currentTenant();
+    this.currentRole = this.context.role();
+    this.currentTenant = this.context.tenant();
     this.currentApplication = this.context.application();
   }
 
@@ -65,7 +65,7 @@ export class CurrentRoleComponent implements OnInit {
   }
 
   endImpersonation() {
-    this.context.endImpersonateSession()
+    this.context.endImpersonation()
     this.navService.goto('home.dashboard');
   }
 

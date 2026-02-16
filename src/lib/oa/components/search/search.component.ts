@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, ElementRef, EventEmitter, inject, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, effect, ElementRef, EventEmitter, inject, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Subject, Subscription } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
@@ -12,10 +12,9 @@ import { DataService } from '../../core/services/data.service';
 import { FieldModel } from '../../core/models/field.model';
 
 @Component({
-    selector: 'oa-search',
-    templateUrl: './search.component.html',
-    styleUrls: ['./search.component.scss'],
-    standalone: false
+  selector: 'oa-search',
+  templateUrl: './search.component.html',
+  styleUrls: ['./search.component.scss']
 })
 export class SearchComponent implements OnInit, OnChanges, OnDestroy {
 
@@ -74,7 +73,7 @@ export class SearchComponent implements OnInit, OnChanges, OnDestroy {
   ddlPosition = 'down';
 
   ddlWidth = '0px';
-  selectedTab: any;
+  searchTab: any;
 
   clear = new Action({
     code: 'clear',
@@ -118,9 +117,16 @@ export class SearchComponent implements OnInit, OnChanges, OnDestroy {
       }
     });
 
-    this.auth.showSearch.changes.subscribe((isShow) => {
-      this.isShowSearchBar = isShow;
+    effect(() => {
+      this.options = this.auth.search()
+      if (this.options && this.options.params && this.options.params.length > 0) {
+        this.visible.emit(true);
+      } else {
+        this.visible.emit(false);
+      }
+      this.init();
     })
+
   }
 
   ngOnDestroy() {
@@ -134,19 +140,7 @@ export class SearchComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   ngOnInit() {
-    this.auth.search.changes.subscribe((options) => {
-      this.options = options;
-      if (this.options && this.options.params && this.options.params.length > 0) {
-        this.visible.emit(true);
-      } else {
-        this.visible.emit(false);
-      }
-      this.init();
-    });
-
-
-
-    this.uxService.onTabSelect.subscribe((selected: any) => {
+    this.uxService.searchTab.subscribe((selected: any) => {
       const selectedParamKey = Object.keys(selected)[0];
       this.params.forEach(param => {
         if (param.key === selectedParamKey) {
@@ -217,29 +211,29 @@ export class SearchComponent implements OnInit, OnChanges, OnDestroy {
 
   onSelectedTab(tab: any) {
 
-    const initializing = !this.selectedTab && !tab.value;
+    const initializing = !this.searchTab && !tab.value;
 
     if (!initializing) {
       this.resetSearch();
     }
 
     this.renderFilters();
-    this.selectedTab = tab;
-    const param = this.params.find((p) => p.key === this.selectedTab.key);
+    this.searchTab = tab;
+    const param = this.params.find((p) => p.key === this.searchTab.key);
     if (param) {
       param.value = tab.value;
     }
 
     // if (this.params && this.params.length) {
-    //   let param = this.params.find((param) => param.key === this.selectedTab.key);
+    //   let param = this.params.find((param) => param.key === this.searchTab.key);
     //   if (param) {
     //     let index = this.params.indexOf(param);
-    //     this.params[index] = this.selectedTab
+    //     this.params[index] = this.searchTab
     //   } else {
-    //     this.params.push(this.selectedTab)
+    //     this.params.push(this.searchTab)
     //   }
     // } else {
-    //   this.params.push(this.selectedTab)
+    //   this.params.push(this.searchTab)
     // }
 
     if (!initializing && this.view === 'card') {
@@ -318,7 +312,7 @@ export class SearchComponent implements OnInit, OnChanges, OnDestroy {
     pageOptions.path = `${param.config.stats.code}/data`;
     if (param.config.stats.options) {
       if (param.config.stats.options.assignee === 'my') {
-        param.config.stats.options.assignee = this.auth.currentUser()?.email;
+        param.config.stats.options.assignee = this.auth.user()?.email;
       }
     }
     api.search(param.config.stats.options, pageOptions).then((page) => {
@@ -569,7 +563,7 @@ export class SearchComponent implements OnInit, OnChanges, OnDestroy {
 
     });
     this.changed.emit(obj);
-    this.uxService.onSearch.emit(obj);
+    this.uxService.searchSelected.emit(obj);
     this.finishEditing();
   }
 
@@ -692,7 +686,7 @@ export class SearchComponent implements OnInit, OnChanges, OnDestroy {
 
     this.router.navigate([], { queryParams: query });
     this.changed.emit(query);
-    this.uxService.onSearch.emit(query);
+    this.uxService.searchSelected.emit(query);
     this.finishEditing();
   }
 
@@ -707,7 +701,7 @@ export class SearchComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     this.changed.emit(query);
-    this.uxService.onSearch.emit(query);
+    this.uxService.searchSelected.emit(query);
   }
 
   onResetFilters() {
@@ -743,7 +737,7 @@ export class SearchComponent implements OnInit, OnChanges, OnDestroy {
 
   onSearchReports() {
     const hasValues = this.params.filter(param => param.value && param.value.label)
-    this.uxService.onSearch.emit(hasValues);
+    this.uxService.searchSelected.emit(hasValues);
   }
 
 }

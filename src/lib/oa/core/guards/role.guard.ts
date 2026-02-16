@@ -15,7 +15,7 @@ export const roleGuard: CanActivateFn = async (route, state) => {
     return false;
   }
 
-  const role = await context.getRole();
+  const role = await context.role();
 
   if (!role) {
     navService.goto('auth.login', {

@@ -1,4 +1,4 @@
-import { inject, Injectable } from '@angular/core';
+import { effect, inject, Injectable } from '@angular/core';
 import { Meta, MetaDefinition, Title } from '@angular/platform-browser';
 import { environment } from '../../../../environments/environment';
 import { ContextService } from './context.service';
@@ -14,18 +14,12 @@ export class MetaService {
   private context = inject(ContextService);
 
   constructor() {
-    this.context.title.changes.subscribe(t => {
-      this.titleService.setTitle(t || this._title);
-    })
-
-    const application = this.context.application();
-
-    this.context.page.changes.subscribe(page => {
+    effect(() => {
+      this.titleService.setTitle(this.context.title() || this._title);
+      const page = this.context.page()
       if (!page) return;
 
       page.discovery = page.discovery || {};
-
-
 
       for (const key in page.discovery) {
         if (Object.prototype.hasOwnProperty.call(page.discovery, key)) {
@@ -36,6 +30,7 @@ export class MetaService {
         }
       }
 
+      const application = this.context.application();
       const description = page.discovery?.description || application?.discovery?.description || ''
       const title = page.discovery?.title || page.title || application?.title || this._title
       const image = page.discovery?.image || application?.discovery?.image
@@ -59,7 +54,6 @@ export class MetaService {
         this.setMetaTag({ name: 'og:image', content: image });
       }
     })
-
   }
 
   // setTitle(title?: string): void {
@@ -75,9 +69,7 @@ export class MetaService {
   }
 
   setMetaTags(tags: Array<MetaDefinition | null>): void {
-    tags.forEach((tag) => {
-      tag && this.meta.updateTag(tag);
-    });
+    tags.forEach((tag) => { if (tag) this.meta.updateTag(tag); });
   }
 
   removeMetaTag(str: string): void { //"name='description'", 'og:url'

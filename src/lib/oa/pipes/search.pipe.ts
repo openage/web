@@ -1,16 +1,15 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
-    name: 'search',
-    standalone: false
+  name: 'search'
 })
 export class SearchPipe implements PipeTransform {
 
-  public transform(items, args?: any) {
+  public transform(items: any[], args?: any) {
 
     if (!items || !items.length) { return items; }
 
-    const conditions = [];
+    const conditions: any[] = [];
 
     for (const k in args) {
       const condition: any = {
@@ -35,7 +34,7 @@ export class SearchPipe implements PipeTransform {
       conditions.push(condition);
     }
 
-    const getValue = (item, key) => {
+    const getValue = (item: any, key: string) => {
       let value = item;
       for (const field of key.split('.')) {
         if (value[field] === undefined) {
@@ -46,7 +45,7 @@ export class SearchPipe implements PipeTransform {
       return value;
     };
 
-    return (items || []).filter((i) => {
+    return (items || []).filter((i: any) => {
       for (const condition of conditions) {
 
         const value = getValue(i, condition.key);

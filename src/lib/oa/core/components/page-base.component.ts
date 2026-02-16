@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectorRef, Component, OnChanges, OnDestroy, OnInit, SimpleChanges, TemplateRef, inject } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, OnChanges, OnDestroy, OnInit, SimpleChanges, TemplateRef, effect, inject } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Entity, Link, Logger } from '../models';
 import { StorageService } from '../services';
@@ -8,8 +8,7 @@ import { ConstantService } from '../services/constant.service';
 import { NavService } from '../services/nav.service';
 
 @Component({
-  template: '',
-  standalone: false
+  template: ''
 })
 export abstract class PageBaseComponent implements OnInit, OnDestroy {
 
@@ -31,7 +30,7 @@ export abstract class PageBaseComponent implements OnInit, OnDestroy {
 
   // entity?: Entity;
   showFilters?: boolean;
-  filters?: any[] = [];
+  filters: any[] = [];
   view: any;
 
   // data: any = {};
@@ -47,12 +46,9 @@ export abstract class PageBaseComponent implements OnInit, OnDestroy {
     this.path = this.navService.getPath(this._route.snapshot);
     this.page = this.navService.getByPath(this.path);
 
-    const current = this.context.page.get()
-    this.isCurrent = current?.code === this.page?.code;
-    this.isInitialized = false;
-
-    this.context.page.changes.subscribe(p => {
-      this.isCurrent = p?.code === this.page?.code;
+    effect(() => {
+      const page = this.context.page()
+      this.isCurrent = page?.code === this.page?.code;
       this.isInitialized = false;
       if (this.isCurrent) {
         this._logger.debug(`for page change`)
@@ -62,7 +58,6 @@ export abstract class PageBaseComponent implements OnInit, OnDestroy {
 
     if (this.isCurrent) {
       this._logger.debug(`for ng Init`)
-
       this._init()
     }
   }
@@ -172,8 +167,8 @@ export abstract class PageBaseComponent implements OnInit, OnDestroy {
   }
 
   private _setFitlers() {
-    this.filters = (this.page?.meta?.filters || this.page?.meta?.search || [])
-    this.context.search.set(this.filters);
+    this.filters = this.page?.meta?.filters || this.page?.meta?.search || []
+    this.context.search.set(this.filters || []);
   }
 
   private _setLayout() {

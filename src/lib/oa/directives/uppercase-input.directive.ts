@@ -1,15 +1,16 @@
-import { Directive, ElementRef, HostListener } from '@angular/core';
+import { Directive, ElementRef, HostListener, inject } from '@angular/core';
 
 @Directive({
-  selector: '[uppercase]',
+  // eslint-disable-next-line @angular-eslint/directive-selector
+  selector: '[oaUppercase]',
   host: {
     '(input)': '$event'
   }
 })
 export class UppercaseInputDirective {
   lastValue?: string;
-
-  constructor(public ref: ElementRef) { }
+  private ref = inject(ElementRef)
+  constructor() { }
 
   @HostListener('input', ['$event'])
   onInput($event: any) {

@@ -1,12 +1,13 @@
-import { Directive, ElementRef, HostListener } from '@angular/core';
+import { Directive, ElementRef, HostListener, inject } from '@angular/core';
 
 @Directive({
   // eslint-disable-next-line @angular-eslint/directive-selector
-  selector: '[numbersOnly]'
+  selector: '[oaNumbersOnly]'
 })
 export class OnlynumberDirective {
 
-  constructor(private _el: ElementRef) { }
+  private _el = inject(ElementRef)
+  constructor() { }
 
   @HostListener('input', ['$event']) onInputChange(event: { stopPropagation: () => void; }) {
     const initalValue = this._el.nativeElement.value;

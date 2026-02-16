@@ -542,7 +542,7 @@ export class LayoutComponent implements OnInit, OnChanges {
   /**
    * Handle tab selection.
    */
-  onTabSelect(item: { isSelected: boolean }, divs: any[]) {
+  searchTab(item: { isSelected: boolean }, divs: any[]) {
     divs.forEach((div) => {
       div.isSelected = false;
     });

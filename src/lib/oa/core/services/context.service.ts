@@ -1,4 +1,4 @@
-import { Inject, Injectable, DOCUMENT } from '@angular/core';
+import { inject, Injectable, DOCUMENT, signal, effect } from '@angular/core';
 import { Application, Entity, ErrorModel, Link, Logger, Organization, Pic, Tenant, Theme, User } from '../models';
 import { Role } from '../models/role.model';
 import { Session } from '../models/session.model';
@@ -8,7 +8,6 @@ import { Service } from '../models/service.model';
 import { IAuth } from './auth.interface';
 import { environment } from '../../../../environments/environment';
 import { Action } from '../models/action.model';
-import { ObservableObject, ObservableStack } from '../models/observable.model';
 import { SearchOptions } from '../models/search.options';
 
 import { Progress } from '../models/progress.model';
@@ -19,343 +18,119 @@ import { HttpHeaders } from '@angular/common/http';
 })
 export class ContextService implements IAuth {
 
-  private _organization?: Organization;
-  private _tenant?: Tenant;
-  private _application?: Application;
-  private _role?: Role;
-  private _user?: User;
-  private _session?: Session;
-  private _isImpersonateSession?: boolean;
-  private _lastSession?: Session;
+  private logger = new Logger(ContextService);
+  private document = inject(DOCUMENT);
+  private cache = inject(StorageService);
 
-  private _data: any = {}
+  readonly theme = signal<Theme | undefined>(this.cache.get('theme'))
+  readonly path = signal<string | undefined>(undefined);
+  readonly tasks = signal<Progress[]>([]);
+  readonly actions = signal<Action[]>([]);
+  readonly breadcrumbs = signal<Link[]>([]);
+  readonly navs = signal<Link[]>([]);
+  readonly search = signal<SearchOptions[]>([]);
+  readonly errors = signal<ErrorModel[]>([]);
+  readonly entity = signal<Entity | undefined>(undefined);
+  readonly page = signal<Link | undefined | undefined>(undefined);
+  readonly title = signal<string | undefined>(undefined);
+  readonly logo = signal<Pic | undefined>(undefined);
+
+  readonly device = signal<string>('desktop');
+
+  readonly tenant = signal<Tenant | undefined>(new Tenant(this.cache.get('tenant')));
+  readonly application = signal<Application | undefined>(new Application(this.cache.get('application')));
+  readonly organization = signal<Organization | undefined>(new Organization(this.cache.get('organization')));
+
+  readonly role = signal<Role | undefined>(new Role(this.cache.get('role')));
+  readonly user = signal<User | undefined>(new User(this.cache.get('user')));
+  readonly session = signal<Session | undefined>(new Session(this.cache.get('session')));
+
+  // readonly isImpersonateSession = signal<boolean>(false);
+  // readonly lastSession = signal<Session | undefined>(undefined);
 
   // public _page?: Link;
   // public _entity?: Entity;
   // public _actions?: Action[];
 
-  path = new ObservableObject<string>();
-  tasks = new ObservableStack<Progress>();
-  actions = new ObservableStack<Action>();
-  entity = new ObservableObject<Entity>();
-  page = new ObservableObject<Link | undefined>();
-  breadcrumbs = new ObservableStack<Link>();
-  navs = new ObservableStack<Link>();
-  title = new ObservableObject<string>();
 
-  logo = new ObservableObject<Pic>();
-  theme = new ObservableObject<Theme>();
-  device = new ObservableObject<string>();
 
-  search = new ObservableStack<SearchOptions>();
-  underMaintenance = new ObservableObject<string>();
-  isProcessing = new ObservableObject<boolean>();
-  showNav = new ObservableObject<boolean>();
-  showSidePanel = new ObservableObject<boolean>();
-  showSearch = new ObservableObject<boolean>();
 
-  errors = new ObservableStack<ErrorModel>();
 
-  private _organizationSubject = new Subject<Organization | undefined>();
-  private _tenantSubject = new Subject<Tenant | undefined>();
-  private _applicationSubject = new Subject<Application | undefined>();
-  private _roleSubject = new Subject<Role | undefined>();
-  private _userSubject = new Subject<User | undefined>();
-  private _sessionSubject = new Subject<Session | undefined>();
-  private _impersonateSubject = new BehaviorSubject<boolean>(false);
+  readonly underMaintenance = signal<boolean>(false);
+  readonly isProcessing = signal<boolean>(false);
+  readonly showNav = signal<boolean>(false);
+  readonly showSidePanel = signal<boolean>(false);
+  readonly showSearch = signal<boolean>(false);
 
-  organizationChanges = this._organizationSubject.asObservable();
-  applicationChanges = this._applicationSubject.asObservable();
-  tenantChanges = this._tenantSubject.asObservable();
-  roleChanges = this._roleSubject.asObservable();
-  userChanges = this._userSubject.asObservable();
-  impersonateChanges = this._impersonateSubject.asObservable();
+  readonly data = signal(new Map<string, any>([]));
 
-  private logger = new Logger(ContextService);
+  readonly culture = signal({
+    locale: 'en-IN'
+  })
 
-  constructor(
-    private cache: StorageService,
-    @Inject(DOCUMENT)
-    private document: Document,
-  ) {
-  }
 
-  public init() {
-    const log = this.logger.get('init');
-    // this should have been done during the booting of the application
-    const application = this.cache.get('application');
-
-    if (!application) {
+  constructor() {
+    if (!this.application()) {
       this.document.location.reload();
       return;
     }
 
-    this.device.set('desktop');
+    effect((): void => {
 
-    this.setApplication(new Application(application));
-
-    const tenant = this.cache.get('tenant');
-    this.setTenant(new Tenant(tenant));
-
-    const organization = this.cache.get('organization');
-    this.setOrganization(new Organization(organization));
-  }
-
-  private _setRole(role?: Role) {
-
-    if (!role || !role.id) {
-      this._role = undefined
-      this.cache.remove('role');
-    } else {
-      this._role = role;
-
-      role.email = role.email || this._user?.email;
-      role.phone = role.phone || this._user?.phone;
-      this.cache.update('role', role);
-      this._setOrganization(role.organization);
-    }
-    this._roleSubject.next(this._role);
-    return this._role;
-  }
-
-  private _setUser(user?: User) {
-    this._user = user;
-
-    if (user) {
-      user.meta = user.meta || {};
-    }
-    this.cache.update('user', this._user);
-    this._userSubject.next(this._user);
-    return user;
-  }
-
-  private _setTenant(tenant?: Tenant) {
-    this._tenant = tenant;
-    if (tenant) {
-      tenant.meta = tenant.meta || {};
-    }
-
-    this.cache.update('tenant', tenant);
-    this._tenantSubject.next(this._tenant);
-    return tenant;
-  }
-
-  private _setApplication(item?: Application) {
-    this._application = item;
-    if (item) {
-      item.meta = item.meta || {};
-    }
-
-    this.cache.update('application', item);
-    this.theme.set(item?.theme)
-    this.navs.set(item?.navs);
-    this._applicationSubject.next(this._application);
-    return item;
-  }
-
-  private _setSession(item?: Session) {
-    this._session = item
-    this.cache.update('session', item);
-    this._setUser(item?.user);
-    this._setRole(item?.role);
-    this._sessionSubject.next(this._session);
-    return item;
-  }
-
-  private _setOrganization(item?: Organization) {
-    if (!item?.code) {
-      item = undefined;
-    }
-    this._organization = item;
-
-    if (item) {
-      item.meta = item.meta || {};
-    }
-
-    this.cache.update('organization', item);
-    this._organizationSubject.next(this._organization);
-    return item;
-  }
-
-  culture() {
-    return {
-      locale: 'en-IN'
-    }
-  }
-
-  data(code: string, obj?: any): any {
-    if (obj) {
-      this._data[code.toLowerCase()] = obj;
-      return obj
-    } else {
-      return this._data[code.toLowerCase()];
-    }
-  }
-
-  application(item?: Application): Application | undefined {
-
-    if (item === undefined) {
-      return this.currentApplication();
-    }
-
-    return this.setApplication(item);
-  }
-
-  session(item?: Session): Session | undefined {
-
-    if (item === undefined) {
-      return this.currentSession();
-    }
-
-    return this.setSession(item);
-  }
-
-  role(item?: Role): Role | undefined {
-
-    if (item === undefined) {
-      return this.currentRole();
-    }
-
-    return this.setRole(item);
-  }
-
-  organization(item?: Organization): Organization | undefined {
-
-    if (item === undefined) {
-      return this.currentOrganization();
-    }
-
-    return this.setOrganization(item);
-  }
-
-  tenant(item?: Tenant): Tenant | undefined {
-
-    if (item === undefined) {
-      return this.currentTenant();
-    }
-
-    return this.setTenant(item);
-  }
-
-
-  currentRole(): Role | any {
-    if (!this._role) {
-      const role = this.cache.get('role');
-
-      if (role && role.id) {
-        this._role = new Role(role);
+      const session = this.session()
+      if (session?.id) {
+        this.cache.update('role', session);
+        this.user.set(session.user)
+        this.role.set(session.role)
+      } else {
+        this.cache.remove('role');
       }
-    }
-    return this._role;
-  }
 
-  currentUser(): User | undefined {
+      const user = this.user()
+      if (user?.id) {
+        this.cache.update('user', user);
+      } else {
+        this.cache.remove('role');
+      }
 
-    this._isImpersonateSession = this.cache.get('isImpersonateSession')
-    this._impersonateSubject.next(this._isImpersonateSession || false)
 
-    if (this._user) {
-      return this._user;
-    }
+      const role = this.role()
+      if (role?.id) {
+        this.cache.update('role', role);
+        this.organization.set(role.organization)
+      } else {
+        this.cache.remove('role');
+      }
 
-    let item = this.cache.get('user');
+      const organization = this.organization()
+      if (organization?.code) {
+        this.cache.update('organization', organization);
+      } else {
+        this.cache.remove('organization');
+      }
 
-    if (item) {
-      item = new User(item);
-    } else {
-      return;
-    }
+      const tenant = this.tenant()
+      if (tenant?.code) {
+        this.cache.update('tenant', tenant);
+      } else {
+        this.cache.remove('tenant');
+      }
 
-    return this._setUser(item);
-  }
-
-  currentSession(): Session | undefined {
-    if (this._session) {
-      return this._session;
-    }
-
-    let item = this.cache.get('session');
-
-    if (item) {
-      item = new Session(item)
-      // } else if (environment.code) {
-      //   item = new Session(environment.code);
-    } else {
-      return
-    }
-
-    return this._setSession(item);
-  }
-
-  currentApplication(): Application | any {
-    if (this._application) {
-      return this._application;
-    }
-
-    let item = this.cache.get('application');
-
-    // if (!item && environment.code) {
-    //   item = new Application(environment.code);
-    // }
-
-    if (item) {
-      item = new Application(item)
-    } else {
-      return
-    }
-
-    return this._setApplication(item);
-  }
-
-  currentTenant(): Tenant | any {
-    if (this._tenant) {
-      return this._tenant;
-    }
-
-    let item = this.cache.get('tenant');
-    if (item) {
-      item = new Tenant(item)
-    } else if (environment.tenant?.code) {
-      item = new Tenant(environment.tenant);
-    } else {
-      return
-    }
-
-    return this._setTenant(item);
-  }
-
-  currentOrganization(): Organization | undefined {
-    if (this._organization && this._organization.code) {
-      return this._organization;
-    }
-
-    let item = this.cache.get('organization');
-    if (item) {
-      item = new Organization(item)
-    } else if (environment.tenant?.code) {
-      // TODO
-      // const orgCode = route.snapshot.queryParams['organization-code'];
-      item = new Organization(environment.organization);
-    } else {
-      return
-    }
-    return this._setOrganization(item);
+      this.cache.update('device', this.device());
+    });
   }
 
   getService(code: string) {
-    return this._application?.services?.find((s) => s.code === code);
+    return this.application()?.services?.find((s) => s.code === code);
   }
 
   private _defaultRole(user: User): Role {
     return user?.roles?.find((item) => !item.organization);
   }
 
-  getRole() {
-    return this.currentRole()
-  }
 
   setRole(role?: Role) {
-    const user = this.currentUser();
+    const user = this.user();
     if (!user) { return; }
 
     if (!role) {
@@ -364,7 +139,7 @@ export class ContextService implements IAuth {
 
     const newRole = user.role?.find((item: { key: string | undefined; }) => item.key === role?.key);
     if (newRole) {
-      this._setRole(newRole);
+      this.role.set(newRole);
     }
 
     return newRole;
@@ -384,64 +159,21 @@ export class ContextService implements IAuth {
   //   return role;
   // }
 
-  setApplication(item: Application): Application | undefined {
-    return this._setApplication(item);
+
+
+  startImpersonation(session: Session) {
+    const lastSession = this.session()
+    this.cache.update('lastSession', lastSession);
+    session.permissions.push('impersonating')
+    this.session.set(session);
   }
 
-  setTenant(item: Tenant): Tenant | undefined {
-    return this._setTenant(item);
-  }
+  endImpersonation() {
 
-  setOrganization(item: Organization): Organization | undefined {
-    return this._setOrganization(item);
-  }
-
-  setUser(item: any): User | undefined {
-    const user = new User(item)
-    return this._setUser(user);
-  }
-
-  setSession(item: any): Session | undefined {
-    const session = this._setSession(new Session(item));
-    return session;
-  }
-
-
-
-  getRoleKey() {
-    return (this.cache.get('role') || {}).key;
-  }
-
-  impersonateSession(session: Session) {
-
-    this._lastSession = this._session
-    this.cache.update('lastSession', this._lastSession);
-
-    this._setSession(new Session(session));
-    this._setUser(new User(session.user));
-    this._setRole(new Role(session.role));
-
-    this._isImpersonateSession = true
-    this.cache.update('isImpersonateSession', this._isImpersonateSession);
-    this._impersonateSubject.next(true)
-  }
-
-  endImpersonateSession() {
-
-    if (!this._lastSession) {
-      this._lastSession = this.cache.get('lastSession')
+    const lastSession = this.cache.get('lastSession')
+    if (lastSession) {
+      this.session.set(lastSession)
     }
-
-    this._setSession(new Session(this._lastSession));
-    this._setUser(new User(this._lastSession?.user));
-    this._setRole(new Role(this._lastSession?.role));
-
-    this._lastSession = undefined
-    this.cache.remove('lastSession');
-
-    this._isImpersonateSession = false
-    this.cache.update('isImpersonateSession', this._isImpersonateSession);
-    this._impersonateSubject.next(false)
   }
 
   hasPermission(permissions?: string | string[]): boolean {
@@ -450,7 +182,7 @@ export class ContextService implements IAuth {
       return true; // every role has blank permission
     }
 
-    const currentSession = this.currentSession();
+    const currentSession = this.session();
     if (!currentSession) {
       return false;
     }
@@ -501,16 +233,12 @@ export class ContextService implements IAuth {
     const tenant = this.cache.get('tenant');
     const application = this.cache.get('application');
     this.cache.clear();
-    this.cache.update('tenant', tenant);
-    this.cache.update('application', application);
 
-    this._role = undefined;
-    this._user = undefined;
-    this._session = undefined;
-
-    this._roleSubject.next(undefined);
-    this._userSubject.next(undefined);
-    this._sessionSubject.next(undefined);
+    this.role.set(undefined);
+    this.user.set(undefined);
+    this.session.set(undefined);
+    this.tenant.set(tenant);
+    this.application.set(application);
   }
 
   getApiHeaders(code?: string) {
@@ -519,9 +247,9 @@ export class ContextService implements IAuth {
       'Content-type': 'application/json'
     }
 
-    const role = this.currentRole();
-    const application = this.currentApplication();
-    const session = this.currentSession();
+    const role = this.role();
+    const application = this.application();
+    const session = this.session();
 
     if (application?.code) {
       headers['x-application-code'] = application.code;
@@ -536,7 +264,7 @@ export class ContextService implements IAuth {
     } else {
       let organization: any = environment.organization;
       if (!organization?.code) {
-        organization = this.currentOrganization();
+        organization = this.organization();
       }
       if (organization?.code) {
         headers['x-organization-code'] = organization.code;
@@ -544,7 +272,7 @@ export class ContextService implements IAuth {
 
       let tenant: any = environment.tenant;
       if (tenant?.code) {
-        tenant = this.currentTenant();
+        tenant = this.tenant();
       }
 
       if (tenant?.code) {
@@ -573,7 +301,7 @@ export class ContextService implements IAuth {
       }
       return value
     }
-    return getValue(key, this._application?.meta?.app);
+    return getValue(key, this.application()?.meta?.app);
   }
 
   getPageMeta(key: string) {
@@ -589,7 +317,7 @@ export class ContextService implements IAuth {
       }
       return value
     }
-    const page = this.page.get();
+    const page = this.page();
 
     const value: any = page ? getValue(key, page.meta) : null;
 
@@ -597,7 +325,7 @@ export class ContextService implements IAuth {
       return value;
     }
 
-    return getValue(key, this._application?.meta?.page);
+    return getValue(key, this.application()?.meta?.page);
 
   }
 

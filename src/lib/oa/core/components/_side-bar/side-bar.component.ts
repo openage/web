@@ -15,10 +15,9 @@ import { UxService } from '../../services/ux.service';
 import { MatDrawerMode } from '@angular/material/sidenav';
 
 @Component({
-    selector: 'app-side-bar',
-    templateUrl: './side-bar.component.html',
-    styleUrls: ['./side-bar.component.scss'],
-    standalone: false
+  selector: 'oa-side-bar',
+  templateUrl: './side-bar.component.html',
+  styleUrls: ['./side-bar.component.scss']
 })
 export class SideBarComponent implements OnInit, OnChanges, OnDestroy {
 

@@ -177,11 +177,11 @@ export class OpenAgeDocument implements DocumentSourcePlugin {
       headers['If-Modified-Since'] = options.timeStamp.toISOString();
     }
 
-    const application = this.context.currentApplication();
+    const application = this.context.application();
     if (application?.code) {
       headers['x-application-code'] = application.code;
     }
-    const session = this.context.currentSession();
+    const session = this.context.session();
     if (session) {
       if (session?.token) {
         headers['x-access-token'] = session?.token;
@@ -190,16 +190,16 @@ export class OpenAgeDocument implements DocumentSourcePlugin {
         headers['x-session-id'] = session.id;
       }
     }
-    const role = this.context.currentRole();
+    const role = this.context.role();
     if (role) {
       headers['x-role-key'] = role.key;
     }
     else {
-      const organization = this.context.currentOrganization();
+      const organization = this.context.organization();
       if (organization) {
         headers['x-organization-code'] = organization.code;
       }
-      const tenant = this.context.currentTenant();
+      const tenant = this.context.tenant();
       if (tenant) {
         headers['x-tenant-code'] = tenant.code;
       }

@@ -441,30 +441,28 @@ export class OpenAgeData implements DataSourcePlugin {
       headers['If-Modified-Since'] = config.timeStamp.toISOString();
     }
 
-    const application = this.context.currentApplication();
+    const application = this.context.application();
     if (application?.code) {
       headers['x-application-code'] = application.code;
     }
-    const session = this.context.currentSession();
-    if (session) {
-      if (session?.token) {
-        headers['x-access-token'] = session?.token;
-      }
-      if (session?.id) {
-        headers['x-session-id'] = session.id.toString();
-      }
+    const session = this.context.session();
+    if (session?.token) {
+      headers['x-access-token'] = session?.token;
     }
-    const role = this.context.currentRole();
-    if (role) {
+    if (session?.id) {
+      headers['x-session-id'] = session.id.toString();
+    }
+    const role = this.context.role();
+    if (role?.key) {
       headers['x-role-key'] = role.key;
     }
     else {
-      const organization = this.context.currentOrganization();
+      const organization = this.context.organization();
       if (organization?.code) {
         headers['x-organization-code'] = organization.code;
       }
-      const tenant = this.context.currentTenant();
-      if (tenant) {
+      const tenant = this.context.tenant();
+      if (tenant?.code) {
         headers['x-tenant-code'] = tenant.code;
       }
     }

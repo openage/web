@@ -2,7 +2,7 @@
 /* eslint-disable no-prototype-builtins */
 import { Location } from '@angular/common';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { inject, Injectable } from '@angular/core';
+import { effect, inject, Injectable } from '@angular/core';
 import { ActivatedRoute, ActivatedRouteSnapshot, NavigationEnd, Params, Router } from '@angular/router';
 // import { Subject } from 'rxjs';
 import { environment } from '../../../../environments/environment';
@@ -35,9 +35,12 @@ export class NavService {
   // private auth = inject(RoleService);
 
   constructor() {
-    this.context.applicationChanges.subscribe(() => this.init());
-    this.context.roleChanges.subscribe(() => this.init());
-    // this.context.page.changes.subscribe(() => this.context.actions.clear());
+
+    effect(() => {
+      this.context.application();
+      this.context.role();
+      this.init();
+    })
 
     // this.context.path.subscribe(path => {
     //   this.register(path)
@@ -211,7 +214,7 @@ export class NavService {
     let services: Service[] = [];
     let url
 
-    const application = this.context.currentApplication();
+    const application = this.context.application();
     if (application && application.services && application.services.length) {
       services = application.services
     } else {
@@ -227,7 +230,7 @@ export class NavService {
   }
 
   // private saveNavs(code: any, meta: any) {
-  //   let application = this.context.currentApplication()
+  //   let application = this.context.application()
 
   //   function saveNav(items: any[], code: string, count: number): void {
   //     let c = code.split('.')
@@ -396,8 +399,6 @@ export class NavService {
 
   /**
  * Initializes the navigation service by setting the navigation structure.
- * @example
- * this.context.applicationChanges.subscribe(() => this.init());
  */
   public init() {
     let navs = this.context.application()?.navs;
@@ -445,7 +446,7 @@ export class NavService {
     }
     // navs = (navs || []).filter((n) => this.hasAccess(n));
     parse(navs || []);
-    this.context.navs.set(navs);
+    this.context.navs.set(navs || []);
   }
 
   /**
@@ -479,7 +480,7 @@ export class NavService {
       }
     }
 
-    let current = this.context.page.get();
+    let current = this.context.page();
 
     if (current) {
       setActive(current, false);
@@ -834,8 +835,13 @@ export class NavService {
         url = `${url}${url.indexOf('?') < 0 ? '?' : '&'}${(new HttpParams({ fromObject: params.query })).toString()}`;
       }
       window.open(url, newTab ? '_blank' : '_self');
-    } else { // Default to going back if no navigation target is resolved
-      this.back();
+    } else { // Default: try to go to home or root instead of calling back()
+      const home = this.getByCode('home');
+      if (home && home.routerLink && home.routerLink.length) {
+        this.router.navigate(home.routerLink);
+      } else {
+        this.router.navigate(['/']);
+      }
     }
     return
   }
@@ -856,9 +862,14 @@ export class NavService {
 
   setLabel(page: Link, label: string) {
     page.title = label;
-    this.context.breadcrumbs.update(i => i.code === page.code, i => i.title = label)
+    const link = this.context.breadcrumbs().find(i => i.code === page.code)
 
-    if (this.context.page.get()?.code === page.code) {
+
+    if (link) {
+      link.title = label
+    }
+
+    if (this.context.page()?.code === page.code) {
       this.context.title.set(label)
     }
   }
@@ -878,8 +889,8 @@ export class NavService {
   }
 
   reset() {
-    this.context.title.clear();
-    this.context.breadcrumbs.clear();
+    this.context.title.set(undefined);
+    this.context.breadcrumbs.set([]);
   }
 
   // title(item?: string | null): string | undefined {

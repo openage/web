@@ -91,7 +91,7 @@ export class FormComponent implements OnInit, OnChanges {
     });
 
     if (typeof this.value === 'string') {
-      const value = this.context.data(this.value);
+      const value = this.context.data().get(this.value);
 
       if (value.subscribe) {
         value.subscribe((p: any) => {

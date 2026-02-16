@@ -4,7 +4,7 @@ export class ColumnModel extends FieldEditorModel {
 
     ascending?: boolean;
     filters?: any;
-    override showFilters?: any;
+    declare showFilters: any;
     isSticky?: boolean;
 
     click?: any;

@@ -1,13 +1,13 @@
-import { Directive, ElementRef, HostListener, Input } from '@angular/core';
+import { Directive, ElementRef, HostListener, inject, Input } from '@angular/core';
 import { NgControl } from '@angular/forms';
 
 @Directive({
   // eslint-disable-next-line @angular-eslint/directive-selector
-  selector: '[trimSpace]'
+  selector: '[oaTrimSpace]'
 })
 export class TrimSpaceDirective {
-
-  constructor(private _el: ElementRef) { }
+  private _el = inject(ElementRef)
+  constructor() { }
 
   @HostListener('blur', ['$event'])
   onInputChange(event: any) {

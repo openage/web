@@ -2,10 +2,9 @@ import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { environment } from 'src/environments/environment';
 
 @Component({
-    selector: 'oa-recaptcha',
-    templateUrl: './recaptcha.component.html',
-    styleUrls: ['./recaptcha.component.css'],
-    standalone: false
+  selector: 'oa-recaptcha',
+  templateUrl: './recaptcha.component.html',
+  styleUrls: ['./recaptcha.component.css']
 })
 export class RecaptchaComponent implements OnInit {
 

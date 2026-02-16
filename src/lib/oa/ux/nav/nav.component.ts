@@ -51,7 +51,7 @@ export class NavComponent implements OnInit, OnDestroy {
   getValues(src?: string) {
     src = src || 'root';
 
-    const value = (this.context.navs.get() || [])
+    const value = (this.context.navs() || [])
       .filter((i) => this.context.hasPermission(i.permissions) && i.view !== 'hidden')
       .sort((a, b) => a.index - b.index)
 

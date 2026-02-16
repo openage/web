@@ -1,4 +1,4 @@
-import { Component, inject, Input, OnInit } from '@angular/core';
+import { Component, effect, inject, Input, OnInit } from '@angular/core';
 import { ContextService } from '../../services/context.service';
 import { Link } from '../../models';
 
@@ -40,13 +40,13 @@ export class BrandingComponent implements OnInit {
   context = inject(ContextService);
 
   constructor() {
-    this.context.applicationChanges.subscribe((t) => { this.currentApplication = t; this.init() });
-    this.context.tenantChanges.subscribe((t) => { this.currentTenant = t; this.init() });
-    this.context.organizationChanges.subscribe((t) => { this.currentOrganization = t; this.init(); });
-    this.context.page.changes.subscribe(p => {
-      this.currentPage = p;
+    effect(() => {
+      this.currentApplication = this.context.application();
+      this.currentTenant = this.context.tenant();
+      this.currentOrganization = this.context.organization();
+      this.currentPage = this.context.page();
       this.init();
-    });
+    })
   }
 
   ngOnInit(): void {
@@ -63,9 +63,9 @@ export class BrandingComponent implements OnInit {
     this.style = this.style || this.options.style;
 
 
-    this.currentApplication = this.context.currentApplication();
-    this.currentTenant = this.context.currentTenant();
-    this.currentOrganization = this.context.currentOrganization();
+    this.currentApplication = this.context.application();
+    this.currentTenant = this.context.tenant();
+    this.currentOrganization = this.context.organization();
 
 
     this.style = this.style || {};

@@ -57,7 +57,7 @@ export class MarkdownComponent implements OnInit {
         this.value = marked.lexer(content || '', { breaks: true, gfm: true });
         this.render()
       } else {
-        const value = this.context.data(this.value);
+        const value = this.context.data().get(this.value);
         if (!value) {
           this.render()
         } else {

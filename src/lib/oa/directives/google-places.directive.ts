@@ -1,24 +1,25 @@
-import { Directive, ElementRef, EventEmitter, OnInit, Output } from '@angular/core';
+import { Directive, ElementRef, EventEmitter, inject, OnInit, Output } from '@angular/core';
 declare let google: any;
 
 @Directive({
   // eslint-disable-next-line @angular-eslint/directive-selector
-  selector: '[google-place]'
+  selector: '[oaLocation]'
 })
 export class GooglePlacesDirective implements OnInit {
 
   // eslint-disable-next-line @angular-eslint/no-output-on-prefix
   @Output()
-  onSelect: EventEmitter<any> = new EventEmitter();
+  selected: EventEmitter<any> = new EventEmitter();
 
   private element: HTMLInputElement;
+  private elRef = inject(ElementRef)
 
-  constructor(elRef: ElementRef) {
-    this.element = elRef.nativeElement;
+  constructor() {
+    this.element = this.elRef.nativeElement;
   }
 
-  getFormattedAddress(place) {
-    const location_obj = {};
+  getFormattedAddress(place: { address_components: { [x: string]: any; }; formatted_address: any; }) {
+    const location_obj: Record<string, any> = {};
     // eslint-disable-next-line guard-for-in
     for (const i in place.address_components) {
       const item = place.address_components[i];
@@ -45,7 +46,7 @@ export class GooglePlacesDirective implements OnInit {
   ngOnInit() {
     const autocomplete = new google.maps.places.Autocomplete(this.element);
     google.maps.event.addListener(autocomplete, 'place_changed', () => {
-      this.onSelect.emit(this.getFormattedAddress(autocomplete.getPlace()));
+      this.selected.emit(this.getFormattedAddress(autocomplete.getPlace()));
     });
   }
 

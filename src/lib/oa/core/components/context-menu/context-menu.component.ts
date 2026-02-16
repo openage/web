@@ -1,4 +1,4 @@
-import { Component, inject, Input, OnInit } from '@angular/core';
+import { Component, effect, inject, Input, OnInit } from '@angular/core';
 import { ContextService } from '../../services/context.service';
 import { Action } from '../../models/action.model';
 import { NavService } from '../../services/nav.service';
@@ -25,8 +25,8 @@ export class ContextMenuComponent implements OnInit {
   constantService = inject(ConstantService);
 
   constructor() {
-    this.context.actions.changes.subscribe((items: any) => {
-      this.items = items;
+    effect(() => {
+      this.items = this.context.actions()
       this.init()
     });
   }
@@ -64,5 +64,4 @@ export class ContextMenuComponent implements OnInit {
       item.event(item.value);
     }
   }
-
 }

@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, HostListener, inject, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, effect, HostListener, inject, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { Role } from '../../models/role.model';
 import { ContextService } from '../../services/context.service';
 import { ErrorModel, Logger } from '../../models';
@@ -36,15 +36,11 @@ export class HeaderComponent implements OnInit, AfterViewInit {
   constant = inject(ConstantService);
 
   constructor() {
-
-    this.context.errors.changes.subscribe((errors) => {
-      // this.snackBar.open(errors, null, { duration: 5000, verticalPosition: 'top', panelClass: 'error' });
-      this.errors = errors;
-      // this.cleanErrors();
+    effect(() => {
+      this.errors = this.context.errors()
+      this.currentRole = this.context.role();
+      this.device = this.context.device();
     });
-
-    this.context.roleChanges.subscribe((r) => this.currentRole = r);
-    this.context.device.changes.subscribe((d) => this.device = d);
 
   }
 
@@ -63,8 +59,8 @@ export class HeaderComponent implements OnInit, AfterViewInit {
       this.components = header.components;
     }
 
-    this.currentRole = this.context.currentRole();
-    this.device = this.context.device.get();
+    this.currentRole = this.context.role();
+    this.device = this.context.device();
   }
 
   ngAfterViewInit(): void {

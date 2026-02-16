@@ -1,10 +1,9 @@
 import { Component, ElementRef, EventEmitter, Input, OnChanges, OnInit, Output, ViewChild } from '@angular/core';
 
 @Component({
-    selector: 'oa-unit-picker',
-    templateUrl: './unit-picker.component.html',
-    styleUrls: ['./unit-picker.component.css'],
-    standalone: false
+  selector: 'oa-unit-picker',
+  templateUrl: './unit-picker.component.html',
+  styleUrls: ['./unit-picker.component.css']
 })
 export class UnitPickerComponent implements OnInit, OnChanges {
 

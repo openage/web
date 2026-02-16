@@ -1,4 +1,4 @@
-import { Inject, Injectable, DOCUMENT } from '@angular/core';
+import { inject, Injectable, DOCUMENT } from '@angular/core';
 import { Link } from '../models/link.model';
 import { InProcessStorage } from './in-process-storage';
 import { environment } from '../../../../environments/environment';
@@ -15,10 +15,9 @@ export class StorageService {
   currentPage?: Link;
   logger = new Logger(StorageService);
 
-  constructor(
-    @Inject(DOCUMENT)
-    private document: Document
-  ) {
+  private document = inject(DOCUMENT);
+
+  constructor() {
     switch (environment.session.cache.storage) {
       case 'session':
       case 'temporary':

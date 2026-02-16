@@ -1,10 +1,9 @@
 import { Component, Input, OnInit } from '@angular/core';
 
 @Component({
-    selector: 'oa-alert',
-    templateUrl: './alert.component.html',
-    styleUrls: ['./alert.component.css'],
-    standalone: false
+  selector: 'oa-alert',
+  templateUrl: './alert.component.html',
+  styleUrls: ['./alert.component.css']
 })
 export class AlertComponent implements OnInit {
 

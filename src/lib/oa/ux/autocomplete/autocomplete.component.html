@@ -44,9 +44,9 @@
   <div class="controls-row">
     <span class="spacer"></span>
     {{pager.totalPages}} {{pager.currentPageNo}}
-    <app-paginator [pager]="pager" [total]="pager.total" [fetchByLimit]="false" [size]="options.search.limit"
+    <oa-paginator [pager]="pager" [total]="pager.total" [fetchByLimit]="false" [size]="options.search.limit"
       view="previous">
-    </app-paginator>
+    </oa-paginator>
     <span class="spacer"></span>
   </div>
 </button>
@@ -67,9 +67,9 @@
 @if (options.search.limit && pager.totalPages >1 && pager.currentPageNo < pager.totalPages) { <button mat-menu-item>
   <div class="controls-row">
     <span class="spacer"></span>
-    <app-paginator [pager]="pager" [total]="pager.total" [fetchByLimit]="false" [size]="options.search.limit"
+    <oa-paginator [pager]="pager" [total]="pager.total" [fetchByLimit]="false" [size]="options.search.limit"
       view="next">
-    </app-paginator>
+    </oa-paginator>
     <span class="spacer"></span>
   </div>
   </button>
@@ -78,7 +78,7 @@
   <!-- </mat-menu> -->
 
   <!--
-<div [class]="class" [style]="style" [class.autocomplete]="showOptions" (clickOutside)="onShowOptions(false)">
+<div [class]="class" [style]="style" [class.autocomplete]="showOptions" (oaClickOutside)="onShowOptions(false)">
   <label *ngIf="label && showLabel" [attr.for]="id" [class.required]="required">{{label}}</label>
   <ng-container *ngIf="value; then valueViewer; else placeholderViewer"></ng-container>
   <div id="{{ optionsId }}" class="{{ ddlType }} {{ ddlPosition }}" tabindex="0">
@@ -95,7 +95,7 @@
     </div>
 
     <div class="item-list">
-      <processing-indicator *ngIf="isProcessing"></processing-indicator>
+      <oa-processing-indicator *ngIf="isProcessing"></oa-processing-indicator>
       <div class="controls-row" *ngIf="options.search.limit">
         <span class="spacer"></span>
         <app-paginator [pager]="pager" [total]="pager.total" [fetchByLimit]="false" [size]="options.search.limit"

@@ -11,6 +11,7 @@ import { AddFormPopUpComponent } from '../add-form-pop-up/add-form-pop-up.compon
 
 @Component({
   selector: 'oa-action',
+  standalone: true,
   imports: [
     IconComponent,
     TogglerComponent,
@@ -175,7 +176,7 @@ export class ActionComponent implements OnInit, OnChanges {
     }
 
     for (const key of keys) {
-      const value = this.context.data(key);
+      const value = this.context.data().get(key);
       if (value) {
         obj[key] = value;
         if (value.subscribe) {

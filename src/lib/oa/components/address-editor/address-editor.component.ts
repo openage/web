@@ -5,10 +5,9 @@ import { AddressService } from 'src/lib/oa/core/services/address.service';
 import { WizStepBaseComponent } from 'src/lib/oa/core/structures/wiz/wiz-step-base.component';
 
 @Component({
-    selector: 'oa-address-editor',
-    templateUrl: './address-editor.component.html',
-    styleUrls: ['./address-editor.component.css'],
-    standalone: false
+  selector: 'oa-address-editor',
+  templateUrl: './address-editor.component.html',
+  styleUrls: ['./address-editor.component.css']
 })
 export class AddressEditorComponent extends WizStepBaseComponent implements OnInit {
 
@@ -33,7 +32,9 @@ export class AddressEditorComponent extends WizStepBaseComponent implements OnIn
   @Input()
   lineLabel = 'Registered Address';
 
-  constructor(private addressService: AddressService) {
+  private addressService = inject(AddressService);
+
+  constructor() {
     super();
     this.changed = this.valueChange;
   }

@@ -37,6 +37,17 @@
           }
         }
       }
+    },
+    {
+      "type": "npm",
+      "script": "build:local",
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "problemMatcher": [],
+      "label": "npm: build:local",
+      "detail": "node --max_old_space_size=8048 ./node_modules/@angular/cli/bin/ng build -c=local"
     }
   ]
 }

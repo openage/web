@@ -33,6 +33,7 @@
           "error",
           {
             "type": "element",
+            "prefix": "oa",
             "style": "kebab-case"
           }
         ]

@@ -457,12 +457,12 @@
   <div class="tabs horizontal tabs-container">
     @for (tab of tabs; track tab) {
     @if (param.config.stats) {
-    <div [ngClass]="{active: selectedTab?.label === tab?.label}" class="with-stat" (click)="onSelectedTab(tab)">
+    <div [ngClass]="{active: searchTab?.label === tab?.label}" class="with-stat" (click)="onSelectedTab(tab)">
       <span class="label tab">{{tab.label}}</span> <span class="stat">{{tab.stat}}</span>
     </div>
     }
     @if (!param.config.stats) {
-    <div class="without-stat" [ngClass]="{active: selectedTab?.label === tab?.label}" (click)="onSelectedTab(tab)">
+    <div class="without-stat" [ngClass]="{active: searchTab?.label === tab?.label}" (click)="onSelectedTab(tab)">
       {{tab.label}} </div>
     }
     }

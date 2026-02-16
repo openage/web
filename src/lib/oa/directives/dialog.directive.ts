@@ -1,11 +1,11 @@
-import { ApplicationRef, ComponentFactoryResolver, ComponentRef, Directive, ElementRef, EmbeddedViewRef, EventEmitter, HostListener, Injector, Input, Output, TemplateRef, OnDestroy } from '@angular/core';
+import { ApplicationRef, ComponentFactoryResolver, ComponentRef, Directive, ElementRef, EmbeddedViewRef, EventEmitter, HostListener, Injector, Input, Output, TemplateRef, OnDestroy, inject } from '@angular/core';
 import { Action } from '../core/models/action.model';
 import { PopupComponent } from '../ux/popup/popup.component';
 import { PopupPosition, PopupTrigger } from '../core/models/popup.enums';
 
 @Directive({
-  selector: '[oaDialog]',
-  standalone: true
+  // eslint-disable-next-line @angular-eslint/directive-selector
+  selector: '[oaDialog]'
 })
 export class DialogDirective implements OnDestroy {
 
@@ -29,10 +29,11 @@ export class DialogDirective implements OnDestroy {
 
   private componentRef: ComponentRef<any> | null = null;
 
-  constructor(private elementRef: ElementRef,
-    private appRef: ApplicationRef,
-    private componentFactoryResolver: ComponentFactoryResolver,
-    private injector: Injector) { }
+  private elementRef = inject(ElementRef)
+  private appRef = inject(ApplicationRef)
+  private componentFactoryResolver = inject(ComponentFactoryResolver)
+  private injector = inject(Injector)
+  constructor() { }
 
   @HostListener('click')
   onClick(): void {

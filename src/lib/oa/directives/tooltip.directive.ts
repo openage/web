@@ -6,18 +6,19 @@ import {
   ElementRef,
   EmbeddedViewRef,
   HostListener,
+  inject,
   Injector,
-  Input
+  Input, OnDestroy
 } from '@angular/core';
 import { PopupPosition, PopupTheme } from '../core/models/popup.enums';
 import { PopupComponent } from '../ux/popup/popup.component';
 
 
 @Directive({
-  selector: '[oaTooltip]',
-  standalone: true,
+  // eslint-disable-next-line @angular-eslint/directive-selector
+  selector: '[oaTooltip]'
 })
-export class TooltipDirective {
+export class TooltipDirective implements OnDestroy {
 
   @Input()
   oaTooltip?: string | null = '';
@@ -39,8 +40,13 @@ export class TooltipDirective {
   private hideTimeout?: number;
   private touchTimeout?: number;
 
-  constructor(private elementRef: ElementRef, private appRef: ApplicationRef,
-    private componentFactoryResolver: ComponentFactoryResolver, private injector: Injector) {
+  private elementRef = inject(ElementRef)
+  private appRef = inject(ApplicationRef)
+  private componentFactoryResolver = inject(ComponentFactoryResolver)
+  private injector = inject(Injector)
+
+  constructor(
+  ) {
   }
 
   @HostListener('mouseenter')

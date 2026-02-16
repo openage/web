@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angu
 
 
 @Component({
-  selector: 'app-paginator',
+  selector: 'oa-paginator',
   standalone: true,
   templateUrl: './paginator.component.html',
   styleUrls: ['./paginator.component.css'],

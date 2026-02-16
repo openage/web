@@ -1,11 +1,11 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { UxService } from 'src/app/core/services';
+import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
+import { UxService } from '../../core/services/ux.service';
+import { ContentService } from '../../core/services/content.service';
 
 @Component({
-    selector: 'oa-tags',
-    templateUrl: './tags.component.html',
-    styleUrls: ['./tags.component.scss'],
-    standalone: false
+  selector: 'oa-tags',
+  templateUrl: './tags.component.html',
+  styleUrls: ['./tags.component.scss']
 })
 export class TagsComponent implements OnInit {
 
@@ -23,20 +23,18 @@ export class TagsComponent implements OnInit {
 
   newTag = '';
 
-  constructor(
-    private uxService: UxService,
-  ) { }
+  private contentService = inject(ContentService)
 
   ngOnInit(): void {
   }
 
-  removeTag(index) {
+  removeTag(index: number) {
     this.values.splice(index, 1);
     this.changed.emit(this.values);
   }
 
-  addTag($event) {
-    const value = this.uxService.getTextFromEvent($event);
+  addTag($event: any) {
+    const value = this.contentService.getTextFromEvent($event);
     if (value && !this.values.includes(value)) {
       this.values.push(value);
       this.changed.emit(this.values);

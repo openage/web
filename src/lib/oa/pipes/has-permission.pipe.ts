@@ -1,17 +1,17 @@
-import { Pipe, PipeTransform } from '@angular/core';
+import { inject, Pipe, PipeTransform } from '@angular/core';
 
 import { ContextService } from '../core/services/context.service';
 import { Logger } from '../core/models';
 
 @Pipe({
-    name: 'hasPermission',
-    pure: true,
-    standalone: false
+  name: 'hasPermission',
+  pure: true
 })
 export class HasPermissionPipe implements PipeTransform {
 
   logger: Logger;
-  constructor(private auth: ContextService) {
+  private auth = inject(ContextService);
+  constructor() {
     this.logger = new Logger('HasPermissionPipe');
   }
 

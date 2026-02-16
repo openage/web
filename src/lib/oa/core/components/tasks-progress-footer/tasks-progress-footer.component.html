@@ -28,11 +28,11 @@
       }
       @default {
       @if (item.type === 'upload') {
-      <processing-indicator class="spinner" [view]="'spinner-withBackground'" [progressBarvalue]="item.progress"
-        [diameter]="30"></processing-indicator>
+      <oa-processing-indicator class="spinner" [view]="'spinner-withBackground'" [progressBarvalue]="item.progress"
+        [diameter]="30"></oa-processing-indicator>
       }
       @if (item.type === 'download') {
-      <processing-indicator [view]="'download-indicator'" [inline]="true"></processing-indicator>
+      <oa-processing-indicator [view]="'download-indicator'" [inline]="true"></oa-processing-indicator>
       }
       }
       }

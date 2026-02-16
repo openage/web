@@ -3,10 +3,9 @@ import * as moment from 'moment';
 import { Timeline } from '../../models/timeline.model';
 
 @Component({
-    selector: 'oa-timeline',
-    templateUrl: './timeline.component.html',
-    styleUrls: ['./timeline.component.scss'],
-    standalone: false
+  selector: 'oa-timeline',
+  templateUrl: './timeline.component.html',
+  styleUrls: ['./timeline.component.scss']
 })
 export class TimelineComponent implements OnInit, OnChanges {
 

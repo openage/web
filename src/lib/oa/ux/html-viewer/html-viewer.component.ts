@@ -34,7 +34,7 @@ export class HtmlViewerComponent implements OnInit {
     //   this.options = new ViewerOptions(this.options);
     // }
     if (typeof this.value === 'string') {
-      const value = this.context.data(this.value);
+      const value = this.context.data().get(this.value);
       if (!value) {
         this.init()
       } else {

@@ -1,13 +1,11 @@
 import { inject, Injectable } from '@angular/core';
-import { ActivatedRoute, ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from '@angular/router';
+import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from '@angular/router';
 import { DataService } from './data.service';
-import { from, Observable, of } from 'rxjs';
-import { ObservableObject } from '../models/observable.model';
 import { ContextService } from './context.service';
 import { NavService } from './nav.service';
 import { DomainObject } from '../models/domain-object';
 import { DomainPage } from '../models/domain-page';
-import { Application, Link } from '../models';
+import { Link } from '../models';
 
 @Injectable({
   providedIn: 'root'
@@ -17,17 +15,17 @@ export class RouteDataResolver implements Resolve<any> {
   private navService = inject(NavService);
   private context = inject(ContextService);
 
-  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<any> {
+  resolve(route: ActivatedRouteSnapshot, _state: RouterStateSnapshot): Promise<any> | null {
 
     const path = this.navService.getPath(route);
     if (!path) {
-      return of(null);
+      return null;
     }
     const page: Link = this.navService.getByPath(path);
     if (!page) {
-      return of(null);
+      return null;
     }
-    return from(this.buildData(page.meta.data, page));
+    return this.buildData(page.meta.data, page);
   }
 
   private inject = (input: any, getter?: (key: string) => any): any => {
@@ -132,25 +130,29 @@ export class RouteDataResolver implements Resolve<any> {
 
   private _localData = async (data: any, page: Link) => {
 
-    const item = new ObservableObject<any>();
-    this.context.data(data.code, item);
-
     const v = data.config || data.data || data.config?.data;
-    item.set(v)
+    this.context.data.update((current) => {
+      const next = new Map(current);
+      next.set(data.code, v);
+      return next;
+    });
+
+
     return v;
   }
 
   private _remoteData = async (data: any, page: Link) => {
     const config = this.inject(data.config || data || {}, page.params?.get)
 
-    const item = new ObservableObject<any>();
-    this.context.data(data.code, item);
-
     const v = config.id
       ? await this._dataService.get(config.id, config)
       : await this._dataService.search(config.query, config)
+    this.context.data.update((current) => {
+      const next = new Map(current);
+      next.set(data.code, v);
+      return next;
+    });
 
-    item.set(v)
     return v;
   }
 
@@ -160,7 +162,12 @@ export class RouteDataResolver implements Resolve<any> {
     const result = new DomainObject({
       id: config.id
     }, config, this._dataService)
-    this.context.data(data.code, result);
+
+    this.context.data.update((current) => {
+      const next = new Map(current);
+      next.set(data.code, result);
+      return next;
+    });
 
     return result.refresh();
   }
@@ -173,7 +180,12 @@ export class RouteDataResolver implements Resolve<any> {
       page: config.page,
       config: config
     }, this._dataService)
-    this.context.data(data.code, result);
+
+    this.context.data.update((current) => {
+      const next = new Map(current);
+      next.set(data.code, result);
+      return next;
+    });
 
     return result.refresh();
   }
@@ -185,7 +197,12 @@ export class RouteDataResolver implements Resolve<any> {
       page: config.page,
       config: config
     }, this._dataService)
-    this.context.data(data.code, result);
+
+    this.context.data.update((current) => {
+      const next = new Map(current);
+      next.set(data.code, result);
+      return next;
+    });
     return result.add();
 
   }

@@ -23,7 +23,7 @@ export class DataSourceService {
     // current['session'] = this.auth.currentSession()
     // current['tenant'] = this.auth.currentTenant()
     // current['organization'] = this.auth.currentOrganization()
-    // current['user'] = this.auth.currentUser()
+    // current['user'] = this.auth.user()
     // current['role'] = this.auth.currentRole()
 
     return current

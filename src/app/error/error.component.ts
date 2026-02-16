@@ -1,10 +1,11 @@
 import { Component } from '@angular/core';
 
 @Component({
-    selector: 'app-error',
-    imports: [],
-    templateUrl: './error.component.html',
-    styleUrl: './error.component.scss'
+  // eslint-disable-next-line @angular-eslint/component-selector
+  selector: 'app-error',
+  imports: [],
+  templateUrl: './error.component.html',
+  styleUrl: './error.component.scss'
 })
 export class ErrorComponent {
 

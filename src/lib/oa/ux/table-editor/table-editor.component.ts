@@ -139,7 +139,7 @@ export class TableEditorComponent implements OnInit {
     this.createActions();
 
     if (typeof this.value === 'string') {
-      const value = this.context.data(this.value);
+      const value = this.context.data().get(this.value);
       if (value) {
         if (value.subscribe) {
           value.subscribe((p: any) => {

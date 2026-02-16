@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { ErrorHandler, Inject, Injectable, DOCUMENT } from '@angular/core';
+import { ErrorHandler, inject, Injectable, DOCUMENT } from '@angular/core';
 import { AuthService } from './auth.service';
 import { NavService } from './nav.service';
 import { ErrorModel, Logger } from '../models';
@@ -26,10 +26,10 @@ export class ErrorService implements ErrorHandler {
   public errors = this._errors.asObservable();
 
 
+  private document = inject(DOCUMENT);
+
   constructor(
     private http: HttpClient,
-    @Inject(DOCUMENT)
-    private document: Document,
     private navService: NavService
   ) {
     this.http.get('assets/data/errors.json', { responseType: 'text' })
