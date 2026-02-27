@@ -1,4 +1,4 @@
-import { Component, effect, ElementRef, HostListener, inject, OnInit, ViewChild } from '@angular/core';
+import { Component, effect, ElementRef, HostListener, inject, OnInit, ViewChild, computed } from '@angular/core';
 
 import { ActivatedRoute, Router, RouterOutlet } from '@angular/router';
 import { environment } from '../environments/environment';
@@ -35,71 +35,57 @@ export class AppComponent implements OnInit {
   @ViewChild('pageBody')
   pageContainer?: ElementRef<any>;
 
-  title = environment.title;
-  styles: any = {};
-  envName: string = 'prod';
-  theme?: Theme;
-
-  isProcessing?: boolean = true;
-  underMaintenance?: boolean;
-  isInitialized = true;
-  header?: any;
-  footer?: any;
-  sidebar?: any;
-  layoutType?: string = 'sticky-header';
-
-  logger = new Logger(AppComponent);
-
   context = inject(ContextService);
   uxService = inject(UxService);
   navService = inject(NavService);
   router = inject(Router);
   route = inject(ActivatedRoute);
 
+  title = environment.title;
+
+  styles = computed(() => this.context.getPageMeta('styles'));
+  envName = computed(() => {
+    const application = this.context.application();
+    if (application && application.env && application.env !== 'prod') {
+      return application.env;
+    }
+    return '';
+  });
+
+  theme = this.context.theme;
+  isProcessing = this.context.isProcessing;
+  underMaintenance = this.context.underMaintenance;
+  isInitialized = true;
+
+  header = computed(() => this.context.getPageMeta('header'));
+  footer = computed(() => this.context.getPageMeta('footer'));
+  sidebar = computed(() => this.context.getPageMeta('sidebar'));
+  layoutType = computed(() => this.context.getAppMeta('layout') || 'sticky-header');
+
+  logger = new Logger(AppComponent);
+
   constructor() {
     const log = this.logger.get('constructor');
     this.navService.init();
     effect(() => {
-
-      const application = this.context.application();
-
-      if (application && application.env && application.env !== 'prod') {
-        this.envName = application.env;
-      }
-
-      this.theme = this.context.theme();
       this.setTheme();
-      this.isProcessing = this.context.isProcessing();
-      this.underMaintenance = this.context.underMaintenance();
-
       console.log('runs with component lifecycle');
     });
-
-
   }
 
   ngOnInit(): void {
     const log = this.logger.get('ngOnInit')
-    this.theme = this.context.theme();
-    this.setTheme();
-    this.header = this.context.getPageMeta('header');
-    this.sidebar = this.context.getPageMeta('sidebar');
-    this.footer = this.context.getPageMeta('footer');
-    this.styles = this.context.getPageMeta('styles');
-    this.layoutType = this.context.getAppMeta('layout') || 'sticky-header';
-    this.isProcessing = this.context.isProcessing();
-    this.underMaintenance = this.context.underMaintenance();
-
     log.end()
   }
 
   setTheme() {
-    if (this.theme?.style) {
-      this.uxService.addStyle('theme', this.theme?.style);
+    const theme = this.theme();
+    if (theme?.style) {
+      this.uxService.addStyle('theme', theme.style);
     }
 
-    if (this.theme?.icon) {
-      this.uxService.addStyle('icon', this.theme?.icon);
+    if (theme?.icon) {
+      this.uxService.addStyle('icon', theme.icon);
     }
   }
 

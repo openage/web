@@ -10,7 +10,7 @@ export const environment = {
 
   code: 'website',
   name: 'Website',
-  host: 'id.applegos.in', // this is only for local debugging
+  host: 'www.applegos.in', // this is only for local debugging
   title: 'Applegos',
   version: '1.0.0',
   ref: 'https://api.openage.in/system/v1/api/applications/host:{{host}}', // prod

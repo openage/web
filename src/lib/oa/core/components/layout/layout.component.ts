@@ -107,8 +107,9 @@ export class LayoutComponent implements OnInit, OnChanges {
       this.initSection(changes['section'].currentValue);
     }
 
-    // Handle data changes by reinitializing components and layout
-    if (changes["data"]) {
+    // Handle data, layout or components changes by reinitializing components and layout
+    if (changes["data"] || changes["layout"] || changes["components"]) {
+      this.components = this.components || [];
       for (const c of this.components) {
         this.initComponent(c);
       }
@@ -241,7 +242,10 @@ export class LayoutComponent implements OnInit, OnChanges {
     section.container = this.getContainer(section);
 
     let components = section.components || [];
-    components.push(...this.components.filter(c => c.section?.toLowerCase() === section.code?.toLowerCase()));
+    components.push(...this.components.filter(c => {
+      const sectionCode = (c.section || 'content').toLowerCase();
+      return sectionCode === section.code?.toLowerCase();
+    }));
 
     // Filter components based on permissions and avoid duplicates
     components = components.filter((i: any) => this.context.hasPermission(i.permissions));

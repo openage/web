@@ -11,6 +11,7 @@ import { Service } from '../models/service.model';
 import { ContextService } from './context.service';
 import { MetaService } from './meta.service';
 import { StorageService } from './storage.service';
+import { DataService } from './data.service';
 
 
 @Injectable({
@@ -31,6 +32,7 @@ export class NavService {
   private location = inject(Location);
   private context = inject(ContextService);
   private metaService = inject(MetaService);
+  private dataService = inject(DataService);
   private storageService = inject(StorageService);
   // private auth = inject(RoleService);
 
@@ -484,6 +486,17 @@ export class NavService {
 
     if (current) {
       setActive(current, false);
+    }
+
+    if (!page.id) {
+      return
+    }
+
+    if (Object.keys(page.meta || {}).length === 0) {
+      const data = await this.dataService.get(page.id, { service: 'system', collection: 'navs' })
+      if (data) {
+        page.meta = data.meta
+      }
     }
 
     setActive(page, true);

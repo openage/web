@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectorRef, Component, OnChanges, OnDestroy, OnInit, SimpleChanges, TemplateRef, effect, inject } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, Injector, OnChanges, OnDestroy, OnInit, SimpleChanges, TemplateRef, effect, inject } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Entity, Link, Logger } from '../models';
 import { StorageService } from '../services';
@@ -12,6 +12,7 @@ import { NavService } from '../services/nav.service';
 })
 export abstract class PageBaseComponent implements OnInit, OnDestroy {
 
+  private injector = inject(Injector);
   private _ux = inject(UxService);
   private constant = inject(ConstantService);
   private navService = inject(NavService);
@@ -54,7 +55,7 @@ export abstract class PageBaseComponent implements OnInit, OnDestroy {
         this._logger.debug(`for page change`)
         this._init()
       }
-    })
+    }, { injector: this.injector })
 
     if (this.isCurrent) {
       this._logger.debug(`for ng Init`)
@@ -173,12 +174,12 @@ export abstract class PageBaseComponent implements OnInit, OnDestroy {
 
   private _setLayout() {
     const log = this._logger.get("_setLayout");
-    this.layout = this.context.getPageMeta('layout');
-    this.footer = this.context.getPageMeta('footer')
+    this.layout = this.context.getPageMeta('layout') || {};
+    this.footer = this.context.getPageMeta('footer');
     const components = this.context.getPageMeta('components');
 
     let items = [];
-    if (!Array.isArray(components)) {
+    if (components && !Array.isArray(components)) {
       for (const c in components) {
         if (Object.prototype.hasOwnProperty.call(components, c)) {
           const item = components[c];
@@ -187,16 +188,20 @@ export abstract class PageBaseComponent implements OnInit, OnDestroy {
         }
       }
     } else {
-      items = components;
+      items = components || [];
     }
 
     this.components = items.filter((s: any) => this.context.hasPermission(s.permissions))
-    this.layout.sections = this.layout.sections || this.layout.items || [];
-    if (this.footer) {
+
+    if (this.layout) {
+      this.layout.sections = this.layout.sections || this.layout.items || [];
+    }
+
+    if (this.footer && this.footer.layout) {
       this.footer.layout.sections = this.footer.layout.sections || this.footer.components || [];
     }
 
-    log.end(`layout sections: ${this.layout.sections.length}, components: ${this.components.length}`)
+    log.end(`layout sections: ${this.layout?.sections?.length || 0}, components: ${this.components.length}`)
   }
 
 
