@@ -16,7 +16,6 @@ export const environment = {
 
   organization: { code: undefined },
   tenant: { code: undefined },
-  loginTypes: ['email'],
   captcha: {
     provider: 'google',
     type: 'recaptcha',

@@ -16,7 +16,6 @@ export const environment = {
 
   organization: { code: undefined },
   tenant: { code: undefined },
-  loginTypes: ['email'],
 
   theme: null,
   logo: null,

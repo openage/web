@@ -5,19 +5,67 @@
   }
 
   <form class="login-form" (ngSubmit)="login()" #loginForm="ngForm">
-    <label for="identity">Email or mobile number</label>
-    <input id="identity" name="identity" [(ngModel)]="identity" autocomplete="username" placeholder="you@example.com"
-      required>
+    @if(identityTypes.length > 1) {
+    <div class="identity-types" role="group" aria-label="Identity type">
+      @for(type of identityTypes; track type.code) {
+      <button type="button" [class.active]="identityType === type.code" (click)="selectIdentityType(type.code)">
+        @if(type.icon) { <i [class]="type.icon" aria-hidden="true"></i> }
+        {{ type.label }}
+      </button>
+      }
+    </div>
+    }
+    <label for="identity">{{ identityLabel }}</label>
+    <input id="identity" name="identity" [(ngModel)]="identity" autocomplete="username"
+      [placeholder]="identityPlaceholder" required>
+    @if(credentialMethods.length > 1) {
+    <div class="login-methods" role="group" aria-label="Login method">
+      @for(method of credentialMethods; track method.code) {
+      <button type="button" [class.active]="credentialMethod === method.code" (click)="selectCredentialMethod(method.code)">
+        @if(method.icon) { <i [class]="method.icon" aria-hidden="true"></i> }
+        {{ method.label }}
+      </button>
+      }
+    </div>
+    }
+    @if(credentialMethod === 'password') {
     <label for="password">Password</label>
     <input id="password" name="password" [(ngModel)]="password" type="password" autocomplete="current-password"
       required>
+    @if(config.passwordReset && passwordLoginFailed) {
+    <div class="login-reset">
+      <button type="button" class="link-button" (click)="passwordReset()">
+        {{ config.passwordReset }}
+      </button>
+    </div>
+    }
+    }
+    @if(credentialMethod === 'otp') {
+    <label for="otp">Verification code</label>
+    <input id="otp" name="otp" [(ngModel)]="otp" autocomplete="one-time-code" inputmode="numeric" required>
+    <button class="link-button" type="button" (click)="requestOtp()" [disabled]="isSubmitting">Send verification
+      code</button>
+    }
     @if(error) {
     <p class="login-error" role="alert">{{ error }}</p>
     }
-    <button class="login-submit" type="submit" [disabled]="loginForm.invalid || isSubmitting">
-      {{ isSubmitting ? 'Logging in…' : 'Login' }}
+    <button class="login-submit" type="submit"
+      [disabled]="isSubmitting || (credentialMethod !== 'push' && loginForm.invalid)">
+      {{ isSubmitting ? 'Logging in...' : credentialMethod === 'push' ? 'Send push request' : action }}
     </button>
   </form>
+
+  @if(oauthProviders.length) {
+  <div class="oauth-providers">
+    <span>Or continue with</span>
+    @for(provider of oauthProviders; track provider.code) {
+    <button type="button" class="oauth-button" (click)="oauth(provider)">
+      @if(provider.icon) { <i [class]="provider.icon" aria-hidden="true"></i> }
+      {{ provider.label }}
+    </button>
+    }
+  </div>
+  }
 
   @if(config.signup) {
   <div class="login-signup">

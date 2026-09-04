@@ -123,6 +123,10 @@
   <oa-login [ngClass]="item.class" [ngStyle]="item.style" [config]="item.options"></oa-login>
   }
 
+  @case ('signup') {
+  <oa-signup [ngClass]="item.class" [ngStyle]="item.style" [config]="item.options"></oa-signup>
+  }
+
   @case ('notification') {
   <!-- <send-it-new-notification [from]="'!me'" [apiLimit]="5" [autoRefreshTime]="300"></send-it-new-notification>
         <send-it-desktop-notification></send-it-desktop-notification> -->

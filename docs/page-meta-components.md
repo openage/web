@@ -63,16 +63,16 @@ For a tab container, use `type: "tabbed"`, put a `container.header` on each chil
 
 Every registered control may use these fields:
 
-| Field | Type | Meaning |
-| --- | --- | --- |
-| `code` | string | Stable, page-local identifier. Recommended. |
-| `control` | string | One of the controls in this guide. Required. |
-| `value` | any | Content or data supplied to controls that accept it. |
-| `options` | object | Component configuration. |
-| `class` | string | Classes applied to the component host. |
-| `style` | object | Inline style object applied to the component host. |
-| `permissions` | string[] | Required permissions. |
-| `container` | object | Optional wrapper with `class`, `style`, `header`, and `body`. |
+| Field         | Type     | Meaning                                                       |
+| ------------- | -------- | ------------------------------------------------------------- |
+| `code`        | string   | Stable, page-local identifier. Recommended.                   |
+| `control`     | string   | One of the controls in this guide. Required.                  |
+| `value`       | any      | Content or data supplied to controls that accept it.          |
+| `options`     | object   | Component configuration.                                      |
+| `class`       | string   | Classes applied to the component host.                        |
+| `style`       | object   | Inline style object applied to the component host.            |
+| `permissions` | string[] | Required permissions.                                         |
+| `container`   | object   | Optional wrapper with `class`, `style`, `header`, and `body`. |
 
 ## Registered controls
 
@@ -95,7 +95,7 @@ Renders application, tenant, or organization branding. `value` is not used.
 
 ### `login`
 
-Renders the password login form. `value` is not used.
+Renders a configurable credential or OAuth login form. `value` is not used.
 
 ```json
 {
@@ -103,13 +103,74 @@ Renders the password login form. `value` is not used.
   "options": {
     "label": "Sign in",
     "signup": "Create an account",
-    "view": "card"
+    "view": "card",
+    "identityTypes": [
+      {
+        "code": "email",
+        "label": "Email",
+        "icon": "fa fa-envelope",
+        "placeholder": "you@example.com",
+        "credentialMethods": [
+          { "code": "password", "label": "Password", "icon": "fa fa-lock" },
+          { "code": "otp", "label": "One-time code", "icon": "fa fa-lock" }
+        ]
+      },
+      {
+        "code": "mobile",
+        "label": "Mobile",
+        "icon": "fa fa-phone",
+        "placeholder": "+1 555 123 4567",
+        "credentialMethods": [
+          { "code": "otp", "label": "One-time code", "icon": "fa fa-lock" },
+          { "code": "push", "label": "Passwordless push", "icon": "fa fa-mobile" }
+        ]
+      }
+    ],
+    "oauthProviders": [
+      { "code": "google", "label": "Google", "icon": "fa fa-google", "url": "https://id.example.com/oauth/google" },
+      { "code": "microsoft", "label": "Microsoft", "icon": "fa fa-microsoft", "url": "https://id.example.com/oauth/microsoft" }
+    ],
+    "passwordReset": "Forgot password",
+    "action": "Sign in"
   },
   "style": { "max-width": "420px", "margin": "48px auto" }
 }
 ```
 
 `options.label` is the form heading. `options.signup` is the signup-link text; omit it to hide that link. `options.view` is retained by the component for style/view conventions but does not currently change rendering.
+
+`options.action` sets the submit button text. `options.passwordReset` adds a link to the `auth.forgot-password` page. Identity types, credential methods, and OAuth providers may include an `icon` class, which is rendered on the corresponding option button.
+
+`options.identityTypes` contains identity objects with `code`, `label`, optional `placeholder`, and nested `credentialMethods`. Credential methods support `password`, `otp`, and passwordless `push`. The first identity and its first credential method are selected initially. For `otp`, use the form's send-code action before submitting the code. `oauthProviders` supports `google`, `microsoft`, `github`, `facebook`, and `twitter` (or another provider code); each provider needs a redirect `url` to be actionable.
+
+Applications can set the defaults in the environment with `loginTypes` and `loginMethods`. The default remains email plus password for backwards compatibility.
+
+### `signup`
+
+Renders account registration, verification-code confirmation, and resend-code controls. `value` is not used.
+
+```json
+{
+  "control": "signup",
+  "options": {
+    "label": "Create your account",
+    "login": "Sign in instead",
+    "view": "individual",
+    "roleType": "customer.normal",
+    "typeCode": "customer",
+    "source": { "campaign": "website" }
+  }
+}
+```
+
+`options.label` sets the heading, `options.login` sets the login-link text, and `view`, `typeCode`, `roleType`, and `source` are forwarded to the signup request. The form requires first name, last name, a valid email or mobile number, and matching passwords of at least eight characters.
+
+`options.view` must be one of:
+
+- `individual` — creates a user in the current tenant.
+- `employee` — joins the current organization; if there is no current organization, prompts for an organization code.
+- `organization` — prompts for a new organization name and code, then creates it in the current tenant.
+- `tenant` — prompts for a new tenant name and code.
 
 ### `role`
 

@@ -1,0 +1,50 @@
+<section class="signup-card" [ngClass]="class" [ngStyle]="style">
+  @if (!afterSignUp) {
+    <form class="signup-form" #signupForm="ngForm" (ngSubmit)="register()">
+      <h2>{{ label }}</h2>
+      @if (view === 'individual') { <p class="signup-intro">Create a new user account for this tenant.</p> }
+      @if (view === 'employee' && !isEmployeeWithoutOrganization()) { <p class="signup-intro">Join the current organization.</p> }
+      <div class="name-fields">
+        <div><label for="signup-first-name">First name</label><input id="signup-first-name" name="firstName" [(ngModel)]="profile.firstName" autocomplete="given-name" required></div>
+        <div><label for="signup-last-name">Last name</label><input id="signup-last-name" name="lastName" [(ngModel)]="profile.lastName" autocomplete="family-name" required></div>
+      </div>
+      <label for="signup-email">Email address</label>
+      <input id="signup-email" name="email" type="email" [(ngModel)]="email" autocomplete="email">
+      <label for="signup-mobile">Mobile number</label>
+      <input id="signup-mobile" name="mobile" type="tel" [(ngModel)]="mobile" autocomplete="tel">
+      @if (isEmployeeWithoutOrganization()) {
+        <label for="signup-organization-code">Organization code</label>
+        <input id="signup-organization-code" name="organizationCode" [(ngModel)]="organizationCode" autocomplete="organization" required>
+      }
+      @if (view === 'organization') {
+        <label for="signup-organization-name">Organization name</label>
+        <input id="signup-organization-name" name="organizationName" [(ngModel)]="organizationName" autocomplete="organization" required>
+        <label for="signup-organization-code">Organization code</label>
+        <input id="signup-organization-code" name="organizationCode" [(ngModel)]="organizationCode" required>
+      }
+      @if (view === 'tenant') {
+        <label for="signup-tenant-name">Tenant name</label>
+        <input id="signup-tenant-name" name="tenantName" [(ngModel)]="tenantName" required>
+        <label for="signup-tenant-code">Tenant code</label>
+        <input id="signup-tenant-code" name="tenantCode" [(ngModel)]="tenantCode" required>
+      }
+      <label for="signup-password">Password</label>
+      <input id="signup-password" name="password" type="password" [(ngModel)]="password" autocomplete="new-password" required>
+      <label for="signup-confirm-password">Confirm password</label>
+      <input id="signup-confirm-password" name="confirmPassword" type="password" [(ngModel)]="confirmPassword" autocomplete="new-password" required>
+      @if (error) { <p class="signup-error" role="alert">{{ error }}</p> }
+      <button class="signup-submit" type="submit" [disabled]="signupForm.invalid || isProcessing">{{ isProcessing ? 'Creating account…' : 'Create account' }}</button>
+    </form>
+    <p class="signup-login">Already registered? <button type="button" class="link-button" (click)="login()">{{ config.login || 'Login' }}</button></p>
+  } @else {
+    <form class="signup-form" #confirmationForm="ngForm" (ngSubmit)="confirm()">
+      <h2>Verify your account</h2>
+      <p class="signup-intro">We sent a verification code to your registered contact.</p>
+      <label for="signup-otp">Verification code</label>
+      <input id="signup-otp" name="otp" [(ngModel)]="otp" autocomplete="one-time-code" inputmode="numeric" required>
+      @if (error) { <p class="signup-error" role="alert">{{ error }}</p> }
+      <button class="signup-submit" type="submit" [disabled]="confirmationForm.invalid || isProcessing">{{ isProcessing ? 'Verifying…' : 'Verify account' }}</button>
+      <button class="resend-button" type="button" (click)="resendOtp()" [disabled]="disableResend || isProcessing">{{ disableResend ? 'Resend available in ' + countdownSeconds + 's' : 'Resend code' }}</button>
+    </form>
+  }
+</section>

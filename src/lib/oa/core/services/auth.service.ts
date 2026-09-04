@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Subject } from 'rxjs';
-import { Logger, Organization, User } from '../models';
+import { Logger, Organization, Tenant, User } from '../models';
 import { Profile } from '../models/profile.model';
 import { RoleType } from '../models/role-type.model';
 import { Role } from '../models/role.model';
@@ -71,7 +71,7 @@ export class AuthService {
     return this.context.setRole(role);
   }
 
-  public signup = async (user: User, organization?: Organization, roleType?: string, source?: any, app?: string) => {
+  public signup = async (user: User, organization?: Organization, roleType?: string, source?: any, app?: string, tenant?: Tenant) => {
     const email = user.email;
     const phone = user.phone;
 
@@ -91,7 +91,8 @@ export class AuthService {
       meta: {
         organization,
         roleType,
-        source
+        source,
+        tenant
       }
     };
 
@@ -121,7 +122,7 @@ export class AuthService {
   }
 
   public verifyPassword = async (email: string, mobile: string, code: string, password: string,
-    app?: string, device?: string) => {
+    app?: string, device?: string, method = 'password') => {
     const model = {
       purpose: 'login',
       app: this.context.application()?.code,
@@ -130,12 +131,28 @@ export class AuthService {
         email,
         mobile,
         code,
-        password
+        password,
+        method
       }
     };
 
     const session = await this.dataService.create(model, `${this.userApi}/signIn`)
     return this.context.session.set(session)
+  }
+
+  public sendLoginOtp = async (email: string, mobile: string, code: string) => {
+    return this.sendOtp(email, mobile, code);
+  }
+
+  public verifyLoginOtp = async (email: string, mobile: string, code: string, otp: string, sessionId?: string) => {
+    const model = {
+      purpose: 'login',
+      app: this.context.application()?.code,
+      sessionId,
+      user: { email, mobile, code, otp, method: 'otp' }
+    };
+    const session = await this.dataService.create(model, `${this.userApi}/signIn`);
+    return this.context.session.set(session);
   }
 
   public authSuccess = async (token: string, provider: string, applicaton?: string, device?: string) => {
