@@ -1,7 +1,7 @@
 import { AfterViewInit, ChangeDetectorRef, Component, Injector, OnChanges, OnDestroy, OnInit, SimpleChanges, TemplateRef, effect, inject } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Entity, Link, Logger } from '../models';
-import { StorageService } from '../services';
+import { CacheService } from '../services';
 import { ContextService } from '../services/context.service';
 import { UxService } from '../services/ux.service';
 import { ConstantService } from '../services/constant.service';
@@ -18,7 +18,7 @@ export abstract class PageBaseComponent implements OnInit, OnDestroy {
   private navService = inject(NavService);
   private context = inject(ContextService);
   private _route = inject(ActivatedRoute);
-  private storage = inject(StorageService);
+  private storage = inject(CacheService);
 
   isCurrent = true;
   isInitialized = false;

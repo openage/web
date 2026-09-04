@@ -25,7 +25,7 @@ export class UxService {
   private document: Document = inject(DOCUMENT);
   private context = inject(ContextService);
 
-  public init = async () => {
+  public init = () => {
     const log = this.logger.get('init');
 
     effect(() => {

@@ -1,23 +1,4 @@
-<ul class="toc toc-depth-{{depth}}">
-  {{#each this}}
-  <li>
-    {{text}}
-    {{#if children.length}}
-    <ul class="toc toc-depth-{{children.[0].depth}}">
-      {{#each children}}
-      <li>
-        {{text}}
-        {{#if children.length}}
-        <ul class="toc toc-depth-{{children.[0].depth}}">
-          {{#each children}}
-          <li>{{text}}</li>
-          {{/each}}
-        </ul>
-        {{/if}}
-      </li>
-      {{/each}}
-    </ul>
-    {{/if}}
-  </li>
-  {{/each}}
-</ul>
+<ul class='toc toc-depth-{{optins.depth}}'> {{#each this}} <li> {{text}} {{#if children.length}} <ul
+      class='toc toc-depth-{{children.[0].depth}}'> {{#each children}} <li> {{text}} {{#if children.length}} <ul
+          class='toc toc-depth-{{children.[0].depth}}'> {{#each children}} <li>{{text}}</li> {{/each}} </ul> {{/if}}
+      </li> {{/each}} </ul> {{/if}} </li> {{/each}}</ul>"

@@ -103,6 +103,8 @@ class InProcessStorage implements Storage {
 export class EnvironmentService {
   logger = new Logger('EnvironmentService');
 
+  private services: any;
+
   private application?: Application;
 
   private cache = new Cache();
@@ -137,6 +139,23 @@ export class EnvironmentService {
     const applicationUrl = environment.ref.replace('{{host}}', host);
     let applicationData = await this.getData(applicationUrl);
 
+    this.services = applicationData.services ? [...applicationData.services] : [];
+
+    if (environment.services && environment.services.length) {
+      environment.services.forEach((service) => {
+        const environmentService = new Service(service);
+        const index = this.services.findIndex((s: any) => s.code === environmentService.code);
+
+        if (index >= 0) {
+          this.services[index] = environmentService;
+        } else {
+          this.services.push(environmentService);
+        }
+      });
+    }
+
+    applicationData.services = this.services;
+
     applicationData = await this.overrides(applicationData);
     applicationData.code = applicationData.code || environment.code;
     applicationData.name = applicationData.name || environment.name;
@@ -160,8 +179,9 @@ export class EnvironmentService {
     }
 
     this.cache.set('application', this.application)
+    await
 
-    log.end();
+      log.end();
     return
   }
 
@@ -193,14 +213,14 @@ export class EnvironmentService {
       return url;
     }
 
-    let serviceCode = 'app';
+    let serviceCode = 'assets';
     if (url.startsWith(':')) {
       serviceCode = url.split('/')[0].substring(1);
     }
-    const service: any = environment.services.find((s: any) => s.code === serviceCode)
+    const service: any = this.services.find((s: any) => s.code === serviceCode)
 
     if (!service) {
-      throw new Error(`service '${serviceCode}' is not defined in environment.services section`)
+      throw new Error(`service '${serviceCode}' is not defined`)
     }
 
     if (url.startsWith(':')) {
@@ -291,20 +311,6 @@ export class EnvironmentService {
       data.navs = navs;
     }
 
-    if (environment.services && environment.services.length) {
-      const services = environment.services.map((s) => new Service(s));
-
-      if (data.services && data.services.length) {
-
-        data.services.forEach((service) => {
-          if (!services.find((s) => s.code === service.code)) {
-            services.push(service);
-          }
-        });
-      }
-
-      data.services = services;
-    }
 
     const theme = data.theme || environment.theme || {};
     data.theme = new Theme(theme)

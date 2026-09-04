@@ -67,6 +67,8 @@ export class AppComponent implements OnInit {
   constructor() {
     const log = this.logger.get('constructor');
     this.navService.init();
+    this.uxService.init();
+
     effect(() => {
       this.setTheme();
       console.log('runs with component lifecycle');

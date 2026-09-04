@@ -1,6 +1,6 @@
 import { Injectable, Injector } from '@angular/core';
 import { EnvironmentService } from './environment.service';
-import { StorageService } from './storage.service';
+import { CacheService } from './cache.service';
 import { Logger } from '../models';
 
 @Injectable({
@@ -18,8 +18,8 @@ export class AppInitService {
     return this.injector.get(EnvironmentService);
   }
 
-  get cache(): StorageService {
-    return this.injector.get(StorageService);
+  get cache(): CacheService {
+    return this.injector.get(CacheService);
   }
 
   init(): Promise<any> {

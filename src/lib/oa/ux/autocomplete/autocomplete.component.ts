@@ -15,7 +15,7 @@ import {
 import { Subject } from 'rxjs';
 import { PaginatorComponent } from '../../components/paginator/paginator.component';
 import { Action } from '../../core/models/action.model';
-import { StorageService } from '../../core/services';
+import { CacheService } from '../../core/services';
 import { ContentService } from '../../core/services/content.service';
 import { ContextService } from '../../core/services/context.service';
 import { DataService } from '../../core/services/data.service';
@@ -152,7 +152,7 @@ export class AutocompleteComponent implements OnInit, OnChanges {
 
   uxService = inject(UxService);
   context = inject(ContextService);
-  cache = inject(StorageService);
+  cache = inject(CacheService);
   content = inject(ContentService);
 
   constructor() {

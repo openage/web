@@ -328,6 +328,7 @@ export class OpenAgeData implements DataSourcePlugin {
     }
     config = config || {};
     this.checkError(dataModel);
+    return dataModel.data;
   }
 
   /**

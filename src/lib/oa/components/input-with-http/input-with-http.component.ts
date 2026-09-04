@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Component, inject, Input, OnInit } from '@angular/core';
 import { DataService } from '../../core/services/data.service';
 import { UxService } from '../../core/services/ux.service';
-import { StorageService, StringService } from '../../core/services';
+import { CacheService, StringService } from '../../core/services';
 import { ContextService } from '../../core/services/context.service';
 
 @Component({
@@ -55,7 +55,7 @@ export class InputWithHttpComponent implements OnInit {
 
 
   public uxService = inject(UxService);
-  private cache = inject(StorageService);
+  private cache = inject(CacheService);
   private stringService = inject(StringService);
   public auth = inject(ContextService);
 

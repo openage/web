@@ -4,11 +4,13 @@ import { DataSourcePlugin } from '../data-source.plugin';
 import { inject } from '@angular/core';
 import { Page } from '../../lib/oa/core/models/page.model';
 import { ContentService } from '../../lib/oa/core/services/content.service';
+import { ContextService } from '../../lib/oa/core/services/context.service';
 
 export class RemoteData implements DataSourcePlugin {
 
   http = inject(HttpClient);
   private content = inject(ContentService);
+  private context = inject(ContextService);
 
 
   canHandle(src: any): boolean {
@@ -55,6 +57,15 @@ export class RemoteData implements DataSourcePlugin {
     }
 
     let url = src.url
+    if (url.startsWith(':')) {
+      const serviceCode = src.url.split('/')[0].substring(1);
+      const service = this.context.getService(serviceCode);
+      if (!service) {
+        throw new Error('SERVICE_INVALID', { cause: serviceCode })
+      }
+      url = url.replace(`:${serviceCode}`, service.url)
+    }
+
     const resource = config?.src?.resource || config?.resource || config?.src?.collection || config?.collection;
 
     const collection = resource?.type || resource;

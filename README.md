@@ -112,7 +112,7 @@ OA Pages uses JSON-based constructs to define the application's structure and be
 - Use Case: Image galleries, portfolios, or Pinterest-like layouts.
 - [ref](https://www.youtube.com/watch?v=8zm0ruyp3-I)
 
-Full-Screen Hero Layout
+**Full-Screen Hero Layout**
 - Code: `hero`
 - Description: Features a full-screen hero section with a call-to-action, followed by additional content.
 - Use Case: Landing pages, promotional sites, or apps with a strong visual focus.

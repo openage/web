@@ -10,7 +10,7 @@ import { Application, Entity, Link, Logger } from '../models';
 import { Service } from '../models/service.model';
 import { ContextService } from './context.service';
 import { MetaService } from './meta.service';
-import { StorageService } from './storage.service';
+import { CacheService } from './cache.service';
 import { DataService } from './data.service';
 
 
@@ -33,7 +33,7 @@ export class NavService {
   private context = inject(ContextService);
   private metaService = inject(MetaService);
   private dataService = inject(DataService);
-  private storageService = inject(StorageService);
+  private storageService = inject(CacheService);
   // private auth = inject(RoleService);
 
   constructor() {
@@ -507,11 +507,15 @@ export class NavService {
 
   public populateMeta = async (link: Link) => {
     const log = this.logger.get('setPageMeta');
-    const meta = link.meta || link.layout || link.footer;
+    let meta = link.meta || link.layout || {}; // || link.footer;
 
-    if (!meta) {
-      return {};
+    if (typeof meta === 'object' && Object.keys(meta || {}).length === 0 && link.id) {
+      const data = await this.dataService.get(link.id, { service: 'system', collection: 'navs' })
+      if (data) {
+        meta = data.meta
+      }
     }
+
     let url = typeof meta === 'string' ? meta : meta.src || meta.ref;
     if (!url) {
       return meta
@@ -543,6 +547,10 @@ export class NavService {
     log.debug('got meta');
 
     let content = type ? res : res?.data?.content;
+
+    if (content?.meta) {
+      content = content.meta;
+    }
 
     if (typeof content === 'string') {
 
@@ -631,6 +639,18 @@ export class NavService {
     }).join('/');
   }
 
+  private resolvePathPart = (part: string, snapshot: ActivatedRouteSnapshot): string => {
+    if (!part) {
+      return '';
+    }
+
+    if (part.startsWith(':')) {
+      return this.getValue(part.substring(1), snapshot) || part;
+    }
+
+    return part;
+  }
+
   private getValue = (k: string, ss: ActivatedRouteSnapshot): any => {
     if (ss.paramMap.has(k)) {
       return ss.paramMap.get(k);
@@ -702,13 +722,27 @@ export class NavService {
 
         const linkPathParts = n.path.split('?')[0].split('/').filter(p => p !== '');
 
-        if (actualPathParts.length !== linkPathParts.length) {
+        const matchesSameLength = actualPathParts.length === linkPathParts.length;
+        const matchesFinalSegment = actualPathParts.length === 1 && linkPathParts.length > 1
+          ? actualPathParts[0] === this.resolvePathPart(linkPathParts[linkPathParts.length - 1], snapshot)
+          : actualPathParts.length > 1 && linkPathParts.length === 1
+            ? linkPathParts[0] === this.resolvePathPart(actualPathParts[actualPathParts.length - 1], snapshot)
+            : false;
+
+        if (!matchesSameLength && !matchesFinalSegment) {
           return false;
         }
 
-        for (let index = 0; index < linkPathParts.length; index++) {
+        const compareLength = matchesSameLength ? linkPathParts.length : Math.max(linkPathParts.length, actualPathParts.length);
+
+        for (let index = 0; index < compareLength; index++) {
           let linkValue: any = linkPathParts[index];
           const actualValue = actualPathParts[index];
+
+          if (index >= linkPathParts.length || index >= actualPathParts.length) {
+            return matchesFinalSegment && index === compareLength - 1;
+          }
+
           if (linkValue.startsWith(':')) {
             linkValue = this.getValue(linkValue.substring(1), snapshot)
           }

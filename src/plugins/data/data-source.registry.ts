@@ -48,7 +48,8 @@ export class DataSourceRegistry {
     let src = config.src || config.url || config.service;
     if (typeof src === 'string') {
       src = {
-        url: src
+        url: src,
+        provider: config.provider
       }
     }
 

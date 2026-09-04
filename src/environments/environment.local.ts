@@ -13,7 +13,8 @@ export const environment = {
   host: 'www.applegos.in', // this is only for local debugging
   title: 'Applegos',
   version: '1.0.0',
-  ref: 'https://api.openage.in/system/v1/api/applications/host:{{host}}', // prod
+  // ref: 'https://api.openage.in/system/v1/api/applications/host:{{host}}', // prod
+  ref: 'http://localhost:8080/%24content/system/applications/local.json',
 
   organization: { code: undefined },
   tenant: { code: undefined },
@@ -22,13 +23,13 @@ export const environment = {
   theme: {
     code: 'default',
     name: null,
-    style: ':app/theme.css',
-    icon: ':app/icons.css',
+    style: ':assets/theme.css',
+    icon: ':assets/icons.css',
     type: 'light'
   },
-  logo: { url: ':app/images/branding/logo.png' },
-  splash: { url: ':app/images/branding/splash.png' },
-  favicon: { url: ':app/images/branding/favicon.png' },
+  logo: { url: ':assets/images/branding/logo.png' },
+  splash: { url: ':assets/images/branding/splash.png' },
+  favicon: { url: ':assets/images/branding/favicon.png' },
   styles: [],
 
   captcha: {
@@ -44,13 +45,14 @@ export const environment = {
     }
   },
   errors: [],
-  meta: { src: ':app/structure.json' },
+  meta: { src: ':assets/structure.json' },
 
   // if services section exists then it would be used
 
-  services: [{
-    code: 'app',
-    url: '/assets/app/aquateams'
+  services: [
+    // {
+    // code: 'assets',
+    // url: '/assets/app/aquateams'
     // }, {
     //   code: 'directory',
     //   // url: 'http://localhost:3001/api'
@@ -75,25 +77,26 @@ export const environment = {
     //   code: 'bap',
     //   // url: 'http://localhost:3005/api'
     //   url: 'https://stage.openage.in/billing/api'
-  }],
+    //}
+  ],
 
   // if navs section exists then it would be used
   navs: [
     // {
     //   code: 'home',
-    //   src: ':app/nav/home/nav.json'
+    //   src: ':assets/nav/home/nav.json'
     // },
     // {
     //   code: 'customers',
-    //   src: ':app/nav/home/customers/nav.json'
+    //   src: ':assets/nav/home/customers/nav.json'
     // },
     // {
     //   code: 'vendors',
-    //   src: ':app/nav/home/vendors/nav.json'
+    //   src: ':assets/nav/home/vendors/nav.json'
     // },
     // {
     //   code: 'orders',
-    //   src: ':app/nav/home/orders/nav.json'
+    //   src: ':assets/nav/home/orders/nav.json'
     // },
   ]
 };

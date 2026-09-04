@@ -2,7 +2,7 @@ import { inject, Injectable, DOCUMENT, signal, effect } from '@angular/core';
 import { Application, Entity, ErrorModel, Link, Logger, Organization, Pic, Tenant, Theme, User } from '../models';
 import { Role } from '../models/role.model';
 import { Session } from '../models/session.model';
-import { StorageService } from './storage.service';
+import { CacheService } from './cache.service';
 import { BehaviorSubject, Subject } from 'rxjs';
 import { Service } from '../models/service.model';
 import { IAuth } from './auth.interface';
@@ -20,7 +20,7 @@ export class ContextService implements IAuth {
 
   private logger = new Logger(ContextService);
   private document = inject(DOCUMENT);
-  private cache = inject(StorageService);
+  private cache = inject(CacheService);
 
   readonly theme = signal<Theme | undefined>(this.cache.get('theme'))
   readonly path = signal<string | undefined>(undefined);

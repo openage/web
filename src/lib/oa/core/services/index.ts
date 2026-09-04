@@ -1,5 +1,6 @@
 export * from './auth.service';
-export * from './storage.service';
+export * from './cache.service';
+export * from './cache.interface';
 export * from './api.interface';
 export * from './error.service';
 export * from './string.service';

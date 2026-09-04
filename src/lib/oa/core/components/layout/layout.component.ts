@@ -280,8 +280,9 @@ export class LayoutComponent implements OnInit, OnChanges {
     });
 
     if (section.type && section.type !== 'default') {
-      section.container.header = section.container.header || {};
-      section.container.body = section.container.body || {};
+      section.container = section.container || {};
+      section.container.header = section.container?.header || {};
+      section.container.body = section.container?.body || {};
       let index = 0;
       let selected = false;
       section.sections.forEach((s: any) => {
