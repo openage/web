@@ -21,7 +21,8 @@
     @if(credentialMethods.length > 1) {
     <div class="login-methods" role="group" aria-label="Login method">
       @for(method of credentialMethods; track method.code) {
-      <button type="button" [class.active]="credentialMethod === method.code" (click)="selectCredentialMethod(method.code)">
+      <button type="button" [class.active]="credentialMethod === method.code"
+        (click)="selectCredentialMethod(method.code)">
         @if(method.icon) { <i [class]="method.icon" aria-hidden="true"></i> }
         {{ method.label }}
       </button>
