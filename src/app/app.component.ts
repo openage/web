@@ -1,4 +1,4 @@
-import { Component, effect, ElementRef, HostListener, inject, OnInit, ViewChild, computed } from '@angular/core';
+import { Component, effect, ElementRef, HostListener, inject, OnInit, ViewChild, computed, signal } from '@angular/core';
 
 import { ActivatedRoute, Router, RouterOutlet } from '@angular/router';
 import { environment } from '../environments/environment';
@@ -57,10 +57,10 @@ export class AppComponent implements OnInit {
   underMaintenance = this.context.underMaintenance;
   isInitialized = true;
 
-  header = computed(() => this.context.getPageMeta('header'));
-  footer = computed(() => this.context.getPageMeta('footer'));
-  sidebar = computed(() => this.context.getPageMeta('sidebar'));
-  layoutType = computed(() => this.context.getAppMeta('layout') || 'sticky-header');
+  header = signal(false);
+  footer = signal(false);
+  sidebar = signal(false);
+  layoutType = signal('sticky-header');
 
   logger = new Logger(AppComponent);
 
@@ -69,9 +69,21 @@ export class AppComponent implements OnInit {
     this.navService.init();
     this.uxService.init();
 
+    // Effects run once during initialization and again whenever either signal
+    // changes, unlike a computed value which is evaluated only when read.
     effect(() => {
       this.setTheme();
       console.log('runs with component lifecycle');
+      this.context.application();
+      this.context.page();
+      const header = this.context.getPageMeta('header');
+      const footer = this.context.getPageMeta('footer');
+      const sidebar = this.context.getPageMeta('sidebar');
+
+      this.header.set(!!header && header.enabled !== false);
+      this.footer.set(!!footer && footer.enabled !== false);
+      this.sidebar.set(!!sidebar && sidebar.enabled !== false);
+      this.layoutType.set(this.context.getAppMeta('layout') || 'sticky-header');
     });
   }
 

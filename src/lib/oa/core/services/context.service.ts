@@ -293,7 +293,7 @@ export class ContextService implements IAuth {
     const getValue = (identifier: string, value: any) => {
       if (!value) { return }
       for (const key of identifier.split('.')) {
-        if (!value[key]) {
+        if (!Object.prototype.hasOwnProperty.call(value, key)) {
           value = null
           break
         }
@@ -309,7 +309,7 @@ export class ContextService implements IAuth {
     const getValue = (identifier: string, value: any) => {
       if (!value) { return }
       for (const key of identifier.split('.')) {
-        if (!value[key]) {
+        if (!Object.prototype.hasOwnProperty.call(value, key)) {
           value = null
           break
         }
@@ -321,7 +321,7 @@ export class ContextService implements IAuth {
 
     const value: any = page ? getValue(key, page.meta) : null;
 
-    if (value) {
+    if (value !== undefined) {
       return value;
     }
 

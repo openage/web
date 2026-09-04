@@ -36,6 +36,7 @@ import { BrandingComponent } from "../branding/branding.component";
 import { BreadcrumbComponent } from "../breadcrumb/breadcrumb.component";
 import { CurrentRoleComponent } from "../current-role/current-role.component";
 import { MarkdownComponent } from "../../../ux/markdown/markdown.component";
+import { LoginComponent } from "../../../components/login/login.component";
 
 @Component({
   selector: "oa-layout",
@@ -61,7 +62,8 @@ import { MarkdownComponent } from "../../../ux/markdown/markdown.component";
     BrandingComponent,
     BreadcrumbComponent,
     CurrentRoleComponent,
-    MarkdownComponent
+    MarkdownComponent,
+    LoginComponent
   ]
 })
 export class LayoutComponent implements OnInit, OnChanges {
