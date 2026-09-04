@@ -29,21 +29,21 @@ export const routes: Routes = [
   {
     path: ':area',
     canActivate: [pageGuard],
-    loadComponent: () => import('./landing/landing.component').then(mod => mod.LandingComponent),
+    loadComponent: () => import('./dynamic-page/dynamic-page.component').then(mod => mod.DynamicPageComponent),
     resolve: { data: RouteDataResolver },
     runGuardsAndResolvers: 'always',
     children: [
       {
         path: ':collection',
         canActivate: [pageGuard],
-        loadComponent: () => import('./landing/landing.component').then(mod => mod.LandingComponent),
+        loadComponent: () => import('./dynamic-page/dynamic-page.component').then(mod => mod.DynamicPageComponent),
         resolve: { data: RouteDataResolver },
         runGuardsAndResolvers: 'always',
         children: [
           {
             path: ':code',
             canActivate: [pageGuard],
-            loadComponent: () => import('./landing/landing.component').then(mod => mod.LandingComponent),
+            loadComponent: () => import('./dynamic-page/dynamic-page.component').then(mod => mod.DynamicPageComponent),
             resolve: { data: RouteDataResolver },
             runGuardsAndResolvers: 'always'
           }

@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { LandingComponent } from './landing.component';
+import { DynamicPageComponent } from './dynamic-page.component';
 
-describe('LandingComponent', () => {
-  let component: LandingComponent;
-  let fixture: ComponentFixture<LandingComponent>;
+describe('DynamicPageComponent', () => {
+  let component: DynamicPageComponent;
+  let fixture: ComponentFixture<DynamicPageComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [LandingComponent]
+      imports: [DynamicPageComponent]
     })
     .compileComponents();
     
-    fixture = TestBed.createComponent(LandingComponent);
+    fixture = TestBed.createComponent(DynamicPageComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

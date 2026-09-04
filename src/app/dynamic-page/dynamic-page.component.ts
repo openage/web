@@ -6,17 +6,17 @@ import { Logger } from '../../lib/oa/core/models';
 
 @Component({
   // eslint-disable-next-line @angular-eslint/component-selector
-  selector: 'app-landing',
-  templateUrl: './landing.component.html',
-  styleUrl: './landing.component.scss',
+  selector: 'app-dynamic-page',
+  templateUrl: './dynamic-page.component.html',
+  styleUrl: './dynamic-page.component.scss',
   imports: [
     RouterOutlet,
     LayoutComponent
   ]
 })
-export class LandingComponent extends PageBaseComponent implements AfterViewInit {
+export class DynamicPageComponent extends PageBaseComponent implements AfterViewInit {
 
-  logger = new Logger(LandingComponent);
+  logger = new Logger(DynamicPageComponent);
 
   // @ViewChild('htmlComponent')
   // htmlComponent?: TemplateRef<any>;
