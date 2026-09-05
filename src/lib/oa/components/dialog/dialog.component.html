@@ -1,15 +1,15 @@
 @if (trigger) {
-  <oa-action [item]="trigger"></oa-action>
+<oa-action [options]="trigger"></oa-action>
 }
 
 @if (show && view !== 'modal') {
-  <div class="dialog-container" [class.blocking]="true">
-    <div class="dialog-content">
-      <div class="dialog-body">
-        <ng-container *ngTemplateOutlet="bodyTemplate"></ng-container>
-      </div>
+<div class="dialog-container" [class.blocking]="true">
+  <div class="dialog-content">
+    <div class="dialog-body">
+      <ng-container *ngTemplateOutlet="bodyTemplate"></ng-container>
     </div>
   </div>
+</div>
 }
 
 <ng-template #bodyTemplate>

@@ -107,7 +107,7 @@ export class LayoutComponent implements OnInit, OnChanges {
     this.components = this.components || [];
 
     // Handle section changes
-    if (changes['section']) {
+    if (changes['section']?.currentValue) {
       this.initSection(changes['section'].currentValue);
     }
 
@@ -242,6 +242,7 @@ export class LayoutComponent implements OnInit, OnChanges {
   // }
   initSection(section: any) {
     const log = this.logger.get('initSection');
+    if (!section) { return {}; }
     section.style = this.getStyle(section);
     section.container = this.getContainer(section);
 
@@ -443,9 +444,9 @@ export class LayoutComponent implements OnInit, OnChanges {
    * Get the style for a section or component.
    */
   getStyle(section: any) {
-    let style = section.style || section.code;
+    let style = section?.style || section?.code;
     if (typeof style === 'string') {
-      style = this.styles[style];
+      style = this.styles?.[style];
     }
     return style;
   }
@@ -454,7 +455,7 @@ export class LayoutComponent implements OnInit, OnChanges {
    * Get the container details for an item.
    */
   getContainer(item: any) {
-    const container = item.container;
+    const container = item?.container;
     if (container) {
       container.body = container.body || {};
       let style = container.body.style || container.style || item.style || item.code;

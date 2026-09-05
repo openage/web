@@ -5,7 +5,7 @@
   <div class="flex-row banner" [oaTooltip]="error.name">
     <i class="{{error.level}} sm xx"></i>
     <span class="spacer">{{error.message}}</span>
-    <oa-action item="close" class="subtle" (click)="clearError()"></oa-action>
+    <oa-action options="close" class="subtle" (click)="clearError()"></oa-action>
   </div>
   }
   @case ('input-hint') {

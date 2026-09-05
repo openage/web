@@ -73,16 +73,18 @@ export class AppComponent implements OnInit {
     // changes, unlike a computed value which is evaluated only when read.
     effect(() => {
       this.setTheme();
-      console.log('runs with component lifecycle');
+      log.debug('effect');
       this.context.application();
-      this.context.page();
-      const header = this.context.getPageMeta('header');
-      const footer = this.context.getPageMeta('footer');
-      const sidebar = this.context.getPageMeta('sidebar');
-
-      this.header.set(!!header && header.enabled !== false);
-      this.footer.set(!!footer && footer.enabled !== false);
-      this.sidebar.set(!!sidebar && sidebar.enabled !== false);
+      const page = this.context.page();
+      if (!page) {
+        this.header.set(false);
+        this.footer.set(false);
+        this.sidebar.set(false);
+      } else {
+        this.header.set(!this.context.getPageMeta('header.disabled'));
+        this.footer.set(!this.context.getPageMeta('footer.disabled'));
+        this.sidebar.set(!this.context.getPageMeta('side-bar.disabled'));
+      }
       this.layoutType.set(this.context.getAppMeta('layout') || 'sticky-header');
     });
   }

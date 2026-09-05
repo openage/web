@@ -61,8 +61,8 @@
 
   @case ('slider') {
   <div class="header navs" [ngClass]="item.container.header?.class" [ngStyle]="item.container.header?.style">
-    <oa-action [item]="item.actions.previous"></oa-action>
-    <oa-action [item]="item.actions.next"></oa-action>
+    <oa-action [options]="item.actions.previous"></oa-action>
+    <oa-action [options]="item.actions.next"></oa-action>
   </div>
   }
   @default {
@@ -152,7 +152,7 @@
   }
 
   @case ('action') {
-  <oa-action [ngClass]="item.class" [ngStyle]="item.style" [value]="item.value" [item]="item.options"></oa-action>
+  <oa-action [ngClass]="item.class" [ngStyle]="item.style" [value]="item.value" [options]="item.options"></oa-action>
   }
 
   @case ('nav') {

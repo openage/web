@@ -78,7 +78,7 @@ export class LoginComponent implements OnInit {
     this.credentialMethod = this.credentialMethods[0]?.code || 'password';
     this.oauthProviders = this.config.oauthProviders || []
     const params = this.route.snapshot.queryParams;
-    const redirectUrl = params['redirectUrl'] || params['redirect-url'] || params['redirect'] || '/home';
+    const redirectUrl = params['redirectUrl'] || params['redirect-url'] || params['redirect'];
     this.auth.setRedirectUrl(redirectUrl);
   }
 
@@ -182,7 +182,7 @@ export class LoginComponent implements OnInit {
   }
 
   onLogin() {
-    this.navService.goto(this.auth.getRedirectUrl());
+    this.navService.goto(this.auth.getRedirectUrl() || 'home');
   }
 
   signUp() {

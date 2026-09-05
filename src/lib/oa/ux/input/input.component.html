@@ -1,6 +1,6 @@
 <div class="oa-input" [class]="class" [style]="style" [class.selected]="isSelected" [class.inline]="options?.inline">
   @if (preFix) {
-  <oa-action [disabled]="disabled" [item]="preFix" class="subtle"></oa-action>
+  <oa-action [disabled]="disabled" [options]="preFix" class="subtle"></oa-action>
   }
   @switch (view) {
   @case ('text') {
@@ -47,7 +47,7 @@
   }
 
   @if (postFix && !readonly) {
-  <oa-action [disabled]="disabled" [item]="postFix"></oa-action>
+  <oa-action [disabled]="disabled" [options]="postFix"></oa-action>
   }
 </div>
 @if (validate || required) {

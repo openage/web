@@ -12,7 +12,7 @@
   <button class="oa-input" class="w-100 text-left oa-input" [class.pointer]="!(disabled || readonly)"
     (click)="onShowOptions(!showOptions)" [class.inline]="options?.inline">
     @if (preFix) {
-    <oa-action [item]="preFix"></oa-action>
+    <oa-action [options]="preFix"></oa-action>
     }
     <div class="input text-left">
       @if (!options.templates?.value) {
@@ -23,7 +23,7 @@
       }
     </div>
     @if (!(disabled || readonly)) {
-    <oa-action class="subtle ml-auto" [item]="postFix"></oa-action>
+    <oa-action class="subtle ml-auto" [options]="postFix"></oa-action>
     }
   </button>
 </div>

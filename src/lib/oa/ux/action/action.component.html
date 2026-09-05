@@ -3,7 +3,7 @@
 @if (items.length) {
 @switch (view) {
 @case ('icon') {
-<button type="button" [title]="item.title" [oaMenu]="items" (oaMenuClose)="onSelect($event)" class="icon-trigger">
+<button type="button" [title]="options.title" [oaMenu]="items" (oaMenuClose)="onSelect($event)" class="icon-trigger">
   <oa-icon [value]="icon"></oa-icon>
 </button>
 }
@@ -23,7 +23,7 @@
 @else {
 @switch (view) {
 @case ('link') {
-<a class="link" [class]="class" [style]="style" [href]="item.value" (click)="onClick()">{{item.title}}</a>
+<a class="link" [class]="class" [style]="style" [href]="options.value" (click)="onClick()">{{options.title}}</a>
 }
 
 @case ('toggle') {

@@ -183,11 +183,11 @@ export class ContextService implements IAuth {
     }
 
     const currentSession = this.session();
-    if (!currentSession) {
+    if (!currentSession?.permissions?.length) {
       return false;
     }
 
-    if (!currentSession.permissions.length) { return false; }
+    // if (!currentSession.permissions.length) { return false; }
 
     if (typeof permissions === 'string') {
       return this._hasPermission(permissions, currentSession.permissions);
@@ -321,7 +321,7 @@ export class ContextService implements IAuth {
 
     const value: any = page ? getValue(key, page.meta) : null;
 
-    if (value !== undefined) {
+    if (value !== undefined && value !== null) {
       return value;
     }
 

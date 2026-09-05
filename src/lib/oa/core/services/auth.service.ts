@@ -297,6 +297,9 @@ export class AuthService {
     if (!url) {
       url = this._redirectUrl;
     }
+    if (!url) {
+      return
+    }
 
     const session = this.context.session();
     if (url.startsWith('http') && session) {

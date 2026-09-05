@@ -23,7 +23,7 @@ import { AddFormPopUpComponent } from '../add-form-pop-up/add-form-pop-up.compon
 export class ActionComponent implements OnInit, OnChanges {
 
   @Input()
-  item: Action | any;
+  options: Action | any;
 
   @Input()
   value: any;
@@ -73,20 +73,20 @@ export class ActionComponent implements OnInit, OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
 
-    if (typeof this.item === 'string') {
-      this.item = { code: this.item }
+    if (typeof this.options === 'string') {
+      this.options = { code: this.options }
     }
 
-    this.event = this.event || this.item.event;
+    this.event = this.event || this.options.event;
 
-    this.class = this.class || this.item.class;
-    this.style = this.style || this.item.style;
+    this.class = this.class || this.options.class;
+    this.style = this.style || this.options.style;
 
-    if (!(this.item instanceof Action)) {
-      this.item = new Action(this.item);
+    if (!(this.options instanceof Action)) {
+      this.options = new Action(this.options);
     }
 
-    this.items = (this.item?.config?.items || this.item?.items || this.item?.options || []
+    this.items = (this.options?.config?.items || this.options?.items || this.options?.options || []
     ).filter((i: { permissions: string | string[] | undefined; }) => this.context.hasPermission(i.permissions)
     ).map((i: any) => {
       i = i instanceof Action ? i : new Action(i);
@@ -104,33 +104,33 @@ export class ActionComponent implements OnInit, OnChanges {
     });
 
     if (this.items?.length) {
-      this.item = this.item || new Action({
+      this.options = this.options || new Action({
         code: 'more'
       });
     }
 
-    if (!this.item) { return; }
+    if (!this.options) { return; }
 
-    if (this.item.isDisabled && this.item.display === 'disabled') {
+    if (this.options.isDisabled && this.options.display === 'disabled') {
       this.disabled = true;
     }
 
-    this.item = this.constantService.actions.get(this.item);
+    this.options = this.constantService.actions.get(this.options);
 
-    this.setEvent(this.item);
+    this.setEvent(this.options);
 
     if (this.items?.length) {
       this.items[0].isSelected = true;
     }
 
-    this.view = this.view || this.item.view;
+    this.view = this.view || this.options.view;
 
     if (!this.view) {
-      this.view = this.item.icon ? 'icon' : 'button'
+      this.view = this.options.icon ? 'icon' : 'button'
     }
 
-    this.icon = this.item.icon || this.item.code;
-    this.title = this.title || this.item.title;
+    this.icon = this.options.icon || this.options.code;
+    this.title = this.title || this.options.title;
     this.setValue();
   }
 
@@ -138,7 +138,7 @@ export class ActionComponent implements OnInit, OnChanges {
   }
 
   setValue() {
-    this.value = this.value || this.item.value;
+    this.value = this.value || this.options.value;
     let keys: string[] = [];
     if (typeof this.value === 'string') {
       if (this.value.indexOf(',') !== -1) {
@@ -159,13 +159,13 @@ export class ActionComponent implements OnInit, OnChanges {
     const obj: any = {};
 
     const createEvent = () => {
-      const code = this.item.code;
+      const code = this.options.code;
       const values = Object.values(obj)
       if (!values.length) { return; }
 
       this.value = values.length === 1 ? values[0] : obj;
 
-      this.item.event = () => {
+      this.options.event = () => {
         values.forEach((v: any) => {
           const fn = v[code]
           if (fn && typeof fn === 'function') {
@@ -251,8 +251,8 @@ export class ActionComponent implements OnInit, OnChanges {
         break;
     }
 
-    if (!item.event && this.item.event) {
-      item.event = () => this.item.event(item.value);
+    if (!item.event && this.options.event) {
+      item.event = () => this.options.event(item.value);
     }
   }
 
@@ -261,14 +261,14 @@ export class ActionComponent implements OnInit, OnChanges {
   onSelect(value: any) {
     // this.items.forEach((i) => i.isSelected = false);
     // value.isSelected = true;
-    this.item.event(value, this.item.config);
+    this.options.event(value, this.options.config);
   }
 
   onClick() {
-    if (this.item.event) {
-      this.item.event(this.value, this.item.config);
+    if (this.options.event) {
+      this.options.event(this.value, this.options.config);
     }
-    if (this.item.config === 'add-page') {
+    if (this.options.config === 'add-page') {
       this.openPopup()
     }
     this.selected.emit(this.value);

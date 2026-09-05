@@ -26,7 +26,7 @@
   <span class="spacer" (click)="renderFilters()"></span>
   }
   @if (params && params.length) {
-  <oa-action [item]="clear"></oa-action>
+  <oa-action [options]="clear"></oa-action>
   }
   @if (sorts && sorts.length > 0) {
   @if (selectedSort) {
