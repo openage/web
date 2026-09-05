@@ -1,50 +1,141 @@
 <section class="signup-card" [ngClass]="class" [ngStyle]="style">
-  @if (!afterSignUp) {
-    <form class="signup-form" #signupForm="ngForm" (ngSubmit)="register()">
-      <h2>{{ label }}</h2>
-      @if (view === 'individual') { <p class="signup-intro">Create a new user account for this tenant.</p> }
-      @if (view === 'employee' && !isEmployeeWithoutOrganization()) { <p class="signup-intro">Join the current organization.</p> }
-      <div class="name-fields">
-        <div><label for="signup-first-name">First name</label><input id="signup-first-name" name="firstName" [(ngModel)]="profile.firstName" autocomplete="given-name" required></div>
-        <div><label for="signup-last-name">Last name</label><input id="signup-last-name" name="lastName" [(ngModel)]="profile.lastName" autocomplete="family-name" required></div>
-      </div>
-      <label for="signup-email">Email address</label>
-      <input id="signup-email" name="email" type="email" [(ngModel)]="email" autocomplete="email">
-      <label for="signup-mobile">Mobile number</label>
-      <input id="signup-mobile" name="mobile" type="tel" [(ngModel)]="mobile" autocomplete="tel">
-      @if (isEmployeeWithoutOrganization()) {
-        <label for="signup-organization-code">Organization code</label>
-        <input id="signup-organization-code" name="organizationCode" [(ngModel)]="organizationCode" autocomplete="organization" required>
+  @if (!afterSignUp && step === 1) {
+  <form class="signup-form" #signupForm="ngForm" (ngSubmit)="submitUserInfo()">
+    <h2>{{ label }}</h2>
+    <p class="wizard-step">{{ stepLabel('user') }}</p>
+    @if (!isLoggedIn && !otpSent) {
+    <div class="name-fields">
+      <div><label for="signup-first-name">First name</label><input id="signup-first-name" name="firstName"
+          [(ngModel)]="profile.firstName" autocomplete="given-name" required></div>
+      <div><label for="signup-last-name">Last name</label><input id="signup-last-name" name="lastName"
+          [(ngModel)]="profile.lastName" autocomplete="family-name" required></div>
+    </div>
+    @if (identityTypes.length > 1) {
+    <div class="signup-identity-types" role="group" aria-label="Signup identity type">
+      @for (type of identityTypes; track type.code) {
+      <button type="button" [class.active]="identityType === type.code" (click)="selectIdentityType(type.code)">
+        @if (type.icon) { <i [class]="type.icon" aria-hidden="true"></i> }
+        {{ type.label }}
+      </button>
       }
-      @if (view === 'organization') {
-        <label for="signup-organization-name">Organization name</label>
-        <input id="signup-organization-name" name="organizationName" [(ngModel)]="organizationName" autocomplete="organization" required>
-        <label for="signup-organization-code">Organization code</label>
-        <input id="signup-organization-code" name="organizationCode" [(ngModel)]="organizationCode" required>
+    </div>
+    }
+    <label for="signup-identity">{{ identityLabel }}</label>
+    <input id="signup-identity" name="identity" [type]="identityType === 'email' ? 'email' : 'tel'"
+      [(ngModel)]="identityValue" [autocomplete]="identityType === 'email' ? 'email' : 'tel'"
+      [placeholder]="identityPlaceholder" required>
+    @if (credentialMethods.length > 1) {
+    <div class="signup-credential-methods" role="group" aria-label="Signup credential method">
+      @for (method of credentialMethods; track method.code) {
+      <button type="button" [class.active]="credentialMethod === method.code"
+        (click)="selectCredentialMethod(method.code)">
+        @if (method.icon) { <i [class]="method.icon" aria-hidden="true"></i> }
+        {{ method.label }}
+      </button>
       }
-      @if (view === 'tenant') {
-        <label for="signup-tenant-name">Tenant name</label>
-        <input id="signup-tenant-name" name="tenantName" [(ngModel)]="tenantName" required>
-        <label for="signup-tenant-code">Tenant code</label>
-        <input id="signup-tenant-code" name="tenantCode" [(ngModel)]="tenantCode" required>
+    </div>
+    }
+    @if (credentialMethod === 'password') {
+    <label for="signup-password">Password</label>
+    <input id="signup-password" name="password" type="password" [(ngModel)]="password" autocomplete="new-password"
+      required>
+    <label for="signup-confirm-password">Confirm password</label>
+    <input id="signup-confirm-password" name="confirmPassword" type="password" [(ngModel)]="confirmPassword"
+      autocomplete="new-password" required>
+    } @else if (credentialMethod === 'otp') {
+    <p class="signup-intro">A verification code will be sent to your {{ identityLabel.toLowerCase() }}.</p>
+    } @else if (credentialMethod === 'push') {
+    <p class="signup-intro">A passwordless approval request will be sent to your device.</p>
+    }
+    }
+    @if (otpSent) {
+    <p class="signup-intro">Enter the verification code sent to your registered contact.</p>
+    <label for="signup-otp">Verification code</label>
+    <input id="signup-otp" name="otp" [(ngModel)]="otp" autocomplete="one-time-code" inputmode="numeric" required>
+    }
+    @if (error) { <p class="signup-error" role="alert">{{ error }}</p> }
+    @if (otpSent) {
+    <button class="signup-submit" type="button" (click)="confirm()" [disabled]="!otp.trim() || isProcessing">{{
+      isProcessing ? 'Verifying...' : 'Verify and continue' }}</button>
+    <button class="resend-button" type="button" (click)="resendOtp()" [disabled]="disableResend || isProcessing">{{
+      disableResend ? 'Resend available in ' + countdownSeconds + 's' : 'Resend code' }}</button>
+    } @else {
+    <button class="signup-submit" type="submit" [disabled]="signupForm.invalid || isProcessing">{{ isProcessing ?
+      'Sending code...' : 'Continue' }}</button>
+    }
+  </form>
+  <p class="signup-login">Already registered? <button type="button" class="link-button" (click)="login()">{{
+      config.login || 'Login' }}</button></p>
+  } @else if (!afterSignUp && step === 2) {
+  <div class="signup-form">
+    <h2>{{ label }}</h2>
+    <p class="wizard-step">{{ stepLabel('roles') }}</p>
+    <div class="signup-types" role="listbox" aria-label="Available roles">
+      @for (role of availableRoles; track role.code) {
+      <button type="button" [class.active]="selectedRole?.code === role.code" (click)="selectRole(role)">{{ role.label
+        }}</button>
       }
-      <label for="signup-password">Password</label>
-      <input id="signup-password" name="password" type="password" [(ngModel)]="password" autocomplete="new-password" required>
-      <label for="signup-confirm-password">Confirm password</label>
-      <input id="signup-confirm-password" name="confirmPassword" type="password" [(ngModel)]="confirmPassword" autocomplete="new-password" required>
-      @if (error) { <p class="signup-error" role="alert">{{ error }}</p> }
-      <button class="signup-submit" type="submit" [disabled]="signupForm.invalid || isProcessing">{{ isProcessing ? 'Creating account…' : 'Create account' }}</button>
-    </form>
-    <p class="signup-login">Already registered? <button type="button" class="link-button" (click)="login()">{{ config.login || 'Login' }}</button></p>
+    </div>
+    @if (error) { <p class="signup-error" role="alert">{{ error }}</p> }
+    <button class="signup-submit" type="button" (click)="nextStep()"
+      [disabled]="!selectedRole || isProcessing">Continue</button>
+  </div>
+  } @else if (!afterSignUp && step === 3) {
+  <div class="signup-form">
+    <h2>{{ label }}</h2>
+    <p class="wizard-step">{{ stepLabel('team') }}</p>
+    @if (view === 'employee' || view === 'organization') {
+    <label for="signup-organization-code">Organization code</label>
+    <input id="signup-organization-code" name="organizationCode" [(ngModel)]="organizationCode" required>
+    @if (!organizationExists && !organizationCreateRequested) {
+    <p class="signup-intro">This organization was not found.</p>
+    @if (allowOrganizationCreate) {
+    <button class="resend-button" type="button" (click)="requestOrganizationCreate()">Create a new organization</button>
+    }
+    }
+    @if (view === 'organization' && !organizationExists && organizationCreateRequested) {
+    <label for="signup-organization-name">Organization name</label>
+    <input id="signup-organization-name" name="organizationName" [(ngModel)]="organizationName" required>
+    }
+    <button class="signup-submit" type="button" (click)="validateOrganization()" [disabled]="isProcessing">{{
+      isProcessing ? 'Checking...' : 'Check organization' }}</button>
+    } @else {
+    <label for="signup-tenant-code">Tenant code</label>
+    <input id="signup-tenant-code" name="tenantCode" [(ngModel)]="tenantCode" required>
+    @if (view === 'tenant') {
+    <label for="signup-tenant-name">Tenant name</label>
+    <input id="signup-tenant-name" name="tenantName" [(ngModel)]="tenantName" required>
+    }
+    <button class="signup-submit" type="button" (click)="validateTenant()" [disabled]="isProcessing">{{ isProcessing ?
+      'Checking...' : 'Check tenant' }}</button>
+    }
+    <button class="resend-button" type="button" (click)="previousStep()" [disabled]="isProcessing">Back</button>
+    @if (error) { <p class="signup-error" role="alert">{{ error }}</p> }
+  </div>
+  } @else if (!afterSignUp && step === 4) {
+  <div class="signup-form">
+    <h2>{{ label }}</h2>
+    <p class="wizard-step">{{ stepLabel('review') }}</p>
+    <dl class="signup-summary">
+      <dt>User</dt>
+      <dd>{{ profile.firstName }} {{ profile.lastName }}<br>{{ email || mobile }}</dd>
+      <dt>Role</dt>
+      <dd>{{ selectedRole?.label || roleType }}</dd>
+      @if (view === 'employee' || view === 'organization') { <dt>Organization</dt>
+      <dd>{{ organizationName || organizationCode }}</dd> }
+      @if (view === 'individual' || view === 'tenant') { <dt>Tenant</dt>
+      <dd>{{ tenantName || tenantCode || contextTenantName }}</dd> }
+    </dl>
+    @if (error) { <p class="signup-error" role="alert">{{ error }}</p> }
+    <button class="signup-submit" type="button" (click)="create()" [disabled]="isProcessing">{{ isProcessing ?
+      'Creating...' : 'Create' }}</button>
+    <button class="resend-button" type="button" (click)="previousStep()" [disabled]="isProcessing">Back</button>
+  </div>
   } @else {
-    <form class="signup-form" #confirmationForm="ngForm" (ngSubmit)="confirm()">
-      <h2>Verify your account</h2>
-      <p class="signup-intro">We sent a verification code to your registered contact.</p>
-      <label for="signup-otp">Verification code</label>
-      <input id="signup-otp" name="otp" [(ngModel)]="otp" autocomplete="one-time-code" inputmode="numeric" required>
-      @if (error) { <p class="signup-error" role="alert">{{ error }}</p> }
-      <button class="signup-submit" type="submit" [disabled]="confirmationForm.invalid || isProcessing">{{ isProcessing ? 'Verifying…' : 'Verify account' }}</button>
-      <button class="resend-button" type="button" (click)="resendOtp()" [disabled]="disableResend || isProcessing">{{ disableResend ? 'Resend available in ' + countdownSeconds + 's' : 'Resend code' }}</button>
-    </form>
+  <div class="signup-form signup-complete">
+    <h2>Signup complete</h2>
+    <p class="signup-intro">Your account and selected role have been created.</p>
+    <button class="signup-submit" type="button" (click)="login()">Continue</button>
+  </div>
   }
 </section>

@@ -152,18 +152,111 @@ Renders account registration, verification-code confirmation, and resend-code co
 ```json
 {
   "control": "signup",
+  "class": "signup-page",
+  "style": { "max-width": "520px", "margin": "48px auto" },
   "options": {
     "label": "Create your account",
     "login": "Sign in instead",
+    "stepLabels": [
+      {
+        "code": "user",
+        "label": "User Profile"
+      },
+      {
+        "code": "roles",
+        "label": "Choose a role"
+      },
+      {
+        "code": "team",
+        "label": "Team Details"
+      },
+      {
+        "code": "review",
+        "label": "Review"
+      }
+    ],
+    "identityTypes": [
+      {
+        "code": "email",
+        "label": "Email",
+        "icon": "fa fa-envelope",
+        "placeholder": "Enter your email",
+        "credentialMethods": [
+          {
+            "code": "password",
+            "label": "Password",
+            "icon": "fa fa-lock",
+            "policy": {
+              "minLength": 8,
+              "requireUppercase": true,
+              "requireLowercase": true,
+              "requireNumber": true,
+              "requireSpecial": true,
+              "allowedSpecialChars": "!@#$%",
+              "message": "Password must be at least 8 characters long and include uppercase, lowercase, number, and special character (!@#$%)"
+            }
+          }
+        ]
+      },
+      {
+        "code": "mobile",
+        "label": "Mobile",
+        "icon": "fa fa-phone",
+        "placeholder": "Enter your mobile number",
+        "credentialMethods": [
+          {
+            "code": "password",
+            "label": "Password",
+            "icon": "fa fa-lock",
+            "policy": { "minLength": 8 }
+          }
+        ]
+      }
+    ],
     "view": "individual",
-    "roleType": "customer.normal",
-    "typeCode": "customer",
-    "source": { "campaign": "website" }
+    "source": { "campaign": "website" },
+    "signupTypes": [
+      {
+        "code": "organization-member",
+        "label": "Organization member",
+        "view": "employee",
+        "roleType": "organization.member"
+      },
+      {
+        "code": "tenant-member",
+        "label": "Tenant member",
+        "view": "individual",
+        "roleType": "tenant.member"
+      },
+      {
+        "code": "organization-admin",
+        "label": "Organization admin",
+        "view": "organization",
+        "roleType": "organization.admin"
+      },
+      {
+        "code": "tenant-admin",
+        "label": "Tenant admin",
+        "view": "tenant",
+        "roleType": "tenant.admin"
+      }
+    ]
   }
 }
 ```
 
-`options.label` sets the heading, `options.login` sets the login-link text, and `view`, `typeCode`, `roleType`, and `source` are forwarded to the signup request. The form requires first name, last name, a valid email or mobile number, and matching passwords of at least eight characters.
+`class` and `style` are applied to the signup component host. 
+`options.label` sets the heading, and 
+`options.login` sets the login-link text. 
+`options.stepLabels` customizes the four wizard titles using codes `user`, `roles`, `team` and `review`. 
+`options.source` is forwarded to the signup request. 
+`options.identityTypes` configures the step-one identity selector; each item supports `code` (`email` or `mobile`), `label`, optional `icon`, optional `placeholder`, and optional `credentialMethods`. Each credential method supports `code` (`password`, `otp`, or `push`), `label`, optional `icon`, and optional `policy`. Password policies support `minLength`, `maxLength`, `requireUppercase`, `requireLowercase`, `requireNumber`, `requireSpecial`, `allowedSpecialChars`, `pattern`, and a custom `message`. `allowedSpecialChars` is a string of permitted special characters, and `message` is shown when the password fails a policy criterion. 
+`options.signupTypes` replaces the default role choices; each item supports `code`, `label`, `view`, and optional `roleType`. 
+An organization-admin signup type automatically enables the option to create a missing organization. For compatibility, `identityTypes` may be supplied directly or wrapped in one extra array.
+
+For a new user, the form collects first name, last name, email and/or mobile number, password, and password confirmation. Email or mobile is required, and passwords must match with at least eight characters. When a user is already signed in, the current user is reused and the name, contact, password, and confirmation fields are omitted.
+
+The available signup types are filtered by context. With no current tenant, only tenant signup choices (`individual` and `tenant`) are shown. With a tenant but no organization, organization choices (`employee` and `organization`) are shown. With both a tenant and organization, only the organization-member (`employee`) choice is shown.
 
 `options.view` must be one of:
 
@@ -171,6 +264,12 @@ Renders account registration, verification-code confirmation, and resend-code co
 - `employee` — joins the current organization; if there is no current organization, prompts for an organization code.
 - `organization` — prompts for a new organization name and code, then creates it in the current tenant.
 - `tenant` — prompts for a new tenant name and code.
+
+Signup can present configurable role choices with `options.signupTypes`. Each item contains `code`, `label`, `view`, and an optional `roleType`. The default labels are `Organization member`, `Tenant member`, `Organization admin`, and `Tenant admin`, mapped to `employee`, `individual`, `organization`, and `tenant` views respectively. When a user is already signed in, the signup form reuses the current user and does not ask for name, contact, password, or password confirmation.
+
+Tenant codes are checked for uniqueness before a tenant is created, and organization codes are checked for uniqueness before an organization is created.
+
+Signup runs as a four-step wizard: user information and OTP verification, role selection, organization or tenant information, and a summary with the final create action. Existing user, tenant, and organization context skips the corresponding step. Tenant members must select an existing tenant; tenant admins must provide a new unique tenant code and name. Organization members must select an existing organization; organization admins can create a missing organization when `allowOrganizationCreate` is enabled.
 
 ### `role`
 
