@@ -1,6 +1,6 @@
-import { Component, effect, ElementRef, HostListener, inject, OnInit, ViewChild, computed, signal } from '@angular/core';
+import { Component, effect, ElementRef, HostListener, inject, OnInit, ViewChild, computed, signal, OnDestroy } from '@angular/core';
 
-import { ActivatedRoute, Router, RouterOutlet } from '@angular/router';
+import { ActivatedRoute, NavigationCancel, NavigationEnd, NavigationError, NavigationStart, Router, RouterOutlet } from '@angular/router';
 import { environment } from '../environments/environment';
 import { FooterComponent } from '../lib/oa/core/components/footer/footer.component';
 import { HeaderComponent } from '../lib/oa/core/components/header/header.component';
@@ -13,6 +13,7 @@ import { NavService } from '../lib/oa/core/services/nav.service';
 import { SideBarComponent } from "../lib/oa/core/components/side-bar/side-bar.component";
 import { TasksProgressFooterComponent } from '../lib/oa/core/components/tasks-progress-footer/tasks-progress-footer.component';
 import { ContextMenuComponent } from "../lib/oa/core/components/context-menu/context-menu.component";
+// import { Subscription } from 'rxjs';
 
 @Component({
   // eslint-disable-next-line @angular-eslint/component-selector
@@ -30,7 +31,7 @@ import { ContextMenuComponent } from "../lib/oa/core/components/context-menu/con
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit {//, OnDestroy {
 
   @ViewChild('pageBody')
   pageContainer?: ElementRef<any>;
@@ -66,6 +67,7 @@ export class AppComponent implements OnInit {
 
   constructor() {
     const log = this.logger.get('constructor');
+    log.debug('start');
     this.navService.init();
     this.uxService.init();
 
@@ -73,9 +75,9 @@ export class AppComponent implements OnInit {
     // changes, unlike a computed value which is evaluated only when read.
     effect(() => {
       this.setTheme();
-      log.debug('effect');
       this.context.application();
       const page = this.context.page();
+      log.debug('effect', page);
       if (!page) {
         this.header.set(false);
         this.footer.set(false);
@@ -87,12 +89,36 @@ export class AppComponent implements OnInit {
       }
       this.layoutType.set(this.context.getAppMeta('layout') || 'sticky-header');
     });
-  }
+    log.debug('end');
 
+  }
+  //  private routerSubscription: Subscription | undefined;
   ngOnInit(): void {
     const log = this.logger.get('ngOnInit')
+    // this.routerSubscription = this.router.events.subscribe(event => {
+    //   if (event instanceof NavigationStart) {
+    //     log.debug('NavigationStart:', event.url);
+    //   }
+
+    //   if (event instanceof NavigationEnd) {
+    //     log.debug('NavigationEnd:', event.url);
+    //     log.debug('Router outlet should be updated now');
+    //   }
+
+    //   if (event instanceof NavigationCancel) {
+    //     log.debug('NavigationCancel:', event.reason);
+    //   }
+
+    //   if (event instanceof NavigationError) {
+    //     log.debug('NavigationError:', event.error);
+    //   }
+    // });
+
     log.end()
   }
+  // ngOnDestroy() {
+  //   this.routerSubscription?.unsubscribe();
+  // }
 
   setTheme() {
     const theme = this.theme();

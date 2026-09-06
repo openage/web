@@ -1,4 +1,5 @@
-import { AfterViewInit, ChangeDetectorRef, Component, Injector, OnChanges, OnDestroy, OnInit, SimpleChanges, TemplateRef, effect, inject } from '@angular/core';
+import { Component, DestroyRef, Injector, OnDestroy, OnInit, TemplateRef, effect, inject } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute } from '@angular/router';
 import { Entity, Link, Logger } from '../models';
 import { CacheService } from '../services';
@@ -18,6 +19,7 @@ export abstract class PageBaseComponent implements OnInit, OnDestroy {
   private navService = inject(NavService);
   private context = inject(ContextService);
   private _route = inject(ActivatedRoute);
+  private destroyRef = inject(DestroyRef);
   private storage = inject(CacheService);
 
   isCurrent = true;
@@ -44,22 +46,37 @@ export abstract class PageBaseComponent implements OnInit, OnDestroy {
 
   constructor() { }
   ngOnInit(): void {
-    this.path = this.navService.getPath(this._route.snapshot);
-    this.page = this.navService.getByPath(this.path);
+    const log = this._logger.get('ngOnInit')
+
+    this._route.data
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(data => this.handlePageChange(data['data']));
 
     effect(() => {
       const page = this.context.page()
       this.isCurrent = page?.code === this.page?.code;
-      this.isInitialized = false;
-      if (this.isCurrent) {
-        this._logger.debug(`for page change`)
+      if (this.isCurrent && !this.isInitialized) {
+        log.debug(`for page change`)
         this._init()
       }
     }, { injector: this.injector })
+  }
+
+  private handlePageChange(_data: any): void {
+    this.path = this.navService.getPath(this._route.snapshot);
+    this.page = this.navService.getByPath(this.path);
+    this.isCurrent = this.context.page()?.code === this.page?.code;
+    this.isInitialized = false;
+    this.view = undefined;
+    this.showFilters = undefined;
+    this.filters = [];
+    this.layout = undefined;
+    this.footer = undefined;
+    this.components = [];
 
     if (this.isCurrent) {
-      this._logger.debug(`for ng Init`)
-      this._init()
+      this.context.entity.set(undefined);
+      this._init();
     }
   }
 
