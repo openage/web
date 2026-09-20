@@ -17,13 +17,13 @@
 </div>
 
 <ng-template #profileMenu yPosition="below">
-  <div class="profile-menu section">
-    <div class="header">
+  <div class="oa-dialog-menu profile-menu section">
+    <div class="oa-dialog-header header">
       <page-branding [options]="options?.branding"></page-branding>
       <div class="application">{{currentRole?.organization?.name || currentApplication?.title || currentTenant?.name}}
       </div>
     </div>
-    <div class="body">
+    <div class="oa-dialog-body body">
       <oa-avatar [value]="currentUser?.profile" type="thumbnail" [size]="50"></oa-avatar>
       <h6 class="title"><b>{{currentUser?.profile| format: 'title'}}</b></h6>
       <div class="role">
@@ -33,7 +33,7 @@
         }
       </div>
     </div>
-    <div class="footer">
+    <div class="oa-dialog-footer footer">
       <div class="oa-button settings">
         <oa-icon value="settings"></oa-icon>
         <span class="label">Settings</span>

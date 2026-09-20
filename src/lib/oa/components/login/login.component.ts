@@ -10,7 +10,6 @@ import { Role } from '../../core/models/role.model';
 @Component({
   selector: 'oa-login',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css'],
   imports: [CommonModule, FormsModule, ActionComponent]
 })
 export class LoginComponent implements OnInit {

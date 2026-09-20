@@ -11,7 +11,6 @@ import { ActionComponent } from "../../ux/action/action.component";
 @Component({
   selector: 'oa-signup',
   templateUrl: './signup.component.html',
-  styleUrls: ['./signup.component.css'],
   imports: [CommonModule, FormsModule, ActionComponent]
 })
 export class SignupComponent implements OnInit, OnDestroy {

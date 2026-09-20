@@ -1,10 +1,5 @@
-<section class="signup-card" [ngClass]="class" [ngStyle]="style">
+<section class="oa-wiz-card" [ngClass]="class" [ngStyle]="style">
   <h2>{{ label }}</h2>
-  @if(options.login) {
-  <p class="signup-login">Already registered? <oa-action [value]="options.login.value"
-      [options]="options.login.options"></oa-action>
-  </p>
-  }
   <p class="wizard-step">{{ currentStep?.label }}</p>
 
   @if(currentStep.code !== 'success') {
@@ -12,7 +7,7 @@
     @switch (currentStep?.code) {
     @case ('user') {
     @if (!verificationDone) {
-    <div class="signup-body">
+    <div class="oa-wiz-body">
       <div class="name-fields">
         <div>
           <label for="signup-first-name">First name</label>
@@ -41,20 +36,20 @@
     </div>
     <!-- verfiy: start-->
     @if(selectedIdentityType.verify) {
-    <div class="signup-footer">
-      @if (error) { <p class="signup-error" role="alert">{{ error }}</p> }
+    <div class="oa-wiz-actions">
+      @if (error) { <p class="oa-wiz-error" role="alert">{{ error }}</p> }
       @if (!verificationInitiated) {
-      <button class="signup-submit" type="button" (click)="validateUser()"
+      <button class="primary-button" type="button" (click)="validateUser()"
         [disabled]="isProcessing">{{currentStep.next.label}}</button>
       } @else {
       <p class="signup-intro">{{selectedIdentityType.verify.message}}</p>
       <label for="signup-otp">{{selectedIdentityType.verify.label}}</label>
       <input id="signup-otp" name="otp" [(ngModel)]="otp" autocomplete="one-time-code" inputmode="numeric" required>
 
-      <button class="signup-submit" type="button" (click)="confirmOtp()" [disabled]="!otp.trim() || isProcessing">{{
+      <button class="primary-button" type="button" (click)="confirmOtp()" [disabled]="!otp.trim() || isProcessing">{{
         isProcessing ? 'Verifying...' : selectedIdentityType.verify.action.label }}</button>
       @if(selectedIdentityType.verify.resend) {
-      <button class="resend-button" type="button" (click)="resendOtp()"
+      <button class="secondary-button" type="button" (click)="resendOtp()"
         [disabled]="!verificationRetry || isProcessing">{{
         !verificationRetry ? `${selectedIdentityType.verify.resend.label} available in ${countdownSeconds}s` :
         selectedIdentityType.verify.resend.label }}</button>
@@ -67,7 +62,7 @@
     }
 
     @case ('credentials') {
-    <div class="signup-body">
+    <div class="oa-wiz-body">
       <div class="signup-credential-methods" role="group" aria-label="Signup credential method">
         @for (method of credentialMethods; track method.code) {
         <button type="button" [class.active]="selectedCredentialMethod?.code === method.code"
@@ -85,17 +80,17 @@
       <input id="signup-confirm-password" name="confirmPassword" type="password" [(ngModel)]="confirmPassword"
         autocomplete="new-password" required>
     </div>
-    <div class="signup-footer">
-      @if (error) { <p class="signup-error" role="alert">{{ error }}</p> }
-      <button class="signup-submit" type="button" (click)="setCredentials()"
+    <div class="oa-wiz-actions">
+      @if (error) { <p class="oa-wiz-error" role="alert">{{ error }}</p> }
+      <button class="primary-button" type="button" (click)="setCredentials()"
         [disabled]="!password.trim() || isProcessing">{{currentStep.next.label }}</button>
-      @if (currentStep.skip) { <button class="signup-skip" type="button" (click)="nextStep()"
+      @if (currentStep.skip) { <button class="secondary-button" type="button" (click)="nextStep()"
         [disabled]="isProcessing">{{currentStep.skip.label }}</button>}
     </div>
     }
 
     @case ('roles') {
-    <div class="signup-body">
+    <div class="oa-wiz-body">
       <div class="signup-types" role="listbox" aria-label="Available roles">
         @for (role of availableRoles; track role.code) {
         <button type="button" [class.active]="selectedRole?.code === role.code" (click)="selectRole(role)">{{ role.label
@@ -103,20 +98,20 @@
         }
       </div>
     </div>
-    <div class="signup-footer">
-      @if (error) { <p class="signup-error" role="alert">{{ error }}</p> }
-      <button class="signup-submit" type="button" (click)="nextStep()"
+    <div class="oa-wiz-actions">
+      @if (error) { <p class="oa-wiz-error" role="alert">{{ error }}</p> }
+      <button class="primary-button" type="button" (click)="nextStep()"
         [disabled]="!selectedRole || isProcessing">{{currentStep.next.label}}</button>
 
       @if(currentStep.previous) {
-      <button class="back-button" type="button" (click)="previousStep()"
+      <button class="secondary-button" type="button" (click)="previousStep()"
         [disabled]="isProcessing">{{currentStep.previous.label}}</button>
       }
     </div>
     }
 
     @case ('team') {
-    <div class="signup-body">
+    <div class="oa-wiz-body">
       @if (selectedRole.level === 'organization') {
       <label for="signup-organization-code">{{selectedRole.input.label}}</label>
       <input id="signup-organization-code" name="organizationCode" [(ngModel)]="organizationCode"
@@ -139,21 +134,21 @@
       }
       }
     </div>
-    <div class="signup-footer">
-      @if (error) { <p class="signup-error" role="alert">{{ error }}</p> }
+    <div class="oa-wiz-actions">
+      @if (error) { <p class="oa-wiz-error" role="alert">{{ error }}</p> }
 
-      <button class="signup-submit" type="button" (click)="validateRole(selectedRole)"
+      <button class="primary-button" type="button" (click)="validateRole(selectedRole)"
         [disabled]="isProcessing">{{currentStep.next.label}}</button>
 
       @if(currentStep.previous) {
-      <button class="back-button" type="button" (click)="previousStep()"
+      <button class="secondary-button" type="button" (click)="previousStep()"
         [disabled]="isProcessing">{{currentStep.previous.label}}</button>
       }
     </div>
     }
 
     @case ('review') {
-    <div class="signup-body">
+    <div class="oa-wiz-body">
       <dl class="signup-summary">
         @if(currentStep.summary.user) {
         <dt>{{currentStep.summary.user.label}}</dt>
@@ -175,13 +170,13 @@
         }
       </dl>
     </div>
-    <div class="signup-footer">
-      @if (error) { <p class="signup-error" role="alert">{{ error }}</p> }
-      <button class="signup-submit" type="button" (click)="createRole(selectedRole)"
+    <div class="oa-wiz-actions">
+      @if (error) { <p class="oa-wiz-error" role="alert">{{ error }}</p> }
+      <button class="primary-button" type="button" (click)="createRole(selectedRole)"
         [disabled]="isProcessing">{{currentStep.next.label}}</button>
 
       @if(currentStep.previous) {
-      <button class="back-button" type="button" (click)="previousStep()"
+      <button class="secondary-button" type="button" (click)="previousStep()"
         [disabled]="isProcessing">{{currentStep.previous.label}}</button>
       }
     </div>
@@ -192,17 +187,27 @@
 
   @if(currentStep.code === 'success') {
   <div class="signup-form signup-complete">
-    <div class="signup-body">
+    <div class="oa-wiz-body">
       <p class="signup-intro">{{currentStep.message}}</p>
     </div>
-    <div class="signup-footer">
+    <div class="oa-wiz-actions">
       @if(currentStep.next) {
-      <oa-action [value]="currentStep.next.value" [options]="currentStep.next.options"></oa-action>
+      <oa-action [value]="currentStep.next.value" [options]="currentStep.next.options"
+        class="primary-button"></oa-action>
       }
       @if(currentStep.previous) {
-      <oa-action [value]="currentStep.previous.value" [options]="currentStep.previous.options"></oa-action>
+      <oa-action [value]="currentStep.previous.value" [options]="currentStep.previous.options"
+        class="secondary-button"></oa-action>
       }
     </div>
+  </div>
+  }
+
+  @if(options.login) {
+  <div class="oa-wiz-footer">
+    <p class="oa-wiz-login">Already registered? <oa-action [value]="options.login.value"
+        [options]="options.login.options" class="secondary-button"></oa-action>
+    </p>
   </div>
   }
 </section>

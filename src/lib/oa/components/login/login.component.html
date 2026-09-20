@@ -1,17 +1,12 @@
-<form class="signup-card" [ngClass]="class" [ngStyle]="style">
+<section class="oa-wiz-card" [ngClass]="class" [ngStyle]="style">
   <h2>{{ label }}</h2>
-  @if(options.signup) {
-  <p class="signup-login">Already registered? <oa-action [value]="options.signup.value"
-      [options]="options.signup.options"></oa-action>
-  </p>
-  }
   <p class="wizard-step">{{ currentStep?.label }}</p>
 
   <form class="login-form" #loginForm="ngForm">
 
     @switch (currentStep?.code) {
     @case ('user') {
-    <div class="login-body">
+    <div class="oa-wiz-body">
       @if(identityTypes.length > 1) {
       <div class="identity-types" role="group" aria-label="Identity type">
         @for(type of identityTypes; track type.code) {
@@ -29,15 +24,17 @@
         [autocomplete]="selectedIdentityType.type" [placeholder]="selectedIdentityType.placeholder" required>
     </div>
     @if(error) {
-    <p class="login-error" role="alert">{{ error }}</p>
+    <p class="oa-wiz-error" role="alert">{{ error }}</p>
     }
 
-    <button class="signup-submit" type="button" (click)="validateUser()"
-      [disabled]="isProcessing">{{currentStep.next.label}}</button>
+    <div class="oa-wiz-actions">
+      <button class="primary-button" type="button" (click)="validateUser()"
+        [disabled]="isProcessing">{{currentStep.next.label}}</button>
+    </div>
     }
 
     @case ('credentials') {
-    <div class="signup-body">
+    <div class="oa-wiz-body">
       <div class="signup-credential-methods" role="group" aria-label="Login credential method">
         @for(method of credentialMethods; track method.code) {
         <button type="button" [class.active]="selectedCredentialMethod?.code === method.code"
@@ -51,12 +48,16 @@
       <label for="signup-password">{{selectedCredentialMethod.label}}</label>
       <input id="signup-password" name="password" [type]="selectedCredentialMethod.type" [(ngModel)]="password"
         autocomplete="current-password" required>
-      @if(options.passwordReset && passwordLoginFailed) { <oa-action [value]="options.passwordReset.value"
-        [options]="options.passwordReset.options"></oa-action> }
+      @if(options.passwordReset && passwordLoginFailed) {
+      <div class="oa-wiz-actions">
+        <oa-action [value]="options.passwordReset.value" [options]="options.passwordReset.options"
+          class="secondary-button"></oa-action>
+      </div>
+      }
     </div>
 
-    <div class="signup-footer">
-      @if (error) { <p class="login-error" role="alert">{{ error }}</p> }
+    <div class="oa-wiz-actions">
+      @if (error) { <p class="oa-wiz-error" role="alert">{{ error }}</p> }
 
       <button class="primary-button" type="button" (click)="login()"
         [disabled]="isProcessing">{{currentStep.next.label}}</button>
@@ -69,7 +70,7 @@
     }
 
     @case ('roles') {
-    <div class="login-body">
+    <div class="oa-wiz-body">
 
       <div class="role-list" aria-label="Available roles">
         @for(role of availableRoles; track role.key || role.id || $index) {
@@ -80,7 +81,7 @@
         </button>
         }
       </div>
-      <div class="signup-footer">
+      <div class="oa-wiz-actions">
         @if (currentStep.skip) { <button class="secondary-button" type="button" (click)="skipRoleSelection()"
           [disabled]="isProcessing">{{currentStep.skip.label }}</button>
         }
@@ -92,3 +93,12 @@
     }
     }
   </form>
+
+  @if(options.signup) {
+  <div class="oa-wiz-footer">
+    <p class="oa-wiz-login">Already registered? <oa-action [value]="options.signup.value"
+        [options]="options.signup.options"></oa-action>
+    </p>
+  </div>
+  }
+</section>

@@ -1,4 +1,4 @@
-<div class="oa-popup" [style.left]="left + 'px'" [style.top]="top + 'px'" [style.position]="'fixed'">
+<div class="oa-popup oa-dialog" [style.left]="left + 'px'" [style.top]="top + 'px'" [style.position]="'fixed'">
   @switch (type) {
   @case ('tooltip') {
   <div class="tooltip" [class]="['tooltip--'+position, 'tooltip--'+theme]" [class.tooltip--visible]="visible"
@@ -6,12 +6,14 @@
     {{title}}
   </div>
   } @case ('menu') {
-  @for (i of data; track i) {
-  <button class="oa-menu-item" (click)="i?.event()">{{i.title}}</button>
-  }
+  <div class="oa-dialog-menu">
+    @for (i of data; track i) {
+    <button class="oa-dialog-item oa-menu-item" (click)="i?.event()">{{i.title}}</button>
+    }
+  </div>
   } @case ('dialog') {
   @if(template) {
-  <div class="oa-dialog-panel" [style.position]="'relative'">
+  <div class="oa-dialog-panel oa-dialog-panel--dialog" [style.position]="'relative'">
     <ng-container *ngTemplateOutlet="template; context: { data: data }">
     </ng-container>
   </div>

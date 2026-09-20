@@ -1,5 +1,4 @@
 import { AfterViewInit, Component, TemplateRef } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
 import { LayoutComponent } from '../../lib/oa/core/components/layout/layout.component';
 import { PageBaseComponent } from '../../lib/oa/core/components/page-base.component';
 import { Logger } from '../../lib/oa/core/models';
@@ -10,7 +9,6 @@ import { Logger } from '../../lib/oa/core/models';
   templateUrl: './dynamic-page.component.html',
   styleUrl: './dynamic-page.component.scss',
   imports: [
-    RouterOutlet,
     LayoutComponent
   ]
 })

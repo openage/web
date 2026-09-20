@@ -30,7 +30,6 @@ export class AuthService {
   }
 
   constructor(
-
   ) {
     this.logger = new Logger(AuthService);
   }

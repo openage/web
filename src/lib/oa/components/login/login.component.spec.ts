@@ -4,6 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { AuthService } from '../../core/services';
 import { NavService } from '../../core/services/nav.service';
 import { LoginComponent } from './login.component';
+import { beforeEach, describe, expect, it } from 'vitest';
 
 describe('LoginComponent', () => {
   let component: LoginComponent;
