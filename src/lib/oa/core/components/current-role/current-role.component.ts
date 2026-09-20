@@ -1,9 +1,10 @@
 import { Component, effect, inject, Input, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { ContextService } from '../../services/context.service';
 import { Role } from '../../models/role.model';
 import { AuthService } from '../../services';
 import { NavService } from '../../services/nav.service';
-import { Application, Tenant } from '../../models';
+import { Application, Tenant, User } from '../../models';
 import { AvatarComponent } from '../../../ux/avatar/avatar.component';
 import { FormatPipe } from '../../../pipes/format.pipe';
 import { BrandingComponent } from '../branding/branding.component';
@@ -13,13 +14,14 @@ import { DialogDirective } from '../../../directives/dialog.directive';
 
 @Component({
   selector: 'page-role',
-  imports: [AvatarComponent, FormatPipe, BrandingComponent, IconComponent, DialogDirective],
+  imports: [CommonModule, AvatarComponent, FormatPipe, BrandingComponent, IconComponent, DialogDirective],
   templateUrl: './current-role.component.html',
   styleUrls: ['./current-role.component.scss']
 })
 export class CurrentRoleComponent implements OnInit {
   isImpersonateSession: boolean = false
   currentRole?: Role;
+  currentUser?: User;
   currentTenant?: Tenant;
   currentApplication?: Application;
 
@@ -34,6 +36,7 @@ export class CurrentRoleComponent implements OnInit {
   constructor() {
     effect(() => {
       this.currentRole = this.context.role();
+      this.currentUser = this.context.user();
       this.isImpersonateSession = this.context.hasPermission('impersonating')
     })
   }
@@ -44,16 +47,18 @@ export class CurrentRoleComponent implements OnInit {
       this.options = new CurrentRoleOptions(this.options);
     }
     this.currentRole = this.context.role();
+    this.currentUser = this.context.user();
     this.currentTenant = this.context.tenant();
     this.currentApplication = this.context.application();
   }
 
-  selectRole(role?: Role) {
-    this.context.setRole(role);
-    this.navService.goto('home.dashboard');
-    setTimeout(() => {
-      location.reload();
-    }, 2);
+  async selectRole(role?: Role) {
+    if (!role?.key) {
+      return;
+    }
+
+    await this.auth.switchRole(role);
+    this.navService.goto('/');
   }
 
   endSession() {
@@ -66,7 +71,7 @@ export class CurrentRoleComponent implements OnInit {
 
   endImpersonation() {
     this.context.endImpersonation()
-    this.navService.goto('home.dashboard');
+    this.navService.goto('/');
   }
 
   logout = () => {

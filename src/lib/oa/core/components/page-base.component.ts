@@ -1,6 +1,6 @@
-import { Component, DestroyRef, Injector, OnDestroy, OnInit, TemplateRef, effect, inject } from '@angular/core';
+import { Component, DestroyRef, OnDestroy, OnInit, TemplateRef, inject } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { Entity, Link, Logger } from '../models';
 import { CacheService } from '../services';
 import { ContextService } from '../services/context.service';
@@ -13,12 +13,12 @@ import { NavService } from '../services/nav.service';
 })
 export abstract class PageBaseComponent implements OnInit, OnDestroy {
 
-  private injector = inject(Injector);
   private _ux = inject(UxService);
   private constant = inject(ConstantService);
   private navService = inject(NavService);
   private context = inject(ContextService);
   private _route = inject(ActivatedRoute);
+  private router = inject(Router);
   private destroyRef = inject(DestroyRef);
   private storage = inject(CacheService);
 
@@ -46,24 +46,32 @@ export abstract class PageBaseComponent implements OnInit, OnDestroy {
 
   constructor() { }
   ngOnInit(): void {
-    const log = this._logger.get('ngOnInit')
-
     this._route.data
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(data => this.handlePageChange(data['data']));
 
-    effect(() => {
-      const page = this.context.page()
-      this.isCurrent = page?.code === this.page?.code;
-      if (this.isCurrent && !this.isInitialized) {
-        log.debug(`for page change`)
-        this._init()
-      }
-    }, { injector: this.injector })
+    this.router.events
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(event => {
+        if (event instanceof NavigationEnd) {
+          this.handlePageChange(this.getCurrentRouteSnapshot()?.data?.['data']);
+        }
+      });
+  }
+
+  private getCurrentRouteSnapshot() {
+    let route: any = this._route.snapshot;
+
+    while (route?.firstChild) {
+      route = route.firstChild;
+    }
+
+    return route;
   }
 
   private handlePageChange(_data: any): void {
-    this.path = this.navService.getPath(this._route.snapshot);
+    const currentRoute = this.getCurrentRouteSnapshot();
+    this.path = this.navService.getPath(currentRoute);
     this.page = this.navService.getByPath(this.path);
     this.isCurrent = this.context.page()?.code === this.page?.code;
     this.isInitialized = false;

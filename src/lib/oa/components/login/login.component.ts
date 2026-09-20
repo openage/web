@@ -4,132 +4,207 @@ import { FormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { AuthService } from '../../core/services';
 import { NavService } from '../../core/services/nav.service';
+import { ActionComponent } from '../../ux/action/action.component';
+import { Role } from '../../core/models/role.model';
 
 @Component({
   selector: 'oa-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css'],
-  imports: [CommonModule, FormsModule]
+  imports: [CommonModule, FormsModule, ActionComponent]
 })
 export class LoginComponent implements OnInit {
 
-  @Input()
-  label?: string;
+  @Input() label?: string;
 
-  @Input()
-  value: any;
+  @Input() options?: any = {};
+  @Input() style?: any;
+  @Input() class?: string;
+  @Input() view?: string;
 
-  @Input()
-  config?: any = {};
+  @Input() value: any;
 
-  @Output()
-  valueChange: EventEmitter<any> = new EventEmitter();
+  @Output() valueChange: EventEmitter<any> = new EventEmitter();
+  @Output() processing = new EventEmitter<boolean>();
+  @Output() success = new EventEmitter<Role | undefined>();
+  @Output() failure = new EventEmitter<Error>();
 
-  @Input()
-  style?: any;
-
-  @Input()
-  class?: string;
-
-  @Input()
-  view?: string;
-
-  identity = '';
   password = '';
   otp = '';
-  identityType = 'email';
-  identityTypes: any[] = [{
-    code: 'email',
-    label: 'Email',
-    icon: 'fa fa-envelope',
-    placeholder: 'abc@example.com',
-    credentialMethods: [{ code: 'password', label: 'Password', icon: 'fa fa-lock' }]
-  }];
 
-  credentialMethod = 'password';
-  oauthProviders: any[] = [];
-  action = 'Login';
-  passwordLoginFailed = false;
-
-  private loginSessionId = '';
-
-  @Input()
   error?: string;
+  isProcessing = false;
 
-  isSubmitting = false;
+  availableRoles: any[] = [];
+  selectedRole?: any;
+
+  identityTypes: any[] = [];
+  selectedIdentityType: any;
+
+  credentialMethods: any[] = []
+  selectedCredentialMethod: any;
+
+  identityValue = '';
+
+  steps: any[] = [];
+  currentStep: any;
+
+  oauthProviders: any[] = [];
+  passwordLoginFailed = false;
 
   private route = inject(ActivatedRoute);
   private auth = inject(AuthService);
   private navService = inject(NavService);
 
   ngOnInit() {
-    this.config = this.config || {};
-    this.label = this.config.label || this.label;
-    this.view = this.config.view || this.view;
-    this.action = this.config.action || this.action;
-    this.identityTypes = this.config.identityTypes || [{
-      code: 'email',
-      label: 'Email',
-      icon: 'fa fa-envelope',
-      placeholder: 'abc@example.com',
-      credentialMethods: [{ code: 'password', label: 'Password', icon: 'fa fa-lock' }]
-    }];
-    this.identityType = this.identityTypes[0]?.code || 'email';
-    this.credentialMethod = this.credentialMethods[0]?.code || 'password';
-    this.oauthProviders = this.config.oauthProviders || []
+    this.options = this.options || {};
+    this.view = this.options.view || this.view;
+    this.label = this.options.label || this.label;
+
+    this.steps = this.options.steps || [];
+    this.selectStep('user')
+
     const params = this.route.snapshot.queryParams;
     const redirectUrl = params['redirectUrl'] || params['redirect-url'] || params['redirect'];
     this.auth.setRedirectUrl(redirectUrl);
   }
 
-  async login() {
-    if (this.isSubmitting) { return; }
+  selectStep(code: string): void {
+    this.error = undefined;
+    this.currentStep = this.steps.find(s => s.code === code);
 
+    switch (code) {
+      case 'user':
+        this.identityTypes = this.currentStep?.identityTypes;
+        this.selectIdentityType(this.identityTypes[0]);
+        this.credentialMethods = [];
+        break;
+
+      case 'credentials':
+        this.credentialMethods = this.currentStep?.methods || [];
+        this.selectCredentialMethod(this.credentialMethods[0]);
+        break;
+    }
+
+    return this.currentStep;
+  }
+
+  nextStep() {
+    switch (this.currentStep?.code) {
+      case 'user':
+        this.selectStep('credentials')
+        break;
+
+      case 'credentials':
+        this.selectStep('roles')
+        break;
+
+      case 'roles':
+        this.continueWithRole();
+        break;
+    }
+  }
+
+  previousStep() {
+    if (this.currentStep?.code === 'credentials') {
+      this.selectStep('user');
+    }
+  }
+
+  selectIdentityType(type: any): void {
+    if (!type) { return; }
+    this.selectedIdentityType = type;
     this.error = undefined;
     this.passwordLoginFailed = false;
-    const identity = this.identity.trim();
-    if (!identity ||
-      (this.credentialMethod === 'password' && !this.password) ||
-      (this.credentialMethod === 'otp' && !this.otp)) {
-      this.error = `Enter your ${this.identityLabel?.toLowerCase()} and ${this.credentialLabel}.`;
+    this.identityValue = '';
+    this.password = '';
+    this.otp = '';
+  }
+
+  selectCredentialMethod(method: any): void {
+    this.selectedCredentialMethod = method;
+    this.error = undefined;
+    this.password = '';
+    this.passwordLoginFailed = false;
+  }
+
+  private setProcessing(value: boolean): void { this.isProcessing = value; this.processing.emit(value); }
+  private setError(message: string): void { this.error = message; this.failure.emit(new Error(message)); }
+  private errorMessage(error: unknown): string { return error instanceof Error ? error.message : 'Please try again.'; }
+
+  async validateUser(): Promise<void> {
+    if (this.isProcessing) { return; }
+
+    const validators = this.selectedIdentityType.validators || {};
+    if (validators.required && !this.identityValue) { this.setError(validators.required.message); return; }
+    if (validators.pattern) {
+      const compiledPattern = new RegExp(validators.pattern.regex, validators.pattern.flags || '');
+      if (!compiledPattern.test(this.identityValue)) { this.setError(validators.pattern.message); return; }
+    }
+
+    this.setProcessing(true);
+    this.error = undefined;
+    try {
+      // if (validators.shouldExist) {
+      //   const exist = await this.codeExists(this.identityValue, this.selectedIdentityType.code);
+      //   if ((validators.shouldExist.exist && exist) || (!validators.shouldExist.exist && !exist)) { this.setError(validators.shouldExist.message); return; }
+      // }
+
+      this.nextStep()
+    } catch (error: unknown) {
+      this.setError(this.errorMessage(error));
+    } finally {
+      this.setProcessing(false);
+    }
+  }
+
+  async login() {
+    if (this.isProcessing) { return; }
+
+    if (this.selectedCredentialMethod === 'push') {
+      this.setError('Not Implmented')
       return;
     }
 
-    this.isSubmitting = true;
+    this.error = undefined;
+    const validators = this.selectedCredentialMethod.validators || {};
+    if (validators.required && !this.password.trim()) { this.setError(validators.required.message); return; }
+
+    const user: any = {};
+    user[this.selectedIdentityType?.code] = this.identityValue;
+    const credentials: any = {};
+    credentials[this.selectedCredentialMethod.code] = this.selectedCredentialMethod.code === 'password' ? this.password : this.otp
+    this.isProcessing = true;
+
     try {
-      const credentials = this.identityCredentials(identity);
-      if (this.credentialMethod === 'otp') {
-        await this.auth.verifyLoginOtp(credentials.email, credentials.mobile, credentials.code, this.otp, this.loginSessionId);
+      await this.auth.login(user, credentials);
+      this.availableRoles = await this.auth.getMyRoles();
+      this.selectRole(this.availableRoles[0])
+
+      if (this.availableRoles.length > 1) {
+        this.selectStep('roles');
+        return;
       } else {
-        await this.auth.verifyPassword(credentials.email, credentials.mobile, credentials.code,
-          this.credentialMethod === 'password' ? this.password : '', undefined, undefined, this.credentialMethod);
+        this.skipRoleSelection()
       }
-      this.onLogin();
+
     } catch (error: unknown) {
-      this.passwordLoginFailed = this.credentialMethod === 'password';
-      this.error = error instanceof Error ? error.message : 'Unable to sign in. Please try again.';
+      this.passwordLoginFailed = this.selectedCredentialMethod === 'password';
+      this.errorMessage(error)
     } finally {
-      this.isSubmitting = false;
+      this.isProcessing = false;
     }
   }
 
   async requestOtp() {
-    const identity = this.identity.trim();
-    if (!identity) {
-      this.error = `Enter your ${this.identityLabel?.toLowerCase()} first.`;
-      return;
-    }
-
     this.error = undefined;
-    this.isSubmitting = true;
+    this.isProcessing = true;
     try {
-      const credentials = this.identityCredentials(identity);
-      const session = await this.auth.sendLoginOtp(credentials.email, credentials.mobile, credentials.code);
-      this.loginSessionId = session?.id || session?.sessionId || '';
+      await this.auth.sendOtp(this.identityValue.trim(), this.selectedIdentityType.code);
     } catch (error: unknown) {
-      this.error = error instanceof Error ? error.message : 'Unable to send the verification code.';
+      this.errorMessage(error)
     } finally {
-      this.isSubmitting = false;
+      this.isProcessing = false;
     }
   }
 
@@ -141,55 +216,20 @@ export class LoginComponent implements OnInit {
     window.location.assign(provider.url);
   }
 
-  get identityLabel() {
-    return this.identityTypes.find(i => i.code === this.identityType)?.label;
+  selectRole(role: any): void {
+    this.selectedRole = role;
+    this.error = undefined;
   }
 
-  selectIdentityType(code: string) {
-    this.identityType = code;
-    this.credentialMethod = this.credentialMethods[0]?.code || 'password';
-    this.passwordLoginFailed = false;
-    this.identity = '';
-    this.password = '';
-    this.otp = '';
-  }
-
-  selectCredentialMethod(code: string) {
-    this.credentialMethod = code;
-    this.passwordLoginFailed = false;
-  }
-
-  get credentialLabel() {
-    return this.credentialMethods.find((i: { code: string; }) => i.code === this.credentialMethod)?.label;
-  }
-
-  get credentialMethods() {
-    return this.identityTypes.find(i => i.code === this.identityType)?.credentialMethods || [];
-  }
-
-  get identityPlaceholder() {
-    return this.identityTypes.find(i => i.code === this.identityType)?.placeholder || '';
-  }
-
-  private identityCredentials(identity: string) {
-    if (this.identityType === 'email' && identity.includes('@')) {
-      return { email: identity, mobile: '', code: '' };
+  async continueWithRole() {
+    if (!this.selectedRole) {
+      this.selectedRole = this.availableRoles[0]
     }
-    if (this.identityType === 'mobile' && /^\+?[\d ()-]+$/.test(identity)) {
-      return { email: '', mobile: identity, code: '' };
-    }
-    return { email: '', mobile: '', code: identity };
+    await this.auth.switchRole(this.selectedRole);
+    this.navService.goto(this.auth.getRedirectUrl() || '/');
   }
 
-  onLogin() {
-    this.navService.goto(this.auth.getRedirectUrl() || 'home');
-  }
-
-  signUp() {
-    this.navService.goto('auth.signup');
-  }
-
-  passwordReset() {
-    this.navService.goto('auth.forgot-password');
+  skipRoleSelection() {
+    this.navService.goto(this.auth.getRedirectUrl() || '/');
   }
 }

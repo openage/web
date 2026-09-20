@@ -21,5 +21,4 @@ export class User extends ModelBase {
     this.profile = new Profile(obj.profile);
     this.role = obj.role;
   }
-
 }

@@ -79,7 +79,7 @@ export class ContextService implements IAuth {
 
       const session = this.session()
       if (session?.id) {
-        this.cache.update('role', session);
+        this.cache.update('session', session);
         this.user.set(session.user)
         this.role.set(session.role)
       } else {
@@ -137,12 +137,8 @@ export class ContextService implements IAuth {
       role = this._defaultRole(user);
     }
 
-    const newRole = user.role?.find((item: { key: string | undefined; }) => item.key === role?.key);
-    if (newRole) {
-      this.role.set(newRole);
-    }
-
-    return newRole;
+    this.role.set(role)
+    return this.role();
   }
 
   // addRole(role: Role) {
@@ -158,7 +154,6 @@ export class ContextService implements IAuth {
   //   this.cache.update('user', user);
   //   return role;
   // }
-
 
 
   startImpersonation(session: Session) {

@@ -35,74 +35,94 @@ export class AuthService {
     this.logger = new Logger(AuthService);
   }
 
+  public async getMyRoles() {
+    try {
+      const page = await this.dataService.search({ 'user': 'my' }, this.rolesApi);
+      return page?.items || [];
+    } catch (error) {
+      return [];
+    }
+  }
+
+  /**
+   * Hydrates the active user and resolves the current role from the returned role set.
+   * This is used after login, refresh, or other user-scoped actions where the server
+   * returns the user and available roles together.
+   */
   private setUserAndRole = async (data: any) => {
     const user = new User(data);
     this.context.user.set(user);
-    const defaultRole = user?.roles?.find(r => !r.organization);
+    const roles = await this.getMyRoles();
+    const defaultRole = roles.find((r: any) => !r.organization) || roles[0] || user?.role;
 
-    // if (this._user && this._user.roles && this._user.roles.length >= 2) {
-    //   let role: Role = this._user.roles.find((item) => item.key === roleKey)
-    //   if (!role) {
-    //     role = this._user.roles.find((r) => !!r.organization) || this._user.roles[0];
-    //   }
-    //   subject.next(role)
-    // }
+    if (!defaultRole) {
+      if (user?.role) {
+        return this.context.setRole(new Role(user.role));
+      }
+      return this.context.role();
+    }
 
+    const availableRoles = await this.getMyRoles();
+    if (!availableRoles.length) {
+      this.context.setRole(new Role(defaultRole));
+      return this.context.role();
+    }
 
-    const page = await this.dataService.search({ 'user': 'my' }, {
-      headers: { 'x-role-key': defaultRole.key },
-      src: this.rolesApi
-    })
-    const roles = page?.items || [];
     let role;
-    if (roles.length > 1) {
+    if (availableRoles.length > 1) {
       const roleKey = this.context.role()?.key;
       if (roleKey) {
-        role = roles.find((item) => item.key === roleKey);
-      } else if (defaultRole && defaultRole.type.code !== 'user') {
+        role = availableRoles.find((item: any) => item.key === roleKey);
+      } else if (defaultRole && defaultRole.type?.code !== 'user') {
         role = defaultRole;
-      } else if (roles.length) {
-        role = roles.find((r) => !!r.organization) || roles[0];
+      } else if (availableRoles.length) {
+        role = availableRoles.find((r: any) => !!r.organization) || availableRoles[0];
       }
     } else {
-      role = roles[0];
+      role = availableRoles[0] || defaultRole;
     }
 
     return this.context.setRole(role);
   }
 
-  public signup = async (user: User, organization?: Organization, roleType?: string, source?: any, app?: string, tenant?: Tenant) => {
-    const email = user.email;
-    const phone = user.phone;
+  /**
+   * Starts the signup flow by creating a signup session for the new user.
+   * The backend receives the user payload and source metadata together so it can
+   * begin OTP verification / onboarding for the requested account.
+   */
+  public signup = async (user: User | any, source: any) => {
+    // const userData = await this.dataService.create(user, this.userApi);
+    // this.context.user.set(new User(userData));
+    const session = await this.dataService.create({
+      meta: {
+        user,
+        source
+      },
+      purpose: 'signup'
+    }, this.sessionsApi);
 
-    // eslint-disable-next-line max-len
-    if (email && email.match(/^[-a-z0-9~!$%^&*_=+}{'?]+(\.[-a-z0-9~!$%^&*_=+}{'?]+)*@([a-z0-9_][-a-z0-9_]*(\.[-a-z0-9_]+)*\.(aero|arpa|biz|com|coop|edu|gov|glass|info|int|mil|museum|name|net|org|pro|travel|mobi|[a-z][a-z])|([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}))(:[0-9]{1,5})?$/i)) {
-      user.email = email;
-    } else if (phone && (phone.match(/^\d{10}$/) || phone.match(/^(\+\d{1,3}[- ]?)?\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/) || phone.match(/^(\+\d{1,3}[- ]?)?\(?([0-9]{2})\)?[-. ]?([0-9]{4})[-. ]?([0-9]{4})$/))) {
-      user.phone = phone;
-    } else {
-      throw new Error('mobile or email is required');
+    return new Session(session);
+  }
+
+  /**
+   * Resends the verification code using the requested identity field.
+   * The type is usually email or mobile and is mapped into the payload dynamically.
+   */
+  public sendOtp = async (value: string, type: string, templateCode?: string) => {
+    const model: any = {}
+
+    model[type] = value;
+    if (templateCode) {
+      model[templateCode] = templateCode;
     }
 
-    const model: any = {
-      purpose: 'signup',
-      app: this.context.application(),
-      user,
-      meta: {
-        organization,
-        roleType,
-        source,
-        tenant
-      }
-    };
-
-    return this.dataService.create(model, `${this.userApi}/signUp`);
+    return this.dataService.create(model, `${this.userApi}/resend`);
   }
 
-  public sendOtp = async (email: string, mobile: string, code: string, templateCode?: string) => {
-    return this.dataService.create({ email, mobile, code, templateCode }, `${this.userApi}/resend`);
-  }
-
+  /**
+   * Checks whether the supplied identity already belongs to a user.
+   * If the type is omitted, the method infers email/mobile/code from the value format.
+   */
   public exists = async (identity: string, type?: string) => {
 
     if (!type) {
@@ -121,38 +141,76 @@ export class AuthService {
     return this.dataService.get(`exists?${type}=${identity}`, this.userApi);
   }
 
-  public verifyPassword = async (email: string, mobile: string, code: string, password: string,
-    app?: string, device?: string, method = 'password') => {
+  // public verifyPassword = async (email: string, mobile: string, code: string, password: string,
+  //   app?: string, device?: string, method = 'password') => {
+  //   const model = {
+  //     purpose: 'login',
+  //     app: this.context.application()?.code,
+  //     device,
+  //     user: {
+  //       email,
+  //       mobile,
+  //       code,
+  //       password,
+  //       method
+  //     },
+  //     credentials: {
+  //       password
+  //     }
+  //   };
+
+  //   const session = await this.dataService.create(model, `${this.sessionsApi}`)
+  //   return this.context.session.set(session)
+  // }
+  // public verifyLoginOtp = async (email: string, mobile: string, code: string, otp: string, sessionId?: string) => {
+  //   const model = {
+  //     purpose: 'login',
+  //     app: this.context.application()?.code,
+  //     sessionId,
+  //     user: { email, mobile, code, otp, method: 'otp' },
+  //     credentials: {
+  //       otp
+  //     }
+  //   };
+  //   const session = await this.dataService.create(model, `${this.sessionsApi}`);
+  //   return this.context.session.set(session);
+  // }
+
+  /**
+   * Authenticates a user by creating a login session with the provided user and credentials.
+   */
+  public login = async (user: any, credentials: any) => {
     const model = {
       purpose: 'login',
-      app: this.context.application()?.code,
-      device,
-      user: {
-        email,
-        mobile,
-        code,
-        password,
-        method
-      }
+      user,
+      credentials
     };
+    const session = await this.dataService.create(model, `${this.sessionsApi}`);
+    const currentSession = new Session(session);
+    this.context.session.set(currentSession);
 
-    const session = await this.dataService.create(model, `${this.userApi}/signIn`)
-    return this.context.session.set(session)
+    if (currentSession?.user) {
+      this.context.user.set(currentSession.user);
+    }
+
+    if (currentSession?.role) {
+      this.context.setRole(currentSession.role);
+      return currentSession;
+    }
+
+    if (currentSession?.token) {
+      const me = await this.dataService.get('my', {
+        headers: { 'x-access-token': currentSession.token },
+        src: this.userApi
+      });
+      return this.setUserAndRole(me);
+    }
+
+    return currentSession;
   }
 
   public sendLoginOtp = async (email: string, mobile: string, code: string) => {
     return this.sendOtp(email, mobile, code);
-  }
-
-  public verifyLoginOtp = async (email: string, mobile: string, code: string, otp: string, sessionId?: string) => {
-    const model = {
-      purpose: 'login',
-      app: this.context.application()?.code,
-      sessionId,
-      user: { email, mobile, code, otp, method: 'otp' }
-    };
-    const session = await this.dataService.create(model, `${this.userApi}/signIn`);
-    return this.context.session.set(session);
   }
 
   public authSuccess = async (token: string, provider: string, applicaton?: string, device?: string) => {
@@ -161,8 +219,20 @@ export class AuthService {
     return this.context.session.set(session)
   }
 
+  /**
+   * Updates the currently authenticated user's password on the active session.
+   * A valid session token is required before the password can be persisted.
+   */
   public setPassword = async (password: string) => {
-    return this.dataService.create({ password }, `${this.userApi}/resetPassword`);
+    const session = this.context.session();
+
+    if (!session?.token) {
+      throw new Error('A valid session is required to set the password.');
+    }
+
+    return this.dataService.update('my', {
+      credentials: { password }
+    }, this.userApi);
   }
 
   public initPassword = async (model: any, otp: string, password: string) => {
@@ -186,10 +256,11 @@ export class AuthService {
     return this.setUserAndRole(data)
   }
 
-  public verifyOtp = async (id: string, otp: string) => {
-    const subject = new Subject<any>();
-    const data = await this.dataService.create({ id, otp }, `${this.userApi}/confirm`)
-    return this.setUserAndRole(data)
+  /**
+   * Verifies the OTP against the signup/session activation API.
+   */
+  public verifyOtp = async (id: string | number, otp: string) => {
+    return this.activateSession(id, otp);
   }
 
   public refreshUser = async () => {
@@ -205,12 +276,31 @@ export class AuthService {
     return this.setUserAndRole(data)
   }
 
-  public setRoleKey = async (roleKey: string) => {
+  public switchRole = async (role: Role | string | any) => {
+    const roleKey = typeof role === 'string' ? role : role?.key;
+    if (!roleKey) {
+      return this.context.role();
+    }
+
     const data = await this.dataService.get('my', {
       headers: { 'x-role-key': roleKey },
-      src: this.userApi
-    })
-    return this.setUserAndRole(data)
+      src: this.sessionsApi
+    });
+    const session = new Session(data);
+    this.context.session.set(session);
+
+    if (session?.role) {
+      this.context.setRole(session.role);
+    } else if (session?.user?.roles?.length) {
+      const matchingRole = session.user.roles.find((item: any) => item.key === roleKey) || session.user.roles[0];
+      this.context.setRole(new Role(matchingRole));
+    }
+
+    return session;
+  }
+
+  public setRoleKey = async (roleKey: string) => {
+    return this.switchRole(roleKey);
   }
 
   public setSessionToken = async (token: string) => {
@@ -218,14 +308,36 @@ export class AuthService {
       headers: { 'x-access-token': token },
       src: this.sessionsApi
     });
-    return this.context.session.set(data)
+    const session = new Session(data);
+    this.context.session.set(session);
+
+    if (session?.user) {
+      this.context.user.set(session.user);
+    }
+
+    if (session?.role) {
+      this.context.setRole(session.role);
+    } else if (this.context.user()) {
+      await this.setUserAndRole(this.context.user());
+    }
+
+    return session;
   }
 
-  public joinOrganization = async (profile: Profile, organization?: Organization, typeCode?: string) => {
-    const newRole = new Role();
-    newRole.organization = this.context.organization() || organization;
-    newRole.type = new RoleType({ code: typeCode });
-    newRole.profile = profile;
+  /**
+   * Creates a new role assignment for the user, usually as a tenant or organization role.
+   * The payload is passed through as-is to the roles API so the backend can resolve the
+   * tenant/organization relationship and role metadata.
+   */
+  public createRole = async (role: any) => {
+    // const newRole: any = {
+    //   type: {
+    //     code: role.type
+    //   }
+    // };
+    // newRole.organization = this.context.organization() || organization;
+    // newRole.type = new RoleType({ code: typeCode });
+    // newRole.profile = profile;
 
     // if(organization) {
     //   role.user = new User({
@@ -235,10 +347,11 @@ export class AuthService {
     //     email: organization.email
     //   });
     // }
-    const role = await this.dataService.create(newRole, this.rolesApi)
-    const user = this.context.user();
-    user?.roles?.push(role);
-    return this.context.role.set(role);
+    const newRole = await this.dataService.create(role, this.rolesApi)
+    // const user = this.context.user();
+    // user?.roles?.push(newRole);
+    // this.context.role.set(newRole);
+    return newRole
   }
 
   public createSession = async () => {
@@ -270,13 +383,14 @@ export class AuthService {
     return this.createSession()
   }
 
-  public activateSession = async (id: string, otp?: string, token?: string) => {
-    const model = {
-      otp,
-      token,
-      status: 'active'
-    };
-    return await this.dataService.update(id, model, this.sessionsApi)
+  public activateSession = async (id: string | number, otp?: string, token?: string) => {
+    const sessionData = await this.dataService.create({
+      credentials: { otp },
+      token
+    }, `${this.sessionsApi}/${id}/activate`);
+    const session = new Session(sessionData);
+    this.context.session.set(session);
+    return session;
   }
 
   public logout = async () => {

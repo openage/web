@@ -64,6 +64,8 @@ export class DialogDirective implements OnDestroy {
       this.componentRef.instance.template = this.oaDialog;
       this.componentRef.instance.data = this.oaData;
       this.componentRef.instance.position = this.oaPosition;
+      this.componentRef.instance.type = 'dialog';
+      this.componentRef.instance.visible = true;
     }
   }
 

@@ -824,8 +824,19 @@ export class NavService {
           ? window.open(key, '_blank')
           : this.router.navigate([key], { queryParams });
       }
+
       // Handle navigation using breadcrumb codes
       nav = this.getByCode(key);
+      if (!nav && key.includes('.')) {
+        const fallbackPath = `/${key.replace(/\./g, '/')}`;
+        return newTab
+          ? window.open(fallbackPath, '_blank')
+          : this.router.navigate([fallbackPath], {
+              queryParams,
+              fragment
+            });
+      }
+
       // if (!nav) {
       //   return this.gotoParent(key, params);
       // }

@@ -56,13 +56,13 @@
   text-align: center;
 }
 
-.signup-identity-types {
+.identity-types {
   display: flex;
   gap: 8px;
   margin-top: 8px;
 }
 
-.signup-identity-types button {
+.identity-types button {
   flex: 1;
   min-height: 38px;
   padding: 8px 12px;
@@ -74,13 +74,13 @@
   font: inherit;
 }
 
-.signup-identity-types button.active,
-.signup-identity-types button:hover {
+.identity-types button.active,
+.identity-types button:hover {
   border-color: var(--primary);
   color: var(--primary);
 }
 
-.signup-identity-types i {
+.identity-types i {
   margin-right: 6px;
 }
 

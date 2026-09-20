@@ -5,174 +5,251 @@ import { Organization, Tenant, User } from '../../core/models';
 import { Profile } from '../../core/models/profile.model';
 import { Role } from '../../core/models/role.model';
 import { AuthService } from '../../core/services';
-import { NavService } from '../../core/services/nav.service';
 import { ContextService } from '../../core/services/context.service';
-
-type SignupView = 'individual' | 'employee' | 'organization' | 'tenant';
-
-interface SignupConfig {
-  label?: string;
-  view?: SignupView;
-  typeCode?: string;
-  roleType?: string;
-  source?: unknown;
-  login?: string;
-  signupTypes?: SignupType[];
-  allowOrganizationCreate?: boolean;
-  identityTypes?: SignupIdentityType[] | SignupIdentityType[][];
-  stepLabels?: any[];
-}
-
-interface SignupIdentityType {
-  code: 'email' | 'mobile';
-  label: string;
-  icon?: string;
-  placeholder?: string;
-  credentialMethods?: SignupCredentialMethod[];
-}
-
-interface SignupCredentialMethod {
-  code: 'password' | 'otp' | 'push';
-  label: string;
-  icon?: string;
-  policy?: any;
-}
-
-interface SignupType {
-  code: string;
-  label: string;
-  view: SignupView;
-  roleType?: string;
-}
-
-interface SignupRole {
-  code: string;
-  label: string;
-  roleType?: string;
-  view?: SignupView;
-  organization?: Organization;
-  tenant?: Tenant;
-}
+import { ActionComponent } from "../../ux/action/action.component";
 
 @Component({
   selector: 'oa-signup',
   templateUrl: './signup.component.html',
   styleUrls: ['./signup.component.css'],
-  imports: [CommonModule, FormsModule]
+  imports: [CommonModule, FormsModule, ActionComponent]
 })
 export class SignupComponent implements OnInit, OnDestroy {
   @Input() label?: string;
-  @Input() config: SignupConfig = {};
+  @Input() options: any = {};
   @Input() style?: Record<string, string>;
   @Input() class?: string;
-  @Input() view: SignupView = 'individual';
   @Input() typeCode?: string;
-  @Input() roleType?: string;
   @Input() source?: unknown;
   @Input() oneStep = true;
-  @Input() sessionId?: string;
+  @Input() sessionId?: string | number;
   @Input() tokenString?: string;
   @Input() organization?: Organization;
 
-  @Output() valueChange = new EventEmitter<User>();
+  @Output() valueChange = new EventEmitter<Role>();
   @Output() created = new EventEmitter<void>();
   @Output() processing = new EventEmitter<boolean>();
   @Output() success = new EventEmitter<Role | undefined>();
   @Output() failure = new EventEmitter<Error>();
 
   profile = new Profile({});
-  email = '';
-  mobile = '';
   password = '';
   confirmPassword = '';
   otp = '';
+
   organizationName = '';
   organizationCode = '';
   tenantName = '';
   tenantCode = '';
-  user?: User;
+
   error?: string;
-  afterSignUp = false;
   isProcessing = false;
-  disableResend = false;
-  countdownSeconds = 0;
-  signupTypes: SignupType[] = [];
-  identityTypes: SignupIdentityType[] = [];
-  identityType: SignupIdentityType['code'] = 'email';
+
+  availableRoles: any[] = [];
+  selectedRole?: any;
+
+  identityTypes: any[] = [];
+  selectedIdentityType: any;
+
+  credentialMethods: any[] = []
+  selectedCredentialMethod: any;
+
   identityValue = '';
-  credentialMethod: SignupCredentialMethod['code'] = 'password';
+
+  steps: any[] = [];
+  currentStep: any;
+
   signupType = '';
   isLoggedIn = false;
-  step = 1;
-  otpSent = false;
-  otpVerified = false;
-  allowOrganizationCreate = false;
-  organizationExists = false;
-  organizationCreateRequested = false;
-  tenantExists = false;
-  availableRoles: SignupRole[] = [];
-  selectedRole?: SignupRole;
-  stepLabels: any[] = [];
+  verificationInitiated = false;
+  verificationDone = false;
+  verificationRetry = false;
+  countdownSeconds = 0;
+
+  createdRole: any;
+
+
 
   private resendTimer?: ReturnType<typeof setInterval>;
   private auth = inject(AuthService);
-  private navService = inject(NavService);
   private context = inject(ContextService);
 
   ngOnInit(): void {
-    this.isLoggedIn = !!this.context.session()?.user?.id || !!this.context.user()?.id;
-    this.view = this.config.view || this.view;
-    this.label = this.config.label || this.label || this.defaultLabel();
-    this.typeCode = this.config.typeCode || this.typeCode;
-    this.source = this.config.source || this.source;
-    this.stepLabels = this.config.stepLabels || [];
-    this.identityTypes = this.normalizeIdentityTypes(this.config.identityTypes) || this.defaultIdentityTypes();
-    this.identityType = this.identityTypes[0]?.code || 'email';
-    this.credentialMethod = this.credentialMethods[0]?.code || 'password';
-    this.signupTypes = this.applicableSignupTypes(this.config.signupTypes || this.defaultSignupTypes());
-    const configuredSignupType = this.signupTypes.find(type => type.view === this.view) || this.signupTypes[0];
-    this.signupType = configuredSignupType?.code || '';
-    if (configuredSignupType) {
-      this.view = configuredSignupType.view;
-      this.roleType = configuredSignupType.roleType;
-      this.allowOrganizationCreate = this.canCreateOrganization(configuredSignupType);
-    }
+    const currentUser = this.context.user();
+    this.isLoggedIn = !!currentUser?.id;
+
+    // this.view = this.options.view || this.view;
+    this.label = this.options.label || this.label;
+    this.typeCode = this.options.typeCode || this.typeCode;
+    this.source = this.options.source || this.source;
+    this.steps = this.options.steps || [];
+
+    this.selectStep('user')
+
+
+    // const configuredSignupType = this.signupTypes.find(type => type.view === this.view) || this.signupTypes[0];
+    // this.signupType = configuredSignupType?.code || '';
+    // if (configuredSignupType) {
+    //   this.view = configuredSignupType.view;
+    //   this.roleType = configuredSignupType.roleType;
+    //   this.allowOrganizationCreate = this.canCreateOrganization(configuredSignupType);
+    // }
+
     if (this.isLoggedIn) {
-      const currentUser = this.context.user();
-      this.user = currentUser;
       this.profile = currentUser?.profile || this.profile;
-      this.email = currentUser?.email || '';
-      this.mobile = currentUser?.phone || '';
-      this.identityType = this.email ? 'email' : 'mobile';
-      this.identityValue = this.email || this.mobile;
-      this.step = 2;
+      if (currentUser?.email) {
+        this.identityValue = currentUser?.email
+        this.selectedIdentityType = this.identityTypes.find(type => type.code === 'email')
+      } else if (currentUser?.phone) {
+        this.identityValue = currentUser?.phone
+        this.selectedIdentityType = this.identityTypes.find(type => type.code === 'phone')
+      }
+      this.selectStep('roles')
     }
-    this.loadRoles();
   }
 
   ngOnDestroy(): void { this.stopResendTimer(); }
 
-  async register(): Promise<void> {
-    await this.submitUserInfo();
+  selectStep(code: string): void {
+    this.error = undefined;
+
+    this.currentStep = this.steps.find(s => s.code === code);
+
+    switch (code) {
+      case 'user':
+        this.identityTypes = this.currentStep?.identityTypes;
+        this.selectIdentityType(this.identityTypes[0]);
+        break;
+
+      case 'credentials':
+        this.credentialMethods = this.currentStep?.methods;
+        this.selectCredentialMethod(this.credentialMethods[0]);
+        break;
+
+      case 'roles':
+        this.availableRoles = this.currentStep?.roles.filter((r: { level: string; create: any; }) => {
+          // Check if there's a tenant in context
+          if (this.context.tenant()?.id) {
+            if (this.context.organization()?.id) {// Case 1: Tenant + Organization context
+              return r.level === 'organization' && !r.create
+            } else { // Case 2: Tenant only (no organization)
+              return r.level === 'organization' || (r.level === 'tenant' && !this.isLoggedIn && !r.create)
+            }
+          } else {// Case 3: No tenant (probably creating a new tenant)
+            return r.level === 'tenant' && !!r.create
+          }
+        })
+        this.selectRole(this.availableRoles[0])
+        break;
+
+      case 'success':
+        if (this.currentStep.next?.value === 'switch-role') {
+          this.currentStep.next.event = this.switchRole
+        }
+        break;
+    }
+
+    return this.currentStep;
   }
 
-  async submitUserInfo(): Promise<void> {
-    if (this.isProcessing) { return; }
-    if (this.isLoggedIn) { this.step = 2; return; }
-    this.syncIdentityValue();
-    const validationError = this.validateUserInfo();
-    if (validationError) { this.setError(validationError); return; }
+  nextStep(): void {
+    switch (this.currentStep?.code) {
+      case 'user':
+        this.selectStep('credentials');
+        break;
 
-    const user = new User({ email: this.email.trim() || undefined, phone: this.mobile.trim() || undefined, profile: this.profile });
-    (user as User & { password: string }).password = this.password;
+      case 'credentials':
+        this.selectStep('roles');
+        break;
+
+      case 'roles':
+        this.selectStep('team');
+        break;
+      case 'team':
+        this.selectStep('review');
+        break;
+    }
+  }
+
+  previousStep(): void {
+    this.error = undefined;
+    switch (this.currentStep.code) {
+      case 'user':
+        break;
+      case 'roles':
+        break;
+      case 'team':
+        if (this.availableRoles.length >= 1) {
+          this.selectStep('roles');
+        }
+        break;
+      case 'review':
+        this.selectStep('team');
+        break;
+    }
+  }
+
+  selectIdentityType(type: any): void {
+    if (!type) { return; }
+    this.selectedIdentityType = type;
+    this.otp = '';
+    this.error = undefined;
+  }
+
+  selectCredentialMethod(method: any): void {
+    this.selectedCredentialMethod = method;
+    this.error = undefined;
+    this.password = '';
+    this.confirmPassword = '';
+  }
+
+  selectRole(role: any): void {
+    this.selectedRole = role;
+    switch (this.selectedRole.level) {
+      case 'organization':
+        this.organizationCode = role.organization?.code || this.organizationCode;
+        break;
+
+      case 'tenant':
+        this.tenantCode = role.tenant?.code || this.tenantCode;
+        break;
+    }
+    this.error = undefined;
+  }
+
+  async validateUser(): Promise<void> {
+    if (this.isProcessing) { return; }
+
+    if (this.isLoggedIn) {
+      this.currentStep = this.steps.find(s => s.code === 'roles')
+      return;
+    }
+
+    if (!this.profile.firstName?.trim() || !this.profile.lastName?.trim()) { this.setError('Enter your first and last name.'); return; }
+
+    const validators = this.selectedIdentityType.validators || {};
+    if (validators.required && !this.identityValue) { this.setError(validators.required.message); return; }
+    if (validators.pattern) {
+      const compiledPattern = new RegExp(validators.pattern.regex, validators.pattern.flags || '');
+      if (!compiledPattern.test(this.identityValue)) { this.setError(validators.pattern.message); return; }
+    }
+
     this.setProcessing(true);
     this.error = undefined;
     try {
-      const session: any = await this.auth.signup(user, undefined, undefined, this.source);
-      this.user = user;
-      this.sessionId = session?.id;
+      // if (validators.shouldExist) {
+      //   const exist = await this.codeExists(this.identityValue, this.selectedIdentityType.code);
+      //   if ((validators.shouldExist.exist && exist) || (!validators.shouldExist.exist && !exist)) { this.setError(validators.shouldExist.message); return; }
+      // }
+
+      const userModel: any = {}
+      userModel[this.selectedIdentityType?.code] = this.identityValue;
+      userModel.profile = this.profile;
+
+      const session: any = await this.auth.signup(userModel, this.source);
+      this.sessionId = session.id;
       if (!this.sessionId) { throw new Error('Signup did not return a confirmation session.'); }
-      this.otpSent = true;
+      this.verificationInitiated = true;
     } catch (error: unknown) {
       this.setError(this.errorMessage(error));
     } finally {
@@ -180,7 +257,7 @@ export class SignupComponent implements OnInit, OnDestroy {
     }
   }
 
-  async confirm(): Promise<void> {
+  async confirmOtp(): Promise<void> {
     if (this.isProcessing || !this.sessionId) { return; }
     if (!this.otp.trim()) { this.setError('Enter the verification code.'); return; }
 
@@ -188,10 +265,10 @@ export class SignupComponent implements OnInit, OnDestroy {
     this.error = undefined;
     try {
       await this.auth.verifyOtp(this.sessionId, this.otp.trim());
-      this.otpVerified = true;
-      this.otpSent = false;
-      this.step = 2;
-      this.loadRoles();
+      this.verificationInitiated = false;
+      this.verificationDone = true;
+      this.nextStep();
+
     } catch (error: unknown) {
       this.setError(this.errorMessage(error));
     } finally {
@@ -200,15 +277,13 @@ export class SignupComponent implements OnInit, OnDestroy {
   }
 
   async resendOtp(): Promise<void> {
-    if (this.disableResend || this.isProcessing) { return; }
-    const email = this.email.trim();
-    const mobile = this.mobile.trim();
-    if (!email && !mobile) { this.setError('Enter an email address or mobile number before requesting a new code.'); return; }
+    if (!this.verificationRetry || this.isProcessing) { return; }
+    if (!this.identityValue?.trim()) { this.setError(`Enter an ${this.selectedIdentityType?.code} before requesting a new code.`); return; }
 
     this.setProcessing(true);
     this.error = undefined;
     try {
-      const session: any = await this.auth.sendOtp(email, mobile, '');
+      const session: any = await this.auth.sendOtp(this.identityValue, this.selectedIdentityType?.code, '');
       this.sessionId = session?.id || this.sessionId;
       this.startResendTimer();
     } catch (error: unknown) {
@@ -218,160 +293,31 @@ export class SignupComponent implements OnInit, OnDestroy {
     }
   }
 
-  login(): void { this.navService.goto('auth.login'); }
+  async setCredentials() {
+    if (this.isProcessing || !this.sessionId) { return; }
 
-  selectIdentityType(type: SignupIdentityType['code']): void {
-    this.syncIdentityValue();
-    this.identityType = type;
-    this.identityValue = this.identityType === 'email' ? this.email : this.mobile;
-    this.credentialMethod = this.credentialMethods[0]?.code || 'password';
-    this.password = '';
-    this.confirmPassword = '';
+    const validators = this.selectedCredentialMethod.validators || {};
+    if (validators.required && !this.password.trim()) { this.setError(validators.required.message); return; }
+    if (validators.match && this.password !== this.confirmPassword) { this.setError(validators.match.message); return; }
+    if (validators.policy) { const policyError = this.validatePasswordPolicy(validators.policy); if (policyError) { this.setError(policyError); return; } }
+
+    this.setProcessing(true);
     this.error = undefined;
-  }
-
-  selectCredentialMethod(method: SignupCredentialMethod['code']): void {
-    this.credentialMethod = method;
-    this.password = '';
-    this.confirmPassword = '';
-    this.error = undefined;
-  }
-
-  get identityLabel(): string {
-    return this.identityTypes.find(type => type.code === this.identityType)?.label || 'Identity';
-  }
-
-  get identityPlaceholder(): string {
-    return this.identityTypes.find(type => type.code === this.identityType)?.placeholder || '';
-  }
-
-  stepLabel(code: string): string {
-    return this.stepLabels.find(step => step.code === code)?.label || code;
-  }
-
-  get credentialMethods(): SignupCredentialMethod[] {
-    return this.identityTypes.find(type => type.code === this.identityType)?.credentialMethods || [];
-  }
-
-  get credentialLabel(): string {
-    return this.credentialMethods.find(method => method.code === this.credentialMethod)?.label || 'Credential';
-  }
-
-  get credentialPolicy(): any {
-    return this.credentialMethods.find(method => method.code === this.credentialMethod)?.policy || {};
-  }
-
-  selectSignupType(type: SignupType): void {
-    this.signupType = type.code;
-    this.view = type.view;
-    this.roleType = type.roleType;
-    this.allowOrganizationCreate = this.canCreateOrganization(type);
-    this.error = undefined;
-  }
-
-  selectRole(role: SignupRole): void {
-    this.selectedRole = role;
-    this.roleType = role.roleType;
-    if (role.view) { this.view = role.view; }
-    this.organizationCode = role.organization?.code || this.organizationCode;
-    this.tenantCode = role.tenant?.code || this.tenantCode;
-    this.error = undefined;
-  }
-
-  nextStep(): void {
-    this.error = undefined;
-    if (this.step === 2) {
-      this.step = this.needsOrganizationStep() ? 3 : 4;
-    } else if (this.step === 3) {
-      this.step = 4;
+    try {
+      await this.auth.setPassword(this.password.trim());
+      this.nextStep()
+    } catch (error: unknown) {
+      this.setError(this.errorMessage(error));
+    } finally {
+      this.setProcessing(false);
     }
   }
 
-  previousStep(): void {
-    this.error = undefined;
-    if (this.step === 4) { this.step = this.needsOrganizationStep() ? 3 : 2; }
-    else if (this.step === 3) { this.step = 2; }
-  }
 
-  async validateOrganization(): Promise<void> {
-    const code = this.organizationCode.trim();
-    if (!code) { this.setError('Enter the organization code.'); return; }
-    this.setProcessing(true);
-    try {
-      this.organizationExists = await this.codeExists(code, 'organization');
-      if (!this.organizationExists && !this.allowOrganizationCreate) {
-        this.setError('That organization does not exist.');
-        return;
-      }
-      if (this.organizationExists) { this.step = 4; }
-      else { this.organizationCreateRequested = false; this.step = 3; }
-    } catch (error: unknown) { this.setError(this.errorMessage(error)); }
-    finally { this.setProcessing(false); }
-  }
 
-  requestOrganizationCreate(): void {
-    this.organizationCreateRequested = true;
-    this.error = undefined;
-  }
 
-  async validateTenant(): Promise<void> {
-    const code = this.tenantCode.trim();
-    if (!code) { this.setError('Enter the tenant code.'); return; }
-    this.setProcessing(true);
-    try {
-      this.tenantExists = await this.codeExists(code, 'tenant');
-      if (this.view === 'tenant' && this.tenantExists) {
-        this.setError('That tenant code is already in use.');
-        return;
-      }
-      if (this.view === 'individual' && !this.tenantExists) {
-        this.setError('That tenant does not exist.');
-        return;
-      }
-      this.step = 4;
-    } catch (error: unknown) { this.setError(this.errorMessage(error)); }
-    finally { this.setProcessing(false); }
-  }
 
-  async create(): Promise<void> {
-    if (this.isProcessing) { return; }
-    const validationError = this.validateDestination();
-    if (validationError) { this.setError(validationError); return; }
-    if (!this.isLoggedIn && !this.otpVerified) { this.setError('Verify your account before continuing.'); return; }
-    this.setProcessing(true);
-    this.error = undefined;
-    try {
-      const user = this.user || new User({ email: this.email.trim() || undefined, phone: this.mobile.trim() || undefined, profile: this.profile });
-      const session: any = await this.auth.signup(user, this.getOrganization(), this.roleType, this.source, undefined, this.getTenant());
-      this.user = user;
-      this.sessionId = session?.id || this.sessionId;
-      this.afterSignUp = true;
-      this.valueChange.emit(user);
-      this.created.emit();
-    } catch (error: unknown) { this.setError(this.errorMessage(error)); }
-    finally { this.setProcessing(false); }
-  }
-
-  private validateUserInfo(): string | undefined {
-    if (this.isLoggedIn) { return undefined; }
-    if (!this.profile.firstName?.trim() || !this.profile.lastName?.trim()) { return 'Enter your first and last name.'; }
-    if (!this.email.trim() && !this.mobile.trim()) { return 'Enter an email address or mobile number.'; }
-    if (this.email.trim() && !/^\S+@\S+\.\S+$/.test(this.email.trim())) { return 'Enter a valid email address.'; }
-    if (this.credentialMethod === 'password') {
-      const policyError = this.validatePasswordPolicy();
-      if (policyError) { return policyError; }
-      if (this.password !== this.confirmPassword) { return 'Passwords do not match.'; }
-    }
-    return undefined;
-  }
-
-  private syncIdentityValue(): void {
-    this.email = this.identityType === 'email' ? this.identityValue.trim() : '';
-    this.mobile = this.identityType === 'mobile' ? this.identityValue.trim() : '';
-  }
-
-  private validatePasswordPolicy(): string | undefined {
-    const policy = this.credentialPolicy;
+  private validatePasswordPolicy(policy: any): string | undefined {
     const minLength = policy.minLength ?? 8;
     if (this.password.length < minLength) {
       return policy.message || `Password must contain at least ${minLength} characters.`;
@@ -402,131 +348,126 @@ export class SignupComponent implements OnInit, OnDestroy {
     return undefined;
   }
 
-  private defaultIdentityTypes(): SignupIdentityType[] {
-    const password = { code: 'password' as const, label: 'Password', icon: 'fa fa-lock' };
-    return [
-      { code: 'email', label: 'Email', icon: 'fa fa-envelope', placeholder: 'Enter your email', credentialMethods: [password] },
-      { code: 'mobile', label: 'Mobile', icon: 'fa fa-phone', placeholder: 'Enter your mobile number', credentialMethods: [password] }
-    ];
+  async validateRole(role: any): Promise<void> {
+    if (this.selectedRole.level === 'organization') {
+      return this.validateOrganization(role)
+    }
+    return this.validateTenant(role)
   }
 
-  private normalizeIdentityTypes(types?: SignupConfig['identityTypes']): SignupIdentityType[] | undefined {
-    if (!types) { return undefined; }
-    const normalized = Array.isArray(types[0]) ? (types as SignupIdentityType[][]).flat() : types as SignupIdentityType[];
-    return normalized.length ? normalized : undefined;
-  }
+  async validateOrganization(role: any): Promise<void> {
+    const code = this.organizationCode.trim();
 
-  private canCreateOrganization(type: SignupType): boolean {
-    return type.view === 'organization' && type.roleType?.toLowerCase().includes('admin') === true;
-  }
+    const codeValidators = role.input?.validators || {};
+    const createValidators = role.create?.validators || {};
+    if (codeValidators.required && !code) { this.setError(codeValidators.required.message); return; }
+    if (createValidators.required && !this.organizationName.trim()) { this.setError(createValidators.required.message); return; }
 
-  private validateDestination(): string | undefined {
-    if (this.view === 'employee' && !this.context.organization() && !this.organizationCode.trim()) {
-      return 'Enter the organization code.';
-    }
-    if (this.view === 'organization' && !this.organizationCode.trim()) {
-      return 'Enter the organization name and code.';
-    }
-    if (this.view === 'organization' && !this.organizationExists && !this.organizationName.trim()) {
-      return 'Enter the organization name.';
-    }
-    if (this.view === 'individual' && !this.context.tenant() && !this.tenantCode.trim()) {
-      return 'Enter the tenant code.';
-    }
-    if (this.view === 'tenant' && (!this.tenantName.trim() || !this.tenantCode.trim())) {
-      return 'Enter the tenant name and code.';
-    }
-    return undefined;
-  }
 
-  private loadRoles(): void {
-    const roles = this.context.user()?.roles || [];
-    this.availableRoles = roles.map((role: any) => ({
-      code: role.code || role.key,
-      label: role.name || role.title || role.type?.name || role.type?.code || role.code,
-      roleType: role.type?.code,
-      view: this.signupTypes.find(type => type.roleType === role.type?.code)?.view,
-      organization: role.organization,
-      tenant: role.tenant
-    }));
-    if (!this.selectedRole) {
-      this.selectedRole = this.availableRoles.find(role => role.roleType === this.roleType) || this.availableRoles[0];
+    this.setProcessing(true);
+    try {
+      // if (codeValidators.shouldExist) {
+      //   const exist = await this.codeExists(code, 'organization');
+      //   if ((codeValidators.shouldExist.exist && exist) || (!codeValidators.shouldExist.exist && !exist)) { this.setError(codeValidators.shouldExist.message); return; }
+      // }
+
+      this.nextStep()
+    } catch (error: unknown) {
+      this.setError(this.errorMessage(error));
     }
-    if (!this.availableRoles.length) {
-      this.availableRoles = this.signupTypes.map(type => ({ code: type.code, label: type.label, roleType: type.roleType, view: type.view }));
-      this.selectedRole = this.availableRoles[0];
+    finally {
+      this.setProcessing(false);
     }
   }
 
-  private needsOrganizationStep(): boolean {
-    if (this.view === 'employee' || this.view === 'organization') { return !this.context.organization()?.code; }
-    if (this.view === 'individual' || this.view === 'tenant') { return !this.context.tenant()?.code; }
-    return false;
+  async validateTenant(role: any): Promise<void> {
+    const code = this.tenantCode.trim();
+    const codeValidators = role.input?.validators || {};
+    const createValidators = role.create?.validators || {};
+    if (codeValidators.required && !code) { this.setError(codeValidators.required.message); return; }
+    if (createValidators.required && !this.tenantName.trim()) { this.setError(createValidators.required.message); return; }
+
+    this.setProcessing(true);
+    try {
+      // if (codeValidators.shouldExist) {
+      //   const exist = await this.codeExists(code, 'tenant');
+      //   if ((codeValidators.shouldExist.exist && exist) || (!codeValidators.shouldExist.exist && !exist)) { this.setError(codeValidators.shouldExist.message); return; }
+      // }
+      this.nextStep();
+    } catch (error: unknown) {
+      this.setError(this.errorMessage(error));
+    }
+    finally {
+      this.setProcessing(false);
+    }
   }
+
+  async createRole(selectedRole: any): Promise<void> {
+    if (this.isProcessing) { return; }
+    // const validationError = this.validateDestination();
+    // if (validationError) { this.setError(validationError); return; }
+    // if (!this.isLoggedIn && !this.verificationDone) { this.setError('Verify your account before continuing.'); return; }
+
+    this.setProcessing(true);
+    this.error = undefined;
+    try {
+
+      const roleModel: any = {
+      }
+
+      if (selectedRole.level === 'tenant') {
+        roleModel.tenant = {
+          code: this.tenantCode,
+          name: this.tenantName
+        }
+      }
+
+      if (selectedRole.level === 'organization') {
+        roleModel.organization = {
+          code: this.organizationCode,
+          name: this.organizationName
+        }
+      }
+
+      if (selectedRole.type) {
+        roleModel.type = { code: selectedRole.type }
+      }
+
+      this.createdRole = await this.auth.createRole(roleModel)
+
+      // const userModel: any = {}
+      // userModel[this.selectedIdentityType?.code] = this.identityValue;
+      // userModel.pofile = this.profile;
+
+      this.selectStep('success');
+      this.valueChange.emit(this.createdRole);
+      this.created.emit();
+    } catch (error: unknown) { this.setError(this.errorMessage(error)); }
+    finally { this.setProcessing(false); }
+  }
+
+  async switchRole(): Promise<void> {
+    this.auth.switchRole(this.createdRole)
+  }
+
+  // private validateDestination(): string | undefined {
+  //   if (!this.selectedRole) { return 'Choose a role.'; }
+  //   if (this.selectedRole.level === 'organization' && !this.organizationCode.trim()) {
+  //     return this.selectedRole.input?.validators?.required?.message || 'Enter the team code.';
+  //   }
+  //   if (this.selectedRole.level === 'tenant' && !this.tenantCode.trim()) {
+  //     return this.selectedRole.input?.validators?.required?.message || 'Enter the tenant code.';
+  //   }
+  //   return undefined;
+  // }
 
   private async codeExists(code: string, type: string): Promise<boolean> {
     try {
       const result: any = await this.auth.exists(code, type);
       return result === true || result?.exists === true || result?.data?.exists === true || result?.items?.length > 0;
     } catch (error: unknown) {
-      throw new Error(`Unable to verify the ${type} code. Please try again.`);
+      throw new Error(`Unable to verify the ${type}. Please try again.`);
     }
-  }
-
-  get contextTenantName(): string {
-    const tenant = this.context.tenant();
-    return tenant?.name || tenant?.code || '';
-  }
-
-  isEmployeeWithoutOrganization(): boolean {
-    return this.view === 'employee' && !this.context.organization();
-  }
-
-  private getOrganization(): Organization | undefined {
-    if (this.view === 'employee') {
-      return this.context.organization() || new Organization({ code: this.organizationCode.trim() });
-    }
-    if (this.view === 'organization') {
-      if (this.organizationExists) { return new Organization({ code: this.organizationCode.trim() }); }
-      return new Organization({ name: this.organizationName.trim(), code: this.organizationCode.trim() });
-    }
-    return undefined;
-  }
-
-  private getTenant(): Tenant | undefined {
-    if (this.view === 'tenant') { return new Tenant({ name: this.tenantName.trim(), code: this.tenantCode.trim() }); }
-    if (this.view === 'individual') { return this.context.tenant() || new Tenant({ code: this.tenantCode.trim() }); }
-    return undefined;
-  }
-
-  private defaultLabel(): string {
-    switch (this.view) {
-      case 'employee': return 'Join your organization';
-      case 'organization': return 'Create an organization';
-      case 'tenant': return 'Create a tenant';
-      default: return 'Join this tenant';
-    }
-  }
-
-  private defaultSignupTypes(): SignupType[] {
-    return [
-      { code: 'organization-member', label: 'Organization member', view: 'employee', roleType: 'organization.member' },
-      { code: 'tenant-member', label: 'Tenant member', view: 'individual', roleType: 'tenant.member' },
-      { code: 'organization-admin', label: 'Organization admin', view: 'organization', roleType: 'organization.admin' },
-      { code: 'tenant-admin', label: 'Tenant admin', view: 'tenant', roleType: 'tenant.admin' }
-    ];
-  }
-
-  private applicableSignupTypes(types: SignupType[]): SignupType[] {
-    const hasTenant = !!this.context.tenant()?.code;
-    const hasOrganization = !!this.context.organization()?.code;
-    const applicableViews: SignupView[] = hasOrganization
-      ? ['employee']
-      : hasTenant
-        ? ['employee', 'organization']
-        : ['individual', 'tenant'];
-    const applicable = types.filter(type => applicableViews.includes(type.view));
-    return applicable.length ? applicable : types;
   }
 
   private setProcessing(value: boolean): void { this.isProcessing = value; this.processing.emit(value); }
@@ -535,11 +476,11 @@ export class SignupComponent implements OnInit, OnDestroy {
 
   private startResendTimer(): void {
     this.stopResendTimer();
-    this.disableResend = true;
+    this.verificationRetry = false;
     this.countdownSeconds = 30;
     this.resendTimer = setInterval(() => {
       this.countdownSeconds -= 1;
-      if (this.countdownSeconds <= 0) { this.stopResendTimer(); this.disableResend = false; }
+      if (this.countdownSeconds <= 0) { this.stopResendTimer(); this.verificationRetry = true; }
     }, 1000);
   }
 

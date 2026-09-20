@@ -1,76 +1,94 @@
-<section class="login-card" [ngStyle]="style" [ngClass]="class">
-
-  @if(label) {
-  <div class="label">{{ label }}</div>
+<form class="signup-card" [ngClass]="class" [ngStyle]="style">
+  <h2>{{ label }}</h2>
+  @if(options.signup) {
+  <p class="signup-login">Already registered? <oa-action [value]="options.signup.value"
+      [options]="options.signup.options"></oa-action>
+  </p>
   }
+  <p class="wizard-step">{{ currentStep?.label }}</p>
 
-  <form class="login-form" (ngSubmit)="login()" #loginForm="ngForm">
-    @if(identityTypes.length > 1) {
-    <div class="identity-types" role="group" aria-label="Identity type">
-      @for(type of identityTypes; track type.code) {
-      <button type="button" [class.active]="identityType === type.code" (click)="selectIdentityType(type.code)">
-        @if(type.icon) { <i [class]="type.icon" aria-hidden="true"></i> }
-        {{ type.label }}
-      </button>
+  <form class="login-form" #loginForm="ngForm">
+
+    @switch (currentStep?.code) {
+    @case ('user') {
+    <div class="login-body">
+      @if(identityTypes.length > 1) {
+      <div class="identity-types" role="group" aria-label="Identity type">
+        @for(type of identityTypes; track type.code) {
+        <button type="button" [class.active]="selectedIdentityType.code === type.code"
+          (click)="selectIdentityType(type)">
+          @if(type.icon) { <i [class]="type.icon" aria-hidden="true"></i> }
+          {{ type.label }}
+        </button>
+        }
+      </div>
       }
+
+      <label for="identity">{{ selectedIdentityType.label }}</label>
+      <input id="identity" name="identity" [type]="selectedIdentityType.type" [(ngModel)]="identityValue"
+        [autocomplete]="selectedIdentityType.type" [placeholder]="selectedIdentityType.placeholder" required>
     </div>
-    }
-    <label for="identity">{{ identityLabel }}</label>
-    <input id="identity" name="identity" [(ngModel)]="identity" autocomplete="username"
-      [placeholder]="identityPlaceholder" required>
-    @if(credentialMethods.length > 1) {
-    <div class="login-methods" role="group" aria-label="Login method">
-      @for(method of credentialMethods; track method.code) {
-      <button type="button" [class.active]="credentialMethod === method.code"
-        (click)="selectCredentialMethod(method.code)">
-        @if(method.icon) { <i [class]="method.icon" aria-hidden="true"></i> }
-        {{ method.label }}
-      </button>
-      }
-    </div>
-    }
-    @if(credentialMethod === 'password') {
-    <label for="password">Password</label>
-    <input id="password" name="password" [(ngModel)]="password" type="password" autocomplete="current-password"
-      required>
-    @if(config.passwordReset && passwordLoginFailed) {
-    <div class="login-reset">
-      <button type="button" class="link-button" (click)="passwordReset()">
-        {{ config.passwordReset }}
-      </button>
-    </div>
-    }
-    }
-    @if(credentialMethod === 'otp') {
-    <label for="otp">Verification code</label>
-    <input id="otp" name="otp" [(ngModel)]="otp" autocomplete="one-time-code" inputmode="numeric" required>
-    <button class="link-button" type="button" (click)="requestOtp()" [disabled]="isSubmitting">Send verification
-      code</button>
-    }
     @if(error) {
     <p class="login-error" role="alert">{{ error }}</p>
     }
-    <button class="login-submit" type="submit"
-      [disabled]="isSubmitting || (credentialMethod !== 'push' && loginForm.invalid)">
-      {{ isSubmitting ? 'Logging in...' : credentialMethod === 'push' ? 'Send push request' : action }}
-    </button>
-  </form>
 
-  @if(oauthProviders.length) {
-  <div class="oauth-providers">
-    <span>Or continue with</span>
-    @for(provider of oauthProviders; track provider.code) {
-    <button type="button" class="oauth-button" (click)="oauth(provider)">
-      @if(provider.icon) { <i [class]="provider.icon" aria-hidden="true"></i> }
-      {{ provider.label }}
-    </button>
+    <button class="signup-submit" type="button" (click)="validateUser()"
+      [disabled]="isProcessing">{{currentStep.next.label}}</button>
     }
-  </div>
-  }
 
-  @if(config.signup) {
-  <div class="login-signup">
-    Not registered? <button type="button" class="link-button" (click)="signUp()">{{config.signup}}</button>
-  </div>
-  }
-</section>
+    @case ('credentials') {
+    <div class="signup-body">
+      <div class="signup-credential-methods" role="group" aria-label="Login credential method">
+        @for(method of credentialMethods; track method.code) {
+        <button type="button" [class.active]="selectedCredentialMethod?.code === method.code"
+          (click)="selectCredentialMethod(method)">
+          @if(method.icon) { <i [class]="method.icon" aria-hidden="true"></i> }
+          {{ method.label }}
+        </button>
+        }
+      </div>
+      @if(selectedCredentialMethod.message) { <p class="signup-intro">{{selectedCredentialMethod.message}}</p> }
+      <label for="signup-password">{{selectedCredentialMethod.label}}</label>
+      <input id="signup-password" name="password" [type]="selectedCredentialMethod.type" [(ngModel)]="password"
+        autocomplete="current-password" required>
+      @if(options.passwordReset && passwordLoginFailed) { <oa-action [value]="options.passwordReset.value"
+        [options]="options.passwordReset.options"></oa-action> }
+    </div>
+
+    <div class="signup-footer">
+      @if (error) { <p class="login-error" role="alert">{{ error }}</p> }
+
+      <button class="primary-button" type="button" (click)="login()"
+        [disabled]="isProcessing">{{currentStep.next.label}}</button>
+
+      @if(currentStep.previous) {
+      <button class="secondary-button" type="button" (click)="previousStep()"
+        [disabled]="isProcessing">{{currentStep.previous.label}}</button>
+      }
+    </div>
+    }
+
+    @case ('roles') {
+    <div class="login-body">
+
+      <div class="role-list" aria-label="Available roles">
+        @for(role of availableRoles; track role.key || role.id || $index) {
+        <button type="button" class="role-option" [class.active]="selectedRole?.id === role.id"
+          (click)="selectRole(role)">
+          <span class="role-name">{{ role.organization?.name || role.type.name}}</span>
+          <small>{{ role.type.name }}</small>
+        </button>
+        }
+      </div>
+      <div class="signup-footer">
+        @if (currentStep.skip) { <button class="secondary-button" type="button" (click)="skipRoleSelection()"
+          [disabled]="isProcessing">{{currentStep.skip.label }}</button>
+        }
+
+        <button class="primary-button" type="button" (click)="continueWithRole()"
+          [disabled]="isProcessing">{{currentStep?.next?.label}}</button>
+      </div>
+    </div>
+    }
+    }
+  </form>

@@ -1,10 +1,10 @@
 <!-- eslint-disable @angular-eslint/template/click-events-have-key-events -->
 <!-- eslint-disable @angular-eslint/template/interactive-supports-focus -->
 <div class="subtle controls-row">
-  <div class="profile-row" [oaDialog]="profileMenu" oaPosition="below">
-    <oa-avatar [value]="currentRole?.profile" type="thumbnail"></oa-avatar>
+  <div class="profile-row" [oaDialog]="profileMenu" oaPosition="below" role="button" tabindex="0" aria-haspopup="menu">
+    <oa-avatar [value]="currentUser?.profile" type="thumbnail"></oa-avatar>
     <div class="content">
-      <h3>{{currentRole?.profile | format: 'title'}}</h3>
+      <h3>{{currentUser?.profile| format: 'title'}}</h3>
       <span class="sub-text designation">
         @if (isImpersonateSession) {
         <span>Impersonating as </span>
@@ -15,6 +15,7 @@
     <oa-icon value="keyboard_arrow_down"></oa-icon>
   </div>
 </div>
+
 <ng-template #profileMenu yPosition="below">
   <div class="profile-menu section">
     <div class="header">
@@ -23,8 +24,8 @@
       </div>
     </div>
     <div class="body">
-      <oa-avatar [value]="currentRole?.profile" type="thumbnail" [size]="50"></oa-avatar>
-      <h6 class="title"><b>{{currentRole?.profile | format: 'title'}}</b></h6>
+      <oa-avatar [value]="currentUser?.profile" type="thumbnail" [size]="50"></oa-avatar>
+      <h6 class="title"><b>{{currentUser?.profile| format: 'title'}}</b></h6>
       <div class="role">
         <span>{{currentRole?.type?.name}}</span>
         @if (isImpersonateSession) {

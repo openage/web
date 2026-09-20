@@ -1,4 +1,4 @@
-<div class="oa-popup">
+<div class="oa-popup" [style.left]="left + 'px'" [style.top]="top + 'px'" [style.position]="'fixed'">
   @switch (type) {
   @case ('tooltip') {
   <div class="tooltip" [class]="['tooltip--'+position, 'tooltip--'+theme]" [class.tooltip--visible]="visible"
@@ -11,8 +11,10 @@
   }
   } @case ('dialog') {
   @if(template) {
-  <ng-container *ngTemplateOutlet="template; context: { data: data }">
-  </ng-container>
+  <div class="oa-dialog-panel" [style.position]="'relative'">
+    <ng-container *ngTemplateOutlet="template; context: { data: data }">
+    </ng-container>
+  </div>
   }
   }
   }
