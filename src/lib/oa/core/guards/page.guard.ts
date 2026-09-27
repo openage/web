@@ -20,28 +20,43 @@ export const pageGuard: CanActivateFn = async (route: ActivatedRouteSnapshot, st
     return false;
   }
 
-  if (page.permissions && page.permissions.length) {
+  const sessionTokenParams = ['session-token', 'token', 'access_token', 'access-token'];
+  const hasSessionToken = sessionTokenParams
+    .some(key => !!route.queryParamMap.get(key));
+  const hasPermissions = !!page.permissions?.length;
+
+  if (hasPermissions || hasSessionToken) {
 
     const session = await auth.getSession();
 
-    if (!session) {
-      return false;
+    if (session && hasSessionToken) {
+      const cleanUrl = router.parseUrl(state.url);
+      for (const key of sessionTokenParams) {
+        delete cleanUrl.queryParams[key];
+      }
+      return cleanUrl;
     }
 
-    const role = context.role();
+    if (hasPermissions) {
+      if (!session) {
+        return false;
+      }
 
-    if (!role) {
-      navService.goto('auth.login', {
-        query: {
-          redirect: window.document.location.href
-        }
-      });
-      return false;
-    }
+      const role = context.role();
 
-    if (!context.hasPermission(page.permissions)) {
-      navService.goto([`/errors/access-denied`], { query: { path: route.url } });
-      return false;
+      if (!role) {
+        navService.goto('auth.login', {
+          query: {
+            redirect: window.document.location.href
+          }
+        });
+        return false;
+      }
+
+      if (!context.hasPermission(page.permissions)) {
+        navService.goto([`/errors/access-denied`], { query: { path: route.url } });
+        return false;
+      }
     }
   }
 

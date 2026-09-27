@@ -38,4 +38,32 @@ describe('AuthService', () => {
     expect(context.role()?.key).toBe('manager');
     expect(result).toEqual(session);
   });
+
+  it('should load a session from the session-token query parameter', async () => {
+    const auth = TestBed.inject(AuthService);
+    const context = TestBed.inject(ContextService);
+    const dataService = TestBed.inject(DataService);
+    const token = 'session-token-123';
+    const session = { id: 12, token, user: { id: 7 } } as any;
+    const url = new URL(window.location.href);
+    const originalUrl = window.location.href;
+    url.searchParams.set('session-token', token);
+    window.history.replaceState({}, '', url);
+    spyOn(dataService, 'get').and.resolveTo(session);
+    spyOn(dataService, 'create');
+
+    try {
+      const result = await auth.getSession();
+
+      expect(dataService.get).toHaveBeenCalledWith('my', jasmine.objectContaining({
+        src: ':directory/sessions',
+        headers: jasmine.objectContaining({ 'x-access-token': token })
+      }));
+      expect(dataService.create).not.toHaveBeenCalled();
+      expect(context.session()?.id).toBe(12);
+      expect(result?.id).toBe(12);
+    } finally {
+      window.history.replaceState({}, '', originalUrl);
+    }
+  });
 });

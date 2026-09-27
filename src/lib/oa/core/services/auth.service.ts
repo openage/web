@@ -368,7 +368,7 @@ export class AuthService {
 
     const session = this.context.session();
     const params = new URLSearchParams(window?.document?.location?.search);
-    const token = params.get('token') || params.get('access_token') || params.get('access-token');
+    const token = params.get('session-token') || params.get('token') || params.get('access_token') || params.get('access-token');
 
     if (token) {
       if (session && session.token === token) {
