@@ -2,6 +2,17 @@
 
 All notable changes to this project are documented in this file.
 
+## [3.1.0] - 2026-09-27
+
+### Added
+- Add loading skeletons and async template resolution for the HTML viewer.
+
+### Changed
+- Improve navigation and template URL resolution for parameterized page data and content lookups.
+
+### Fixed
+- Fix delayed keyed-value rendering so HTML content updates when data becomes available.
+
 ## [3.0.0] - 2026-09-26
 
 ### Added

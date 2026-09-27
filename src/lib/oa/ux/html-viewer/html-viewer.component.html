@@ -1,4 +1,8 @@
-@if(content)
-{
-<div class="{{options?.view}}" [class]="options.class" [style]="options.style" [innerHtml]="content"></div>
+@if (isLoading) {
+@if (skeletonContent) {
+<div class="html-viewer-skeleton" [style]="options?.style" role="status" aria-label="Loading content" aria-busy="true"
+  [innerHtml]="skeletonContent"></div>
+}
+} @else if (content) {
+<div [class]="options?.class" [style]="options?.style" [innerHtml]="content"></div>
 }

@@ -24,10 +24,13 @@ export class ConstantService {
 
   private http = inject(HttpClient);
   private context = inject(ContextService);
+  private _assetService: any;
 
   constructor() {
 
-    this.http.get('assets/data/messages.json', { responseType: 'text' })
+    this._assetService = this.context.getService('assets') || { url: 'assets' }
+
+    this.http.get(`${this._assetService.url}/data/messages.json`, { responseType: 'text' })
       .subscribe((data) => {
         this._messages = {};
         JSON.parse(data).forEach((item: { code: string; ref: string | number; }) => {
@@ -35,7 +38,7 @@ export class ConstantService {
         });
       });
 
-    this.http.get('assets/data/errors.json', { responseType: 'text' })
+    this.http.get(`${this._assetService.url}/data/errors.json`, { responseType: 'text' })
       .subscribe((data) => {
         this._errors = {};
         JSON.parse(data).forEach((item: { code: string; ref: string | number; }) => {
@@ -43,7 +46,7 @@ export class ConstantService {
         });
       });
 
-    this.http.get('assets/data/actions.json', { responseType: 'text' })
+    this.http.get(`${this._assetService.url}/data/actions.json`, { responseType: 'text' })
       .subscribe((data) => {
         this._actions = {};
         JSON.parse(data).forEach((item: { code: string; ref: string | number; }) => {
@@ -51,7 +54,7 @@ export class ConstantService {
         });
       });
 
-    this.http.get('assets/data/icons.json', { responseType: 'text' })
+    this.http.get(`${this._assetService.url}/data/icons.json`, { responseType: 'text' })
       .subscribe((data) => {
         this._icons = {};
         JSON.parse(data).forEach((item: { code: string; ref: string | number; }) => {
@@ -59,7 +62,7 @@ export class ConstantService {
         });
       });
 
-    this.http.get('assets/data/lists.json', { responseType: 'text' })
+    this.http.get(`${this._assetService.url}/data/lists.json`, { responseType: 'text' })
       .subscribe((data) => {
         this._lists = {};
         JSON.parse(data).forEach((item: { code: string; ref: string | number; }) => {
@@ -87,7 +90,7 @@ export class ConstantService {
       let content = this._templates[code.toLowerCase()];
 
       if (!content) {
-        content = await firstValueFrom(this.http.get(`assets/templates/${code}.html`, { responseType: 'text' }));
+        content = await firstValueFrom(this.http.get(`${this._assetService.url}/templates/${code}.html`, { responseType: 'text' }));
         this._templates[code.toLowerCase()] = content;
       }
 

@@ -744,7 +744,12 @@ export class NavService {
           }
 
           if (linkValue.startsWith(':')) {
-            linkValue = this.getValue(linkValue.substring(1), snapshot)
+            const paramKey = linkValue.substring(1);
+            const val = this.getValue(paramKey, snapshot);
+            linkValue = val !== undefined ? val : actualValue;
+            if (!n.params) n.params = {};
+            if (!n.params.path) n.params.path = {};
+            n.params.path[paramKey] = actualValue;
           }
 
           if (linkValue !== actualValue) {
