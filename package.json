@@ -1,6 +1,6 @@
 {
   "name": "pages-app",
-  "version": "2.4.0",
+  "version": "3.0.0",
   "scripts": {
     "ng": "ng",
     "local": "ng serve -c=local --open --port 4210",
