@@ -17,7 +17,6 @@ import { DataService } from '../../core/services/data.service';
 @Component({
   selector: 'oa-form',
   templateUrl: './form.component.html',
-  styleUrls: ['./form.component.scss'],
   imports: [
     CommonModule,
     IconComponent,
@@ -143,7 +142,10 @@ export class FormComponent implements OnInit, OnChanges {
 
     const fields = section.fields || [];
     // fields.push(...this.fields.filter((c: any) => c.group?.toLowerCase() === section.code?.toLowerCase()));
-    fields.push(...this.fields.filter((c: any) => c.section?.toLowerCase() === section.code?.toLowerCase()));
+    fields.push(...this.fields.filter((field: any) => {
+      const group = typeof field.group === 'string' ? field.group : field.section;
+      return group?.toLowerCase() === section.code?.toLowerCase();
+    }));
 
 
     log.silly(`fields count: ${fields.length}`)

@@ -17,7 +17,6 @@ import { InputErrorComponent } from '../input-error/input-error.component';
     InputErrorComponent
   ],
   templateUrl: './input.component.html',
-  styleUrls: ['./input.component.css']
 })
 export class InputTextComponent implements OnInit, OnChanges, AfterViewInit {
 

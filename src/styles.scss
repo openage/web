@@ -22,6 +22,133 @@
   --font-family: "Poppins", Helvetica, Arial, Lucida, sans-serif;
 }
 
+oa-text-input {
+  -webkit-box-flex: 1;
+  -ms-flex-positive: 1;
+  flex-grow: 1;
+  min-width: 0;
+}
+
+oa-text-input .otp input {
+  width: 12%;
+  font-size: 205%;
+  margin: 1px;
+  text-align: center;
+  height: 40px;
+  outline: none;
+  border-bottom: 2px solid var(--neutral-light);
+  border-left: none;
+  border-right: none;
+  border-top: none;
+}
+
+oa-text-input .otp input:focus {
+  outline: none;
+  border-bottom: 2px solid var(--primary-dark);
+}
+
+oa-text-input .oa-input {
+  height: var(--oa-input-height, 40px);
+  display: flex;
+  flex-direction: row;
+  padding-right: var(--oa-input-padding-inline, 10px);
+  padding-left: var(--oa-input-padding-inline, 10px);
+  border: 1px solid var(--oa-input-border-color, var(--neutral));
+  border-radius: var(--oa-input-border-radius, 3px);
+  background-color: var(--oa-input-background, var(--surface, #fff));
+  overflow: hidden;
+  width: var(--oa-input-width, 25%);
+  margin-left: auto;
+  margin-right: auto;
+}
+
+oa-form {
+  display: block;
+  min-width: 0;
+}
+
+oa-form .group.form {
+  display: grid;
+  gap: var(--oa-form-gap, 16px);
+}
+
+oa-form .section {
+  box-sizing: border-box;
+  min-width: 0;
+  padding: var(--oa-form-section-padding, 20px);
+  border: 1px solid var(--oa-form-section-border, var(--neutral-light, #d7dee5));
+  border-radius: var(--oa-form-section-radius, 8px);
+  background: var(--oa-form-section-background, var(--surface, #fff));
+}
+
+oa-form .section .header {
+  align-items: flex-start;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+oa-form .section .title {
+  margin: 0;
+  color: var(--oa-form-heading-color, var(--text, var(--primary-dark, #263746)));
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+oa-form .section .body.flex-row.two {
+  display: grid !important;
+  grid-template-columns: var(--oa-form-grid-columns, repeat(2, minmax(0, 1fr))) !important;
+  gap: var(--oa-form-grid-gap, 16px 20px) !important;
+  padding: var(--oa-form-grid-padding, 0);
+}
+
+oa-form .form-field {
+  width: 100%;
+  min-width: 0;
+}
+
+oa-form .labelFields {
+  margin-bottom: 6px;
+}
+
+oa-form .labelFields label {
+  display: block;
+  margin: 0;
+  color: var(--oa-form-label-color, var(--text, var(--neutral-dark, #44515e)));
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+oa-form .oa-field {
+  display: block !important;
+  width: 100%;
+  margin: 0;
+}
+
+oa-form .form-field .oa-input {
+  box-sizing: border-box;
+  width: 100%;
+  min-height: var(--oa-form-input-height, 42px);
+  margin: 0;
+  border-radius: var(--oa-form-input-radius, 6px);
+}
+
+oa-form .controls-row.right {
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+@media (max-width: 640px) {
+  oa-form .section {
+    padding: var(--oa-form-section-padding-mobile, 14px);
+  }
+
+  oa-form .section .body.flex-row.two {
+    grid-template-columns: var(--oa-form-grid-columns-mobile, minmax(0, 1fr)) !important;
+    gap: var(--oa-form-grid-gap-mobile, 12px) !important;
+  }
+}
+
 /* Theme: Auth wizard */
 oa-login,
 oa-signup {
@@ -2251,7 +2378,7 @@ input.selected,
 .input:focus,
 .input.selected {
   color: var(--primary);
-  background-color: var(--background) !important;
+  // background-color: var(--background) !important;
   background: inherit;
   outline: none;
 }

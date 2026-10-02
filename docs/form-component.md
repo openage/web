@@ -133,9 +133,9 @@ The form receives configuration through `options` and normalizes it into a `Form
 
 This is the primary metadata object for the control.
 
-### 3. Group fields into sections with `group` or `section`
+### 3. Group fields into sections with `group`
 
-The component looks up section membership by field `group` and section `code`.
+Use the field `group` to match a section `code`. Existing metadata using `section` remains supported for compatibility; use `group` for new metadata.
 
 ```json
 "sections": [

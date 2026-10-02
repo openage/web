@@ -42,7 +42,7 @@ describe('FormComponent', () => {
 
   it('should place fields only in their configured sections', () => {
     component.fields = [
-      { key: 'displayName', section: 'general-sec', value: 'Open Age' } as any,
+      { key: 'displayName', group: 'general-sec', value: 'Open Age' } as any,
       { key: 'segment', section: 'meta-sec', value: 'enterprise' } as any
     ];
 
