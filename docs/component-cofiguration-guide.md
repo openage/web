@@ -535,6 +535,216 @@ The `options` property accepts an AutoCompleteOptions object or a plain object w
 }
 ```
 
+## Editable page specification without `oa-form`
+
+Use sections to define layout and use individual field components for value editing. Do not model the page as a single `oa-form` configuration object.
+
+### Required pattern
+
+- Use `layout.sections` or nested section blocks to structure rows and columns.
+- Use component-level `class` and `style` values for visual styling.
+- Bind each input to the same page record model object.
+- Use `valueChange` / `[(value)]` updates to mutate the current record immediately.
+- Use `oa-action` for any save, update, or submit behavior.
+- Resolve data from the page data source on load and render it into the inputs.
+- When the data source changes, rebind the same record object and let the inputs re-render from the updated values.
+
+### Section behavior
+
+Sections support declarative conditions, collapsible bodies, and popup presentation:
+
+```json
+{
+  "code": "company-details",
+  "condition": {
+    "key": "party.type",
+    "operator": "==",
+    "value": "company"
+  },
+  "collapsible": true,
+  "expanded": false,
+  "container": {
+    "header": { "title": { "text": "Company Details" } }
+  }
+}
+```
+
+- `condition` accepts a boolean or the existing condition-validator object format. Dotted keys resolve against page data sources, such as `party.type`; comparison operators include `==`, `!=`, `>`, `<`, `>=`, `<=`, `in`, and `nin`.
+- `collapsible: true` adds an accessible header toggle. A collapsible section is expanded by default; set `expanded: false` to start collapsed. Set `expanded: true` to state the default explicitly.
+- `popup: true` renders the section as a button and opens its content in a dialog. An object can provide `buttonLabel`, `class`, and `style`, for example `"popup": { "buttonLabel": "Edit details" }`. The dialog title uses the section header title.
+- Popup dialogs close from the close button, Escape, or the backdrop. Conditions still apply to popup sections.
+
+### Recommended data flow
+
+```ts
+record = {
+  firstName: '',
+  startDate: '',
+  customerId: null,
+  status: 'draft'
+};
+
+loadRecord(data: any) {
+  this.record = { ...this.record, ...data };
+}
+
+onFieldChange(key: string, value: any) {
+  this.record = { ...this.record, [key]: value };
+}
+
+saveRecord() {
+  this.dataService.update(this.record);
+}
+```
+
+### Example page structure
+
+```json
+{
+  "layout": {
+    "sections": [
+      {
+        "code": "profile-header",
+        "class": "section-header",
+        "style": { "margin-bottom": "16px" },
+        "components": [
+          {
+            "control": "html",
+            "value": "<h2>Account Details</h2>"
+          }
+        ]
+      },
+      {
+        "code": "profile-form",
+        "class": "row two-col",
+        "style": { "gap": "16px" },
+        "components": [
+          {
+            "control": "text",
+            "class": "field",
+            "style": { "min-width": "220px" },
+            "options": {
+              "label": "First name",
+              "placeholder": "Jane",
+              "required": true
+            },
+            "value": "record.firstName"
+          },
+          {
+            "control": "date",
+            "class": "field",
+            "options": {
+              "label": "Start date",
+              "format": "YYYY-MM-DD"
+            },
+            "value": "record.startDate"
+          },
+          {
+            "control": "autocomplete",
+            "class": "field",
+            "options": {
+              "label": "Customer",
+              "api": "customers",
+              "search": { "field": "name", "limit": 10 }
+            },
+            "value": "record.customerId"
+          },
+          {
+            "control": "select",
+            "class": "field",
+            "options": {
+              "label": "Status",
+              "items": [
+                { "label": "Draft", "value": "draft" },
+                { "label": "Active", "value": "active" },
+                { "label": "Archived", "value": "archived" }
+              ]
+            },
+            "value": "record.status"
+          }
+        ]
+      },
+      {
+        "code": "save-row",
+        "class": "actions-row",
+        "components": [
+          {
+            "control": "action",
+            "class": "primary",
+            "options": {
+              "title": "Save",
+              "config": {
+                "target": {
+                  "service": "app",
+                  "collection": "profiles",
+                  "method": "update"
+                }
+              }
+            },
+            "value": "record"
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+### Angular component pattern
+
+```html
+<section class="profile-page" [ngStyle]="pageStyle">
+  <div class="section-grid" [ngStyle]="{ gap: '16px' }">
+    <oa-text-input
+      class="field"
+      [ngStyle]="{ minWidth: '220px' }"
+      label="First name"
+      [(value)]="record.firstName">
+    </oa-text-input>
+
+    <oa-date-picker
+      class="field"
+      label="Start date"
+      [(value)]="record.startDate">
+    </oa-date-picker>
+
+    <oa-autocomplete
+      class="field"
+      label="Customer"
+      [api]="customerApi"
+      [options]="customerOptions"
+      [(value)]="record.customerId">
+    </oa-autocomplete>
+
+    <oa-input-selector
+      class="field"
+      label="Status"
+      [items]="statusOptions"
+      [(value)]="record.status">
+    </oa-input-selector>
+  </div>
+
+  <oa-action
+    class="primary"
+    [item]="{ code: 'save', title: 'Save' }"
+    [value]="record"
+    (selected)="saveRecord()">
+  </oa-action>
+</section>
+```
+
+### Binding and update requirements
+
+- The `value` shown in the component must come from the page data model, not from a detached copy.
+- When the component emits a change, update the corresponding field on the current object immediately.
+- For API-driven fields, the selected item should be stored in the record as its id or object reference, while the UI display uses the server-provided label.
+- The final save action should operate on the current record object, not on a stale snapshot captured before the user edits.
+- Styling belongs in `class` and `style` on the field or section level; do not use a global form-layout abstraction to manage field layout.
+
+### Summary
+
+A page is built by combining section containers with individual input components, not by configuring a single `oa-form` definition. The record object remains the source of truth, updates in place as the user changes values, and is persisted by an `oa-action`.
+
 ## Display Components
 
 ### AlertComponent

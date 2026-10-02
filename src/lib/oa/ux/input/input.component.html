@@ -1,3 +1,6 @@
+@if (label && showLabel) {
+<label class="oa-field-label" [attr.for]="id" [class.required]="required">{{label}}</label>
+}
 <div class="oa-input" [class]="class" [style]="style" [class.selected]="isSelected" [class.inline]="options?.inline">
   @if (preFix) {
   <oa-action [disabled]="disabled" [options]="preFix" class="subtle"></oa-action>
@@ -5,8 +8,8 @@
   @switch (view) {
   @case ('text') {
 
-  <input [id]="id" [type]="type" #inputContainer [disabled]="disabled" [readonly]="readonly" [value]="content"
-    [placeholder]="placeholder" (focus)="onFocus()" (change)="onChange($event)" (blur)="onBlur()"
+  <input [id]="id" [type]="type" #inputContainer [disabled]="disabled" [readonly]="readonly" [required]="required"
+    [value]="content" [placeholder]="placeholder" (focus)="onFocus()" (change)="onChange($event)" (blur)="onBlur()"
     (keyup)="onKeyUp($event)" />
 
   }

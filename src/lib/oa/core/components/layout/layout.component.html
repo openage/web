@@ -8,7 +8,33 @@
 <ng-container *ngTemplateOutlet="sectionTemplate; context: { item: content}">
 </ng-container>
 
+@if (popupSection && shouldRenderSection(popupSection)) {
+<div class="section-popup-backdrop" (click)="closeSectionPopup()">
+  <section class="section-popup" role="dialog" aria-modal="true" [attr.aria-label]="getSectionTitle(popupSection)"
+    (click)="$event.stopPropagation()">
+    <header class="section-popup-header">
+      <h2>{{getSectionTitle(popupSection)}}</h2>
+      <button type="button" class="section-popup-close" aria-label="Close dialog" (click)="closeSectionPopup()">
+        <oa-icon value="close"></oa-icon>
+      </button>
+    </header>
+    <div class="section-popup-content" [ngClass]="popupSection.container?.body?.class"
+      [ngStyle]="popupSection.container?.body?.style">
+      <ng-container *ngTemplateOutlet="renderSection; context: { item: popupSection }"></ng-container>
+    </div>
+  </section>
+</div>
+}
+
 <ng-template #sectionTemplate let-item="item" let-class="class">
+  @if (shouldRenderSection(item)) {
+  @if (item.popup) {
+  <button type="button" class="section-popup-trigger" [ngClass]="item.popup?.class" [ngStyle]="item.popup?.style"
+    aria-haspopup="dialog" [attr.aria-label]="getPopupButtonLabel(item)" (click)="openSectionPopup(item)">
+    <oa-icon value="open_in_new"></oa-icon>
+    {{getPopupButtonLabel(item)}}
+  </button>
+  } @else {
   <div [id]="item.code" class="section {{item.code}} {{class}} {{item.type}}" [ngStyle]="item.style"
     [ngClass]="item.class" [class.hidden]="item.selected === false">
     <!-- (click)="selectSection(item)" -->
@@ -19,10 +45,21 @@
     <ng-container *ngTemplateOutlet="renderSection; context: { item: item }"> </ng-container>
     }
   </div>
+  }
+  }
 </ng-template>
 
-<ng-template #renderHeader let-header="header">
+<ng-template #renderHeader let-header="header" let-item="item">
   <div class="header flex-row" [ngClass]="header.class" [ngStyle]="header.style">
+    @if (item?.collapsible) {
+    <button type="button" class="section-collapse-toggle" [attr.aria-expanded]="isSectionExpanded(item)"
+      [attr.aria-controls]="item.code + '-body'"
+      [attr.aria-label]="(isSectionExpanded(item) ? 'Collapse ' : 'Expand ') + getSectionTitle(item)"
+      (click)="toggleSection(item)">
+      <oa-icon [value]="isSectionExpanded(item) ? 'expand_more' : 'chevron_right'"></oa-icon>
+    </button>
+    }
+
     @if (header.icon) {
     <oa-icon [value]="header.icon"></oa-icon>
     }
@@ -53,7 +90,8 @@
   <div class="header tabs" [ngClass]="item.container.header?.class" [ngStyle]="item.container.header?.style">
     @for (tab of item.sections; track $index) {
     <div [class.active]="tab.selected" (click)="selectSection(tab)">
-      <ng-container *ngTemplateOutlet="renderHeader; context: { header: tab.container.header }"> </ng-container>
+      <ng-container *ngTemplateOutlet="renderHeader; context: { header: tab.container.header, item: tab }">
+      </ng-container>
     </div>
     }
   </div>
@@ -67,10 +105,12 @@
   }
   @default {
   @if (item.container.header && !item.bodyOnly){
-  <ng-container *ngTemplateOutlet="renderHeader; context: { header: item.container.header }"> </ng-container>
+  <ng-container *ngTemplateOutlet="renderHeader; context: { header: item.container.header, item: item }">
+  </ng-container>
   }
   }
   }
+  @if (isSectionExpanded(item)) {
   <div class="body" [ngClass]="item.container.body.class" [ngStyle]="item.container.body.style">
     @if(type === 'section'){
     <ng-container *ngTemplateOutlet="renderSection; context: { item: item }"> </ng-container>
@@ -78,6 +118,7 @@
     <ng-container *ngTemplateOutlet="renderComponent; context: { item: item }"> </ng-container>
     }
   </div>
+  }
 </ng-template>
 
 <ng-template #renderSection let-item="item">
@@ -147,12 +188,56 @@
   <oa-html-viewer [ngClass]="item.class" [ngStyle]="item.style" [value]="item.value"
     [options]="item.options"></oa-html-viewer>
   }
+  @case ('input')
+  @case ('text') {
+  <oa-text-input [ngClass]="item.class || item.options?.class" [ngStyle]="item.style || item.options?.style"
+    [class]="item.class || item.options?.class" [style]="item.style || item.options?.style"
+    [id]="item.options?.id || item.id || item.key" [label]="item.options?.label || item.label"
+    [placeholder]="item.options?.placeholder || item.placeholder" [type]="item.options?.type || item.type || 'text'"
+    [value]="getBoundValue(item.value)" [required]="item.options?.required ?? item.required"
+    [readonly]="item.options?.readonly ?? item.readonly" [disabled]="item.options?.disabled ?? item.disabled"
+    [options]="item.options" (valueChange)="setBoundValue(item.value, $event)"></oa-text-input>
+  }
+  @case ('autocomplete') {
+  <oa-autocomplete [ngClass]="item.class || item.options?.class" [ngStyle]="item.style || item.options?.style"
+    [class]="item.class || item.options?.class" [style]="item.style || item.options?.style"
+    [id]="item.options?.id || item.id || item.key" [label]="item.options?.label || item.label"
+    [placeholder]="item.options?.placeholder || item.placeholder" [required]="item.options?.required ?? item.required"
+    [readonly]="item.options?.readonly ?? item.readonly" [disabled]="item.options?.disabled ?? item.disabled"
+    [url]="item.config?.url || item.options?.url" [value]="getBoundValue(item.value)" [options]="item.options"
+    (valueChange)="setBoundValue(item.value, $event)"></oa-autocomplete>
+  }
+  @case ('select')
+  @case ('selector')
+  @case ('list') {
+  <oa-input-selector [ngClass]="item.class || item.options?.class" [ngStyle]="item.style || item.options?.style"
+    [class]="item.class || item.options?.class" [style]="item.style || item.options?.style"
+    [id]="item.options?.id || item.id || item.key" [label]="item.options?.label || item.label"
+    [placeholder]="item.options?.placeholder || item.placeholder" [value]="getBoundValue(item.value)"
+    [items]="item.options?.items || item.items || []" [type]="item.options?.type || item.type || 'custom'"
+    [required]="item.options?.required ?? item.required" [readonly]="item.options?.readonly ?? item.readonly"
+    [disabled]="item.options?.disabled ?? item.disabled"
+    (valueChange)="setBoundValue(item.value, $event?.value ?? $event)"></oa-input-selector>
+  }
+  @case ('date')
+  @case ('date-picker')
+  @case ('datePicker') {
+  <oa-date-picker [ngClass]="item.class || item.options?.class" [ngStyle]="item.style || item.options?.style"
+    [class]="item.class || item.options?.class" [style]="item.style || item.options?.style"
+    [id]="item.options?.id || item.id || item.key" [label]="item.options?.label || item.label"
+    [placeholder]="item.options?.placeholder || item.placeholder" [value]="getBoundValue(item.value)"
+    [view]="item.options?.view || item.view || 'date'" [format]="item.options?.format || item.format || 'YYYY-MM-DD'"
+    [required]="item.options?.required ?? item.required" [readonly]="item.options?.readonly ?? item.readonly"
+    [disabled]="item.options?.disabled ?? item.disabled" [options]="item.options"
+    (valueChange)="setBoundValue(item.value, $event)"></oa-date-picker>
+  }
   @case ('form') {
   <oa-form [ngClass]="item.class" [ngStyle]="item.style" [value]="item.value" [options]="item.options"></oa-form>
   }
 
   @case ('action') {
-  <oa-action [ngClass]="item.class" [ngStyle]="item.style" [value]="item.value" [options]="item.options"></oa-action>
+  <oa-action [ngClass]="item.class || item.options?.class" [ngStyle]="item.style || item.options?.style"
+    [value]="item.value" [options]="getActionOptions(item)"></oa-action>
   }
 
   @case ('nav') {

@@ -1,5 +1,5 @@
 import { Component, ElementRef, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
-import * as moment from 'moment';
+import moment from 'moment';
 import { DatePickerDirective } from './date-picker.directive';
 import { IconComponent } from '../icon/icon.component';
 import { TimeLine } from '../../core/models/timeline.model';
@@ -23,12 +23,24 @@ import { FormatPipe } from '../../pipes/format.pipe';
 //   },
 // };
 @Component({
-    selector: 'oa-date-picker',
-    imports: [DatePickerDirective, IconComponent, FormatPipe],
-    templateUrl: './date-picker.component.html',
-    styleUrls: ['./date-picker.component.scss']
+  selector: 'oa-date-picker',
+  imports: [DatePickerDirective, IconComponent, FormatPipe],
+  templateUrl: './date-picker.component.html',
+  styleUrls: ['./date-picker.component.scss']
 })
 export class DatePickerComponent implements OnInit, OnChanges {
+
+  @Input()
+  id?: string;
+
+  @Input()
+  label?: string;
+
+  @Input()
+  showLabel = true;
+
+  @Input()
+  class?: string;
 
   @Input()
   style: any;
@@ -128,18 +140,38 @@ export class DatePickerComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes?: SimpleChanges) {
+    this.label = this.label || (this.options as any)?.label;
+    this.style = this.style || this.options?.style;
+    this.class = this.class || this.options?.class;
+    this.required = this.required ?? (this.options as any)?.required ?? false;
+    this.readonly = this.readonly ?? (this.options as any)?.readonly ?? false;
+    this.disabled = this.disabled ?? (this.options as any)?.disabled ?? false;
+    this.format = (this.options as any)?.format || this.format;
+
     // if (this.isReset === true) {
     //   this.value = null;
     // }
+    if (!this.value) {
+      this.date = undefined;
+      this.range = undefined;
+      return;
+    }
+
     if (typeof this.value === 'string') {
-      this.value = this.dateService.date(this.value).toDate();
+      const parsed = moment(this.value);
+      if (!parsed || !parsed.isValid()) {
+        this.date = undefined;
+        this.range = undefined;
+        return;
+      }
+      this.value = parsed.toDate();
     }
 
     if (this.value instanceof TimeLine) {
       this.view = 'range';
       this.range = this.value;
     } else {
-      this.date = this.value;
+      this.date = this.value instanceof Date ? this.value : undefined;
     }
 
     // if (changes.value || changes.view) {

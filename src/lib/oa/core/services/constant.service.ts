@@ -108,6 +108,14 @@ export class ConstantService {
         item = new Action(item);
       }
 
+      if (!item.code && item.title) {
+        item.code = item.title.toLowerCase().replace(/\s+/g, '-');
+      }
+
+      if (!item.code) {
+        return item;
+      }
+
       const code = item.code.toLowerCase();
 
       let action = this._actions[code];

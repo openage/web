@@ -3,6 +3,7 @@ import { Action } from '../../core/models/action.model';
 import { ConstantService } from '../../core/services/constant.service';
 import { NavService } from '../../core/services/nav.service';
 import { ContextService } from '../../core/services/context.service';
+import { DataService } from '../../core/services/data.service';
 import { IconComponent } from '../icon/icon.component';
 import { MenuDirective } from '../../directives/menu.directive';
 import { TogglerComponent } from '../toggler/toggler.component';
@@ -68,6 +69,9 @@ export class ActionComponent implements OnInit, OnChanges {
   navService = inject(NavService);
   // shareService = inject(ShareService);
   context = inject(ContextService);
+  dataService = inject(DataService);
+
+  private initialData = new Map<string, any>();
 
   constructor() { }
 
@@ -165,20 +169,23 @@ export class ActionComponent implements OnInit, OnChanges {
 
       this.value = values.length === 1 ? values[0] : obj;
 
-      this.options.event = () => {
+      this.options.event = this.options.event || (() => {
         values.forEach((v: any) => {
           const fn = v[code]
           if (fn && typeof fn === 'function') {
             fn();
           }
         });
-      };
+      });
     }
 
     for (const key of keys) {
       const value = this.context.data().get(key);
       if (value) {
         obj[key] = value;
+        if (!this.initialData.has(key) && typeof value === 'object') {
+          this.initialData.set(key, JSON.parse(JSON.stringify(value)));
+        }
         if (value.subscribe) {
           value.subscribe((p: any) => {
             obj[key] = p;
@@ -238,9 +245,20 @@ export class ActionComponent implements OnInit, OnChanges {
         break;
 
       case 'back':
+        item.event = item.event || (() => this.navigateBack());
+        break;
       case 'clear':
       case 'close':
         item.event = item.event || (() => this.navService.back());
+        break;
+      case 'edit':
+        item.event = item.event || (() => this.navigateToEdit());
+        break;
+      case 'save':
+        item.event = item.event || (() => this.saveValue());
+        break;
+      case 'reset':
+        item.event = item.event || (() => this.resetValue());
         break;
       case 'add':
         item.event = item.event || (() => this.openPopup());
@@ -273,6 +291,62 @@ export class ActionComponent implements OnInit, OnChanges {
     }
     this.selected.emit(this.value);
   }
+
+  private async saveValue() {
+    const target = this.options?.config?.target;
+    if (!target?.service || !target?.collection || !this.value) {
+      return;
+    }
+
+    if (target.method === 'create') {
+      const created = await this.dataService.create(this.value, target);
+      const code = created?.code || created?.id;
+      if (code) {
+        this.navService.goto('customers.details', { path: { code } });
+      }
+      return;
+    }
+
+    const id = target.id || this.value.id || this.value.code;
+    if (!id) { return; }
+    await this.dataService.update(id, this.value, target);
+  }
+
+  private navigateBack() {
+    const target = this.options?.config?.link || this.options?.config?.url;
+    if (!target) {
+      this.navService.back();
+      return;
+    }
+
+    const code = this.value?.code || this.value?.id;
+    this.navService.goto(target, code ? { path: { code } } : {});
+  }
+
+  private navigateToEdit() {
+    const target = this.options?.config?.link || this.options?.config?.url;
+    const code = this.value?.code || this.value?.id;
+    if (target) {
+      this.navService.goto(target, code ? { path: { code } } : {});
+    }
+  }
+
+  private resetValue() {
+    for (const [key, initial] of this.initialData) {
+      const current = this.context.data().get(key);
+      if (!current || typeof current !== 'object' || !initial || typeof initial !== 'object') {
+        continue;
+      }
+
+      Object.keys(current).forEach(property => {
+        if (!Object.prototype.hasOwnProperty.call(initial, property)) {
+          delete current[property];
+        }
+      });
+      Object.assign(current, JSON.parse(JSON.stringify(initial)));
+    }
+  }
+
   openPopup() {
     this.popupContainer.clear();
     this.popupRef = this.popupContainer.createComponent(AddFormPopUpComponent);

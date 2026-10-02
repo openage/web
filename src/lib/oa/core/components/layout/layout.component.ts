@@ -3,6 +3,7 @@
 import {
   Component,
   EventEmitter,
+  HostListener,
   inject,
   Input,
   OnChanges,
@@ -15,6 +16,13 @@ import { DomSanitizer } from "@angular/platform-browser";
 import { RouterModule } from '@angular/router';
 import { Entity, Logger } from "../../models";
 import { ContextService } from "../../services/context.service";
+import { ConditionValidatorService } from "../../services/condition-validator.service";
+import {
+  getSectionPopupButtonLabel,
+  isSectionExpanded as sectionIsExpanded,
+  sectionConditionMatches,
+  toggleSection as toggleSectionState
+} from './section-behavior';
 import { CommonModule } from "@angular/common";
 import { NavService } from "../../services/nav.service";
 import { NotFoundComponent } from "../../../ux/not-found/not-found.component";
@@ -38,6 +46,10 @@ import { CurrentRoleComponent } from "../current-role/current-role.component";
 import { MarkdownComponent } from "../../../ux/markdown/markdown.component";
 import { LoginComponent } from "../../../components/login/login.component";
 import { SignupComponent } from "../../../components/signup/signup.component";
+import { InputTextComponent } from "../../../ux/input/input.component";
+import { InputSelectorComponent } from "../../../components/input-selector/input-selector.component";
+import { AutocompleteComponent } from "../../../ux/autocomplete/autocomplete.component";
+import { DatePickerComponent } from "../../../ux/date-picker/date-picker.component";
 
 @Component({
   selector: "oa-layout",
@@ -65,7 +77,11 @@ import { SignupComponent } from "../../../components/signup/signup.component";
     CurrentRoleComponent,
     MarkdownComponent,
     LoginComponent,
-    SignupComponent
+    SignupComponent,
+    InputTextComponent,
+    InputSelectorComponent,
+    AutocompleteComponent,
+    DatePickerComponent
   ]
 })
 export class LayoutComponent implements OnInit, OnChanges {
@@ -90,8 +106,10 @@ export class LayoutComponent implements OnInit, OnChanges {
   logger: Logger = new Logger('LayoutComponent');
   styles: any = {};
   sections: any = {};
+  popupSection: any;
 
   public context = inject(ContextService);
+  private conditionValidator = inject(ConditionValidatorService);
   public sanitizer = inject(DomSanitizer);
   private navService = inject(NavService);
 
@@ -385,6 +403,85 @@ export class LayoutComponent implements OnInit, OnChanges {
     log.silly(`component ${component.control}`, component);
 
     return component;
+  }
+
+  getBoundValue(path: any) {
+    if (typeof path !== 'string') {
+      return path;
+    }
+
+    const [source, ...properties] = path.split('.');
+    const value = this.context.data().get(source);
+    if (!value || !properties.length) {
+      return value ? value : path;
+    }
+
+    return properties.reduce((current: any, property: string) => current?.[property], value);
+  }
+
+  setBoundValue(path: any, value: any) {
+    if (typeof path !== 'string') {
+      return;
+    }
+
+    const [source, ...properties] = path.split('.');
+    const data = this.context.data();
+    let current = data.get(source);
+    if (!current || !properties.length) {
+      return;
+    }
+
+    for (const property of properties.slice(0, -1)) {
+      current[property] = current[property] || {};
+      current = current[property];
+    }
+
+    current[properties[properties.length - 1]] = value;
+  }
+
+  getActionOptions(item: any) {
+    return {
+      ...item.options,
+      code: item.options?.code || item.code,
+      title: item.options?.title || item.title,
+      class: item.options?.class || item.class,
+      style: item.options?.style || item.style
+    };
+  }
+
+  shouldRenderSection(section: any): boolean {
+    const data = Object.fromEntries(this.context.data());
+    return sectionConditionMatches(section?.condition, data, this.conditionValidator);
+  }
+
+  isSectionExpanded(section: any): boolean {
+    return sectionIsExpanded(section);
+  }
+
+  toggleSection(section: any): void {
+    toggleSectionState(section);
+  }
+
+  openSectionPopup(section: any): void {
+    this.popupSection = section;
+  }
+
+  closeSectionPopup(): void {
+    this.popupSection = undefined;
+  }
+
+  getSectionTitle(section: any): string {
+    const title = section?.container?.header?.title;
+    return (typeof title === 'string' ? title : title?.text) || section?.title || section?.label || section?.code || '';
+  }
+
+  getPopupButtonLabel(section: any): string {
+    return getSectionPopupButtonLabel(section?.popup, this.getSectionTitle(section));
+  }
+
+  @HostListener('document:keydown.escape')
+  onEscape(): void {
+    this.closeSectionPopup();
   }
 
   mapLabelsAndValues(data: any): any {

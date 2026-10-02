@@ -1,14 +1,19 @@
 @switch (view) {
 @case ('date') {
-<div class="oa-input" [class.readonly]="readonly" [style]="style" [oaDatePicker]="date" (select)="updated($event)">
-  <div class="input">
-    @if(date) {
-    <span>{{date}}</span>
-    } @else {
-    <span class="sub-text">{{placeholder}}</span>
-    }
+<div class="date-field" [class]="class" [style]="style">
+  @if (label && showLabel) {
+  <label [attr.for]="id" [class.required]="required">{{label}}</label>
+  }
+  <div class="oa-input" [class.readonly]="readonly" [oaDatePicker]="date" (select)="updated($event)">
+    <div class="input">
+      @if(date) {
+      <span>{{date}}</span>
+      } @else {
+      <span class="sub-text">{{placeholder}}</span>
+      }
+    </div>
+    <oa-icon class="postfix" value="date"></oa-icon>
   </div>
-  <oa-icon class="postfix" value="date"></oa-icon>
 </div>
 }
 @case ('icon') {
