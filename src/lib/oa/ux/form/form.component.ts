@@ -93,7 +93,9 @@ export class FormComponent implements OnInit, OnChanges {
     if (typeof this.value === 'string') {
       const value = this.context.data().get(this.value);
 
-      if (value.subscribe) {
+      console.log(value)
+
+      if (value && value.subscribe) {
         value.subscribe((p: any) => {
           this.value = p;
           this.init(this.options.fields);
@@ -101,6 +103,10 @@ export class FormComponent implements OnInit, OnChanges {
         })
       } else if (value) {
         this.value = value;
+        this.init(this.options.fields)
+        this.initialized = true;
+      } else {
+        this.value = undefined;
         this.init(this.options.fields)
         this.initialized = true;
       }
@@ -137,7 +143,7 @@ export class FormComponent implements OnInit, OnChanges {
 
     const fields = section.fields || [];
     // fields.push(...this.fields.filter((c: any) => c.group?.toLowerCase() === section.code?.toLowerCase()));
-    fields.push(...this.fields.filter((c: any) => c.section?.toLowerCase() === section.code?.toLowerCase() || c.value?.toLowerCase()));
+    fields.push(...this.fields.filter((c: any) => c.section?.toLowerCase() === section.code?.toLowerCase()));
 
 
     log.silly(`fields count: ${fields.length}`)

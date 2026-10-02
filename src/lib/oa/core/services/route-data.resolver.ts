@@ -57,7 +57,7 @@ export class RouteDataResolver implements Resolve<any> {
       input = input.replace(`{{${key}}}`, getter(key))
     }
 
-    for (const key of ['area', 'collection', 'code']) {
+    for (const key of ['area', 'collection', 'code', 'action']) {
       if (input.indexOf(`:${key}`) !== -1) {
         input = input.replace(`:${key}`, getter(key))
       }
@@ -109,20 +109,17 @@ export class RouteDataResolver implements Resolve<any> {
       d.type = d.type || 'REMOTE';
       switch (d.type.toLowerCase()) {
         case 'data':
-          result = this._localData(d, page)
-          break;
+          return this._localData(d, page);
         case 'remote':
-          result = this._remoteData(d, page)
-          break;
+          return this._remoteData(d, page);
         case 'search':
-          result = this._search(d, page);
-          break;
+          return this._search(d, page);
         case 'get':
-          result = this._get(d, page);
-          break;
+          return this._get(d, page);
         case 'add':
-          result = this.add(d, page);
-          break;
+          return this.add(d, page);
+        default:
+          return undefined;
       }
     }
     return Promise.all(data.map((d: any) => extract(d)))
@@ -147,8 +144,12 @@ export class RouteDataResolver implements Resolve<any> {
     const v = config.id
       ? await this._dataService.get(config.id, config)
       : await this._dataService.search(config.query, config)
+
     this.context.data.update((current) => {
       const next = new Map(current);
+      console.log(page.code + ':' + data.code)
+
+      console.log(v)
       next.set(data.code, v);
       return next;
     });

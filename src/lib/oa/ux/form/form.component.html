@@ -80,19 +80,20 @@
 </ng-template>
 
 <ng-template #renderField let-item="item">
-  <div [ngClass]="item.class" [ngStyle]="item.style" style="width: 20rem;">
+  <div class="form-field" [ngClass]="item.class" [ngStyle]="item.style">
     @if (item.label) {
     <div class="labelFields">
-      <label [for]="item.label">{{item.label}}</label>
+      <label [for]="item.key">{{item.label}}</label>
     </div>
     <!-- Call this to show the detail page because the case input not work so call this here -->
-    <oa-text-input [options]="item" [value]="item.value" [placeholder]="item.label"
-      (valueChange)="setValue(item, $event)" class="textFields"></oa-text-input>
+    <!-- <oa-text-input [options]="item" [value]="item.value" [placeholder]="item.label"
+      (valueChange)="setValue(item, $event)" class="textFields"></oa-text-input> -->
     }
     <div class="oa-field">
       @switch (item.control) {
       @case('input'){
-      <oa-text-input [options]="item" [value]="item.value" (valueChange)="setValue( item, $event)"></oa-text-input>
+      <oa-text-input [options]="item" [id]="item.key" [value]="item.value"
+        (valueChange)="setValue( item, $event)"></oa-text-input>
       }
       @default {
       <!-- <oa-field-editor [item]="item" [(value)]="item.value" [isFormSubmit]="isFormSubmit"

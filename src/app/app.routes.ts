@@ -45,7 +45,16 @@ export const routes: Routes = [
             canActivate: [pageGuard],
             loadComponent: () => import('./dynamic-page/dynamic-page.component').then(mod => mod.DynamicPageComponent),
             resolve: { data: RouteDataResolver },
-            runGuardsAndResolvers: 'always'
+            runGuardsAndResolvers: 'always',
+            children: [
+              {
+                path: ':action',
+                canActivate: [pageGuard],
+                loadComponent: () => import('./dynamic-page/dynamic-page.component').then(mod => mod.DynamicPageComponent),
+                resolve: { data: RouteDataResolver },
+                runGuardsAndResolvers: 'always'
+              }
+            ]
           }
         ]
       }

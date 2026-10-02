@@ -5,6 +5,7 @@ export class FieldModel {
   index?: number;
   group?: any;
   container?: any;
+  section?: string;
 
   code?: string;
   label?: string;
@@ -54,6 +55,7 @@ export class FieldModel {
     }
     this.index = obj.index;
     this.container = obj.container;
+    this.section = obj.section;
     this.group = obj.group || {};
     if (obj.groupKey) {
       this.group = {

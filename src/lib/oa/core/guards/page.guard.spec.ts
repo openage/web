@@ -46,4 +46,34 @@ describe('pageGuard', () => {
     expect(result).toBe(cleanUrl);
     expect(cleanUrl.queryParams).toEqual({ next: 'profile' });
   });
+
+  it('should allow an intermediate route without a page when it has a child route', async () => {
+    navService.getLink.and.returnValue(null);
+    const route = {
+      children: [{}],
+      queryParamMap: convertToParamMap({}),
+      url: []
+    } as unknown as ActivatedRouteSnapshot;
+    const state = { url: '/crm/customers' } as RouterStateSnapshot;
+
+    const result = await executeGuard(route, state);
+
+    expect(result).toBeTrue();
+    expect(navService.goto).not.toHaveBeenCalled();
+  });
+
+  it('should redirect to home when a leaf route has no page', async () => {
+    navService.getLink.and.returnValue(null);
+    const route = {
+      children: [],
+      queryParamMap: convertToParamMap({}),
+      url: []
+    } as unknown as ActivatedRouteSnapshot;
+    const state = { url: '/crm/customers' } as RouterStateSnapshot;
+
+    const result = await executeGuard(route, state);
+
+    expect(result).toBeFalse();
+    expect(navService.goto).toHaveBeenCalledWith('home');
+  });
 });

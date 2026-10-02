@@ -15,6 +15,10 @@ export const pageGuard: CanActivateFn = async (route: ActivatedRouteSnapshot, st
   const page: Link = navService.getLink(route);
 
   if (!page) {
+    if (route.children.length) {
+      return true;
+    }
+
     // If no item is found, navigate to the home page with the given path as a query parameter.
     navService.goto('home');
     return false;

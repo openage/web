@@ -2,6 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 
 import { NavService } from './nav.service';
+import { RouteDataResolver } from './route-data.resolver';
 import { Link } from '../models';
 
 describe('NavService', () => {
@@ -67,5 +68,37 @@ describe('NavService', () => {
     const meta = await request;
 
     expect(meta.layout.sections[0].components[0].control).toBe('html');
+  });
+
+  it('should support the /:area/:code/edit route pattern used by customer edit metadata', () => {
+    const { routes } = require('../../../../app/app.routes');
+    expect(routes.some((route: any) => route.path === ':area/:code/edit')).toBeTrue();
+  });
+
+  it('should wait for remote data to resolve before finishing the route data build', async () => {
+    const resolver = Object.create(RouteDataResolver.prototype) as any;
+    resolver._dataService = {
+      get: async (id: string) => ({ id, ok: true })
+    };
+
+    let map = new Map<string, any>();
+    resolver.context = {
+      data: {
+        update: (cb: (current: Map<string, any>) => Map<string, any>) => {
+          map = cb(map);
+        }
+      }
+    };
+
+    const result = await resolver.buildData([
+      {
+        code: 'party',
+        type: 'remote',
+        config: { service: 'registry', collection: 'parties', id: 'p-1001' }
+      }
+    ], { params: { get: () => 'p-1001' } });
+
+    expect(result).toBeTruthy();
+    expect(map.get('party')).toEqual({ id: 'p-1001', ok: true });
   });
 });

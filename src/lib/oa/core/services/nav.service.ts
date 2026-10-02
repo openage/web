@@ -261,6 +261,8 @@ export class NavService {
 
     const application = this.context.application();
 
+    const normalizeParamKey = (value: string) => value.toLowerCase().replace(/[^a-z0-9]/g, '');
+
     function fromRoute(key: string, snapshot: ActivatedRouteSnapshot) {
       if (snapshot.paramMap.has(key)) {
         return snapshot.paramMap.get(key);
@@ -268,6 +270,19 @@ export class NavService {
 
       if (snapshot.queryParamMap.has(key)) {
         return snapshot.queryParamMap.get(key);
+      }
+
+      const normalizedKey = normalizeParamKey(key);
+      for (const paramKey of snapshot.paramMap.keys) {
+        if (normalizeParamKey(paramKey) === normalizedKey) {
+          return snapshot.paramMap.get(paramKey);
+        }
+      }
+
+      for (const paramKey of snapshot.queryParamMap.keys) {
+        if (normalizeParamKey(paramKey) === normalizedKey) {
+          return snapshot.queryParamMap.get(paramKey);
+        }
       }
 
       if (snapshot.parent) {
@@ -660,6 +675,21 @@ export class NavService {
       return ss.queryParamMap.get(k);
     }
 
+    const normalizeParamKey = (value: string) => value.toLowerCase().replace(/[^a-z0-9]/g, '');
+    const normalizedKey = normalizeParamKey(k);
+
+    for (const paramKey of ss.paramMap.keys) {
+      if (normalizeParamKey(paramKey) === normalizedKey) {
+        return ss.paramMap.get(paramKey);
+      }
+    }
+
+    for (const paramKey of ss.queryParamMap.keys) {
+      if (normalizeParamKey(paramKey) === normalizedKey) {
+        return ss.queryParamMap.get(paramKey);
+      }
+    }
+
     if (ss.parent) {
       return this.getValue(k, ss.parent);
     }
@@ -837,9 +867,9 @@ export class NavService {
         return newTab
           ? window.open(fallbackPath, '_blank')
           : this.router.navigate([fallbackPath], {
-              queryParams,
-              fragment
-            });
+            queryParams,
+            fragment
+          });
       }
 
       // if (!nav) {

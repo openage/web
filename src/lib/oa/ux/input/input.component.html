@@ -5,13 +5,13 @@
   @switch (view) {
   @case ('text') {
 
-  <input [type]="type" #inputContainer [disabled]="disabled" [readonly]="readonly" [value]="content"
+  <input [id]="id" [type]="type" #inputContainer [disabled]="disabled" [readonly]="readonly" [value]="content"
     [placeholder]="placeholder" (focus)="onFocus()" (change)="onChange($event)" (blur)="onBlur()"
     (keyup)="onKeyUp($event)" />
 
   }
   @case ('password') {
-  <input type="{{hidden ? 'password': 'text'}}" #inputContainer [disabled]="disabled" [readonly]="readonly"
+  <input [id]="id" type="{{hidden ? 'password': 'text'}}" #inputContainer [disabled]="disabled" [readonly]="readonly"
     [value]="content" (focus)="onFocus()" (change)="onChange($event)" (blur)="onBlur()" (keyup)="onKeyUp($event)" />
   <!-- <mat-icon class="subtle pointer" (click)="hidden = !hidden">{{hidden ? 'visibility': 'visibility_off'}}
             </mat-icon> -->
@@ -34,7 +34,7 @@
   }
 
   @case ('multi-line') {
-  <textarea [id]="label" [placeholder]="placeholder" rows="4" [value]="content" [disabled]="disabled"
+  <textarea [id]="id || label" [placeholder]="placeholder" rows="4" [value]="content" [disabled]="disabled"
     (focus)="onFocus()" (change)="onChange($event)" (blur)="onBlur()" (keyup)="onKeyUp($event)"></textarea>
   }
   <!-- @case ('rich') {

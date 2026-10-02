@@ -1,68 +1,86 @@
-.summary {
-  background: var(--background);
+:host {
+  display: block;
+  min-width: 0;
 }
 
-.footer {
-  margin-top: 10px;
-}
-
-.form-grid {
+.group.form {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 1rem;
+  gap: 16px;
+}
+
+.form-section-box {
+  box-sizing: border-box;
+  min-width: 0;
+  padding: 20px;
+  border: 1px solid var(--neutral-light, #d7dee5);
+  border-radius: 8px;
+  background: var(--surface, #fff);
+}
+
+.form-section-box .header {
+  align-items: flex-start;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.form-section-box .title {
+  margin: 0;
+  color: var(--text, var(--primary-dark, #263746));
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.form-section-box .body.flex-row.two {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px 20px;
+  padding: 0;
 }
 
 .form-field {
-  display: flex;
-  flex-direction: column;
+  width: 100%;
+  min-width: 0;
 }
 
-::ng-deep .oa-input {
-  height: 40px;
-  display: flex;
-  flex-direction: row;
-  padding-right: 10px;
-  padding-left: 10px;
-  border: 1px solid var(--neutral);
-  border-radius: 3px;
-  background-color: var(--surface);
-  overflow: hidden;
-  width: 60% !important;
-  margin-left: auto;
-  margin-right: auto;
+.labelFields {
+  margin-bottom: 6px;
 }
 
-::ng-deep .card::before {
-  content: none;
-  position: absolute;
-  background: var(--info-light);
-  right: -60px;
-  top: -40px;
-  width: 100px;
-  height: 100px;
-  border-radius: 50px;
-  transition: all 0.3s;
-  z-index: -1;
+.labelFields label {
+  display: block;
+  margin: 0;
+  color: var(--text, var(--neutral-dark, #44515e));
+  font-size: 0.875rem;
+  font-weight: 500;
 }
 
 ::ng-deep .oa-field {
   display: block !important;
-  margin-bottom: 5px;
   width: 100%;
+  margin: 0;
 }
 
-// .group {
-//   display: ruby !important;
-// }
-
-.textFields {
-  margin-left: unset;
-  margin-right: unset;
-  max-width: 90% !important;
+::ng-deep .form-field .oa-input {
+  box-sizing: border-box;
+  width: 100% !important;
+  min-height: 42px;
+  margin: 0;
+  border-radius: 6px;
 }
 
-.labelFields {
-  display: block;
-  margin-bottom: 10px;
-  margin-left: 50px;
+.actions-sec {
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+@media (max-width: 640px) {
+  .form-section-box {
+    padding: 14px;
+  }
+
+  .form-section-box .body.flex-row.two {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 12px;
+  }
 }

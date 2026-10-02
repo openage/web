@@ -4,6 +4,7 @@ import { AuthService } from './auth.service';
 import { NavService } from './nav.service';
 import { ErrorModel, Logger } from '../models';
 import { Subject } from 'rxjs';
+import { ContextService } from './context.service';
 
 
 
@@ -27,12 +28,17 @@ export class ErrorService implements ErrorHandler {
 
 
   private document = inject(DOCUMENT);
+  private _assetService: any;
+  private http = inject(HttpClient);
+  private navService = inject(NavService)
+  private context = inject(ContextService);
+
+
 
   constructor(
-    private http: HttpClient,
-    private navService: NavService
   ) {
-    this.http.get('assets/data/errors.json', { responseType: 'text' })
+    this._assetService = this.context.getService('assets') || { url: 'assets' }
+    this.http.get(`${this._assetService.url}/data/errors.json`, { responseType: 'text' })
       .subscribe((data) => {
         this._data = {};
         JSON.parse(data).forEach((item: any) => {
@@ -42,13 +48,9 @@ export class ErrorService implements ErrorHandler {
   }
 
   get(error: any) {
-
     if (!error) { return }
-
     const key = error.code || error.message || error;
-
     let item = this._data[key];
-
     if (!item) {
       item = {
         code: key,

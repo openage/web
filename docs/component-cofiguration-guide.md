@@ -1146,6 +1146,70 @@ The `options` property accepts a FormOptions object or a plain object with the f
 }
 ```
 
+##### Form Metadata Pattern
+
+The runtime form expects the payload and the structural metadata to be split cleanly:
+
+```json
+{
+  "control": "form",
+  "value": {
+    "form": {
+      "originName": "Search",
+      "destinationName": "Search",
+      "sailingDate": ""
+    }
+  },
+  "options": {
+    "sections": [
+      { "code": "r-1" },
+      { "code": "r-2" }
+    ],
+    "fields": [
+      {
+        "control": "input",
+        "group": "r-1",
+        "label": "Origin",
+        "key": "form.originName"
+      },
+      {
+        "control": "date",
+        "group": "r-2",
+        "label": "Sailing Date",
+        "key": "form.sailingDate"
+      }
+    ],
+    "actions": [
+      {
+        "code": "submit",
+        "group": "r-2",
+        "title": "Search",
+        "config": {
+          "target": {
+            "service": "send-it",
+            "collection": "messages",
+            "method": "create"
+          }
+        }
+      },
+      {
+        "code": "reset",
+        "group": "r-2",
+        "title": "Reset"
+      }
+    ]
+  }
+}
+```
+
+Authoring rules:
+
+- Put the actual form payload in `value`, not in `options`.
+- Use `options.fields` for editable inputs and `options.actions` for submit/reset actions.
+- Match field `key` values to nested object paths in the payload.
+- Match each field `group` value to a section `code` so the form rows render correctly.
+- The form resolves `defaultValue` and nested object paths using the same model logic as `FieldModel`.
+
 ##### Action Structure
 
 ```typescript
