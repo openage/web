@@ -2,6 +2,19 @@
 
 All notable changes to this project are documented in this file.
 
+## [3.2.0] - 2026-10-02
+
+### Added
+- Add conditional, collapsible, and popup sections to metadata-driven layouts.
+- Add data-bound field and create/edit action support to dynamic pages.
+
+### Changed
+- Resolve route parameters regardless of case and punctuation, and support nested action routes.
+- Support `group` form-field mapping while preserving legacy `section` metadata.
+
+### Fixed
+- Handle empty date values safely and improve input labels and styling options.
+
 ## [3.1.0] - 2026-09-27
 
 ### Added
@@ -29,5 +42,7 @@ All notable changes to this project are documented in this file.
 ### Fixed
 - Improve application initialization error feedback.
 - Fix Markdown rendering issues.
+
+[3.2.0]: https://gitlab.com/oa-pages/ux/pages-app/-/compare/f7914219bb9935168bc67e869b85c61692a9a430...76980c8dee66ccba5698099339df5f6de7f9311b
 
 
