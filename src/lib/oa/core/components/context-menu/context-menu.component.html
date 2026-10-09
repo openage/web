@@ -1,5 +1,8 @@
-@if (items.length) {
+@if (context.page()?.title || context.title() || items.length) {
 <div layout="row" layout-align="end center" class="menu flex-row">
+  @if (context.page()?.title || context.title()) {
+  <span class="page-title">{{ context.page()?.title || context.title() }}</span>
+  }
   @for (item of items; track $index) {
   @if(item.code === 'spacer') {
   <span class="spacer"></span>

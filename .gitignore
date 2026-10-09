@@ -54,3 +54,6 @@ Thumbs.db
 .nx/cache/d/daemon.log
 
 .fake
+.cache
+.oa
+.data

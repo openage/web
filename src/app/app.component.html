@@ -17,14 +17,11 @@
   }
 </div>
 
-<div [class.hidden]="!isProcessing()" class="oa-app {{theme()?.type}} {{theme()?.code}}">
-  <div class="overlay">
-    <div class="processing">
-      <div></div>
-      <div></div>
-      <div></div>
-      <div></div>
-      <div></div>
+<div [class.hidden]="!isProcessing()" [attr.aria-hidden]="!isProcessing()" class="oa-app processing-screen {{theme()?.type}} {{theme()?.code}}">
+  <div class="processing-overlay">
+    <div class="processing-card" role="status" aria-live="polite">
+      <span class="processing-spinner" aria-hidden="true"></span>
+      <span>Loading</span>
     </div>
   </div>
 </div>

@@ -127,7 +127,7 @@ export class RouteDataResolver implements Resolve<any> {
 
   private _localData = async (data: any, page: Link) => {
 
-    const v = data.config || data.data || data.config?.data;
+    const v = data.data || data.config?.data || data.config;
     this.context.data.update((current) => {
       const next = new Map(current);
       next.set(data.code, v);

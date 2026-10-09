@@ -124,6 +124,22 @@ export class ContextService implements IAuth {
     return this.application()?.services?.find((s) => s.code === code);
   }
 
+  toObject() {
+    const obj: any = {
+      data: {},
+      tenant: this.tenant.asReadonly(),
+      organization: this.organization.asReadonly(),
+      application: this.application.asReadonly(),
+      user: this.user.asReadonly(),
+    };
+
+    for (const [key, value] of this.data()) {
+      obj.data[key] = value;
+    }
+    return obj;
+
+  }
+
   private _defaultRole(user: User): Role {
     return user?.roles?.find((item) => !item.organization);
   }

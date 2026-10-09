@@ -1,0 +1,45 @@
+:host {
+  display: block;
+}
+
+.menu {
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  justify-content: flex-end;
+  width: 100%;
+  min-height: 48px;
+  padding: 0 40px;
+  margin: 0;
+  float: none;
+}
+
+.menu > oa-action {
+  display: inline-flex;
+  align-items: center;
+  width: auto;
+  height: auto;
+  margin: 0;
+  padding: 0;
+  float: none;
+  flex: 0 0 auto;
+  color: inherit;
+  background: transparent;
+}
+
+.menu > oa-action:hover {
+  color: inherit;
+  background: transparent;
+}
+
+.page-title {
+  min-width: 0;
+  overflow: hidden;
+  margin-right: auto;
+  color: var(--default);
+  font-size: 1.125rem;
+  font-weight: 600;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

@@ -241,6 +241,7 @@ export class DataService {
    * });
    */
   public remove = async (id: number | string, options?: any): Promise<boolean> => {
+    this.context.isProcessing.set(true);
     const plugin = this.dataSourceRegistry.getPlugin(options);
     if (typeof options === 'string') {
       options = {

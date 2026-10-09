@@ -36,12 +36,24 @@ export class ContextMenuComponent implements OnInit {
   }
 
   init() {
+    const themeCode = this.context.theme()?.code;
     this.items = (this.items || [])
       .filter((i: any) => this.context.hasPermission(i.permissions))
-      .map((i: { type: string; style: string; }) => {
-        i = this.constantService.actions.get(i);
+      .map((item: any) => {
+        const i = this.constantService.actions.get(
+          item && typeof item === 'object' ? { ...item } : item
+        );
+        if (!i) {
+          return i;
+        }
         i.type = i.type || 'button';
-        i.style = i.style || (i.type === 'icon' ? 'subtle' : 'primaryBackdrop');
+        const classes = (i.class || (i.type === 'icon' ? 'subtle' : 'primary context-menu-action'))
+          .split(/\s+/)
+          .filter(Boolean);
+        if (themeCode && !classes.includes(themeCode)) {
+          classes.push(themeCode);
+        }
+        i.class = classes.join(' ');
         return i;
       });
   }
