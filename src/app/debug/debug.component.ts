@@ -36,4 +36,11 @@ export class DebugComponent {
   logger = new Logger(DebugComponent);
 
   context = inject(ContextService);
+
+  expandSection(event: MouseEvent): void {
+    const summary = event.currentTarget;
+    if (summary instanceof HTMLElement && summary.parentElement instanceof HTMLDetailsElement) {
+      summary.parentElement.open = true;
+    }
+  }
 }

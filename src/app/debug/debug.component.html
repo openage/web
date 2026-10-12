@@ -1,42 +1,71 @@
-<div class="container cards">
-  <div class="section">
-    <div class="header">
-      <h5>Application</h5>
+<main class="debug-page">
+  <header class="debug-header">
+    <div>
+      <p class="debug-eyebrow">Developer tools</p>
+      <h1>Runtime context</h1>
+      <p class="debug-description">Inspect the application, tenant, organization, session, and role currently loaded in this browser.</p>
     </div>
-    <div class="body">
-      <oa-json-viewer [value]="context.application()" [options]="options"></oa-json-viewer>
-    </div>
+  </header>
+
+  <div class="debug-grid">
+    <details class="debug-card debug-card-wide">
+      <summary class="debug-card-header" (dblclick)="expandSection($event)">
+        <span class="debug-card-title">
+          <span class="debug-card-heading" id="debug-application">Application</span>
+          <span class="debug-card-description">Application configuration and navigation</span>
+        </span>
+        <span class="debug-card-chevron" aria-hidden="true"></span>
+      </summary>
+      <div class="debug-card-body">
+        <oa-json-viewer [value]="context.application()" [options]="options"></oa-json-viewer>
+      </div>
+    </details>
+    <details class="debug-card">
+      <summary class="debug-card-header" (dblclick)="expandSection($event)">
+        <span class="debug-card-title">
+          <span class="debug-card-heading" id="debug-tenant">Tenant</span>
+          <span class="debug-card-description">Current tenant details</span>
+        </span>
+        <span class="debug-card-chevron" aria-hidden="true"></span>
+      </summary>
+      <div class="debug-card-body">
+        <oa-json-viewer [value]="context.tenant()" [options]="options"></oa-json-viewer>
+      </div>
+    </details>
+    <details class="debug-card">
+      <summary class="debug-card-header" (dblclick)="expandSection($event)">
+        <span class="debug-card-title">
+          <span class="debug-card-heading" id="debug-organization">Organization</span>
+          <span class="debug-card-description">Organization associated with this context</span>
+        </span>
+        <span class="debug-card-chevron" aria-hidden="true"></span>
+      </summary>
+      <div class="debug-card-body">
+        <oa-json-viewer [value]="context.organization()" [options]="options"></oa-json-viewer>
+      </div>
+    </details>
+    <details class="debug-card debug-card-wide">
+      <summary class="debug-card-header" (dblclick)="expandSection($event)">
+        <span class="debug-card-title">
+          <span class="debug-card-heading" id="debug-user">User</span>
+          <span class="debug-card-description">User profile, current session, and role permissions</span>
+        </span>
+        <span class="debug-card-chevron" aria-hidden="true"></span>
+      </summary>
+      <div class="debug-card-body debug-user-body">
+        <section class="debug-user-panel" aria-labelledby="debug-user-profile">
+          <h3 id="debug-user-profile">Profile</h3>
+          <oa-json-viewer [value]="context.user()" [options]="options"></oa-json-viewer>
+        </section>
+        <section class="debug-user-panel" aria-labelledby="debug-user-session">
+          <h3 id="debug-user-session">Session</h3>
+          <oa-json-viewer [value]="context.session()" [options]="options"></oa-json-viewer>
+        </section>
+        <section class="debug-user-panel" aria-labelledby="debug-user-role">
+          <h3 id="debug-user-role">Role</h3>
+          <oa-json-viewer [value]="context.role()" [options]="options"></oa-json-viewer>
+        </section>
+      </div>
+    </details>
   </div>
-  <div class="section">
-    <div class="header">
-      <h5>Tenant</h5>
-    </div>
-    <div class="body">
-      <oa-json-viewer [value]="context.tenant()" [options]="options"></oa-json-viewer>
-    </div>
-  </div>
-  <div class="section">
-    <div class="header">
-      <h5>Organization</h5>
-    </div>
-    <div class="body">
-      <oa-json-viewer [value]="context.organization()" [options]="options"></oa-json-viewer>
-    </div>
-  </div>
-  <div class="section">
-    <div class="header">
-      <h5>Session</h5>
-    </div>
-    <div class="body">
-      <oa-json-viewer [value]="context.session()" [options]="options"></oa-json-viewer>
-    </div>
-  </div>
-  <div class="section">
-    <div class="header">
-      <h5>Role</h5>
-    </div>
-    <div class="body">
-      <oa-json-viewer [value]="context.role()" [options]="options"></oa-json-viewer>
-    </div>
-  </div>
-</div>
+</main>

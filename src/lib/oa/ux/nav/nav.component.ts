@@ -17,7 +17,7 @@ import { IconComponent } from '../icon/icon.component';
 export class NavComponent implements OnInit, OnDestroy {
 
   @Input()
-  view?: 'side' | 'top';
+  view?: 'side' | 'top' | 'quick-links';
 
   @Input()
   class?: string;
@@ -52,7 +52,7 @@ export class NavComponent implements OnInit, OnDestroy {
     src = src || 'root';
 
     const value = (this.context.navs() || [])
-      .filter((i) => this.context.hasPermission(i.permissions) && i.view !== 'hidden')
+      .filter((i) => this.context.hasPermission(i.permissions) && i.view !== 'hidden' && i.title && i.url)
       .sort((a, b) => a.index - b.index)
 
     if (src === 'root') {
@@ -67,9 +67,28 @@ export class NavComponent implements OnInit, OnDestroy {
     this.view = this.view || this.options.view;
     this.class = this.class || this.options.class;
     this.isExpanded = this.isExpanded || this.options.isExpanded;
-    this.src = this.src || this.value || this.options.src;
+    const configuredValues = Array.isArray(this.value) ? this.value : undefined;
+    this.src = this.src || (typeof this.value === 'string' ? this.value : undefined) || this.options.src;
 
-    this.value = this.getValues(this.src);
+    this.value = this.view === 'quick-links' && configuredValues
+      ? configuredValues
+        .map((item: any) => {
+          if (typeof item === 'string') {
+            return this.navService.getByCode(item);
+          }
+
+          return item?.code
+            ? this.navService.getByCode(item.code) || (item.title && item.url ? item : undefined)
+            : item?.title && item?.url ? item : undefined;
+        })
+        .filter((item: Link | undefined): item is Link => !!item)
+        .filter((item: Link) => this.context.hasPermission(item.permissions) && item.view !== 'hidden' && item.title && item.url)
+      : this.getValues(this.src);
+
+    if (this.view === 'quick-links') {
+      const currentPageCode = this.context.page()?.code;
+      this.value = this.value.filter((item: Link) => item.code !== currentPageCode);
+    }
 
     const active = this.active?.code || this.active;
     const activeNav = this.value.find((v: { code: any; }) => v.code === active);

@@ -42,7 +42,12 @@ export const pageGuard: CanActivateFn = async (route: ActivatedRouteSnapshot, st
     }
 
     if (hasPermissions) {
-      if (!session) {
+      if (!session?.user) {
+        navService.goto('auth.login', {
+          query: {
+            redirect: window.document.location.href
+          }
+        });
         return false;
       }
 

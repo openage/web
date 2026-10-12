@@ -39,7 +39,7 @@ export class JsonViewerComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges() {
-    this.value = this.value || {};
+    this.value = this.value ?? {};
     if (typeof this.value === 'string') {
       const value = this.context.data().get(this.value);
 
@@ -79,7 +79,8 @@ export class JsonViewerComponent implements OnInit, OnChanges {
 
   objectToArray(object: any) {
     let array: any[] = [];
-    if (typeof object === 'object') {
+    this.options = this.options || {};
+    if (object !== null && typeof object === 'object') {
       for (const key in object) {
         if (Object.prototype.hasOwnProperty.call(object, key)) {
           let value = object[key];
@@ -95,18 +96,19 @@ export class JsonViewerComponent implements OnInit, OnChanges {
             key: key,
             value: value,
             type: type,
-            isComplex: type === 'object',
+            isComplex: value !== null && type === 'object',
             isArray: Array.isArray(value)
           })
         }
       }
     }
 
-    if (this.options.skip) {
-      if (this.options.skip.fields) {
-        array = array.filter(i => !(this.options.skip.fields.find((s: string) => s == i.key)))
+    const skip = this.options.skip;
+    if (skip) {
+      if (skip.fields) {
+        array = array.filter(i => !(skip.fields.find((s: string) => s == i.key)))
       }
-      if (this.options.skip.empty) {
+      if (skip.empty) {
         array = array.filter(i => i.value !== 'Not Set')
       }
     }
@@ -131,5 +133,3 @@ export class JsonViewerComponent implements OnInit, OnChanges {
     return array;
   }
 }
-
-

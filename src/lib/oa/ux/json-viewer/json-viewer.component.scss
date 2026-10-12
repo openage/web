@@ -1,0 +1,117 @@
+:host {
+  color: var(--text-primary, #263b4b);
+  display: block;
+  font-family: Inter, 'Segoe UI', Arial, sans-serif;
+  font-size: 0.875rem;
+  min-width: 0;
+}
+
+.tree {
+  list-style: none;
+  margin: 0;
+  min-width: 0;
+  padding: 0;
+}
+
+.tree .tree {
+  border-left: 1px solid var(--border, #dce5eb);
+  margin: 3px 0 5px 11px;
+  padding-left: 13px;
+}
+
+.tree-node {
+  min-width: 0;
+}
+
+.tree .tree-row {
+  align-items: baseline;
+  border-bottom: 1px solid var(--border-subtle, #edf1f4);
+  display: flex;
+  gap: 8px;
+  min-height: 32px;
+  padding: 6px 2px;
+}
+
+.tree .tree-row > .label {
+  color: var(--primary, #147b9d);
+  flex: 0 0 auto;
+  font-family: 'Segoe UI', Arial, sans-serif;
+  font-size: 0.875rem;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.tree .tree-row > .label::after {
+  color: var(--text-secondary, #8996a0);
+  content: ':';
+  margin-left: 1px;
+}
+
+.tree .tree-row > .value {
+  color: var(--text-primary, #3b4d5a);
+  font-family: 'Cascadia Code', Consolas, 'Courier New', monospace;
+  font-size: 0.875rem;
+  min-width: 0;
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+}
+
+.tree .tree-row > .value.null-value {
+  color: var(--text-secondary, #7b8994);
+  font-style: italic;
+}
+
+.tree .tree-row > .value.string-value {
+  color: #18794e;
+}
+
+.tree .tree-row > .value.number-value {
+  color: #1769aa;
+}
+
+.tree .tree-row > .value.boolean-value {
+  color: #8a3ffc;
+}
+
+.tree .tree-row > .complex-value {
+  color: var(--text-secondary, #71808c);
+  font-family: 'Segoe UI', Arial, sans-serif;
+  font-size: 0.75rem;
+}
+
+.toggle {
+  align-items: center;
+  background: var(--surface-subtle, #f3f7f9);
+  border: 1px solid var(--border, #dce5eb);
+  border-radius: 5px;
+  color: var(--primary, #147b9d);
+  cursor: pointer;
+  display: inline-flex;
+  flex: 0 0 22px;
+  font: inherit;
+  height: 22px;
+  justify-content: center;
+  line-height: 1;
+  margin-left: auto;
+  padding: 0;
+  width: 22px;
+}
+
+.toggle:hover {
+  background: var(--primary, #147b9d);
+  border-color: var(--primary, #147b9d);
+  color: #fff;
+}
+
+.toggle:focus-visible {
+  outline: 2px solid var(--primary, #147b9d);
+  outline-offset: 2px;
+}
+
+.tree:empty::after {
+  color: var(--text-secondary, #8996a0);
+  content: 'No data';
+  display: block;
+  font-style: italic;
+  padding: 8px 2px;
+}
