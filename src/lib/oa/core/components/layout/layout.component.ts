@@ -32,7 +32,7 @@ import { IconComponent } from "../../../ux/icon/icon.component";
 import { ActionComponent } from "../../../ux/action/action.component";
 import { FormComponent } from "../../../ux/form/form.component";
 import { FileUploaderComponent } from "../../../ux/file-uploader/file-uploader.component";
-import { TableEditorComponent } from "../../../ux/table-editor/table-editor.component";
+import { ListComponent } from "../../../ux/list/list.component";
 import { ThumbnailSelectorComponent } from "../../../ux/thumbnail-selector/thumbnail-selector.component";
 import { PaginationControlsComponent } from "../../../ux/pagination-controls/pagination-controls.component";
 import { CalendarComponent } from "../../../ux/calendar/calendar.component";
@@ -65,7 +65,7 @@ import { DatePickerComponent } from "../../../ux/date-picker/date-picker.compone
     ActionComponent,
     FormComponent,
     FileUploaderComponent,
-    TableEditorComponent,
+    ListComponent,
     CalendarComponent,
     NavComponent,
     ThumbnailSelectorComponent,

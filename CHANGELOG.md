@@ -2,6 +2,22 @@
 
 All notable changes to this project are documented in this file.
 
+## [3.3.0] - 2026-10-14
+
+### Added
+- Add quick-links navigation and expose current context through `ContextService.toObject()`.
+- Add a reusable list control with table and grid views for metadata-driven pages.
+- Render table templates with configurable skeletons and loading indicators.
+
+### Changed
+- Improve context-menu styling and accessibility, and make navigation links respect visibility and permissions.
+- Preserve the requested URL when redirecting users without a session user to login.
+- Normalize data-source options and improve debug and JSON viewer interactions.
+
+### Fixed
+- Handle invalid data-source options and data-service errors more consistently.
+- Display empty and null JSON values accurately.
+
 ## [3.2.0] - 2026-10-02
 
 ### Added
@@ -44,5 +60,5 @@ All notable changes to this project are documented in this file.
 - Fix Markdown rendering issues.
 
 [3.2.0]: https://gitlab.com/oa-pages/ux/pages-app/-/compare/f7914219bb9935168bc67e869b85c61692a9a430...76980c8dee66ccba5698099339df5f6de7f9311b
-
+[3.3.0]: https://gitlab.com/oa-pages/ux/pages-app/-/compare/113f31ea2e99d0f4a0bdd59d2c671a0c4609f347...1b0895f521f6f5a7f77f84bfb283837b3a23809e
 

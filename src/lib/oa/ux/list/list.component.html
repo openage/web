@@ -5,17 +5,48 @@
 @if (options?.template?.code && (isLoading || isCustomTemplateLoaded)) {
   @if (isLoading) {
     @if (skeletonContent) {
-    <div class="table-template-skeleton" [style]="options?.template?.style || options?.style" role="status"
-      aria-label="Loading table" aria-busy="true" [innerHTML]="skeletonContent"></div>
+    <div class="list-template-skeleton" [style]="options?.template?.style || options?.style" role="status"
+      aria-label="Loading list" aria-busy="true" [innerHTML]="skeletonContent"></div>
     } @else {
-    <div class="table-template-skeleton" role="status" aria-label="Loading table" aria-busy="true"></div>
+    <div class="list-template-skeleton" role="status" aria-label="Loading list" aria-busy="true"></div>
     }
   } @else {
-  <div [class]="options?.template?.class || 'table-template'" [style]="options?.template?.style"
-    [innerHTML]="tableContent"></div>
+  <div [class]="options?.template?.class || 'list-template'" [style]="options?.template?.style"
+    [innerHTML]="listContent"></div>
   }
 } @else {
-<div class="table">
+@if (view === 'grid') {
+<div class="list-grid">
+  @for (item of rows; track item; let i = $index) {
+  <article class="list-grid-card" [class.expanded]="item.isSelected">
+    @for (field of cols; track field) {
+    @if (!field.isHidden) {
+    @switch (field.key) {
+    @case ('index') {
+    <ng-container *ngTemplateOutlet="indexCell; context: { field: field, index: i, item: item }"></ng-container>
+    }
+    @case ('action') {
+    <ng-container *ngTemplateOutlet="actionCell; context: { field: field, index: i, item: item }"></ng-container>
+    }
+    @default {
+    <div class="list-grid-field">
+      <div class="list-grid-label">{{ getLabel(field) }}</div>
+      <ng-container *ngTemplateOutlet="valueCell; context: { field: field, index: i, item: item }"></ng-container>
+    </div>
+    }
+    }
+    }
+    }
+    @if (item.isSelected && detailsTemplate) {
+    <div class="details">
+      <ng-container *ngTemplateOutlet="detailsTemplate; context: { index: i, item: item }"></ng-container>
+    </div>
+    }
+  </article>
+  }
+</div>
+} @else {
+<div class="list-table">
   <ng-container *ngTemplateOutlet="headerRow;"></ng-container>
   @for (item of rows; track item; let i = $index) {
   <ng-container *ngTemplateOutlet="dataRow; context: {
@@ -24,6 +55,7 @@
     }"></ng-container>
   }
 </div>
+}
 
 <ng-template #headerRow>
   @if (!headerTemplate) {

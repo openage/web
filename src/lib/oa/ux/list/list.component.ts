@@ -21,9 +21,9 @@ import { NavService } from '../../core/services/nav.service';
 import { ConstantService } from '../../core/services/constant.service';
 
 @Component({
-  selector: 'oa-table',
-  templateUrl: './table-editor.component.html',
-  styleUrls: ['./table-editor.component.scss'],
+  selector: 'oa-list, oa-table',
+  templateUrl: './list.component.html',
+  styleUrls: ['./list.component.scss'],
   imports: [
     ActionComponent,
     FieldEditorComponent,
@@ -34,7 +34,7 @@ import { ConstantService } from '../../core/services/constant.service';
     // PaginationControlsComponent
   ]
 })
-export class TableEditorComponent implements OnInit {
+export class ListComponent implements OnInit {
 
   @Input()
   class?: string;
@@ -82,7 +82,7 @@ export class TableEditorComponent implements OnInit {
   stats: any = {};
 
   @Input()
-  view: 'form' | 'table' | 'week' = 'form'
+  view: 'form' | 'table' | 'grid' | 'week' = 'table'
 
   @Output()
   changed: EventEmitter<any> = new EventEmitter();
@@ -122,11 +122,11 @@ export class TableEditorComponent implements OnInit {
   cols: any[] = [];
   isLoading = false;
   skeletonContent?: string;
-  tableContent?: string;
-  tableTemplate?: string;
+  listContent?: string;
+  listTemplate?: string;
 
   initialized = false;
-  logger = new Logger(TableEditorComponent);
+  logger = new Logger(ListComponent);
 
   context = inject(ContextService);
   router = inject(Router);
@@ -212,14 +212,14 @@ export class TableEditorComponent implements OnInit {
       const template = await this.constants.templates.get(code);
 
       if (!template) {
-        throw new Error(`Table template '${code}' is empty`);
+        throw new Error(`List template '${code}' is empty`);
       }
 
-      this.tableTemplate = template;
+      this.listTemplate = template;
       this.isCustomTemplateLoaded = true;
-      this.renderTableTemplate();
+      this.renderListTemplate();
     } catch (error) {
-      this.logger.error('Failed to load table template', code, error);
+      this.logger.error('Failed to load list template', code, error);
     } finally {
       this.isTemplateLoading = false;
       this.updateLoadingState();
@@ -232,7 +232,7 @@ export class TableEditorComponent implements OnInit {
       this.skeletonContent = await this.constants.templates.get(`${code}.skeleton`);
     } catch (error: any) {
       if (error?.status !== 404) {
-        this.logger.error('Failed to load table template skeleton', code, error);
+        this.logger.error('Failed to load list template skeleton', code, error);
       }
     } finally {
       this.changeDetector.markForCheck();
@@ -243,13 +243,13 @@ export class TableEditorComponent implements OnInit {
     this.isLoading = !!this.options?.template?.code && (this.isTemplateLoading || this.isDataLoading);
   }
 
-  private renderTableTemplate(): void {
-    if (!this.tableTemplate) { return; }
+  private renderListTemplate(): void {
+    if (!this.listTemplate) { return; }
 
     try {
-      this.tableContent = this.content.inject(this.tableTemplate, this.rows);
+      this.listContent = this.content.inject(this.listTemplate, this.rows);
     } catch (error) {
-      this.logger.error('Failed to render table template', error);
+      this.logger.error('Failed to render list template', error);
       this.isCustomTemplateLoaded = false;
     }
   }
@@ -258,7 +258,7 @@ export class TableEditorComponent implements OnInit {
 
     if (!this.value || (!this.options?.fields?.length && !this.options?.template?.code && !this.isCustomTemplateLoaded)) {
       this.rows = [];
-      this.renderTableTemplate();
+      this.renderListTemplate();
       return
     }
 
@@ -291,7 +291,7 @@ export class TableEditorComponent implements OnInit {
       this.value = [this.value]
     }
     this.rows = this.transform.apply(this.value, this.options?.transforms);
-    this.renderTableTemplate();
+    this.renderListTemplate();
   }
 
   select(item: any): void {
@@ -486,7 +486,7 @@ export class TableEditorComponent implements OnInit {
   }
 
   onSubmit(columns: any) {
-    if (this.view === 'table') {
+    if (this.view === 'table' || this.view === 'grid') {
       this.changed.emit(this.value);
       return
     }

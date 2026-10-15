@@ -40,3 +40,8 @@ This log records key architectural decisions and significant code changes. AI ag
 - **Context**: The Applications page stores a `DomainPage` in context and updates that same instance when search results arrive; the table remained on its skeleton because its stream emitted the identical object reference.
 - **Decision**: Process stream emissions even when they reuse the existing page-object reference, and show each application's host as an HTTPS URL in the Applications template.
 - **Consequences**: Subscribable page updates clear the loading state and render their current items; the Applications table exposes clickable HTTPS host links.
+
+### [2026-10-15] Rename Table Editor to List
+- **Context**: The shared table editor was page metadata's row-list renderer, and needed a second built-in presentation without making the control name table-specific.
+- **Decision**: Rename the shared component and dynamic page control to `list`, provide `table` and responsive `grid` views, and retain `table`/`oa-table` aliases for existing callers.
+- **Consequences**: Page metadata uses `control: "list"` and can choose `options.view: "table"` or `"grid"`; the list guide documents both modes and legacy metadata remains supported.

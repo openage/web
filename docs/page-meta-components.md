@@ -403,15 +403,16 @@ Renders a video viewer.
 }
 ```
 
-### `table`
+### `list`
 
-Renders a table. `value` should normally be an array of row objects, and `options.fields` defines its columns. The renderer shows “No data available” for an empty value. See the [table component guide](./table-component.md) for supported fields, actions, views, and styling options.
+Renders a collection of row objects using a table or card grid. `options.fields` defines the displayed fields, and `options.view` selects `"table"` (default) or `"grid"`. The renderer shows “No data available” for an empty value. See the [list component guide](./list-component.md) for supported fields, actions, views, templates, and styling options.
 
 ```json
 {
-  "control": "table",
+  "control": "list",
   "value": [{ "name": "Avery", "status": "Active" }],
   "options": {
+    "view": "grid",
     "fields": [
       { "key": "name", "label": "Name" },
       { "key": "status", "label": "Status" }

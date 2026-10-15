@@ -208,8 +208,7 @@
     (valueChange)="setBoundValue(item.value, $event)"></oa-autocomplete>
   }
   @case ('select')
-  @case ('selector')
-  @case ('list') {
+  @case ('selector') {
   <oa-input-selector [ngClass]="item.class || item.options?.class" [ngStyle]="item.style || item.options?.style"
     [class]="item.class || item.options?.class" [style]="item.style || item.options?.style"
     [id]="item.options?.id || item.id || item.key" [label]="item.options?.label || item.label"
@@ -218,6 +217,21 @@
     [required]="item.options?.required ?? item.required" [readonly]="item.options?.readonly ?? item.readonly"
     [disabled]="item.options?.disabled ?? item.disabled"
     (valueChange)="setBoundValue(item.value, $event?.value ?? $event)"></oa-input-selector>
+  }
+  @case ('list') {
+  @if (item.options?.fields?.length || item.options?.template?.code || item.options?.view) {
+  <oa-list [ngClass]="item.class" [ngStyle]="item.style" [value]="item.value" [options]="item.options">
+  </oa-list>
+  } @else {
+  <oa-input-selector [ngClass]="item.class || item.options?.class" [ngStyle]="item.style || item.options?.style"
+    [class]="item.class || item.options?.class" [style]="item.style || item.options?.style"
+    [id]="item.options?.id || item.id || item.key" [label]="item.options?.label || item.label"
+    [placeholder]="item.options?.placeholder || item.placeholder" [value]="getBoundValue(item.value)"
+    [items]="item.options?.items || item.items || []" [type]="item.options?.type || item.type || 'custom'"
+    [required]="item.options?.required ?? item.required" [readonly]="item.options?.readonly ?? item.readonly"
+    [disabled]="item.options?.disabled ?? item.disabled"
+    (valueChange)="setBoundValue(item.value, $event?.value ?? $event)"></oa-input-selector>
+  }
   }
   @case ('date')
   @case ('date-picker')
@@ -273,8 +287,8 @@
   <oa-thumbnail-selector [ngClass]="item.class" [ngStyle]="item.style"></oa-thumbnail-selector>
   }
   @case ('table') {
-  <oa-table [ngClass]="item.class" [ngStyle]="item.style" [value]="item.value" [options]="item.options">
-  </oa-table>
+  <oa-list [ngClass]="item.class" [ngStyle]="item.style" [value]="item.value" [options]="item.options">
+  </oa-list>
   @if (!item.value?.length) {
   <div class="no-data">
     No data available

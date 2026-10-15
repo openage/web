@@ -3,7 +3,7 @@ import { Location } from '@angular/common';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
 
-import { TableEditorComponent } from './table-editor.component';
+import { ListComponent } from './list.component';
 import { ContextService } from '../../core/services/context.service';
 import { TransformService } from '../../core/services/transform.service';
 import { StringService } from '../../core/services';
@@ -11,9 +11,9 @@ import { ContentService } from '../../core/services/content.service';
 import { NavService } from '../../core/services/nav.service';
 import { ConstantService } from '../../core/services/constant.service';
 
-describe('TableEditorComponent', () => {
-  let component: TableEditorComponent;
-  let fixture: ComponentFixture<TableEditorComponent>;
+describe('ListComponent', () => {
+  let component: ListComponent;
+  let fixture: ComponentFixture<ListComponent>;
   let contextData: WritableSignal<Map<string, any>>;
   const template = '<div class="custom-applications">{{name}}</div>';
   const constantService = {
@@ -32,7 +32,7 @@ describe('TableEditorComponent', () => {
       code.endsWith('.skeleton') ? '<div>Loading applications</div>' : template);
 
     await TestBed.configureTestingModule({
-      imports: [TableEditorComponent],
+      imports: [ListComponent],
       providers: [
         { provide: ContextService, useValue: { data: contextData, hasPermission: () => true } },
         { provide: Router, useValue: { navigateByUrl: jasmine.createSpy('navigateByUrl') } },
@@ -45,7 +45,7 @@ describe('TableEditorComponent', () => {
       ]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(TableEditorComponent);
+    fixture = TestBed.createComponent(ListComponent);
     component = fixture.componentInstance;
   });
 
@@ -97,7 +97,7 @@ describe('TableEditorComponent', () => {
   it('should finish loading when a subscribable page emits its updated state', async () => {
     let emitPage!: (page: any) => void;
     const page = {
-      items: [],
+      items: [] as any[],
       subscribe: (callback: (value: any) => void) => {
         emitPage = callback;
       }
@@ -120,7 +120,7 @@ describe('TableEditorComponent', () => {
     expect(fixture.nativeElement.querySelector('.custom-applications')?.textContent).toContain('Console');
   });
 
-  it('should render page items when the page resolved before the table subscribed', async () => {
+  it('should render page items when the page resolved before the list subscribed', async () => {
     const page = {
       items: [{ name: 'Console' }],
       limit: 1,
@@ -138,5 +138,22 @@ describe('TableEditorComponent', () => {
     expect(page.subscribe).toHaveBeenCalled();
     expect(fixture.nativeElement.querySelector('[aria-busy="true"]')).toBeNull();
     expect(fixture.nativeElement.querySelector('.custom-applications')?.textContent).toContain('Console');
+  });
+
+  it('should render rows as cards in the grid view', () => {
+    fixture.componentRef.setInput('value', [{ name: 'Console' }]);
+    fixture.componentRef.setInput('options', {
+      view: 'grid',
+      fields: [{ key: 'name', label: 'Name' }]
+    });
+    fixture.detectChanges();
+
+    expect(fixture.nativeElement.querySelector('.list-grid-card')).toBeTruthy();
+    expect(fixture.nativeElement.querySelector('.list-grid-label')?.textContent).toContain('Name');
+    expect(fixture.nativeElement.querySelector('.list-grid-field .name')?.textContent).toContain('Console');
+
+    spyOn(component.changed, 'emit');
+    component.onSubmit([]);
+    expect(component.changed.emit).toHaveBeenCalledWith([{ name: 'Console' }]);
   });
 });

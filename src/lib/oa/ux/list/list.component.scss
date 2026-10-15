@@ -1,8 +1,8 @@
-.tableDiv {
+.list-table-container {
   overflow-x: scroll;
 }
 
-.table {
+.list-table {
 
   td,
   th {
@@ -68,4 +68,52 @@
   justify-content: end;
   gap: 8px;
   margin-top: 8px;
+}
+
+.list-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+  gap: 16px;
+}
+
+.list-grid-card {
+  min-width: 0;
+  padding: 16px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--surface);
+  box-shadow: 0 2px 8px rgb(0 0 0 / 5%);
+}
+
+.list-grid-field {
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.list-grid-field:last-of-type {
+  border-bottom: 0;
+}
+
+.list-grid-label {
+  margin-bottom: 4px;
+  color: var(--text-secondary);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.list-grid-field .col {
+  padding: 0;
+}
+
+.list-grid-card .actions {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+@media (max-width: 600px) {
+  .list-grid {
+    grid-template-columns: 1fr;
+  }
 }
