@@ -1,6 +1,6 @@
 /* eslint-disable no-constant-condition */
 /* eslint-disable no-prototype-builtins */
-import { Component, EventEmitter, inject, Input, OnChanges, OnInit, Output, TemplateRef } from '@angular/core';
+import { ChangeDetectorRef, Component, effect, EventEmitter, inject, Injector, Input, OnInit, Output, TemplateRef } from '@angular/core';
 import { FieldEditorModel } from '../../core/models/field-editor.model';
 import { Action } from '../../core/models/action.model';
 import { ActionComponent } from "../action/action.component";
@@ -18,6 +18,7 @@ import { StringService } from '../../core/services';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ContentService } from '../../core/services/content.service';
 import { NavService } from '../../core/services/nav.service';
+import { ConstantService } from '../../core/services/constant.service';
 
 @Component({
   selector: 'oa-table',
@@ -119,6 +120,10 @@ export class TableEditorComponent implements OnInit {
 
   rows: any[] = [];
   cols: any[] = [];
+  isLoading = false;
+  skeletonContent?: string;
+  tableContent?: string;
+  tableTemplate?: string;
 
   initialized = false;
   logger = new Logger(TableEditorComponent);
@@ -130,45 +135,135 @@ export class TableEditorComponent implements OnInit {
   strings = inject(StringService);
   content = inject(ContentService);
   nav = inject(NavService);
+  constants = inject(ConstantService);
+  private changeDetector = inject(ChangeDetectorRef);
+  private injector = inject(Injector);
+  private isTemplateLoading = false;
+  private isDataLoading = false;
+  isCustomTemplateLoaded = false;
+  private resolvedValue?: any;
 
   constructor() { }
 
   ngOnInit(): void {
 
+    this.options = this.options || {};
     this.style = this.options?.style || {};
     this.createActions();
+    const templateCode = this.options?.template?.code;
+    if (templateCode) {
+      void this.loadTemplate(templateCode);
+      void this.loadSkeleton(templateCode);
+    }
 
     if (typeof this.value === 'string') {
-      const value = this.context.data().get(this.value);
+      const key = this.value;
+      const value = this.context.data().get(key);
       if (value) {
-        if (value.subscribe) {
-          value.subscribe((p: any) => {
-            this.value = p;
-            this.init();
-            this.initialized = true;
-          })
-        }
-        this.value = value;
-        this.init()
-        this.initialized = true;
-
+        this.setResolvedValue(value);
       } else {
-        this.init()
-        this.initialized = true;
+        this.isDataLoading = true;
+        this.updateLoadingState();
       }
+      effect(() => {
+        const resolvedValue = this.context.data().get(key);
+        if (resolvedValue) {
+          this.setResolvedValue(resolvedValue);
+        }
+      }, { injector: this.injector });
     } else {
-      this.init()
-      this.initialized = true;
+      this.setResolvedValue(this.value);
+    }
+  }
+
+  private setResolvedValue(value: any, isStreamEmission = false): void {
+    if (value === this.resolvedValue && !isStreamEmission) { return; }
+    this.resolvedValue = value;
+
+    if (value?.subscribe && !isStreamEmission) {
+      this.isDataLoading = true;
+      this.updateLoadingState();
+      value.subscribe((resolvedValue: any) => {
+        this.setResolvedValue(resolvedValue, true);
+        this.changeDetector.markForCheck();
+      });
+
+      const hasResolvedPage = Array.isArray(value.items) &&
+        (value.items.length > 0 || value.limit === 0 || value.count > 0);
+      if (hasResolvedPage) {
+        this.setResolvedValue(value, true);
+        this.changeDetector.markForCheck();
+      }
+      return;
+    }
+
+    this.value = value;
+    this.isDataLoading = false;
+    this.init();
+    this.initialized = true;
+    this.updateLoadingState();
+  }
+
+  private async loadTemplate(code: string): Promise<void> {
+    this.isTemplateLoading = true;
+    this.updateLoadingState();
+
+    try {
+      const template = await this.constants.templates.get(code);
+
+      if (!template) {
+        throw new Error(`Table template '${code}' is empty`);
+      }
+
+      this.tableTemplate = template;
+      this.isCustomTemplateLoaded = true;
+      this.renderTableTemplate();
+    } catch (error) {
+      this.logger.error('Failed to load table template', code, error);
+    } finally {
+      this.isTemplateLoading = false;
+      this.updateLoadingState();
+      this.changeDetector.markForCheck();
+    }
+  }
+
+  private async loadSkeleton(code: string): Promise<void> {
+    try {
+      this.skeletonContent = await this.constants.templates.get(`${code}.skeleton`);
+    } catch (error: any) {
+      if (error?.status !== 404) {
+        this.logger.error('Failed to load table template skeleton', code, error);
+      }
+    } finally {
+      this.changeDetector.markForCheck();
+    }
+  }
+
+  private updateLoadingState(): void {
+    this.isLoading = !!this.options?.template?.code && (this.isTemplateLoading || this.isDataLoading);
+  }
+
+  private renderTableTemplate(): void {
+    if (!this.tableTemplate) { return; }
+
+    try {
+      this.tableContent = this.content.inject(this.tableTemplate, this.rows);
+    } catch (error) {
+      this.logger.error('Failed to render table template', error);
+      this.isCustomTemplateLoaded = false;
     }
   }
 
   init() {
 
-    if (!this.value || !this.options?.fields?.length) {
+    if (!this.value || (!this.options?.fields?.length && !this.options?.template?.code && !this.isCustomTemplateLoaded)) {
+      this.rows = [];
+      this.renderTableTemplate();
       return
     }
 
-    this.cols = this.options.fields.filter((f: any) => f.key !== 'action')
+    const fields = this.options?.fields || [];
+    this.cols = fields.filter((f: any) => f.key !== 'action')
     this.view = this.options.view || 'table';
     if (this.view === 'week') {
       const starDate = this.options.week.start
@@ -186,7 +281,7 @@ export class TableEditorComponent implements OnInit {
       }
     }
 
-    const actionCol = this.options.fields.find((f: any) => f.key === 'action')
+    const actionCol = fields.find((f: any) => f.key === 'action')
     if (actionCol) {
       this.cols.push(actionCol);
     }
@@ -196,6 +291,7 @@ export class TableEditorComponent implements OnInit {
       this.value = [this.value]
     }
     this.rows = this.transform.apply(this.value, this.options?.transforms);
+    this.renderTableTemplate();
   }
 
   select(item: any): void {
@@ -252,7 +348,7 @@ export class TableEditorComponent implements OnInit {
 
 
   createActions() {
-    const field = this.options.fields.find((f: { key: string; }) => f.key === 'action')
+    const field = this.options?.fields?.find((f: { key: string; }) => f.key === 'action')
     if (!field) { return }
 
     // this.actions = this.actions || {};

@@ -405,13 +405,18 @@ Renders a video viewer.
 
 ### `table`
 
-Renders an editable table. `value` should normally be an array of row objects. The renderer shows “No data available” for an empty value.
+Renders a table. `value` should normally be an array of row objects, and `options.fields` defines its columns. The renderer shows “No data available” for an empty value. See the [table component guide](./table-component.md) for supported fields, actions, views, and styling options.
 
 ```json
 {
   "control": "table",
   "value": [{ "name": "Avery", "status": "Active" }],
-  "options": { "columns": [{ "code": "name", "title": "Name" }, { "code": "status", "title": "Status" }] }
+  "options": {
+    "fields": [
+      { "key": "name", "label": "Name" },
+      { "key": "status", "label": "Status" }
+    ]
+  }
 }
 ```
 

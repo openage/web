@@ -46,6 +46,14 @@ export class DataSourceRegistry {
   getPlugin(config: any): DataSourcePlugin {
     config = config || {};
     let src = config.src || config.url || config.service;
+    if (
+      !src ||
+      typeof src !== 'string' &&
+      (typeof src !== 'object' || !src.provider && typeof src.url !== 'string')
+    ) {
+      throw new Error('Data source must specify a URL, service, or provider.');
+    }
+
     if (typeof src === 'string') {
       src = {
         url: src,
@@ -56,7 +64,7 @@ export class DataSourceRegistry {
     const plugin = this.plugins.find(plugin => plugin.canHandle(src));
 
     if (!plugin) {
-      throw new Error(`Data source plugin '${src.provider}' not found for the given options`);
+      throw new Error(`Data source plugin '${src.provider || src.url}' not found for the given options`);
     }
 
     return plugin;

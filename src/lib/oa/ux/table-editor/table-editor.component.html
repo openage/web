@@ -2,6 +2,19 @@
 <!-- eslint-disable @angular-eslint/template/interactive-supports-focus -->
 <!-- eslint-disable @angular-eslint/template/label-has-associated-control -->
 <!-- eslint-disable @angular-eslint/template/table-scope -->
+@if (options?.template?.code && (isLoading || isCustomTemplateLoaded)) {
+  @if (isLoading) {
+    @if (skeletonContent) {
+    <div class="table-template-skeleton" [style]="options?.template?.style || options?.style" role="status"
+      aria-label="Loading table" aria-busy="true" [innerHTML]="skeletonContent"></div>
+    } @else {
+    <div class="table-template-skeleton" role="status" aria-label="Loading table" aria-busy="true"></div>
+    }
+  } @else {
+  <div [class]="options?.template?.class || 'table-template'" [style]="options?.template?.style"
+    [innerHTML]="tableContent"></div>
+  }
+} @else {
 <div class="table">
   <ng-container *ngTemplateOutlet="headerRow;"></ng-container>
   @for (item of rows; track item; let i = $index) {
@@ -45,9 +58,9 @@
     }
     }
   </div>
-</ng-template>
+  </ng-template>
 
-<ng-template #dataRowX let-item="item" let-index="index">
+  <ng-template #dataRowX let-item="item" let-index="index">
   @if (rowTemplate) {
   <ng-container *ngTemplateOutlet="rowTemplate; context: {
       index: index,
@@ -185,3 +198,4 @@
     }
   </div>
 </ng-template>
+}

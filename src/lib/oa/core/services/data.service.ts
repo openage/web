@@ -92,13 +92,9 @@ export class DataService {
    */
   public get = async (id: number | string, options?: any): Promise<any> => {
     this.context.isProcessing.set(true);
-    if (typeof options === 'string') {
-      options = {
-        src: options
-      }
-    }
-    const plugin = this.dataSourceRegistry.getPlugin(options);
+    options = this.normalizeOptions(options);
     try {
+      const plugin = this.dataSourceRegistry.getPlugin(options);
       const data = await plugin.get(id, options)
       return this.transform(data, options);
 
@@ -128,13 +124,9 @@ export class DataService {
    */
   public search = async (query?: any, options?: any): Promise<Page<any> | undefined> => {
     this.context.isProcessing.set(true);
-    if (typeof options === 'string') {
-      options = {
-        src: options
-      }
-    }
-    const plugin = this.dataSourceRegistry.getPlugin(options);
+    options = this.normalizeOptions(options);
     try {
+      const plugin = this.dataSourceRegistry.getPlugin(options);
       const data = await plugin.search(query, options)
       const page: Page<any> = new Page<any>();
 
@@ -177,13 +169,9 @@ export class DataService {
    */
   public create = async (model: any, options?: any): Promise<any> => {
     this.context.isProcessing.set(true);
-    if (typeof options === 'string') {
-      options = {
-        src: options
-      }
-    }
-    const plugin = this.dataSourceRegistry.getPlugin(options);
+    options = this.normalizeOptions(options);
     try {
+      const plugin = this.dataSourceRegistry.getPlugin(options);
       const data = await plugin.create(model, options)
       return this.transform(data, options);
     } catch (err) {
@@ -210,13 +198,9 @@ export class DataService {
    */
   public update = async (id: number | string, model: any, options?: any): Promise<any> => {
     this.context.isProcessing.set(true);
-    if (typeof options === 'string') {
-      options = {
-        src: options
-      }
-    }
-    const plugin = this.dataSourceRegistry.getPlugin(options);
+    options = this.normalizeOptions(options);
     try {
+      const plugin = this.dataSourceRegistry.getPlugin(options);
       const data = await plugin.update(id, model, options)
       return this.transform(data, options);
     } catch (err) {
@@ -242,13 +226,9 @@ export class DataService {
    */
   public remove = async (id: number | string, options?: any): Promise<boolean> => {
     this.context.isProcessing.set(true);
-    const plugin = this.dataSourceRegistry.getPlugin(options);
-    if (typeof options === 'string') {
-      options = {
-        src: options
-      }
-    }
+    options = this.normalizeOptions(options);
     try {
+      const plugin = this.dataSourceRegistry.getPlugin(options);
       return await plugin.remove(id, options)
     } catch (err) {
       this.handleError(err, options);
@@ -280,6 +260,21 @@ export class DataService {
     } else {
       throw err;
     }
+  }
+
+  private normalizeOptions(options?: any): any {
+    if (typeof options === 'string') {
+      return { src: options };
+    }
+
+    if (!options || typeof options !== 'object') {
+      return {};
+    }
+
+    const { config, ...overrides } = options;
+    return config && typeof config === 'object'
+      ? { ...config, ...overrides }
+      : options;
   }
 
   private transform(data: any, config?: any): any {

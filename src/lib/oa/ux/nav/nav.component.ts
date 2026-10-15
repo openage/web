@@ -51,15 +51,20 @@ export class NavComponent implements OnInit, OnDestroy {
   getValues(src?: string) {
     src = src || 'root';
 
+    const isVisible = (item: Link) =>
+      this.context.hasPermission(item.permissions) && item.view !== 'hidden' && item.title && item.url;
     const value = (this.context.navs() || [])
-      .filter((i) => this.context.hasPermission(i.permissions) && i.view !== 'hidden' && i.title && i.url)
+      .filter(isVisible)
       .sort((a, b) => a.index - b.index)
 
     if (src === 'root') {
       return value;
     }
 
-    return value.find((i) => i.code === src)?.items || [];
+    const children: Link[] = this.navService.getByCode(src)?.items || [];
+    return children
+      .filter(isVisible)
+      .sort((a, b) => a.index - b.index);
   }
 
   ngOnInit() {
