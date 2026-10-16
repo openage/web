@@ -2,49 +2,19 @@
 <!-- eslint-disable @angular-eslint/template/interactive-supports-focus -->
 <!-- eslint-disable @angular-eslint/template/label-has-associated-control -->
 <!-- eslint-disable @angular-eslint/template/table-scope -->
-@if (options?.template?.code && (isLoading || isCustomTemplateLoaded)) {
-  @if (isLoading) {
-    @if (skeletonContent) {
-    <div class="list-template-skeleton" [style]="options?.template?.style || options?.style" role="status"
-      aria-label="Loading list" aria-busy="true" [innerHTML]="skeletonContent"></div>
-    } @else {
-    <div class="list-template-skeleton" role="status" aria-label="Loading list" aria-busy="true"></div>
-    }
-  } @else {
+@if (view === 'template') {
+  @if (viewError) {
+  <div role="alert">{{viewError}}</div>
+  } @else if (isLoading) {
+  <div class="list-template-skeleton" [style]="options?.template?.style || options?.style" role="status"
+    aria-label="Loading list" aria-busy="true" [innerHTML]="skeletonContent"></div>
+  } @else if (isCustomTemplateLoaded) {
   <div [class]="options?.template?.class || 'list-template'" [style]="options?.template?.style"
     [innerHTML]="listContent"></div>
   }
 } @else {
-@if (view === 'grid') {
-<div class="list-grid">
-  @for (item of rows; track item; let i = $index) {
-  <article class="list-grid-card" [class.expanded]="item.isSelected">
-    @for (field of cols; track field) {
-    @if (!field.isHidden) {
-    @switch (field.key) {
-    @case ('index') {
-    <ng-container *ngTemplateOutlet="indexCell; context: { field: field, index: i, item: item }"></ng-container>
-    }
-    @case ('action') {
-    <ng-container *ngTemplateOutlet="actionCell; context: { field: field, index: i, item: item }"></ng-container>
-    }
-    @default {
-    <div class="list-grid-field">
-      <div class="list-grid-label">{{ getLabel(field) }}</div>
-      <ng-container *ngTemplateOutlet="valueCell; context: { field: field, index: i, item: item }"></ng-container>
-    </div>
-    }
-    }
-    }
-    }
-    @if (item.isSelected && detailsTemplate) {
-    <div class="details">
-      <ng-container *ngTemplateOutlet="detailsTemplate; context: { index: i, item: item }"></ng-container>
-    </div>
-    }
-  </article>
-  }
-</div>
+@if (viewError) {
+<div role="alert">{{viewError}}</div>
 } @else {
 <div class="list-table">
   <ng-container *ngTemplateOutlet="headerRow;"></ng-container>
@@ -55,6 +25,7 @@
     }"></ng-container>
   }
 </div>
+}
 }
 
 <ng-template #headerRow>
@@ -203,7 +174,12 @@
         }">
     </ng-container>
     } @else {
-    @if (item.isEditing) {
+    @if (field.control === 'input') {
+    <oa-text-input [options]="field" [value]="getValue(field, item)"
+      (valueChange)="setFieldValue(field, item, $event)"></oa-text-input>
+    } @else if (field.control === 'html') {
+    <div [innerHTML]="field.text || getValue(field, item)"></div>
+    } @else if (item.isEditing) {
     <oa-field-editor [item]="field" [value]="item[field.key]">
     </oa-field-editor>
     } @else {
@@ -230,4 +206,3 @@
     }
   </div>
 </ng-template>
-}

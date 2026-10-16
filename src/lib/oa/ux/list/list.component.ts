@@ -6,16 +6,16 @@ import { Action } from '../../core/models/action.model';
 import { ActionComponent } from "../action/action.component";
 import { FieldEditorComponent } from '../../components/field-editor/field-editor.component';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { Location } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IconComponent } from "../icon/icon.component";
+import { InputTextComponent } from '../input/input.component';
 import moment from 'moment';
 import { ContextService } from '../../core/services/context.service';
 import { Logger } from '../../core/models';
 import { TransformService } from '../../core/services/transform.service';
 import { StringService } from '../../core/services';
-import { DomSanitizer } from '@angular/platform-browser';
 import { ContentService } from '../../core/services/content.service';
 import { NavService } from '../../core/services/nav.service';
 import { ConstantService } from '../../core/services/constant.service';
@@ -29,7 +29,8 @@ import { ConstantService } from '../../core/services/constant.service';
     FieldEditorComponent,
     CommonModule,
     FormsModule,
-    IconComponent
+    IconComponent,
+    InputTextComponent
     // PaginatorComponent,
     // PaginationControlsComponent
   ]
@@ -82,7 +83,7 @@ export class ListComponent implements OnInit {
   stats: any = {};
 
   @Input()
-  view: 'form' | 'table' | 'grid' | 'week' = 'table'
+  view: 'form' | 'table' | 'template' | 'week' = 'table'
 
   @Output()
   changed: EventEmitter<any> = new EventEmitter();
@@ -124,6 +125,7 @@ export class ListComponent implements OnInit {
   skeletonContent?: string;
   listContent?: string;
   listTemplate?: string;
+  viewError?: string;
 
   initialized = false;
   logger = new Logger(ListComponent);
@@ -148,12 +150,17 @@ export class ListComponent implements OnInit {
   ngOnInit(): void {
 
     this.options = this.options || {};
+    this.view = this.options.view || 'table';
     this.style = this.options?.style || {};
     this.createActions();
-    const templateCode = this.options?.template?.code;
-    if (templateCode) {
-      void this.loadTemplate(templateCode);
-      void this.loadSkeleton(templateCode);
+    if (this.view === 'template') {
+      const templateCode = this.options?.template?.code;
+      if (templateCode) {
+        void this.loadTemplate(templateCode);
+      } else {
+        this.viewError = 'Template view requires options.template.code';
+        this.logger.error(this.viewError);
+      }
     }
 
     if (typeof this.value === 'string') {
@@ -209,17 +216,25 @@ export class ListComponent implements OnInit {
     this.updateLoadingState();
 
     try {
-      const template = await this.constants.templates.get(code);
-
+      const [template, skeleton] = await Promise.all([
+        this.constants.templates.get(code),
+        this.constants.templates.get(`${code}.skeleton`)
+      ]);
       if (!template) {
         throw new Error(`List template '${code}' is empty`);
       }
+      if (!skeleton) {
+        throw new Error(`List template skeleton '${code}.skeleton' is empty`);
+      }
 
       this.listTemplate = template;
+      this.skeletonContent = skeleton;
       this.isCustomTemplateLoaded = true;
+      this.viewError = undefined;
       this.renderListTemplate();
     } catch (error) {
       this.logger.error('Failed to load list template', code, error);
+      this.viewError = `Unable to load list template '${code}' and its skeleton`;
     } finally {
       this.isTemplateLoading = false;
       this.updateLoadingState();
@@ -227,20 +242,8 @@ export class ListComponent implements OnInit {
     }
   }
 
-  private async loadSkeleton(code: string): Promise<void> {
-    try {
-      this.skeletonContent = await this.constants.templates.get(`${code}.skeleton`);
-    } catch (error: any) {
-      if (error?.status !== 404) {
-        this.logger.error('Failed to load list template skeleton', code, error);
-      }
-    } finally {
-      this.changeDetector.markForCheck();
-    }
-  }
-
   private updateLoadingState(): void {
-    this.isLoading = !!this.options?.template?.code && (this.isTemplateLoading || this.isDataLoading);
+    this.isLoading = this.view === 'template' && (this.isTemplateLoading || this.isDataLoading);
   }
 
   private renderListTemplate(): void {
@@ -251,20 +254,28 @@ export class ListComponent implements OnInit {
     } catch (error) {
       this.logger.error('Failed to render list template', error);
       this.isCustomTemplateLoaded = false;
+      this.viewError = 'Unable to render list template';
     }
   }
 
   init() {
-
-    if (!this.value || (!this.options?.fields?.length && !this.options?.template?.code && !this.isCustomTemplateLoaded)) {
+    this.view = this.options.view || 'table';
+    if (this.view === 'template') {
+      if (!this.options?.template?.code) {
+        this.viewError = 'Template view requires options.template.code';
+        this.rows = [];
+        return;
+      }
+    } else if (!this.options?.fields?.some((field: any) => field.key !== 'action')) {
+      this.viewError = 'Table view requires at least one field';
+      this.logger.error(this.viewError);
       this.rows = [];
-      this.renderListTemplate();
-      return
+      return;
     }
 
+    this.viewError = undefined;
     const fields = this.options?.fields || [];
-    this.cols = fields.filter((f: any) => f.key !== 'action')
-    this.view = this.options.view || 'table';
+    this.cols = fields.filter((field: any) => field.key !== 'action');
     if (this.view === 'week') {
       const starDate = this.options.week.start
         ? moment(this.strings.inject(this.options.week.start, this.value))
@@ -281,14 +292,16 @@ export class ListComponent implements OnInit {
       }
     }
 
-    const actionCol = fields.find((f: any) => f.key === 'action')
+    const actionCol = fields.find((field: any) => field.key === 'action');
     if (actionCol) {
       this.cols.push(actionCol);
     }
 
-    this.value = this.value.items || this.value
-    if (!Array.isArray(this.value)) {
-      this.value = [this.value]
+    const rowData = this.value?.items || this.value;
+    this.value = rowData == null ? [] : Array.isArray(rowData) ? rowData : [rowData];
+    if (this.view === 'template' && !this.isCustomTemplateLoaded) {
+      this.rows = this.transform.apply(this.value, this.options?.transforms);
+      return;
     }
     this.rows = this.transform.apply(this.value, this.options?.transforms);
     this.renderListTemplate();
@@ -485,8 +498,13 @@ export class ListComponent implements OnInit {
     }
   }
 
+  setFieldValue(field: FieldEditorModel, item: any, value: any): void {
+    if (!field.key) { return; }
+    this.setValue(item, this.parseKeyPath(field.key), value);
+  }
+
   onSubmit(columns: any) {
-    if (this.view === 'table' || this.view === 'grid') {
+    if (this.view === 'table' || this.view === 'template') {
       this.changed.emit(this.value);
       return
     }

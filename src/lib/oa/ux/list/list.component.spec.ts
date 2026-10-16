@@ -20,8 +20,10 @@ describe('ListComponent', () => {
     templates: { get: jasmine.createSpy('get') }
   };
   const contentService = {
-    inject: jasmine.createSpy('inject').and.callFake((_template: string, rows: any[]) =>
-      `<div class="custom-applications">${rows.map((row: any) => `<span>${row.name}</span>`).join('')}</div>`)
+    inject: jasmine.createSpy('inject').and.callFake((_template: string, data: any) =>
+      `<div class="custom-applications">${Array.isArray(data)
+        ? data.map((row: any) => `<span>${row.name}</span>`).join('')
+        : data.name}</div>`)
   };
 
   beforeEach(async () => {
@@ -57,6 +59,7 @@ describe('ListComponent', () => {
   it('should render rows with the configured HTML template', async () => {
     fixture.componentRef.setInput('value', [{ name: 'Console' }]);
     fixture.componentRef.setInput('options', {
+      view: 'template',
       template: { code: 'applications' }
     });
 
@@ -69,6 +72,19 @@ describe('ListComponent', () => {
     expect(fixture.nativeElement.querySelector('.custom-applications')?.textContent).toContain('Console');
   });
 
+  it('should render the built-in table when no template is configured', () => {
+    fixture.componentRef.setInput('value', [{ name: 'Console' }]);
+    fixture.componentRef.setInput('options', {
+      view: 'table',
+      fields: [{ key: 'name', label: 'Name' }]
+    });
+    fixture.detectChanges();
+
+    expect(fixture.nativeElement.querySelector('.list-table .header')).toBeTruthy();
+    expect(fixture.nativeElement.querySelector('.list-table .data-row .name')?.textContent).toContain('Console');
+    expect(fixture.nativeElement.querySelector('.custom-applications')).toBeNull();
+  });
+
   it('should show the configured skeleton while a context-bound value is loading', async () => {
     let resolveTemplate!: (value: string) => void;
     constantService.templates.get.and.callFake((code: string) => code.endsWith('.skeleton')
@@ -77,8 +93,8 @@ describe('ListComponent', () => {
 
     fixture.componentRef.setInput('value', 'applications');
     fixture.componentRef.setInput('options', {
+      view: 'template',
       template: { code: 'applications' },
-      fields: [{ key: 'name', label: 'Name' }]
     });
     fixture.detectChanges();
     await Promise.resolve();
@@ -104,6 +120,7 @@ describe('ListComponent', () => {
     };
     fixture.componentRef.setInput('value', page);
     fixture.componentRef.setInput('options', {
+      view: 'template',
       template: { code: 'applications' }
     });
     fixture.detectChanges();
@@ -129,6 +146,7 @@ describe('ListComponent', () => {
     };
     fixture.componentRef.setInput('value', page);
     fixture.componentRef.setInput('options', {
+      view: 'template',
       template: { code: 'applications' }
     });
     fixture.detectChanges();
@@ -140,20 +158,69 @@ describe('ListComponent', () => {
     expect(fixture.nativeElement.querySelector('.custom-applications')?.textContent).toContain('Console');
   });
 
-  it('should render rows as cards in the grid view', () => {
+  it('should render a table without configured actions', () => {
     fixture.componentRef.setInput('value', [{ name: 'Console' }]);
     fixture.componentRef.setInput('options', {
-      view: 'grid',
+      view: 'table',
       fields: [{ key: 'name', label: 'Name' }]
     });
     fixture.detectChanges();
 
-    expect(fixture.nativeElement.querySelector('.list-grid-card')).toBeTruthy();
-    expect(fixture.nativeElement.querySelector('.list-grid-label')?.textContent).toContain('Name');
-    expect(fixture.nativeElement.querySelector('.list-grid-field .name')?.textContent).toContain('Console');
+    expect(fixture.nativeElement.querySelector('.list-table .header .name')?.textContent).toContain('Name');
+    expect(fixture.nativeElement.querySelector('.list-table .data-row .name')?.textContent).toContain('Console');
+    expect(fixture.nativeElement.querySelector('.actions')).toBeNull();
 
     spyOn(component.changed, 'emit');
     component.onSubmit([]);
     expect(component.changed.emit).toHaveBeenCalledWith([{ name: 'Console' }]);
+  });
+
+  it('should render the complete list from a template without fields', async () => {
+    fixture.componentRef.setInput('value', [{ name: 'Console' }]);
+    fixture.componentRef.setInput('options', {
+      view: 'template',
+      template: { code: 'applications' }
+    });
+    fixture.detectChanges();
+    await fixture.whenStable();
+    fixture.detectChanges();
+
+    expect(fixture.nativeElement.querySelector('.list-template .custom-applications')?.textContent)
+      .toContain('Console');
+    expect(fixture.nativeElement.querySelector('.list-table')).toBeNull();
+  });
+
+  it('should render input and HTML table fields', () => {
+    const row = { name: 'Console', description: '<strong>Applications</strong>' };
+    fixture.componentRef.setInput('value', [row]);
+    fixture.componentRef.setInput('options', {
+      view: 'table',
+      fields: [
+        { key: 'name', label: 'Name', control: 'input' },
+        { key: 'description', label: 'Description', control: 'html' }
+      ]
+    });
+    fixture.detectChanges();
+
+    expect(fixture.nativeElement.querySelector('oa-text-input')).toBeTruthy();
+    expect(fixture.nativeElement.querySelector('.description strong')?.textContent).toBe('Applications');
+    component.setFieldValue(component.cols[0], row, 'Updated');
+    expect(row.name).toBe('Updated');
+  });
+
+  it('should report template mode when the skeleton asset is missing', async () => {
+    constantService.templates.get.and.callFake(async (code: string) =>
+      code.endsWith('.skeleton') ? '' : template);
+    fixture.componentRef.setInput('value', [{ name: 'Console' }]);
+    fixture.componentRef.setInput('options', {
+      view: 'template',
+      template: { code: 'applications' }
+    });
+    fixture.detectChanges();
+    await fixture.whenStable();
+    fixture.detectChanges();
+
+    expect(fixture.nativeElement.querySelector('[role="alert"]')?.textContent)
+      .toContain('Unable to load list template');
   });
 });

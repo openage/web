@@ -1,6 +1,6 @@
 # List component
 
-The `list` control renders row data with the shared `oa-list` component. Choose the built-in `table` or `grid` view with `options.view`; table is the default. In page metadata, provide the data in `value` and the fields and behavior in `options`.
+The `list` control renders row data with the shared `oa-list` component. Set `options.view` to `table` (the default) for configured fields, or `template` to render a full list template. In page metadata, provide the data in `value` and the fields, template, and behavior in `options`.
 
 The implementation is [src/lib/oa/ux/list/list.component.ts](../src/lib/oa/ux/list/list.component.ts), with dynamic page rendering wired in [src/lib/oa/core/components/layout/layout.component.html](../src/lib/oa/core/components/layout/layout.component.html). The old `table` control name and `oa-table` selector remain as compatibility aliases.
 
@@ -24,7 +24,7 @@ The implementation is [src/lib/oa/ux/list/list.component.ts](../src/lib/oa/ux/li
 }
 ```
 
-For either built-in view, `options.fields` is required. Each field describes a displayed property. `key` is the row property to display and `label` is its label (used as a column heading in table view and above the value in grid view). A complete custom HTML template can omit `fields`. The `list` control expects an array of row objects; a single object is wrapped as one row by the component, but an array is recommended. A value object with an `items` array is also unwrapped to its `items`.
+Table view requires at least one non-action field. Each field describes a displayed property: `key` is the row property, `label` is its column heading, and `control` can be `html` to render HTML or `input` to render an editable text input. Omit `control` for a simple displayed value. An optional `action` field configures row actions. Template view does not require fields. The `list` control expects an array of row objects; a single object is wrapped as one row by the component, but an array is recommended. A value object with an `items` array is also unwrapped to its `items`.
 
 A string `value` is treated as a key in `ContextService` data. Use this form only when that key resolves to the row data.
 
@@ -82,50 +82,49 @@ Fields whose key is `index` display the one-based row number. Fields whose key i
 
 ### View
 
-The default view is `table`. Set `options.view` to `"table"` for the column layout or `"grid"` to show each row as a responsive card with field labels and values. The `grid` view uses the same field definitions and row actions as the table view.
+`options.view` supports `table` and `template`. Table is the default; it renders the configured field columns and optional actions. A field with `control: "input"` renders a text input and writes changes back to the row. A field with `control: "html"` renders its `text` value or row value as sanitized HTML. Fields without a control render their row value as sanitized HTML.
 
-The existing `options.view: "week"` view adds seven date columns, starting from `options.week.start` when supplied (the start value is injected against the row data); otherwise it starts from the current week. Include the `options.week` object when using this view. The generated column keys use `YYYY-MM-DD`, so the row data should contain values under matching date keys.
+### Template view
 
-```json
-{
-  "control": "list",
-  "value": [{ "name": "Console", "status": "Active" }],
-  "options": {
-    "view": "grid",
-    "fields": [
-      { "key": "name", "label": "Name" },
-      { "key": "status", "label": "Status" }
-    ]
-  }
-}
-```
-
-```json
-{
-  "options": {
-    "view": "week",
-    "week": { "start": "2026-10-12" },
-    "fields": [
-      { "key": "name", "label": "Name" }
-    ]
-  }
-}
-```
-
-### HTML template and loading skeleton
-
-Set `options.template.code` to load a Handlebars HTML template through the configured assets service. The list passes its transformed row array to `ContentService.inject`, so iterate the root value with `{{#each this}}`. Template files are resolved as `assets/templates/<code>.html`. When `value` is a subscribable page object, the list waits for its change notification, then renders that object's updated `items`.
+Set `options.view` to `"template"` and `options.template.code` to the shared code for a required Handlebars HTML template and loading skeleton. The assets service loads `assets/templates/<code>.html` and `assets/templates/<code>.skeleton.html`. The template receives the transformed row array; use `{{#each this}}` to render each row. The skeleton is shown until both assets and the row data are ready.
 
 ```json
 {
   "control": "list",
   "value": "applications",
   "options": {
-    "template": { "code": "applications" },
-    "fields": [
-      { "key": "name", "label": "Name" },
-      { "key": "code", "label": "Code" }
-    ]
+    "view": "template",
+    "template": { "code": "application-grid" }
+  }
+}
+```
+
+`application-grid.html`:
+
+```html
+<div class="application-grid">
+  {{#each this}}
+  <article>
+    <a href="/console/applications/{{code}}">{{name}}</a>
+    <code>{{code}}</code>
+  </article>
+  {{/each}}
+</div>
+```
+
+`application-grid.skeleton.html` contains the loading markup shown for that template. A missing or empty template or skeleton is reported and displayed as an error; the component does not silently switch to table view. Angular sanitizes both template and skeleton HTML: directives and event bindings are not compiled, and inline styles are removed. Put template-specific styling in the application's stylesheet or theme, and use normal HTML links for navigation.
+
+### HTML template and loading skeleton
+
+When `value` is a subscribable page object, the list waits for its change notification, then renders that object's updated `items`.
+
+```json
+{
+  "control": "list",
+  "value": "applications",
+  "options": {
+    "view": "template",
+    "template": { "code": "applications" }
   }
 }
 ```
@@ -140,9 +139,7 @@ Example `applications.html`:
 </div>
 ```
 
-If `assets/templates/<code>.skeleton.html` exists, its HTML is shown while the template and a context-key `value` are loading. Skeleton markup is inserted as-is and is not processed by Handlebars. If no skeleton exists, the list exposes an empty loading status until content is ready. If the main template fails to load or render, the error is logged and the regular configured view is used as a fallback.
-
-A configured HTML template replaces the built-in view markup. The rendered HTML is sanitized by Angular and does not compile Angular directives or event bindings; use normal HTML links for navigation. The component's Angular `TemplateRef` inputs remain available to direct Angular callers, but the dynamic page renderer only passes `value` and `options`.
+The skeleton markup is inserted as-is and is not processed by Handlebars. The component's Angular `TemplateRef` inputs remain available to direct Angular callers, but the dynamic page renderer only passes `value` and `options`.
 
 ### Row action column
 
@@ -222,14 +219,14 @@ Set the component entry's `class` and `style` for host-level styling. The list a
 - A field's `style.value.style` or `style.value.styles` can be a style object or an array of conditional `{ "operator", "value", "style" }` entries.
 - `field.class` and `field.style` are applied to the header; the special `index` and `action` cells also use those field-level values. Use `field.style.value` for normal data-cell styling.
 
-The built-in table and grid styles use theme variables such as `--surface-light`, `--border`, `--background`, and `--text-secondary`. Prefer the active theme's variables for consistent appearance across applications.
+The built-in table styles use theme variables such as `--surface-light`, `--border`, `--background`, and `--text-secondary`. Prefer the active theme's variables for consistent appearance across applications.
 
 ## Current boundaries
 
 - The table does not provide built-in sorting, filtering, or pagination. Use the separate pagination control where needed and wire it to the page data.
 - Empty list values are shown with the layout's “No data available” message.
-- `options.template.code` replaces the complete built-in view; it does not render the built-in Angular row action column or per-field formatting.
-- The `form` value is accepted by the component's view input, but dynamic list markup renders its row layout; use `table`, `grid`, or the supported `week` option for page metadata.
+- Template mode replaces the complete table; its rendered markup does not use the built-in Angular row action column or per-field formatting.
+- Template markup is plain HTML; Angular components, directives, and event bindings inside the asset are not compiled.
 
 ## Related documentation
 

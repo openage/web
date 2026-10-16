@@ -405,14 +405,14 @@ Renders a video viewer.
 
 ### `list`
 
-Renders a collection of row objects using a table or card grid. `options.fields` defines the displayed fields, and `options.view` selects `"table"` (default) or `"grid"`. The renderer shows “No data available” for an empty value. See the [list component guide](./list-component.md) for supported fields, actions, views, templates, and styling options.
+Renders a collection of row objects using the configured table fields or a full-list template. `options.view` selects `"table"` (default) or `"template"`; table fields are required, while template mode requires `options.template.code` and matching HTML and skeleton assets. See the [list component guide](./list-component.md) for field controls, actions, templates, and styling options.
 
 ```json
 {
   "control": "list",
   "value": [{ "name": "Avery", "status": "Active" }],
   "options": {
-    "view": "grid",
+    "view": "table",
     "fields": [
       { "key": "name", "label": "Name" },
       { "key": "status", "label": "Status" }
