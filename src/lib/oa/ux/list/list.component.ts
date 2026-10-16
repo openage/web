@@ -1,6 +1,6 @@
 /* eslint-disable no-constant-condition */
 /* eslint-disable no-prototype-builtins */
-import { ChangeDetectorRef, Component, effect, EventEmitter, inject, Injector, Input, OnInit, Output, TemplateRef } from '@angular/core';
+import { ChangeDetectorRef, Component, effect, EventEmitter, inject, Injector, Input, OnDestroy, OnInit, Output, TemplateRef } from '@angular/core';
 import { FieldEditorModel } from '../../core/models/field-editor.model';
 import { Action } from '../../core/models/action.model';
 import { ActionComponent } from "../action/action.component";
@@ -19,6 +19,7 @@ import { StringService } from '../../core/services';
 import { ContentService } from '../../core/services/content.service';
 import { NavService } from '../../core/services/nav.service';
 import { ConstantService } from '../../core/services/constant.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'oa-list, oa-table',
@@ -35,7 +36,7 @@ import { ConstantService } from '../../core/services/constant.service';
     // PaginationControlsComponent
   ]
 })
-export class ListComponent implements OnInit {
+export class ListComponent implements OnDestroy, OnInit {
 
   @Input()
   class?: string;
@@ -142,6 +143,8 @@ export class ListComponent implements OnInit {
   private injector = inject(Injector);
   private isTemplateLoading = false;
   private isDataLoading = false;
+  private boundDataSource?: any;
+  private boundDataSubscription?: Subscription;
   isCustomTemplateLoaded = false;
   private resolvedValue?: any;
 
@@ -164,23 +167,47 @@ export class ListComponent implements OnInit {
     }
 
     if (typeof this.value === 'string') {
-      const key = this.value;
-      const value = this.context.data().get(key);
-      if (value) {
-        this.setResolvedValue(value);
-      } else {
-        this.isDataLoading = true;
-        this.updateLoadingState();
-      }
-      effect(() => {
-        const resolvedValue = this.context.data().get(key);
+      const [key, ...properties] = this.value.split('.');
+      const resolveValue = () => properties.reduce(
+        (current: any, property: string) => current?.[property],
+        this.context.data().get(key)
+      );
+      const updateBoundValue = () => {
+        const source = this.context.data().get(key);
+        if (source !== this.boundDataSource) {
+          this.boundDataSubscription?.unsubscribe();
+          this.boundDataSource = source;
+          this.boundDataSubscription = properties.length && source?.subscribe
+            ? source.subscribe(() => {
+              const resolvedValue = resolveValue();
+              if (resolvedValue) {
+                this.setResolvedValue(resolvedValue, true);
+                this.changeDetector.markForCheck();
+              }
+            })
+            : undefined;
+        }
+
+        const resolvedValue = resolveValue();
         if (resolvedValue) {
           this.setResolvedValue(resolvedValue);
+        } else {
+          this.isDataLoading = true;
+          this.updateLoadingState();
         }
+      };
+      updateBoundValue();
+      effect(() => {
+        this.context.data();
+        updateBoundValue();
       }, { injector: this.injector });
     } else {
       this.setResolvedValue(this.value);
     }
+  }
+
+  ngOnDestroy(): void {
+    this.boundDataSubscription?.unsubscribe();
   }
 
   private setResolvedValue(value: any, isStreamEmission = false): void {
@@ -250,12 +277,38 @@ export class ListComponent implements OnInit {
     if (!this.listTemplate) { return; }
 
     try {
-      this.listContent = this.content.inject(this.listTemplate, this.rows);
+      const templateContext = this.resolveTemplateContext();
+      const rows = Object.keys(templateContext).length
+        ? this.rows.map(row => ({ ...row, __template: templateContext }))
+        : this.rows;
+      this.listContent = this.content.inject(this.listTemplate, rows);
     } catch (error) {
       this.logger.error('Failed to render list template', error);
       this.isCustomTemplateLoaded = false;
       this.viewError = 'Unable to render list template';
     }
+  }
+
+  private resolveTemplateContext(): Record<string, any> {
+    const configuredContext = this.options?.template?.context;
+    if (!configuredContext || typeof configuredContext !== 'object' || Array.isArray(configuredContext)) {
+      return {};
+    }
+
+    return Object.fromEntries(
+      Object.entries(configuredContext).map(([key, path]) => {
+        if (typeof path !== 'string') {
+          return [key, path];
+        }
+
+        const [source, ...properties] = path.split('.');
+        const value = properties.reduce(
+          (current: any, property: string) => current?.[property],
+          this.context.data().get(source)
+        );
+        return [key, value];
+      })
+    );
   }
 
   init() {

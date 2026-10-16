@@ -22,9 +22,9 @@ export const routes: Routes = [
     ]
   },
   {
-    path: 'debug',
+    path: 'diagnostics',
     canActivate: [roleGuard],
-    loadComponent: () => import('./debug/debug.component').then(mod => mod.DebugComponent),
+    loadComponent: () => import('./diagnostics/diagnostics.component').then(mod => mod.DiagnosticsComponent),
   },
   {
     path: ':area',

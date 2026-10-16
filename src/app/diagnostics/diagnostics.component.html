@@ -1,0 +1,194 @@
+<main class="page-container">
+    <header class="debug-header">
+        <div>
+            <p class="debug-eyebrow">Developer tools</p>
+            <h1>Diagnostics</h1>
+            <p class="debug-description">Inspect the application, tenant, organization, session, viewport, theme, page tree, and runtime metadata loaded in this browser.</p>
+        </div>
+    </header>
+
+    <section class="diag-section" id="theme">
+        <h2 class="section-title">
+            <oa-icon value="palette"></oa-icon>
+            <span>Theme and Color Palette</span>
+        </h2>
+
+        <div class="diagnostics-grid">
+            @for (entry of themeDiagnostics; track entry.label) {
+            <div class="action-card" [class.clickable]="entry.data"
+                (click)="entry.data && showJson(entry.label, entry.data)">
+                <div class="card-icon" [class]="entry.status">
+                    @if (entry.image) {
+                    <img [src]="entry.image" class="card-img" [alt]="entry.label" />
+                    } @else {
+                    <oa-icon [value]="entry.icon || statusIcon[entry.status ?? 'info']"></oa-icon>
+                    }
+                </div>
+                <div class="action-info">
+                    <h4>{{ entry.label }}</h4>
+                    <p class="value">{{ entry.value }}</p>
+                </div>
+                @if (entry.actions && entry.actions.length) {
+                <div class="card-actions">
+                    @for (action of entry.actions; track action.code) {
+                    <button (click)="$event.stopPropagation(); action.event ? action.event() : null"
+                        [title]="action.title">
+                        <oa-icon [value]="action.icon"></oa-icon>
+                    </button>
+                    }
+                </div>
+                }
+            </div>
+            }
+        </div>
+
+        <div class="palette-grid">
+            <div class="oa-swatch" style="--c: var(--primary)"><div class="oa-swatch-box"></div><span>--primary</span></div>
+            <div class="oa-swatch" style="--c: var(--accent)"><div class="oa-swatch-box"></div><span>--accent</span></div>
+            <div class="oa-swatch" style="--c: var(--default)"><div class="oa-swatch-box"></div><span>--default</span></div>
+            <div class="oa-swatch" style="--c: var(--background)"><div class="oa-swatch-box"></div><span>--background</span></div>
+            <div class="oa-swatch" style="--c: var(--surface)"><div class="oa-swatch-box"></div><span>--surface</span></div>
+            <div class="oa-swatch" style="--c: var(--text-primary)"><div class="oa-swatch-box"></div><span>--text-primary</span></div>
+            <div class="oa-swatch" style="--c: var(--text-secondary)"><div class="oa-swatch-box"></div><span>--text-secondary</span></div>
+            <div class="oa-swatch" style="--c: var(--text-disabled)"><div class="oa-swatch-box"></div><span>--text-disabled</span></div>
+            <div class="oa-swatch" style="--c: var(--error)"><div class="oa-swatch-box"></div><span>--error</span></div>
+            <div class="oa-swatch" style="--c: var(--warn)"><div class="oa-swatch-box"></div><span>--warn</span></div>
+            <div class="oa-swatch" style="--c: var(--success)"><div class="oa-swatch-box"></div><span>--success</span></div>
+            <div class="oa-swatch" style="--c: var(--info)"><div class="oa-swatch-box"></div><span>--info</span></div>
+            <div class="oa-swatch" style="--c: var(--neutral)"><div class="oa-swatch-box"></div><span>--neutral</span></div>
+            <div class="oa-swatch" style="--c: var(--neutral-light)"><div class="oa-swatch-box"></div><span>--neutral-light</span></div>
+            <div class="oa-swatch" style="--c: var(--neutral-dark)"><div class="oa-swatch-box"></div><span>--neutral-dark</span></div>
+            <div class="oa-swatch" style="--c: var(--border)"><div class="oa-swatch-box"></div><span>--border</span></div>
+            <div class="oa-swatch" style="--c: var(--backdrop)"><div class="oa-swatch-box"></div><span>--backdrop</span></div>
+            <div class="oa-swatch" style="--c: var(--hover)"><div class="oa-swatch-box"></div><span>--hover</span></div>
+        </div>
+    </section>
+
+    <section class="diag-section" id="device">
+        <h2 class="section-title">
+            <oa-icon value="devices"></oa-icon>
+            <span>Device and View Port</span>
+        </h2>
+        <div class="diagnostics-grid">
+            @for (entry of deviceDiagnostics; track entry.label) {
+            <div class="action-card">
+                <div class="card-icon" [class]="entry.status">
+                    <oa-icon [value]="entry.icon || statusIcon[entry.status ?? 'info']"></oa-icon>
+                </div>
+                <div class="action-info">
+                    <h4>{{ entry.label }}</h4>
+                    <p class="value">{{ entry.value }}</p>
+                </div>
+            </div>
+            }
+        </div>
+    </section>
+
+    <section class="diag-section" id="identity">
+        <h2 class="section-title">
+            <oa-icon value="badge"></oa-icon>
+            <span>Identity and Session</span>
+        </h2>
+        <div class="diagnostics-grid">
+            @for (entry of identityDiagnostics; track entry.label) {
+            <div class="action-card" [class.clickable]="entry.data"
+                (click)="entry.data && showJson(entry.label, entry.data)">
+                <div class="card-icon" [class]="entry.status">
+                    @if (entry.image) {
+                    <img [src]="entry.image" class="card-img" [alt]="entry.label" />
+                    } @else {
+                    <oa-icon [value]="entry.icon || statusIcon[entry.status ?? 'info']"></oa-icon>
+                    }
+                </div>
+                <div class="action-info">
+                    <h4>{{ entry.label }}</h4>
+                    <p class="value">{{ entry.value }}</p>
+                </div>
+                @if (entry.actions && entry.actions.length) {
+                <div class="card-actions">
+                    @for (action of entry.actions; track action.code) {
+                    <button (click)="$event.stopPropagation(); action.event ? action.event() : null"
+                        [title]="action.title">
+                        <oa-icon [value]="action.icon"></oa-icon>
+                    </button>
+                    }
+                </div>
+                }
+            </div>
+            }
+        </div>
+    </section>
+
+    <section class="diag-section" id="app-structure">
+        <h2 class="section-title">
+            <oa-icon value="account_tree"></oa-icon>
+            <span>Structure</span>
+        </h2>
+        <div class="diagnostics-grid">
+            @for (entry of appLayoutDiagnostics; track entry.label) {
+            <div class="action-card" [class.clickable]="entry.data"
+                (click)="entry.data && showJson(entry.label, entry.data)">
+                <div class="card-icon" [class]="entry.status">
+                    <oa-icon [value]="entry.icon || statusIcon[entry.status ?? 'info']"></oa-icon>
+                </div>
+                <div class="action-info">
+                    <h4>{{ entry.label }}</h4>
+                    <p class="value">{{ entry.value }}</p>
+                </div>
+                @if (entry.actions && entry.actions.length) {
+                <div class="card-actions">
+                    @for (action of entry.actions; track action.code) {
+                    <button (click)="$event.stopPropagation(); action.event ? action.event() : null"
+                        [title]="action.title">
+                        <oa-icon [value]="action.icon"></oa-icon>
+                    </button>
+                    }
+                </div>
+                }
+            </div>
+            }
+        </div>
+    </section>
+
+    <section class="diag-section" id="root-pages">
+        <h2 class="section-title">
+            <oa-icon value="layers"></oa-icon>
+            <span>Pages</span>
+            <span class="badge-count">{{ allPages().length }}</span>
+        </h2>
+
+        <div class="diagnostics-grid">
+            @for (node of pageTree(); track node.code) {
+            <div class="action-card clickable" (click)="onPageAction({type: 'navigate', page: node})">
+                <div class="card-icon info">
+                    <oa-icon [value]="node.icon || 'description'"></oa-icon>
+                </div>
+                <div class="action-info">
+                    <h4>{{ node.title || node.name }}</h4>
+                    <p class="value">/{{ node.code }}</p>
+                </div>
+                <div class="card-actions">
+                    <button (click)="$event.stopPropagation(); onPageAction({type: 'edit', page: node})" title="Edit">
+                        <oa-icon value="edit"></oa-icon>
+                    </button>
+                    <button (click)="$event.stopPropagation(); onPageAction({type: 'json', page: node})" title="View JSON">
+                        <oa-icon value="code"></oa-icon>
+                    </button>
+                </div>
+            </div>
+            }
+        </div>
+    </section>
+</main>
+
+@if (popupVisible()) {
+<div class="debug-popup-backdrop" (click)="popupVisible.set(false)">
+    <div class="debug-popup" (click)="$event.stopPropagation()">
+        <div class="debug-popup-header">
+            <h3>{{ popupTitle() }}</h3>
+            <button type="button" class="debug-popup-close" (click)="popupVisible.set(false)" aria-label="Close dialog">×</button>
+        </div>
+        <oa-json-viewer [value]="popupData()" [options]="options"></oa-json-viewer>
+    </div>
+</div>
+}

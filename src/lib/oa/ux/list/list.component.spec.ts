@@ -2,6 +2,7 @@ import { signal, WritableSignal } from '@angular/core';
 import { Location } from '@angular/common';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
+import { Subject } from 'rxjs';
 
 import { ListComponent } from './list.component';
 import { ContextService } from '../../core/services/context.service';
@@ -70,6 +71,56 @@ describe('ListComponent', () => {
     expect(constantService.templates.get).toHaveBeenCalledWith('applications');
     expect(contentService.inject).toHaveBeenCalledWith(template, [{ name: 'Console' }]);
     expect(fixture.nativeElement.querySelector('.custom-applications')?.textContent).toContain('Console');
+  });
+
+  it('should resolve nested data paths and pass template context to each row', async () => {
+    contextData.set(new Map([['application', {
+      code: 'console',
+      services: [{ code: 'directory', name: 'Directory' }]
+    }]]));
+    fixture.componentRef.setInput('value', 'application.services');
+    fixture.componentRef.setInput('options', {
+      view: 'template',
+      template: {
+        code: 'application-services-table',
+        context: { applicationCode: 'application.code' }
+      }
+    });
+
+    fixture.detectChanges();
+    await fixture.whenStable();
+    fixture.detectChanges();
+
+    expect(contentService.inject).toHaveBeenCalledWith(template, [{
+      code: 'directory',
+      name: 'Directory',
+      __template: { applicationCode: 'console' }
+    }]);
+  });
+
+  it('should refresh a nested list when its parent data emits an update', async () => {
+    const changes = new Subject<void>();
+    const application: any = {
+      code: 'console',
+      services: [{ code: 'directory', name: 'Directory' }],
+      subscribe: changes.subscribe.bind(changes)
+    };
+    contextData.set(new Map([['application', application]]));
+    fixture.componentRef.setInput('value', 'application.services');
+    fixture.componentRef.setInput('options', {
+      view: 'template',
+      template: { code: 'application-services-table' }
+    });
+
+    fixture.detectChanges();
+    await fixture.whenStable();
+    fixture.detectChanges();
+
+    application.services = [{ code: 'drive', name: 'Drive' }];
+    changes.next();
+    fixture.detectChanges();
+
+    expect(contentService.inject.calls.mostRecent().args[1]).toEqual(application.services);
   });
 
   it('should render the built-in table when no template is configured', () => {

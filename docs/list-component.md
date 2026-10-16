@@ -26,7 +26,7 @@ The implementation is [src/lib/oa/ux/list/list.component.ts](../src/lib/oa/ux/li
 
 Table view requires at least one non-action field. Each field describes a displayed property: `key` is the row property, `label` is its column heading, and `control` can be `html` to render HTML or `input` to render an editable text input. Omit `control` for a simple displayed value. An optional `action` field configures row actions. Template view does not require fields. The `list` control expects an array of row objects; a single object is wrapped as one row by the component, but an array is recommended. A value object with an `items` array is also unwrapped to its `items`.
 
-A string `value` is treated as a key in `ContextService` data. Use this form only when that key resolves to the row data.
+A string `value` is resolved from `ContextService` data and may use a dotted path to select nested row data, such as `application.services`.
 
 ## Data and column fields
 
@@ -87,6 +87,23 @@ Fields whose key is `index` display the one-based row number. Fields whose key i
 ### Template view
 
 Set `options.view` to `"template"` and `options.template.code` to the shared code for a required Handlebars HTML template and loading skeleton. The assets service loads `assets/templates/<code>.html` and `assets/templates/<code>.skeleton.html`. The template receives the transformed row array; use `{{#each this}}` to render each row. The skeleton is shown until both assets and the row data are ready.
+
+An optional `options.template.context` object adds per-page context to each rendered row. String values are resolved as paths in `ContextService` data, which lets a row template build links using both the row and its parent record:
+
+```json
+{
+  "value": "application.services",
+  "options": {
+    "view": "template",
+    "template": {
+      "code": "application-services-table",
+      "context": { "applicationCode": "application.code" }
+    }
+  }
+}
+```
+
+Within each template row, access configured context through `{{__template.applicationCode}}`. When no template context is configured, rows are passed to the template unchanged.
 
 ```json
 {
