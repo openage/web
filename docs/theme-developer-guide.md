@@ -1,10 +1,10 @@
 # Theme Developer Guide
 
-This project keeps the shared app theme in the global stylesheet at [src/styles.scss](src/styles.scss). The login/signup wizard styling and the popup/dialog menu styling are intentionally centralized there so theme updates do not need component-level CSS overrides.
+This project keeps the shared app theme in the global stylesheet at [src/styles.scss](../src/styles.scss). The login/signup wizard styling and the popup/dialog menu styling are intentionally centralized there so theme updates do not need component-level CSS overrides.
 
 ## 1. Where the theme is defined
 
-The shared styles in [src/styles.scss](src/styles.scss) use CSS variables that are expected to be supplied by the active app theme. The root block in the global stylesheet only defines layout-level sizing and font settings; the brand colors are still provided by the theme CSS that the app loads for each application or tenant.
+The shared styles in [src/styles.scss](../src/styles.scss) use CSS variables that are expected to be supplied by the active app theme. The root block in the global stylesheet only defines layout-level sizing and font settings; the brand colors are still provided by the theme CSS that the app loads for each application or tenant.
 
 Typical tokens used by the wizard include:
 
@@ -23,7 +23,7 @@ Typical tokens used by the wizard include:
 }
 ```
 
-The actual app theme files under [src/assets/app](src/assets/app) such as [src/assets/app/ai/theme.css](src/assets/app/ai/theme.css) and the other theme variants are the normal place to set these values for a specific brand.
+The actual app theme files under [src/assets/app](../src/assets/app) such as [src/assets/app/ai/theme.css](../src/assets/app/ai/theme.css) and the other theme variants are the normal place to set these values for a specific brand.
 
 ## 2. Shared theme classes
 
@@ -55,7 +55,7 @@ The generic selectors also include `oa-login` and `oa-signup` so both components
 
 ## 3. Styling pattern
 
-Keep all shared auth and dialog styling in [src/styles.scss](src/styles.scss). Do not add duplicated wizard colors, button styles, popup spacing, or layout rules in component CSS unless the style is genuinely local to a component.
+Keep all shared auth and dialog styling in [src/styles.scss](../src/styles.scss). Do not add duplicated wizard colors, button styles, popup spacing, or layout rules in component CSS unless the style is genuinely local to a component.
 
 The current pattern is:
 

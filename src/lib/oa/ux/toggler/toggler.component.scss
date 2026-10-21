@@ -7,3 +7,77 @@
 .spacing {
   margin-right: 5px;
 }
+
+.oa-controls.oa-toggle {
+  --toggle-track: color-mix(in srgb, var(--primary, #16779b) 10%, var(--surface, #fff));
+  --toggle-selected: var(--surface, #fff);
+  align-items: stretch;
+  background: var(--toggle-track);
+  border: 1px solid var(--border, #dce4eb);
+  border-radius: 7px;
+  display: flex;
+  gap: 0;
+  isolation: isolate;
+  overflow: hidden;
+  padding: 3px;
+  position: relative;
+}
+
+.oa-toggle-indicator {
+  background: var(--toggle-selected);
+  border: 1px solid color-mix(in srgb, var(--primary, #16779b) 38%, transparent);
+  border-radius: 5px;
+  bottom: 3px;
+  box-shadow: 0 1px 3px rgba(20, 35, 45, 0.14);
+  left: 3px;
+  pointer-events: none;
+  position: absolute;
+  top: 3px;
+  transition: transform 220ms cubic-bezier(0.2, 0.8, 0.2, 1);
+  z-index: 0;
+}
+
+.oa-controls.oa-toggle > * {
+  margin: 0;
+}
+
+.oa-toggle-option {
+  align-items: center;
+  background: transparent;
+  border: 0;
+  border-radius: 5px;
+  color: var(--text-secondary, #687b89);
+  cursor: pointer;
+  display: inline-flex;
+  flex: 1 1 0;
+  font: inherit;
+  gap: 6px;
+  justify-content: center;
+  min-height: 30px;
+  min-width: 0;
+  padding: 0 9px;
+  position: relative;
+  white-space: nowrap;
+  z-index: 1;
+}
+
+.oa-toggle-option.selected {
+  color: var(--primary, #16779b);
+  font-weight: 600;
+}
+
+.oa-toggle-option:focus-visible {
+  outline: 2px solid var(--primary, #16779b);
+  outline-offset: -2px;
+}
+
+.oa-toggle-option:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .oa-toggle-indicator {
+    transition: none;
+  }
+}

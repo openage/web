@@ -4,13 +4,19 @@
   [title]="selected.label"></oa-icon>
 }
 @case ('button') {
-<div class="oa-controls" [class.readonly]="readonly">
+<div class="oa-controls oa-toggle" [class.readonly]="readonly">
+  <span class="oa-toggle-indicator" [style.width.%]="items.length ? 100 / items.length : 100"
+    [style.transform]="'translateX(' + ((selected?.index || 0) * 100) + '%)'"></span>
   @for (item of items; track $index) {
-  <button [class]="item?.class" [style]="item?.style" (click)="onToggle()" [disabled]="disabled || readonly">
+  <button type="button" class="oa-toggle-option" [class.selected]="item?.isSelected"
+    [style]="item?.style" [attr.aria-label]="item.label || item.title || item.code"
+    [attr.aria-pressed]="item?.isSelected"
+    [disabled]="disabled || readonly" (click)="onSelect(item)">
     @if(item.icon){
     <oa-icon [value]="item.icon" [oaTooltip]="item.label"></oa-icon>
-    } @else {
-    <span>{{item.label}}</span>
+    }
+    @if(item.label || item.title) {
+    <span>{{item.label || item.title}}</span>
     }
   </button>
   }

@@ -1,0 +1,113 @@
+@if (builder.metadata(); as config) {
+<section class="builder-canvas" [ngClass]="className" [attr.data-root-document]="rootDocumentType"
+  [attr.aria-label]="options['ariaLabel'] || 'Workspace canvas'">
+  @if (showCanvasViewSwitch && canvasTabs.length) {
+  <div class="builder-tabs" role="tablist" aria-label="Workspace views">
+    @for (tab of canvasTabs; track tab.code) {
+    <button type="button" role="tab" [class.active]="activeTab() === tab.code"
+      [attr.aria-selected]="activeTab() === tab.code" (click)="builder.selectTab(tab.code)">
+      <oa-icon [value]="tab.icon"></oa-icon><span>{{ tab.title }}</span>
+    </button>
+    }
+  </div>
+  }
+  @if (builder.loadError()) { <div class="builder-notice" role="status">{{ builder.loadError() }}</div> }
+
+  @switch (activeWorkspaceMode) {
+  @case ('viewer') {
+  @if (viewerOptions['template']) {
+  <div class="summary-canvas">
+    <oa-html-viewer [value]="builder.workspaceData()" [options]="viewerOptions"></oa-html-viewer>
+  </div>
+  } @else {
+  <div class="canvas-empty"><oa-icon [value]="config.icon"></oa-icon><h3>Viewer template is not configured</h3>
+    <p>Set <code>options.viewer.template.code</code> on the canvas.</p></div>
+  }
+  }
+  @case ('code') {
+  <div class="json-canvas">
+    @if (builder.propertyError()) { <div class="application-config-error" role="alert">{{ builder.propertyError() }}</div> }
+    <oa-json-editor [value]="builder.workspaceData()" [options]="codeEditorOptions"
+      (valueChange)="builder.updateWorkspaceData($event)"></oa-json-editor>
+  </div>
+  }
+  @default {
+  <div class="structure-canvas" (click)="builder.selectWorkspace()">
+    <div class="canvas-guidance"><oa-icon value="info"></oa-icon><span>Drag tools here to add them. Select an item to edit its properties.</span></div>
+    @for (group of editorSectionGroups; track group.title) {
+    <section class="canvas-section-group">
+      <h2 class="canvas-group-title">{{ group.title }}</h2>
+      <div class="canvas-section-grid">
+      @for (section of group.sections; track section.code) {
+      @if (sectionAvailable(section)) {
+      <section class="canvas-section">
+      <div class="canvas-section-heading"><span>{{ section.title }}</span>
+        @if (sectionValue(section); as value) { @if (isArray(value)) { <span>{{ value.length }}</span> } }
+      </div>
+      @if (sectionValue(section); as value) {
+        @if (isArray(value)) {
+        <ng-container *ngTemplateOutlet="nodeList; context: { $implicit: objectItems(value), parentPath: section.path }"></ng-container>
+        } @else if (isObject(value)) {
+        <button type="button" class="canvas-node canvas-object-node"
+          [class.selected]="builder.selected()?.path === section.path"
+          (click)="$event.stopPropagation(); selectObject(value, section.path)">
+          <strong>{{ objectLabel(value, section.title) }}</strong><small>{{ section.code }}</small>
+        </button>
+        } @else {
+        <p class="application-config-empty">This section is not configured yet.</p>
+        }
+      } @else {
+      <p class="application-config-empty">This section is not configured yet.</p>
+      }
+      </section>
+      }
+      }
+      </div>
+    </section>
+    }
+  </div>
+  }
+  }
+
+  @if (builder.validationErrors().length) {
+  <section class="validation-results" aria-live="polite">
+    <h3><oa-icon value="warning"></oa-icon> Validation issues</h3>
+    @for (error of builder.validationErrors(); track error.path + error.message) {
+    <div class="validation-error"><code>{{ error.path }}</code><span>{{ error.message }}</span>
+      @if (error.suggestion) { <small>{{ error.suggestion }}</small> }</div>
+    }
+  </section>
+  }
+</section>
+}
+
+<ng-template #nodeList let-items let-parentPath="parentPath">
+  <div class="canvas-list" cdkDropList [cdkDropListData]="items" [id]="builder.dropListId(parentPath)"
+    [cdkDropListConnectedTo]="builder.dropListIds()"
+    [class.drop-target]="builder.isDropTarget(parentPath)"
+    (cdkDropListDropped)="builder.drop($event, parentPath)">
+    @for (item of items; track builder.trackByCode($index, item); let index = $index) {
+    <article class="canvas-node" cdkDrag [cdkDragData]="{ path: builder.itemPath(parentPath, index), index }"
+      [class.selected]="builder.selected()?.path === builder.itemPath(parentPath, index)"
+      (click)="$event.stopPropagation(); builder.selectItem(item, builder.itemPath(parentPath, index), index)">
+      <header class="node-header" cdkDragHandle>
+        <span class="node-icon"><oa-icon [value]="item['icon'] || item['control'] || 'widgets'"></oa-icon></span>
+        <span class="node-title"><strong>{{ item['title'] || item['label'] || item['name'] || item['code'] }}</strong>
+          <small>{{ item['control'] || item['type'] || 'Item' }} · {{ item['code'] }}</small></span>
+        <span class="node-grip"><oa-icon value="drag_indicator"></oa-icon></span>
+      </header>
+      @for (key of childKeys; track key) {
+        @if (builder.childItems(item, key); as children) {
+          @if (children.length) {
+          <div class="node-children">
+            <div class="nested-heading"><span>{{ key === 'sections' ? 'Sections' : 'Components' }}</span><span>{{ children.length }}</span></div>
+            <ng-container *ngTemplateOutlet="nodeList; context: { $implicit: children, parentPath: builder.itemPath(parentPath, index) + '.' + key }"></ng-container>
+          </div>
+          }
+        }
+      }
+    </article>
+    }
+    @if (!items.length) { <div class="drop-empty">Drop an item here</div> }
+  </div>
+</ng-template>

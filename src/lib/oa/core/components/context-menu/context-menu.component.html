@@ -1,9 +1,20 @@
-@if (context.page()?.title || context.title() || items.length) {
+@if (context.page()?.title || context.title() || context.breadcrumbs().length || items.length) {
 <div layout="row" layout-align="end center" class="menu flex-row">
-  @if (context.page()?.title || context.title()) {
+  @if (context.breadcrumbs().length) {
+  <nav class="context-breadcrumbs" aria-label="Breadcrumb">
+    @for (crumb of context.breadcrumbs(); track $index; let last = $last) {
+    @if (last) {
+    <span aria-current="page">{{ crumb.title }}</span>
+    } @else {
+    <a [href]="crumb.url || '#'">{{ crumb.title }}</a>
+    <span class="breadcrumb-separator" aria-hidden="true">›</span>
+    }
+    }
+  </nav>
+  } @else if (context.page()?.title || context.title()) {
   <span class="page-title">{{ context.page()?.title || context.title() }}</span>
   }
-  @for (item of items; track $index) {
+  @for (item of items; track item.code || $index) {
   @if(item.code === 'spacer') {
   <span class="spacer"></span>
   } @else {

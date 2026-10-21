@@ -1,10 +1,10 @@
-# Debug component
+# Diagnostics component
 
 This guide documents the runtime diagnostics page rendered by [src/app/diagnostics/diagnostics.component.ts](../src/app/diagnostics/diagnostics.component.ts) and its template [src/app/diagnostics/diagnostics.component.html](../src/app/diagnostics/diagnostics.component.html).
 
 ## Purpose
 
-The debug page surfaces the browser's currently loaded runtime context for application, tenant, organization, user, session, and role data. It is designed to mirror the visual language used by the diagnostics page and make large JSON payloads easier to inspect without leaving the app.
+The diagnostics page surfaces the browser's currently loaded runtime context for application, tenant, organization, user, session, and role data. It provides JSON inspection and navigation to edit a page using the dynamic-page builder route.
 
 ## Layout
 
@@ -48,6 +48,7 @@ Use this configuration when adding new context payloads so the debug view stays 
 - The page opens each section by default to show the current runtime data immediately.
 - Double-clicking a section header expands the accordion when the user wants to force the card open.
 - The JSON viewer sorts keys alphabetically and strips empty fields to keep the output focused.
+- Selecting a page's edit action opens `/:area/:collection/:code/builder` for the console pages collection.
 - On smaller screens, the grid collapses to a single stacked column.
 
 ## Styling

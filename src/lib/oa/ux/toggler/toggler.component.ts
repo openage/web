@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, inject, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { IconComponent } from '../icon/icon.component';
 import { TooltipDirective } from '../../directives/tooltip.directive';
 import { ConstantService } from '../../core/services/constant.service';
@@ -39,6 +39,7 @@ export class TogglerComponent implements OnInit, OnChanges {
   @Input()
   items: {
     label: string,
+    title?: string,
     icon: any,
     class?: string,
     style?: any,
@@ -52,10 +53,7 @@ export class TogglerComponent implements OnInit, OnChanges {
   options: TogglerOptions | any;
 
   selected: any;
-  constructor(
-    private constantService: ConstantService
-  ) {
-  }
+  private readonly constantService = inject(ConstantService);
 
   init() {
     if (this.code) {
@@ -69,11 +67,11 @@ export class TogglerComponent implements OnInit, OnChanges {
   ngOnChanges(changes: SimpleChanges): void {
     for (let i = 0; i < this.items.length; i++) {
       this.items[i].index = i;
-      this.items[i].value = this.items[i].value || this.items[i].code
+      this.items[i].value = this.items[i].value ?? this.items[i].code
       this.items[i].isSelected = false;
     }
 
-    if (this.value) {
+    if (this.value !== undefined && this.value !== null) {
       this.selected = this.items.find((i) => { return `${i.value}` === `${this.value}` });
     } else if (this.items.length) {
       this.selected = this.items[0];
@@ -83,15 +81,16 @@ export class TogglerComponent implements OnInit, OnChanges {
     if (this.selected) {
       this.selected.isSelected = true;
     }
-
   }
 
   onToggle() {
+    if (!this.items.length || !this.selected) return;
     this.onSelect(this.items[this.selected.index - 1] || this.items[this.items.length - 1]);
   }
 
   onSelect(option: any) {
-    this.selected.isSelected = false;
+    if (!option || option === this.selected) return;
+    if (this.selected) this.selected.isSelected = false;
 
     this.selected = option;
     this.selected.isSelected = true;

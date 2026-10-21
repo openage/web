@@ -16,25 +16,30 @@
   - `components/` and other feature directories contain page components and reusable UI modules
 - The README documents a strong design goal: application structure and page structure are defined via JSON metadata, so pages, sections, components, and layout behavior can be configured without creating many hard-coded screens.
 - The system emphasizes environment-specific configuration (`local`, `dev`, `qa`, `prod`) through Angular build targets and environment files.
+- Server rendering is configured with `@angular/ssr` and an Express entry point. Keep browser-only globals behind appropriate platform boundaries and preserve compatibility with server rendering and hydration when adding UI behavior.
+- Unit tests use the Angular `@angular/build:unit-test` target with Vitest. Do not add Jasmine/Karma tests or migrate the runner unless explicitly requested.
 
 ## Coding Style
 
-- TypeScript and Angular conventions are followed consistently:
+- Use Angular 21 and TypeScript 5.9 strict-mode conventions:
+  - components, directives, and pipes are standalone; do not introduce NgModules
   - classes use PascalCase (`AppComponent`, `ContextService`, `NavService`)
   - methods, properties, and signals use camelCase (`setTheme`, `underMaintenance`, `layoutType`)
-  - Angular dependency injection uses `inject()` and `signal()` prominently
-- State management follows Angular Signals patterns, especially for app-global state and reactive UI updates:
-  - `signal()` for state
-  - `computed()` for derived values
-  - `effect()` for side effects tied to state changes
+- Prefer `inject()` for dependency injection rather than constructor injection.
+- Prefer Angular Signals (`signal`, `computed`, `effect`, `linkedSignal`, and `resource` where appropriate) for local reactive state and data fetching. Use RxJS for asynchronous streams, event handling, and cross-component messaging through services; use `toSignal` and `toObservable` to bridge APIs when useful.
+- Use Angular's built-in template control flow (`@if`, `@else`, `@for`, `@switch`, and `@defer`). Do not introduce deprecated `*ngIf` or `*ngFor` syntax.
+- Prefer host metadata/bindings over `@HostBinding` and `@HostListener` for new code.
 - The code favors explicit, small, self-contained services over broad global orchestration.
-- Imports are grouped by domain and framework, with Angular/core imports before local modules; classes generally have clear constructor injection and root-level `providedIn: 'root'` services.
+- Imports are grouped by domain and framework, with Angular/core imports before local modules; root-level services use `providedIn: 'root'` where appropriate.
+- Keep TypeScript strictly typed and avoid `any`; narrow uncertain values at system boundaries.
 - TypeScript style is explicit and defensive:
   - early returns for invalid states
   - null-safe checks before property access
   - clear guard logic (`pageGuard`, `roleGuard`, `sessionGuard`)
-- Templates use Angular’s modern control-flow syntax (`@if`, `@switch`), but older structural directives and template outlets still coexist in the app.
+- Existing templates may still contain legacy structural directives; when touching a template, use modern control flow and avoid expanding legacy syntax.
 - The codebase generally prefers simple, readable formatting and explicit naming over abstraction-heavy patterns.
+- Build accessible interfaces with semantic HTML, associated labels, keyboard-operable controls, visible focus states, and ARIA attributes when native semantics are insufficient.
+- When adding or changing logic, add or update focused Vitest tests using the configured Angular unit-test builder and nearby test conventions. Do not introduce Jasmine/Karma unless explicitly migrating the runner.
 - Error handling is pragmatic:
   - route guards limit unauthorized navigation
   - logger utilities provide structured debugging

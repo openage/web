@@ -133,12 +133,17 @@
 
 <ng-template #componentTemplate let-item="item" let-class="class">
   @if(item.container) {
-  <div class="component {{class}}" [ngClass]="item.container.class" [ngStyle]="item.container.style">
+  <div class="component {{class}}" [ngClass]="item.container.class" [ngStyle]="item.container.style"
+    [class.selectable]="selectable" [class.selected]="selectable && context.selectedComponent() === item"
+    [attr.data-component-code]="item.code || null" (click)="selectComponent(item, $event)">
     <ng-container *ngTemplateOutlet="renderContainer; context: { item: item, type: 'component' }">
     </ng-container>
   </div>
   } @else {
-  <ng-container *ngTemplateOutlet="renderComponent; context: { item: item }"> </ng-container>
+  <div class="layout-component" [class.selectable]="selectable" [class.selected]="selectable && context.selectedComponent() === item"
+    [attr.data-component-code]="item.code || null" (click)="selectComponent(item, $event)">
+    <ng-container *ngTemplateOutlet="renderComponent; context: { item: item }"> </ng-container>
+  </div>
   }
 </ng-template>
 

@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, effect, inject, Injector, Input, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, effect, inject, Injector, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { ContextService } from '../../core/services/context.service';
 import { DataService } from '../../core/services/data.service';
 import { ContentService } from '../../core/services/content.service';
@@ -10,7 +10,7 @@ import { ConstantService } from '../../core/services/constant.service';
   templateUrl: './html-viewer.component.html',
   styleUrl: './html-viewer.component.scss'
 })
-export class HtmlViewerComponent implements OnInit {
+export class HtmlViewerComponent implements OnInit, OnChanges {
 
 
   @Input()
@@ -54,12 +54,18 @@ export class HtmlViewerComponent implements OnInit {
         }
       }, { injector: this.injector });
     } else {
-      void this.init();
+      this.setValue(this.value);
+    }
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['value'] && this.initialized && typeof this.value !== 'string') {
+      this.setValue(this.value);
     }
   }
 
   private setValue(value: any): void {
-    if (value === this.resolvedValue) { return; }
+    if (value === this.resolvedValue && this.initialized) { return; }
     this.resolvedValue = value;
     this.isLoading = true;
 

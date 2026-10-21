@@ -24,6 +24,9 @@ export class ContextService implements IAuth {
 
   readonly theme = signal<Theme | undefined>(this.cache.get('theme'))
   readonly path = signal<string | undefined>(undefined);
+  readonly appSource = signal<string | undefined>(undefined);
+  readonly view = signal<string | undefined>(undefined);
+  readonly selectedComponent = signal<Record<string, unknown> | undefined>(undefined);
   readonly tasks = signal<Progress[]>([]);
   readonly actions = signal<Action[]>([]);
   readonly breadcrumbs = signal<Link[]>([]);

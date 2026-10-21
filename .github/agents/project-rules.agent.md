@@ -19,13 +19,19 @@ You are working in the OA Pages Angular application. Follow the repository's arc
 
 ## Coding Style
 
-- Use TypeScript and Angular conventions consistently.
+- Use Angular 21 and TypeScript 5.9 strict-mode conventions consistently; components, directives, and pipes are standalone, and new NgModules are not allowed.
 - Use PascalCase for classes and camelCase for methods, properties, and signals.
-- Prefer Angular `signal()`, `computed()`, and `effect()` for reactive state and side effects.
+- Prefer Angular `signal()`, `computed()`, `effect()`, `linkedSignal()`, and `resource()` where appropriate for local reactive state and data fetching. Use RxJS for asynchronous streams, events, and service-level cross-component messaging; bridge with `toSignal()` / `toObservable()` when appropriate.
+- Use `inject()` instead of constructor injection where possible.
+- Use `@if`, `@else`, `@for`, `@switch`, and `@defer` in templates; do not add deprecated `*ngIf` or `*ngFor` syntax.
+- Prefer Angular host metadata/bindings to `@HostBinding` and `@HostListener` for new code.
+- Keep TypeScript strict and avoid `any`; add or update focused Vitest tests for changed logic and do not introduce Jasmine/Karma tests.
+- Preserve SSR and hydration compatibility: guard browser-only APIs and keep server/browser behavior boundaries explicit.
+- Build accessible UI with semantic HTML, keyboard support, labels, focus behavior, and ARIA when native semantics are insufficient.
 - Keep services explicit, small, and focused; avoid broad, opaque orchestration layers.
 - Follow clear import grouping and dependency injection patterns.
 - Prefer defensive checks, early returns, and explicit guard logic.
-- Existing templates mix modern Angular control flow (`@if`, `@switch`) with older structural conventions, so keep compatibility in mind when editing templates.
+- Existing templates may still use legacy structural directives; use modern Angular control flow in changed templates and avoid adding more legacy syntax.
 - Use logger utilities and UI fallback components for failure/maintenance states instead of silent error handling.
 
 ## Key Constraints and Decisions
@@ -39,8 +45,10 @@ You are working in the OA Pages Angular application. Follow the repository's arc
 
 ## Workflow Instructions
 
-1. **Before starting any task**, read `.continue/rules/decision-log.md` to understand prior decisions.
-2. **Before modifying code**, align with the architecture and style notes above and with the project rules in `.continue/rules/architecture-and-style.md`.
-3. **After completing a task**, append a new entry to `.continue/rules/decision-log.md` using the format defined there.
-4. **For release-related work**, follow `.github/agents/update-releaselog.agent.md` and validate changes with the repository release workflow.
-5. **When uncertain**, ask the user for clarification instead of guessing at architectural intent.
+1. **At workspace initialization**, review `docs/README.md` and `docs/architecture.md`; inspect the docs index against the source tree and note stale/missing relevant guides.
+2. **Before starting a task**, read `.continue/rules/decision-log.md` and the guide in `docs/` that covers the affected feature/component.
+3. **Before modifying code**, align with the architecture and style notes above and `.continue/rules/architecture-and-style.md`.
+4. **With every user-visible feature, route, service behavior, metadata, or component change**, update the closest human-readable guide in `docs/`; create one if absent and update `docs/README.md` when the guide catalog changes. Verify behavior and source links against the current implementation.
+5. **After a significant architectural decision**, append an entry to `.continue/rules/decision-log.md` using the format defined there.
+6. **For release-related work**, follow `.github/agents/update-releaselog.agent.md` and validate changes with the repository release workflow.
+7. **When uncertain**, ask the user for clarification instead of guessing at architectural intent.

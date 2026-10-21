@@ -95,10 +95,12 @@ export class ActionComponent implements OnInit, OnChanges {
       this.options = { code: this.options }
     }
 
-    this.event = this.event || this.options.event;
+    const configuredEvent = this.options.event;
+    this.event = configuredEvent || this.event;
 
     const ctx = this.context.toObject();
     this.options = JSON.parse(this.contentService.inject(JSON.stringify(this.options), ctx))
+    this.options.event = this.options.event || configuredEvent || this.event;
 
     // Use the configured default value when no value is explicitly provided.
     this.value = this.value || this.options.value;
@@ -143,11 +145,8 @@ export class ActionComponent implements OnInit, OnChanges {
 
     if (!this.options) { return; }
 
-    if (this.options.isDisabled && this.options.display === 'disabled') {
-      this.disabled = true;
-    }
-
     this.options = this.constantService.actions.get(this.options);
+    this.disabled = Boolean(this.options.isDisabled && this.options.display === 'disabled');
 
     this.setEvent(this.options);
 
@@ -318,6 +317,12 @@ export class ActionComponent implements OnInit, OnChanges {
     // this.items.forEach((i) => i.isSelected = false);
     // value.isSelected = true;
     this.options.event(value, this.options.config);
+  }
+
+  onToggleSelect(value: any): void {
+    this.value = value;
+    this.options.event?.(value, this.options.config);
+    this.selected.emit(value);
   }
 
   /**

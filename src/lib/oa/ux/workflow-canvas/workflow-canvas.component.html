@@ -1,0 +1,129 @@
+@if (builder.metadata(); as config) {
+<section class="builder-canvas" [ngClass]="className" [attr.aria-label]="options['ariaLabel'] || 'Workspace canvas'">
+  <div class="builder-header">
+    <div class="builder-heading">
+      <oa-icon [value]="options['icon'] || config.icon"></oa-icon>
+      <div>
+        <p class="builder-eyebrow">{{ options['eyebrow'] || config.workspaceType + ' workspace' }}</p>
+        <h1>{{ options['title'] || builder.workspaceTitle() }}</h1>
+      </div>
+      @if (builder.dirty()) { <span class="builder-dirty">Unsaved draft</span> }
+      @else if (builder.saved()) { <span class="builder-saved">Draft saved {{ builder.lastSavedAt() }}</span> }
+    </div>
+    <div class="builder-actions">
+      <button type="button" (click)="builder.saveDraft()" title="Save a local draft"><oa-icon value="save"></oa-icon><span>{{ options['saveLabel'] || 'Save draft' }}</span></button>
+      <button type="button" (click)="builder.validateWorkspace()" title="Validate workspace data"><oa-icon value="fact_check"></oa-icon><span>Validate</span></button>
+      <button type="button" (click)="builder.openSourceEditor()" title="Edit workspace JSON"><oa-icon value="code"></oa-icon><span>Source</span></button>
+      <button type="button" (click)="builder.toggleTheme()" [title]="builder.darkMode() ? 'Use light appearance' : 'Use dark appearance'"><oa-icon [value]="builder.darkMode() ? 'light_mode' : 'dark_mode'"></oa-icon></button>
+      <button type="button" (click)="builder.closeBuilder()" title="Close builder"><oa-icon value="close"></oa-icon></button>
+    </div>
+  </div>
+  @if (builder.loadError()) { <div class="builder-notice" role="status">{{ builder.loadError() }}</div> }
+  <div class="builder-tabs" role="tablist" aria-label="Workspace views">
+    @for (tab of config.actions; track tab.code) {
+    <button type="button" role="tab" [attr.aria-selected]="builder.activeTab() === tab.code"
+      [class.active]="builder.activeTab() === tab.code" (click)="builder.selectTab(tab.code)">
+      <oa-icon [value]="tab.icon"></oa-icon><span>{{ tab.title }}</span>
+    </button>
+    }
+  </div>
+  <div class="canvas-toolbar">
+    <div><span class="panel-kicker">{{ builder.currentTab()?.title || 'Workspace' }}</span><h2>{{ builder.workspaceTitle() }}</h2></div>
+    @if (builder.currentTab()?.workspaceMode !== 'json') {
+    <div class="canvas-mode">
+      <button type="button" [class.active]="builder.activeTab() === 'visual'" (click)="builder.selectTab('visual')" title="Visual mode"><oa-icon value="view_quilt"></oa-icon></button>
+      <button type="button" [class.active]="builder.activeTab() === 'structure'" (click)="builder.selectTab('structure')" title="Structure view"><oa-icon value="account_tree"></oa-icon></button>
+      <button type="button" [class.active]="builder.activeTab() === 'summary'" (click)="builder.selectTab('summary')" title="Overview"><oa-icon value="dashboard"></oa-icon></button>
+    </div>
+    }
+  </div>
+  @if (builder.currentTab()?.workspaceMode === 'json') {
+  <div class="json-canvas">
+    <div class="json-toolbar"><span>Read-only workspace source</span><button type="button" (click)="builder.openSourceEditor()">Edit JSON</button></div>
+    <pre><code>{{ builder.rawJson() }}</code></pre>
+  </div>
+  } @else if (builder.activeTab() === 'summary' || !builder.currentTab()?.workspaceMode) {
+  <div class="summary-canvas">
+    <div class="summary-intro">
+      <span class="summary-icon"><oa-icon [value]="config.icon"></oa-icon></span>
+      <div><h3>{{ builder.workspaceTitle() }}</h3><p>{{ config.title }} overview and quick navigation</p></div>
+    </div>
+    <div class="summary-stats">
+      <button type="button" class="stat-card" (click)="builder.selectTab('structure')"><span class="stat-value">{{ builder.flattenedItems().length }}</span><span>Total items</span></button>
+      <button type="button" class="stat-card" (click)="builder.selectWorkspace()"><span class="stat-value">{{ builder.validationErrors().length }}</span><span>Validation issues</span></button>
+      <button type="button" class="stat-card"><span class="stat-value">{{ builder.selected() ? 1 : 0 }}</span><span>Selected item</span></button>
+    </div>
+    <section class="summary-section">
+      <div class="section-heading"><h3>Quick navigation</h3><button type="button" (click)="builder.selectTab('structure')">Open structure</button></div>
+      @if (builder.rootItems().length) {
+      <div class="quick-list">
+        @for (item of builder.rootItems(); track builder.trackByCode($index, item); let index = $index) {
+        <button type="button" (click)="builder.selectTab('structure'); builder.selectItem(item, config.itemCollectionPath + '.' + index, index)">
+          <oa-icon [value]="item['icon'] || config.icon"></oa-icon><span>{{ item['title'] || item['name'] || item['code'] }}</span><oa-icon value="chevron_right"></oa-icon>
+        </button>
+        }
+      </div>
+      } @else { <p class="empty-hint">No {{ config.itemLabel.toLowerCase() }} yet. Add a building block from the toolbox.</p> }
+    </section>
+  </div>
+  } @else {
+  <div class="structure-canvas" [class.wysiwyg-mode]="builder.currentTab()?.workspaceMode === 'wysiwyg'" (click)="builder.selectWorkspace()">
+    <div class="canvas-guidance"><oa-icon value="info"></oa-icon><span>Drag tools here to add them. Select an item to edit its properties.</span></div>
+    <ng-container *ngTemplateOutlet="nodeList; context: { $implicit: builder.rootItems(), parentPath: config.itemCollectionPath }"></ng-container>
+    @for (collection of config.auxiliaryCollections || []; track collection.path) {
+    <section class="auxiliary-collection">
+      <div class="nested-heading"><span>{{ collection.title }}</span><span>{{ builder.itemsAt(collection.path).length }}</span></div>
+      <ng-container *ngTemplateOutlet="nodeList; context: { $implicit: builder.itemsAt(collection.path), parentPath: collection.path }"></ng-container>
+    </section>
+    }
+    @if (builder.rootItems().length === 0) {
+    <div class="canvas-empty"><oa-icon [value]="config.icon"></oa-icon><h3>Start building</h3><p>Drag a tool from the left panel or click it to add it here.</p></div>
+    }
+  </div>
+  }
+  @if (builder.validationErrors().length) {
+  <section class="validation-results" aria-live="polite">
+    <h3><oa-icon value="warning"></oa-icon> Validation issues</h3>
+    @for (error of builder.validationErrors(); track error.path + error.message) {
+    <div class="validation-error"><code>{{ error.path }}</code><span>{{ error.message }}</span>@if (error.suggestion) { <small>{{ error.suggestion }}</small> }</div>
+    }
+  </section>
+  }
+</section>
+}
+
+<ng-template #nodeList let-items let-parentPath="parentPath">
+  <div class="canvas-list" cdkDropList [cdkDropListData]="items" (cdkDropListDropped)="builder.drop($event, parentPath)">
+    @for (item of items; track builder.trackByCode($index, item); let index = $index) {
+    <article class="canvas-node" cdkDrag [cdkDragData]="{ path: builder.itemPath(parentPath, index), index }"
+      [class.selected]="builder.selected()?.path === builder.itemPath(parentPath, index)"
+      (click)="$event.stopPropagation(); builder.selectItem(item, builder.itemPath(parentPath, index), index)">
+      <header class="node-header" cdkDragHandle>
+        <span class="node-icon"><oa-icon [value]="item['icon'] || item['control'] || 'widgets'"></oa-icon></span>
+        <span class="node-title"><strong>{{ item['title'] || item['label'] || item['name'] || item['code'] }}</strong><small>{{ item['control'] || item['type'] || 'Item' }} · {{ item['code'] }}</small></span>
+        <span class="node-grip"><oa-icon value="drag_indicator"></oa-icon></span>
+      </header>
+      @if (builder.childItems(item, 'components').length) {
+      <div class="node-children">
+        <div class="nested-heading"><span>Child components</span><span>{{ builder.childItems(item, 'components').length }}</span></div>
+        <ng-container *ngTemplateOutlet="nodeList; context: { $implicit: builder.childItems(item, 'components'), parentPath: builder.itemPath(parentPath, index) + '.components' }"></ng-container>
+      </div>
+      }
+    </article>
+    }
+    @if (!items.length) { <div class="drop-empty">Drop an item here</div> }
+  </div>
+</ng-template>
+
+@if (builder.sourceEditorOpen()) {
+<div class="source-backdrop" [class.builder-dark]="builder.darkMode()" (click)="builder.closeSourceEditor()">
+  <section class="source-dialog" role="dialog" aria-modal="true" aria-labelledby="source-title" (click)="$event.stopPropagation()">
+    <header><div><span class="panel-kicker">Workspace source</span><h2 id="source-title">Edit JSON</h2></div>
+      <button type="button" class="icon-button" (click)="builder.closeSourceEditor()" aria-label="Close JSON editor"><oa-icon value="close"></oa-icon></button>
+    </header>
+    <textarea class="source-editor" spellcheck="false" [value]="builder.sourceText()" (input)="builder.updateSourceText($event)" aria-label="Workspace JSON"></textarea>
+    @if (builder.sourceError()) { <p class="source-error" role="alert">{{ builder.sourceError() }}</p> }
+    <footer><button type="button" class="secondary" (click)="builder.closeSourceEditor()">Cancel</button><button type="button" class="primary" (click)="builder.applySourceChanges()">Apply changes</button></footer>
+  </section>
+</div>
+}

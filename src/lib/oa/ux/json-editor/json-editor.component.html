@@ -3,5 +3,6 @@
 <div class="oa-input">
   <pre class="input json" contenteditable="true" (focus)="onSelect()" (blur)="onTextChange($event)"
     [innerHTML]="text"></pre>
+  @if (parseError) { <p class="json-editor-error" role="alert">{{ parseError }}</p> }
 </div>
 }

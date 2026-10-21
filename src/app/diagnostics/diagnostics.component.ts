@@ -127,7 +127,9 @@ export class DiagnosticsComponent {
         this.showJson(`Page Meta: ${event.page?.title || event.page?.name || event.page?.code}`, event.page);
         break;
       case 'edit':
-        this.showJson(`Edit: ${event.page?.title || event.page?.name || event.page?.code}`, event.page);
+        if (event.page?.code) {
+          this.router.navigate(['/canvas', 'pages', event.page.code, 'builder']);
+        }
         break;
       default:
         break;
@@ -239,4 +241,3 @@ export class DiagnosticsComponent {
     }
   }
 }
-

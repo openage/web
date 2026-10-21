@@ -1067,6 +1067,8 @@ A versatile component for displaying various types of loading and progress indic
 
 A component for rendering HTML content with templating capabilities and dynamic data binding.
 
+When the bound data object changes, the viewer rerenders the template with the current value. The page builder uses this behavior to keep Viewer synchronized with edits made in Editor or Code.
+
 #### Configuration Options
 
 ##### Input Properties

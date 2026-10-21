@@ -4,6 +4,15 @@
   // height: 100%;
 }
 
+.selectable {
+  cursor: pointer;
+}
+
+.selectable.selected {
+  outline: 2px solid var(--primary, #7357d8);
+  outline-offset: 2px;
+}
+
 .widget {
   // z-index:99;
 

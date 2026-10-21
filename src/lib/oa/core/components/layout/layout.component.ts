@@ -97,8 +97,10 @@ export class LayoutComponent implements OnInit, OnChanges {
   @Input() entity?: Entity;
   @Input() view = "grid";
   @Input() filterView = "inline";
+  @Input() selectable = false;
 
   @Output() selected: EventEmitter<any> = new EventEmitter();
+  @Output() componentSelected: EventEmitter<Record<string, unknown>> = new EventEmitter();
 
   // items = [];
   widgetArray = [];
@@ -353,6 +355,10 @@ export class LayoutComponent implements OnInit, OnChanges {
       });
     }
     section.selected = true;
+    if (this.selectable) {
+      this.context.selectedComponent.set(section);
+      this.onSectionSelect(section);
+    }
   }
 
   /**
@@ -644,6 +650,13 @@ export class LayoutComponent implements OnInit, OnChanges {
    */
   onSectionSelect(section: any) {
     this.selected.emit(section);
+  }
+
+  selectComponent(item: Record<string, unknown>, event: Event): void {
+    if (!this.selectable) return;
+    event.stopPropagation();
+    this.context.selectedComponent.set(item);
+    this.componentSelected.emit(item);
   }
 
   /**

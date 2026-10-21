@@ -27,6 +27,25 @@ export const routes: Routes = [
     loadComponent: () => import('./diagnostics/diagnostics.component').then(mod => mod.DiagnosticsComponent),
   },
   {
+    path: 'canvas/applications/:code/builder',
+    redirectTo: '/console/applications/:code/builder',
+    pathMatch: 'full'
+  },
+  {
+    path: 'canvas/pages/:code/builder',
+    canActivate: [pageGuard],
+    loadComponent: () => import('./page-builder/builder-page.component').then(mod => mod.BuilderPageComponent),
+    resolve: { data: RouteDataResolver },
+    runGuardsAndResolvers: 'always'
+  },
+  {
+    path: ':area/:collection/:code/builder',
+    canActivate: [pageGuard],
+    loadComponent: () => import('./page-builder/builder-page.component').then(mod => mod.BuilderPageComponent),
+    resolve: { data: RouteDataResolver },
+    runGuardsAndResolvers: 'always'
+  },
+  {
     path: ':area',
     canActivate: [pageGuard],
     loadComponent: () => import('./dynamic-page/dynamic-page.component').then(mod => mod.DynamicPageComponent),

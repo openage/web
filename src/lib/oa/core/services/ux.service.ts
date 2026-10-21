@@ -1,4 +1,4 @@
-import { EventEmitter, Inject, Injectable, TemplateRef, DOCUMENT, inject, effect } from '@angular/core';
+import { EventEmitter, Inject, Injectable, TemplateRef, DOCUMENT, inject, effect, signal } from '@angular/core';
 import { Subject } from 'rxjs';
 import { NavService } from './nav.service';
 import { ErrorService } from './error.service';
@@ -13,6 +13,8 @@ import { Action } from '../models/action.model';
 })
 export class UxService {
   logger = new Logger('UxService');
+
+  readonly draggingTool = signal<unknown | undefined>(undefined);
 
   private _progressItem = new Subject<any>();
 

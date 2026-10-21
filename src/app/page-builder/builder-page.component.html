@@ -1,0 +1,33 @@
+@if (layout && isInitialized) {
+<main [id]="page?.code" class="builder-page-layout" [class.application-builder]="workspaceType() === 'application'"
+  [class.builder-toolbox-collapsed]="toolboxCollapsed()"
+  [class.builder-properties-collapsed]="propertiesCollapsed()"
+  [class.builder-no-panels]="builderPanelsHidden()"
+  [class.hidden]="!isCurrent">
+  <oa-layout [layout]="layout" [params]="params" [components]="components" [templates]="templates"></oa-layout>
+  @if (toolboxCollapsed() && !builderPanelsHidden()) {
+  <button type="button" class="panel-anchor toolbox-anchor" (click)="toggleToolbox()"
+    aria-label="Expand toolbox" title="Expand toolbox" aria-expanded="false" aria-controls="builder-toolbox-panel">
+    <oa-icon value="left_panel_open"></oa-icon>
+  </button>
+  }
+  @if (propertiesCollapsed() && !builderPanelsHidden()) {
+  <button type="button" class="panel-anchor properties-anchor" (click)="toggleProperties()"
+    aria-label="Expand properties" title="Expand properties" aria-expanded="false" aria-controls="builder-properties-panel">
+    <oa-icon value="right_panel_open"></oa-icon>
+  </button>
+  }
+</main>
+}
+
+<ng-template #toolbarTemplate let-item="item">
+  <oa-toolbox [builder]="builderController" [options]="collapsiblePanelOptions(item.options || {})" [value]="item.value"></oa-toolbox>
+</ng-template>
+<ng-template #propertiesTemplate let-item="item">
+  <oa-properties [builder]="builderController" [data]="propertiesData" [type]="propertiesType" [value]="item.value"
+    [options]="collapsiblePanelOptions(propertiesOptions(item.options || {}))"
+    (dataChange)="onPropertiesChange($event)"></oa-properties>
+</ng-template>
+<ng-template #canvasTemplate let-item="item">
+  <oa-canvas [builder]="builderController" [options]="item.options || {}" [value]="item.value"></oa-canvas>
+</ng-template>

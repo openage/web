@@ -1,0 +1,71 @@
+<aside id="builder-properties-panel" class="builder-properties" [ngClass]="className" [class.collapsed]="builder.propertiesCollapsed()"
+  aria-label="Properties panel">
+  <div class="panel-title">
+    <h2>{{ optionsValue['title'] || 'Properties' }}</h2>
+    <div class="panel-title-actions">
+      @if (optionsValue['collapsible'] !== false) {
+      <button type="button" class="icon-button panel-collapse-button" (click)="builder.toggleProperties()"
+        [attr.aria-label]="builder.propertiesCollapsed() ? 'Expand properties' : 'Collapse properties'"
+        [title]="builder.propertiesCollapsed() ? 'Expand properties' : 'Collapse properties'"
+        [attr.aria-expanded]="!builder.propertiesCollapsed()">
+        <oa-icon [value]="builder.propertiesCollapsed() ? 'right_panel_open' : 'right_panel_close'"></oa-icon>
+      </button>
+      }
+    </div>
+  </div>
+
+  @if (!builder.propertiesCollapsed()) {
+  <div class="property-list">
+    @for (group of getGroups(); track group.name) {
+    <section class="property-group">
+      <h3>{{ group.name }}</h3>
+      @for (property of group.properties; track property.key) {
+      <div class="property-field" [class.invalid]="hasValidationError(property)">
+        <label [attr.for]="'builder-property-' + property.key">
+          {{ property.label }}@if (fieldRequired(property)) { <b aria-label="required">*</b> }
+        </label>
+        @if (property.type === 'select' || property.type === 'lookup') {
+        <select [id]="'builder-property-' + property.key" [value]="displayValue(getValue(data, property.key))"
+          [required]="fieldRequired(property)"
+          [attr.aria-invalid]="hasValidationError(property)"
+          [title]="validationError(property)"
+          (change)="setValue(data, property.key, $any($event.target).value)">
+          @for (option of selectOptions(property); track $index) {
+          <option [value]="optionValue(option)">{{ optionLabel(option) }}</option>
+          }
+        </select>
+        } @else if (property.type === 'boolean') {
+        <input [id]="'builder-property-' + property.key" type="checkbox" [checked]="getValue(data, property.key) === true"
+          (change)="setValue(data, property.key, $any($event.target).checked)" />
+        } @else if (property.type === 'json') {
+        <textarea [id]="'builder-property-' + property.key" rows="4" [value]="displayValue(getValue(data, property.key))"
+          (blur)="setValue(data, property.key, $any($event.target).value)"></textarea>
+        } @else if (property.type === 'html' || property.type === 'style') {
+        <textarea [id]="'builder-property-' + property.key" rows="5" [value]="displayValue(getValue(data, property.key))"
+          [required]="fieldRequired(property)"
+          [attr.aria-invalid]="hasValidationError(property)"
+          [title]="validationError(property)"
+          (input)="setValue(data, property.key, $any($event.target).value)"></textarea>
+        } @else {
+        <input [id]="'builder-property-' + property.key" [type]="property.type === 'number' ? 'number' : 'text'"
+          [value]="displayValue(getValue(data, property.key))"
+          [required]="fieldRequired(property)"
+          [attr.minlength]="fieldMinLength(property)"
+          [class.invalid]="hasValidationError(property)"
+          [attr.aria-invalid]="hasValidationError(property)"
+          [title]="validationError(property)"
+          (input)="setValue(data, property.key, property.type === 'number' ? +$any($event.target).value : $any($event.target).value)" />
+        }
+        @if (hasValidationError(property)) { <small class="validation-error">{{ validationError(property) }}</small> }
+        @if (property.description) { <small>{{ property.description }}</small> }
+      </div>
+      }
+    </section>
+    }
+  </div>
+
+  <div class="properties-footer">
+    <span>{{ optionsValue['footer'] || 'Changes are held in a local workspace draft.' }}</span>
+  </div>
+  }
+</aside>

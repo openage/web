@@ -1,5 +1,4 @@
 import { Component, EventEmitter, inject, Input, OnChanges, OnInit, Output } from '@angular/core';
-import { EditorOptions } from '../../core/models/editor.options';
 import { ContextService } from '../../core/services/context.service';
 import { DataService } from '../../core/services/data.service';
 
@@ -28,6 +27,7 @@ export class JsonEditorComponent implements OnInit, OnChanges {
 
   text?: string;
   initialized = false;
+  parseError = '';
 
   context = inject(ContextService);
   dataService = inject(DataService);
@@ -69,6 +69,7 @@ export class JsonEditorComponent implements OnInit, OnChanges {
   }
 
   init() {
+    this.parseError = '';
     if (typeof this.value === 'string') {
       this.text = this.syntaxHighlight(this.value);
     } else {
@@ -101,18 +102,22 @@ export class JsonEditorComponent implements OnInit, OnChanges {
   onSelect() {
 
   }
-  onTextChange($event: any) {
-    let subject: string = $event.target.tagName === 'INPUT' ? $event.target.value : $event.target.innerText;
-
-    if (!subject) {
+  onTextChange(event: Event): void {
+    const target = event.target;
+    if (!(target instanceof HTMLElement)) return;
+    const subject = target instanceof HTMLInputElement ? target.value : target.innerText;
+    if (!subject.trim()) {
+      this.parseError = 'JSON cannot be empty.';
       return;
     }
 
-    subject = subject.replace(/(?:\r\n|\r|\n)/g, '');
-
-    const value = JSON.parse(subject);
-    Object.assign(this.value, value)
-    this.valueChange.emit(this.value);
+    try {
+      const value = JSON.parse(subject);
+      this.parseError = '';
+      this.valueChange.emit(value);
+    } catch (error) {
+      this.parseError = error instanceof Error ? `Invalid JSON: ${error.message}` : 'Invalid JSON.';
+    }
   }
 
   syntaxHighlight(json: string) {
@@ -122,7 +127,7 @@ export class JsonEditorComponent implements OnInit, OnChanges {
     // .replace(/(?:\r\n|\r|\n)/g, '<br>');
 
     // eslint-disable-next-line max-len
-    return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, (match) => {
+    return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+-]?\d+)?)/g, (match) => {
       let cls = 'number';
       if (/^"/.test(match)) {
         if (/:$/.test(match)) {

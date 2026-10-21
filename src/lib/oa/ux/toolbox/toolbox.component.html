@@ -1,0 +1,57 @@
+<aside id="builder-toolbox-panel" class="builder-toolbar" [ngClass]="className" [class.collapsed]="builder.toolboxCollapsed()"
+  aria-label="Builder toolbox">
+  <div class="panel-title">
+    <div><span class="panel-kicker workspace-kicker">{{ options['eyebrow'] || 'Workspace' }}</span></div>
+    @if (options['collapsible'] !== false) {
+    <button type="button" class="icon-button panel-collapse-button" (click)="builder.toggleToolbox()"
+      [attr.aria-label]="builder.toolboxCollapsed() ? 'Expand toolbox' : 'Collapse toolbox'"
+      [title]="builder.toolboxCollapsed() ? 'Expand toolbox' : 'Collapse toolbox'"
+      [attr.aria-expanded]="!builder.toolboxCollapsed()">
+      <oa-icon [value]="builder.toolboxCollapsed() ? 'left_panel_open' : 'left_panel_close'"></oa-icon>
+    </button>
+    }
+  </div>
+  @if (!builder.toolboxCollapsed()) {
+  @if (builder.currentTab()?.workspaceMode !== 'code') {
+  <label class="tool-search">
+    <oa-icon value="search"></oa-icon>
+    <input type="search" placeholder="Search tools" [value]="builder.toolSearch()"
+      (input)="builder.toolSearch.set($any($event.target).value)" />
+  </label>
+  @for (group of filteredToolGroups; track group.title) {
+  <section class="tool-group">
+    <h3>
+      <button type="button" class="tool-group-toggle" [attr.aria-expanded]="groupExpanded(group.title)"
+        [attr.aria-controls]="'builder-tool-group-' + $index" (click)="toggleGroup(group.title)">
+        @if (group.icon) { <oa-icon [value]="group.icon"></oa-icon> }
+        <span>{{ group.title }}</span>
+        <oa-icon class="tool-group-chevron" value="expand_more"></oa-icon>
+      </button>
+    </h3>
+    <div class="tool-list" cdkDropList [cdkDropListData]="group.items"
+      [cdkDropListConnectedTo]="builder.dropListIds()" [id]="'builder-tool-group-' + $index"
+      [hidden]="!groupExpanded(group.title)">
+      @for (tool of group.items; track $index) {
+      <button type="button" class="tool-item" cdkDrag [cdkDragData]="tool"
+        (cdkDragStarted)="onDragStarted(tool)" (cdkDragEnded)="onDragEnded()"
+        (click)="addItem(tool)" [disabled]="!builder.workspaceValid()"
+        [title]="itemTitle(tool)">
+        <oa-icon [value]="tool.icon || 'widgets'"></oa-icon><span>{{ itemLabel(tool) }}</span>
+        <oa-icon class="tool-grip" value="drag_indicator"></oa-icon>
+      </button>
+      }
+    </div>
+  </section>
+  }
+  @if (filteredToolGroups.length === 0) {
+  <p class="empty-hint">{{ emptyToolsMessage }}</p>
+  }
+  } @else {
+  <p class="empty-hint">Toolbox items are available in the Editor view.</p>
+  }
+  <div class="toolbox-footer">
+    <span>{{ builder.workspaceType() | titlecase }} builder</span>
+    <span>{{ toolGroups.length }} tool group(s)</span>
+  </div>
+  }
+</aside>

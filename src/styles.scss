@@ -1,4 +1,5 @@
 @use 'sass:map';
+@use './lib/oa/ux/builder/builder-components';
 /* ==========================================================================
    Table of Contents:
    1. Variables & Root
@@ -20,6 +21,13 @@
   --padding-tablet: 20px;
   --padding-mobile: 10px;
   --font-family: "Poppins", Helvetica, Arial, Lucida, sans-serif;
+  --oa-builder-surface: var(--surface, #fff);
+  --oa-builder-panel: var(--background, #f4f7fa);
+  --oa-builder-border: var(--border, #dce4eb);
+  --oa-builder-text: var(--text-primary, #193143);
+  --oa-builder-muted: var(--text-secondary, #687b89);
+  --oa-builder-accent: var(--primary, #16779b);
+  --oa-builder-accent-soft: rgba(var(--primary-rgb, 22 119 155), 0.09);
 }
 
 oa-text-input {

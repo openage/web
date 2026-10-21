@@ -1,4 +1,20 @@
 import { Injectable } from '@angular/core';
+import { BuilderValidationError } from '../../../oa/ux/builder/builder-metadata.model';
+
+interface SchemaNode {
+  $ref?: string;
+  type?: string | string[];
+  enum?: unknown[];
+  const?: unknown;
+  required?: string[];
+  properties?: Record<string, SchemaNode>;
+  items?: SchemaNode;
+  oneOf?: SchemaNode[];
+  minLength?: number;
+  minItems?: number;
+  minimum?: number;
+  maximum?: number;
+}
 
 @Injectable({
   providedIn: 'root',
@@ -6,6 +22,134 @@ import { Injectable } from '@angular/core';
 export class ValidationService {
 
   constructor() { }
+
+  validate(data: unknown, schema: Record<string, unknown>): BuilderValidationError[] {
+    const errors: BuilderValidationError[] = [];
+    const root = schema as SchemaNode;
+    this.validateNode(data, root, root, '$', errors, 0);
+    return errors;
+  }
+
+  private validateNode(
+    value: unknown,
+    schema: SchemaNode,
+    root: SchemaNode,
+    path: string,
+    errors: BuilderValidationError[],
+    depth: number
+  ): void {
+    if (depth > 64) {
+      errors.push({ path, message: 'Schema nesting exceeds the supported validation depth.' });
+      return;
+    }
+
+    if (schema.$ref) {
+      const referenced = this.resolveReference(schema.$ref, root);
+      if (!referenced) {
+        errors.push({ path, message: `Unresolved schema reference "${schema.$ref}".` });
+        return;
+      }
+      this.validateNode(value, referenced, root, path, errors, depth + 1);
+      return;
+    }
+
+    if (schema.oneOf?.length) {
+      const matches = schema.oneOf.map((option) => {
+        const optionErrors: BuilderValidationError[] = [];
+        this.validateNode(value, option, root, path, optionErrors, depth + 1);
+        return optionErrors;
+      }).filter((optionErrors) => optionErrors.length === 0);
+      if (matches.length !== 1) {
+        errors.push({ path, message: `Expected a value matching exactly one of ${schema.oneOf.length} schema variants.` });
+      }
+      return;
+    }
+
+    const expectedTypes = Array.isArray(schema.type) ? schema.type : schema.type ? [schema.type] : [];
+    if (expectedTypes.length && !expectedTypes.some((type) => this.matchesType(value, type))) {
+      errors.push({
+        path,
+        message: `Expected ${expectedTypes.join(' or ')}, received ${this.describeType(value)}.`,
+        suggestion: `Provide a ${expectedTypes[0]} value.`
+      });
+      return;
+    }
+
+    if (schema.const !== undefined && value !== schema.const) {
+      errors.push({ path, message: `Expected the constant value ${JSON.stringify(schema.const)}.` });
+    }
+    if (schema.enum && !schema.enum.some((candidate) => candidate === value)) {
+      errors.push({ path, message: `Value must be one of: ${schema.enum.map(String).join(', ')}.` });
+    }
+
+    if (typeof value === 'string') {
+      if (schema.minLength !== undefined && value.length < schema.minLength) {
+        errors.push({ path, message: `Must contain at least ${schema.minLength} character(s).` });
+      }
+      return;
+    }
+
+    if (typeof value === 'number') {
+      if (schema.minimum !== undefined && value < schema.minimum) {
+        errors.push({ path, message: `Must be at least ${schema.minimum}.` });
+      }
+      if (schema.maximum !== undefined && value > schema.maximum) {
+        errors.push({ path, message: `Must be at most ${schema.maximum}.` });
+      }
+      return;
+    }
+
+    if (Array.isArray(value)) {
+      if (schema.minItems !== undefined && value.length < schema.minItems) {
+        errors.push({ path, message: `Must contain at least ${schema.minItems} item(s).` });
+      }
+      if (schema.items) {
+        value.forEach((item, index) => this.validateNode(item, schema.items!, root, `${path}[${index}]`, errors, depth + 1));
+      }
+      return;
+    }
+
+    if (value && typeof value === 'object') {
+      const objectValue = value as Record<string, unknown>;
+      for (const required of schema.required || []) {
+        if (!(required in objectValue)) {
+          errors.push({ path: `${path}.${required}`, message: 'Required property is missing.' });
+        }
+      }
+      for (const [key, propertySchema] of Object.entries(schema.properties || {})) {
+        if (key in objectValue) {
+          this.validateNode(objectValue[key], propertySchema, root, `${path}.${key}`, errors, depth + 1);
+        }
+      }
+    }
+  }
+
+  private resolveReference(reference: string, root: SchemaNode): SchemaNode | undefined {
+    if (!reference.startsWith('#/')) return undefined;
+    return reference.slice(2).split('/').reduce<unknown>((current, segment) => {
+      if (!current || typeof current !== 'object') return undefined;
+      return (current as Record<string, unknown>)[segment.replace(/~1/g, '/').replace(/~0/g, '~')];
+    }, root) as SchemaNode | undefined;
+  }
+
+  private matchesType(value: unknown, expected: string): boolean {
+    switch (expected) {
+      case 'object': return value !== null && typeof value === 'object' && !Array.isArray(value);
+      case 'array': return Array.isArray(value);
+      case 'integer': return typeof value === 'number' && Number.isInteger(value);
+      case 'number': return typeof value === 'number' && Number.isFinite(value);
+      case 'null': return value === null;
+      case 'string': return typeof value === 'string';
+      case 'boolean': return typeof value === 'boolean';
+      default: return true;
+    }
+  }
+
+  private describeType(value: unknown): string {
+    if (value === null) return 'null';
+    if (Array.isArray(value)) return 'array';
+    return typeof value;
+  }
 
   textLength = 100;
   passwordMinLength = 6;

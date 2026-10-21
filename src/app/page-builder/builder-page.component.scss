@@ -1,0 +1,1566 @@
+:host {
+  --builder-surface: var(--oa-builder-surface, var(--surface, #fff));
+  --builder-panel: var(--oa-builder-panel, var(--background, #f4f7fa));
+  --builder-border: var(--oa-builder-border, var(--border, #dce4eb));
+  --builder-text: var(--oa-builder-text, var(--text-primary, #193143));
+  --builder-muted: var(--oa-builder-muted, var(--text-secondary, #687b89));
+  --builder-accent: var(--oa-builder-accent, var(--primary, #16779b));
+  --builder-soft-accent: var(--oa-builder-accent-soft, rgba(var(--primary-rgb, 22 119 155), 0.09));
+  display: flex;
+  flex: 1 1 0;
+  flex-direction: column;
+  height: 0;
+  min-width: 0;
+  min-height: calc(100vh - 152px);
+}
+
+.builder-page-layout {
+  background:
+    radial-gradient(ellipse at 8% 0%, rgba(var(--primary-rgb, 22 119 155), 0.07), transparent 32rem),
+    var(--builder-panel);
+  box-sizing: border-box;
+  color: var(--builder-text);
+  flex: 1 1 0;
+  height: 0;
+  min-height: 0;
+  overflow: hidden;
+  padding: 0 clamp(16px, 2vw, 28px);
+  position: relative;
+}
+
+.builder-page-layout.builder-dark {
+  --builder-surface: #192632;
+  --builder-panel: #101922;
+  --builder-border: #2b3d4b;
+  --builder-text: #e5edf3;
+  --builder-muted: #a5b4bf;
+  --builder-accent: #67c5e5;
+  --builder-soft-accent: rgba(103, 197, 229, 0.13);
+  color-scheme: dark;
+}
+
+.builder-controller {
+  display: none;
+}
+
+:host ::ng-deep .builder-page-layout > oa-layout {
+  display: contents;
+}
+
+:host ::ng-deep .builder-page-layout > oa-layout > .section.content {
+  box-sizing: border-box;
+  display: grid;
+  gap: 0;
+  grid-template-areas: "toolbar canvas properties";
+  grid-template-columns: 10% 70% 20%;
+  height: 100%;
+  margin: 0 auto;
+  max-width: none;
+  min-height: 0;
+}
+
+.application-builder {
+  --builder-surface: #fff;
+  --builder-panel: #f8fafc;
+  --builder-border: #e2e8f0;
+  --builder-text: #0f172a;
+  --builder-muted: #64748b;
+  --builder-accent: #4f46e5;
+  --builder-soft-accent: rgba(79, 70, 229, 0.1);
+  background: var(--builder-panel);
+  min-height: 0;
+  padding: 0;
+}
+
+.application-builder.builder-dark {
+  --builder-surface: #20283a;
+  --builder-panel: #171e2d;
+  --builder-border: #354056;
+  --builder-text: #eef2fb;
+  --builder-muted: #a6b0c3;
+  --builder-accent: #a99fff;
+  --builder-soft-accent: rgba(169, 159, 255, 0.15);
+  background: #171e2d;
+}
+
+:host ::ng-deep .application-builder > oa-layout > .section.content {
+  gap: 0;
+  grid-template-columns: minmax(220px, 260px) minmax(0, 1fr) minmax(260px, 300px);
+  max-width: none;
+  min-height: 0;
+}
+
+:host ::ng-deep .builder-page-layout .builder-region-toolbar {
+  grid-area: toolbar;
+  min-width: 0;
+  position: sticky;
+  top: 0;
+  height: 100%;
+  max-height: 100%;
+  overflow-y: auto;
+  align-self: start;
+}
+
+:host ::ng-deep .builder-page-layout .builder-region-canvas {
+  grid-area: canvas;
+  min-width: 0;
+  min-height: 0;
+  overflow-y: auto;
+  position: static;
+}
+
+:host ::ng-deep .builder-page-layout .builder-region-canvas .builder-canvas {
+  max-height: none;
+}
+
+:host ::ng-deep .builder-page-layout .builder-region-properties {
+  grid-area: properties;
+  min-width: 0;
+  position: sticky;
+  top: 0;
+  height: 100%;
+  max-height: 100%;
+  overflow-y: auto;
+  align-self: start;
+}
+
+:host ::ng-deep .application-builder .builder-region-toolbar,
+:host ::ng-deep .application-builder .builder-region-properties {
+  background: var(--builder-surface);
+  min-height: 0;
+}
+
+:host ::ng-deep .application-builder .builder-region-toolbar {
+  padding: 0 12px;
+}
+
+:host ::ng-deep .application-builder .builder-region-toolbar {
+  border-right: 1px solid var(--builder-border);
+}
+
+:host ::ng-deep .application-builder .builder-region-properties {
+  border-left: 1px solid var(--builder-border);
+}
+
+:host ::ng-deep .application-builder .builder-toolbar,
+:host ::ng-deep .application-builder .builder-properties,
+:host ::ng-deep .application-builder .builder-canvas {
+  background: var(--builder-surface);
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  height: auto;
+  max-height: none;
+}
+
+:host ::ng-deep .application-builder .builder-toolbar,
+:host ::ng-deep .application-builder .builder-properties {
+  padding: 12px 0;
+}
+
+:host ::ng-deep .application-builder .builder-region-canvas .builder-canvas {
+  min-height: 100%;
+  max-height: none;
+}
+
+:host ::ng-deep .application-builder .builder-toolbar,
+:host ::ng-deep .application-builder .builder-properties {
+  padding: 13px 12px;
+}
+
+:host ::ng-deep .application-builder .builder-header {
+  background: var(--builder-surface);
+  border-bottom: 1px solid var(--builder-border);
+  gap: 12px;
+  flex: 0 0 auto;
+  margin: 0;
+  max-width: none;
+  min-height: 42px;
+  padding: 4px 18px;
+}
+
+:host ::ng-deep .application-builder .builder-heading {
+  gap: 9px;
+}
+
+:host ::ng-deep .application-builder .builder-heading > oa-icon {
+  background: var(--builder-soft-accent);
+  border-radius: 6px;
+  color: var(--builder-accent);
+  flex-basis: 28px;
+  font-size: 0.9rem;
+  height: 28px;
+}
+
+:host ::ng-deep .application-builder .builder-heading h1 {
+  font-size: 0.86rem;
+}
+
+:host ::ng-deep .application-builder .builder-eyebrow {
+  font-size: 0.58rem;
+  letter-spacing: 0.07em;
+}
+
+:host ::ng-deep .application-builder .builder-actions {
+  flex-wrap: nowrap;
+  gap: 4px;
+}
+
+:host ::ng-deep .application-builder .builder-actions button {
+  border-radius: 5px;
+  min-height: 31px;
+  padding: 5px 7px;
+}
+
+:host ::ng-deep .application-builder .canvas-toolbar {
+  flex: 0 0 auto;
+  min-height: 44px;
+  padding: 7px 14px;
+}
+
+:host ::ng-deep .application-builder .canvas-toolbar h2,
+:host ::ng-deep .application-builder .panel-title h2 {
+  font-size: 0.88rem;
+}
+
+:host ::ng-deep .application-builder .canvas-mode button {
+  border-radius: 4px;
+}
+
+:host ::ng-deep .application-builder .application-stage {
+  background-color: var(--builder-panel);
+  background-image: none;
+  padding: 24px;
+}
+
+:host ::ng-deep .application-builder.builder-dark .application-stage {
+  background-color: var(--builder-panel);
+  background-image: none;
+}
+
+:host ::ng-deep .application-builder .application-stage .canvas-guidance {
+  background: var(--builder-surface);
+  border-color: var(--builder-border);
+  border-radius: 4px;
+  margin-bottom: 17px;
+}
+
+:host ::ng-deep .application-builder .application-layers {
+  display: none;
+}
+
+:host ::ng-deep .application-builder .application-layer-heading {
+  align-items: center;
+  color: var(--builder-muted);
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 13px 6px;
+}
+
+:host ::ng-deep .application-builder .application-layer-heading h3 {
+  font-size: 0.66rem;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  margin: 0;
+  text-transform: uppercase;
+}
+
+:host ::ng-deep .application-builder .application-layer-heading > span {
+  font-size: 0.68rem;
+}
+
+:host ::ng-deep .application-builder .application-layer-list {
+  display: grid;
+  gap: 1px;
+}
+
+:host ::ng-deep .application-builder .application-layer-item {
+  align-items: center;
+  background: transparent;
+  border: 0;
+  color: var(--builder-text);
+  cursor: pointer;
+  display: grid;
+  font: inherit;
+  gap: 7px;
+  grid-template-columns: 16px minmax(0, 1fr);
+  padding: 6px 13px;
+  text-align: left;
+}
+
+:host ::ng-deep .application-builder .application-layer-item > oa-icon {
+  color: var(--builder-muted);
+  font-size: 0.83rem;
+}
+
+:host ::ng-deep .application-builder .application-layer-item > span {
+  font-size: 0.76rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+:host ::ng-deep .application-builder .application-layer-item > small {
+  color: var(--builder-muted);
+  font-size: 0.62rem;
+  grid-column: 2;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+:host ::ng-deep .application-builder .application-layer-item:hover {
+  background: #f4f5fa;
+}
+
+:host ::ng-deep .application-builder.builder-dark .application-layer-item:hover {
+  background: #2a3348;
+}
+
+:host ::ng-deep .application-builder .application-layer-item.selected {
+  background: var(--builder-soft-accent);
+  color: var(--builder-accent);
+}
+
+:host ::ng-deep .application-builder.builder-dark .application-layer-item.selected {
+  background: var(--builder-soft-accent);
+  color: var(--builder-accent);
+}
+
+:host ::ng-deep .application-builder .application-layer-item.selected > oa-icon {
+  color: var(--builder-accent);
+}
+
+:host ::ng-deep .application-builder .services-heading {
+  border-top: 1px solid var(--builder-border);
+  margin-top: 8px;
+  padding-top: 13px;
+}
+
+:host ::ng-deep .application-builder .tool-search {
+  margin: 7px 0;
+}
+
+:host ::ng-deep .application-builder .tool-group {
+  background: var(--builder-surface);
+  border: 1px solid var(--builder-border);
+  border-radius: 6px;
+  margin-top: 9px;
+  overflow: hidden;
+}
+
+:host ::ng-deep .application-builder .tool-group-toggle {
+  align-items: center;
+  background: transparent;
+  border: 0;
+  color: inherit;
+  cursor: pointer;
+  display: flex;
+  font: inherit;
+  gap: 8px;
+  justify-content: flex-start;
+  min-height: 38px;
+  padding: 7px 10px;
+  text-align: left;
+  width: 100%;
+}
+
+:host ::ng-deep .application-builder .tool-group-toggle[aria-expanded="true"] {
+  background: var(--builder-soft-accent);
+  color: var(--builder-accent);
+}
+
+:host ::ng-deep .application-builder .tool-group > h3 {
+  margin: 0;
+}
+
+:host ::ng-deep .application-builder .tool-group .tool-list {
+  border-top: 1px solid var(--builder-border);
+  padding: 4px 7px;
+}
+
+:host ::ng-deep .application-builder .tool-group-toggle > span {
+  flex: 1;
+}
+
+:host ::ng-deep .application-builder .tool-group-chevron {
+  transition: transform 140ms ease;
+}
+
+:host ::ng-deep .application-builder .tool-group-toggle[aria-expanded="false"] .tool-group-chevron {
+  transform: rotate(-90deg);
+}
+
+:host ::ng-deep .application-builder .tool-item {
+  border-radius: 4px;
+  min-height: 34px;
+  padding: 5px 7px;
+}
+
+:host ::ng-deep .application-builder .tool-item:hover,
+:host ::ng-deep .application-builder .application-section-badge:hover {
+  background: var(--builder-soft-accent);
+}
+
+:host ::ng-deep .application-builder .tool-search input {
+  background: #f8f9fc;
+  border: 1px solid var(--builder-border);
+  border-radius: 5px;
+  min-height: 36px;
+}
+
+:host ::ng-deep .application-builder.builder-dark .tool-search input {
+  background: var(--builder-panel);
+  color: var(--builder-text);
+}
+
+:host ::ng-deep .application-builder .application-artboards {
+  align-content: start;
+  display: grid;
+  gap: 14px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  justify-content: stretch;
+  min-height: 0;
+  padding: 8px 0 18px;
+}
+
+:host ::ng-deep .application-builder .application-artboard {
+  align-self: stretch;
+  cursor: pointer;
+  min-width: 0;
+  outline: none;
+}
+
+:host ::ng-deep .application-builder .application-artboard-screen {
+  background: var(--builder-surface);
+  border: 1px solid var(--builder-border);
+  border-radius: 6px;
+  box-shadow: 0 1px 3px rgba(36, 49, 74, 0.05);
+  color: var(--builder-text);
+  display: flex;
+  flex-direction: column;
+  min-height: 100px;
+  overflow: hidden;
+  transition: border-color 130ms ease, box-shadow 130ms ease, transform 130ms ease;
+}
+
+:host ::ng-deep .application-builder .application-artboard.selected .application-artboard-screen,
+:host ::ng-deep .application-builder .application-artboard:hover .application-artboard-screen {
+  border-color: var(--builder-accent);
+  box-shadow: 0 0 0 2px var(--builder-soft-accent), 0 3px 9px rgba(36, 49, 74, 0.08);
+}
+
+:host ::ng-deep .application-builder .application-artboard:focus-visible .application-artboard-screen {
+  outline: 2px solid var(--builder-accent);
+  outline-offset: 3px;
+}
+
+:host ::ng-deep .application-builder .application-artboard-status,
+:host ::ng-deep .application-builder .application-artboard-nav,
+:host ::ng-deep .application-builder .application-artboard-caption {
+  display: none;
+}
+
+:host ::ng-deep .application-builder .application-artboard-topbar {
+  align-items: center;
+  background: transparent;
+  color: var(--builder-text);
+  display: flex;
+  flex: 1 1 auto;
+  font-size: 0.78rem;
+  gap: 10px;
+  min-height: 98px;
+  padding: 16px;
+}
+
+:host ::ng-deep .application-builder .application-artboard-topbar > oa-icon:first-child {
+  align-items: center;
+  background: var(--builder-soft-accent);
+  border-radius: 7px;
+  color: var(--builder-accent);
+  display: inline-flex;
+  height: 34px;
+  justify-content: center;
+  width: 34px;
+}
+
+:host ::ng-deep .application-builder .application-artboard-topbar > span {
+  flex: 1;
+  font-weight: 650;
+}
+
+:host ::ng-deep .application-builder .application-artboard-topbar > oa-icon:last-child {
+  color: var(--builder-muted);
+}
+
+:host ::ng-deep .application-builder .node-header:focus-visible {
+  outline: 2px solid var(--builder-accent);
+  outline-offset: -2px;
+}
+
+:host ::ng-deep .application-builder .application-artboard-status,
+:host ::ng-deep .application-builder .application-artboard-status > span,
+:host ::ng-deep .application-builder .application-artboard-topbar,
+:host ::ng-deep .application-builder .application-artboard-nav {
+  align-items: center;
+  display: flex;
+}
+
+:host ::ng-deep .application-builder .application-artboard-status {
+  font-size: 0.56rem;
+  font-weight: 700;
+  justify-content: space-between;
+  padding: 7px 10px 4px;
+}
+
+:host ::ng-deep .application-builder .application-artboard-status > span {
+  gap: 3px;
+}
+
+:host ::ng-deep .application-builder .application-artboard-status oa-icon {
+  font-size: 0.62rem;
+}
+
+:host ::ng-deep .application-builder .application-artboard-topbar {
+  border-bottom: 1px solid #eeecea;
+  cursor: grab;
+  gap: 7px;
+  min-height: 35px;
+  padding: 5px 10px;
+}
+
+:host ::ng-deep .application-builder .application-artboard-topbar > span {
+  flex: 1;
+  font-size: 0.69rem;
+  font-weight: 650;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+:host ::ng-deep .application-builder .application-artboard-topbar oa-icon {
+  color: #77736f;
+  font-size: 0.78rem;
+}
+
+:host ::ng-deep .application-builder .application-artboard-content {
+  flex: 1;
+  padding: 17px 13px 13px;
+}
+
+:host ::ng-deep .application-builder .application-artboard-kicker {
+  color: #88837e;
+  font-size: 0.52rem;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+}
+
+:host ::ng-deep .application-builder .application-artboard-content h3 {
+  font-size: 1rem;
+  line-height: 1.25;
+  margin: 8px 0 3px;
+  overflow-wrap: anywhere;
+}
+
+:host ::ng-deep .application-builder .application-artboard-content > p {
+  color: #8a8580;
+  font-size: 0.63rem;
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+:host ::ng-deep .application-builder .application-preview-lines {
+  display: grid;
+  gap: 5px;
+  margin: 16px 0;
+}
+
+:host ::ng-deep .application-builder .application-preview-lines i {
+  background: #eceae8;
+  border-radius: 4px;
+  height: 6px;
+  width: 100%;
+}
+
+:host ::ng-deep .application-builder .application-preview-lines i:nth-child(2) {
+  width: 78%;
+}
+
+:host ::ng-deep .application-builder .application-preview-lines i:nth-child(3) {
+  width: 56%;
+}
+
+:host ::ng-deep .application-builder .application-preview-links {
+  display: grid;
+  gap: 5px;
+}
+
+:host ::ng-deep .application-builder .application-preview-links > div {
+  align-items: center;
+  background: #f6f5f4;
+  display: flex;
+  gap: 6px;
+  min-width: 0;
+  padding: 7px;
+}
+
+:host ::ng-deep .application-builder .application-preview-links > div > span {
+  flex: 1;
+  font-size: 0.62rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+:host ::ng-deep .application-builder .application-preview-links oa-icon {
+  color: #77736f;
+  font-size: 0.7rem;
+}
+
+:host ::ng-deep .application-builder .application-preview-placeholder {
+  align-items: center;
+  border: 1px dashed #d8d4d0;
+  color: #938d87;
+  display: flex;
+  font-size: 0.62rem;
+  gap: 5px;
+  justify-content: center;
+  min-height: 58px;
+}
+
+:host ::ng-deep .application-builder .application-artboard-nav {
+  border-top: 1px solid #eeecea;
+  gap: 20px;
+  justify-content: center;
+  min-height: 31px;
+}
+
+:host ::ng-deep .application-builder .application-artboard-nav i {
+  background: #d8d4d0;
+  border-radius: 50%;
+  height: 6px;
+  width: 6px;
+}
+
+:host ::ng-deep .application-builder .application-artboard-caption {
+  color: var(--builder-text);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 7px 1px 0;
+}
+
+:host ::ng-deep .application-builder .application-artboard-caption strong {
+  font-size: 0.7rem;
+  font-weight: 600;
+}
+
+:host ::ng-deep .application-builder .application-artboard-caption span {
+  color: var(--builder-muted);
+  font-size: 0.6rem;
+}
+
+:host ::ng-deep .application-builder .builder-properties .property-list {
+  display: block;
+}
+
+:host ::ng-deep .application-builder .builder-properties .property-field input,
+:host ::ng-deep .application-builder .builder-properties .property-field select,
+:host ::ng-deep .application-builder .builder-properties .property-field textarea {
+  border-radius: 3px;
+}
+
+:host ::ng-deep .application-builder .builder-properties .property-field.invalid input,
+:host ::ng-deep .application-builder .builder-properties .property-field.invalid select,
+:host ::ng-deep .application-builder .builder-properties .property-field.invalid textarea,
+:host ::ng-deep .application-builder .application-summary-fields > label.invalid input {
+  border-color: #c73535;
+  box-shadow: 0 0 0 2px rgba(199, 53, 53, 0.12);
+}
+
+:host ::ng-deep .application-builder .validation-error {
+  color: #b42318;
+}
+
+:host ::ng-deep .application-builder .builder-validation-errors {
+  background: #fff0ef;
+  border: 1px solid #e9aaa5;
+  border-radius: 8px;
+  color: #7f1d1d;
+  margin: 12px 18px;
+  padding: 12px 16px;
+}
+
+:host ::ng-deep .application-builder .builder-validation-errors ul {
+  margin: 8px 0 0;
+  padding-left: 20px;
+}
+
+:host ::ng-deep .application-builder .builder-validation-errors code {
+  font-weight: 700;
+}
+
+:host ::ng-deep .application-builder .application-config-canvas,
+:host ::ng-deep .application-builder .application-summary {
+  background: transparent;
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  padding: 20px;
+}
+
+:host ::ng-deep .application-builder .application-summary-intro,
+:host ::ng-deep .application-builder .application-config-heading {
+  align-items: center;
+  display: flex;
+  gap: 12px;
+}
+
+:host ::ng-deep .application-builder .application-summary-intro {
+  margin: 0 auto 17px;
+  max-width: 850px;
+}
+
+:host ::ng-deep .application-builder .application-summary-icon {
+  align-items: center;
+  background: rgba(255, 255, 255, 0.62);
+  backdrop-filter: blur(14px);
+  border: 1px solid var(--builder-border);
+  border-radius: 13px;
+  color: var(--builder-accent);
+  display: inline-flex;
+  flex: 0 0 42px;
+  height: 42px;
+  justify-content: center;
+}
+
+:host ::ng-deep .application-builder .application-summary-intro h3,
+:host ::ng-deep .application-builder .application-config-heading h3 {
+  color: var(--builder-text);
+  font-size: 0.98rem;
+  margin: 1px 0 2px;
+}
+
+:host ::ng-deep .application-builder .application-summary-intro p,
+:host ::ng-deep .application-builder .application-config-heading p {
+  color: var(--builder-muted);
+  font-size: 0.72rem;
+  margin: 0;
+}
+
+:host ::ng-deep .application-builder .application-config-kicker {
+  color: var(--builder-muted);
+  display: block;
+  font-size: 0.57rem;
+  font-weight: 750;
+  letter-spacing: 0.08em;
+}
+
+:host ::ng-deep .application-builder .application-summary-cards {
+  display: grid;
+  gap: 10px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  margin: 0 auto 14px;
+  max-width: 850px;
+}
+
+:host ::ng-deep .application-builder .application-summary-cards > article,
+:host ::ng-deep .application-builder .application-config-card {
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(228, 225, 223, 0.85);
+  box-shadow: 0 8px 22px rgba(35, 31, 28, 0.045);
+}
+
+:host ::ng-deep .application-builder.builder-dark .application-summary-cards > article,
+:host ::ng-deep .application-builder.builder-dark .application-config-card,
+:host ::ng-deep .application-builder.builder-dark .application-summary-icon {
+  background: rgba(39, 38, 36, 0.78);
+  border-color: var(--builder-border);
+}
+
+:host ::ng-deep .application-builder .application-summary-cards > article {
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  min-width: 0;
+  padding: 11px 13px;
+}
+
+:host ::ng-deep .application-builder .application-summary-cards > article > span {
+  color: var(--builder-muted);
+  font-size: 0.65rem;
+}
+
+:host ::ng-deep .application-builder .application-summary-cards > article > strong {
+  color: var(--builder-text);
+  font-size: 0.95rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+:host ::ng-deep .application-builder .application-config-card {
+  border-radius: 9px;
+  margin: 0 auto 13px;
+  max-width: 850px;
+  padding: 15px;
+}
+
+:host ::ng-deep .application-builder .application-config-heading {
+  align-items: flex-start;
+  margin-bottom: 14px;
+}
+
+:host ::ng-deep .application-builder .application-config-heading > oa-icon {
+  color: var(--builder-accent);
+  flex: 0 0 auto;
+  margin-top: 2px;
+}
+
+:host ::ng-deep .application-builder .application-summary-fields {
+  display: grid;
+  gap: 10px 14px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+:host ::ng-deep .application-builder .application-summary-fields > label,
+:host ::ng-deep .application-builder .application-json-field {
+  color: var(--builder-muted);
+  display: grid;
+  font-size: 0.69rem;
+  font-weight: 650;
+  gap: 5px;
+  min-width: 0;
+}
+
+:host ::ng-deep .application-builder .application-summary-fields input,
+:host ::ng-deep .application-builder .application-style-pill input,
+:host ::ng-deep .application-builder .application-json-field textarea {
+  background: rgba(255, 255, 255, 0.62);
+  border: 1px solid var(--builder-border);
+  border-radius: 4px;
+  color: var(--builder-text);
+  font: inherit;
+  font-weight: 400;
+  min-width: 0;
+  padding: 8px 9px;
+  width: 100%;
+}
+
+:host ::ng-deep .application-builder.builder-dark .application-summary-fields input,
+:host ::ng-deep .application-builder.builder-dark .application-style-pill input,
+:host ::ng-deep .application-builder.builder-dark .application-json-field textarea {
+  background: rgba(30, 29, 28, 0.8);
+}
+
+:host ::ng-deep .application-builder .application-summary-fields input:focus,
+:host ::ng-deep .application-builder .application-style-pill input:focus,
+:host ::ng-deep .application-builder .application-json-field textarea:focus {
+  border-color: var(--builder-accent);
+  outline: 2px solid var(--builder-soft-accent);
+}
+
+:host ::ng-deep .application-builder .application-source-field {
+  grid-column: 1 / -1;
+}
+
+:host ::ng-deep .application-builder .application-source-field small {
+  color: var(--builder-muted);
+  font-size: 0.62rem;
+  font-weight: 400;
+  overflow-wrap: anywhere;
+}
+
+:host ::ng-deep .application-builder .application-summary-actions {
+  display: grid;
+  gap: 6px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+:host ::ng-deep .application-builder .application-summary-actions button,
+:host ::ng-deep .application-builder .application-section-badge,
+:host ::ng-deep .application-builder .application-config-primary {
+  align-items: center;
+  background: rgba(255, 255, 255, 0.5);
+  border: 1px solid var(--builder-border);
+  border-radius: 5px;
+  color: var(--builder-text);
+  cursor: pointer;
+  display: flex;
+  font: inherit;
+  gap: 8px;
+  min-width: 0;
+  padding: 9px;
+  text-align: left;
+}
+
+:host ::ng-deep .application-builder .application-summary-actions button:hover,
+:host ::ng-deep .application-builder .application-section-badge:hover,
+:host ::ng-deep .application-builder .application-config-primary:hover {
+  border-color: var(--builder-accent);
+}
+
+:host ::ng-deep .application-builder .application-summary-actions button > span {
+  flex: 1;
+  font-size: 0.72rem;
+}
+
+:host ::ng-deep .application-builder .application-summary-actions button > oa-icon:first-child,
+:host ::ng-deep .application-builder .application-section-badge > oa-icon {
+  color: var(--builder-accent);
+}
+
+:host ::ng-deep .application-builder .application-config-canvas {
+  background-color: #f4f3f2;
+  background-image: radial-gradient(#d9d6d3 0.75px, transparent 0.75px);
+  background-size: 18px 18px;
+}
+
+:host ::ng-deep .application-builder.builder-dark .application-config-canvas {
+  background-color: #1e1d1c;
+  background-image: radial-gradient(#3a3835 0.75px, transparent 0.75px);
+}
+
+:host ::ng-deep .application-builder .application-config-error {
+  background: #fff1ef;
+  border: 1px solid #e9b5ad;
+  border-radius: 5px;
+  color: #9f2d1d;
+  font-size: 0.75rem;
+  margin: 0 auto 12px;
+  max-width: 850px;
+  padding: 9px 12px;
+}
+
+:host ::ng-deep .application-builder .application-layout-list {
+  display: grid;
+  gap: 6px;
+  margin-bottom: 11px;
+}
+
+:host ::ng-deep .application-builder .application-layout-row {
+  align-items: center;
+  background: var(--builder-surface);
+  border: 1px solid var(--builder-border);
+  border-radius: 5px;
+  display: flex;
+  gap: 5px;
+  justify-content: space-between;
+  padding: 5px;
+}
+
+:host ::ng-deep .application-builder .application-layout-row.selected {
+  border-color: var(--builder-accent);
+  box-shadow: 0 0 0 2px var(--builder-soft-accent);
+}
+
+:host ::ng-deep .application-builder .application-layout-select {
+  align-items: center;
+  background: transparent;
+  border: 0;
+  color: var(--builder-text);
+  cursor: grab;
+  display: flex;
+  flex: 1;
+  font: inherit;
+  gap: 9px;
+  min-width: 0;
+  padding: 6px;
+  text-align: left;
+}
+
+:host ::ng-deep .application-builder .application-layout-select > oa-icon {
+  color: var(--builder-muted);
+}
+
+:host ::ng-deep .application-builder .application-layout-select > span {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+:host ::ng-deep .application-builder .application-layout-select strong,
+:host ::ng-deep .application-builder .application-layout-select small {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+:host ::ng-deep .application-builder .application-layout-select strong {
+  font-size: 0.75rem;
+}
+
+:host ::ng-deep .application-builder .application-layout-select small {
+  color: var(--builder-muted);
+  font-size: 0.63rem;
+}
+
+:host ::ng-deep .application-builder .application-layout-remove,
+:host ::ng-deep .application-builder .application-style-pill > button {
+  background: transparent;
+  border: 0;
+  color: var(--builder-muted);
+  cursor: pointer;
+  display: inline-flex;
+  padding: 6px;
+}
+
+:host ::ng-deep .application-builder .application-layout-remove:hover,
+:host ::ng-deep .application-builder .application-style-pill > button:hover {
+  color: #c62828;
+}
+
+:host ::ng-deep .application-builder .application-config-primary {
+  background: var(--builder-accent);
+  border-color: var(--builder-accent);
+  color: #fff;
+  font-size: 0.73rem;
+  justify-content: center;
+  margin-bottom: 14px;
+}
+
+:host ::ng-deep .application-builder .application-json-field textarea {
+  background: #171e23;
+  color: #e3e9ec;
+  font-family: Consolas, 'SFMono-Regular', monospace;
+  font-size: 0.73rem;
+  line-height: 1.5;
+  resize: vertical;
+  tab-size: 2;
+}
+
+:host ::ng-deep .application-builder .application-enable-toggle {
+  align-items: center;
+  background: var(--builder-panel);
+  border: 1px solid var(--builder-border);
+  border-radius: 5px;
+  cursor: pointer;
+  display: flex;
+  gap: 10px;
+  margin-bottom: 13px;
+  padding: 10px;
+}
+
+:host ::ng-deep .application-builder .application-enable-toggle input {
+  accent-color: var(--builder-accent);
+  height: 17px;
+  width: 17px;
+}
+
+:host ::ng-deep .application-builder .application-enable-toggle span {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+:host ::ng-deep .application-builder .application-enable-toggle strong {
+  color: var(--builder-text);
+  font-size: 0.73rem;
+}
+
+:host ::ng-deep .application-builder .application-enable-toggle small {
+  color: var(--builder-muted);
+  font-size: 0.64rem;
+}
+
+:host ::ng-deep .application-builder .shell-editor-card.disabled-section {
+  opacity: 0.68;
+}
+
+:host ::ng-deep .application-builder .application-style-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 14px 0;
+}
+
+:host ::ng-deep .application-builder .application-style-pill {
+  align-items: center;
+  background: rgba(255, 255, 255, 0.6);
+  border: 1px solid var(--builder-border);
+  border-radius: 999px;
+  display: flex;
+  gap: 6px;
+  max-width: 100%;
+  min-width: min(100%, 290px);
+  padding: 4px 6px 4px 10px;
+}
+
+:host ::ng-deep .application-builder .application-style-pill > oa-icon {
+  color: var(--builder-accent);
+  flex: 0 0 auto;
+  font-size: 0.8rem;
+}
+
+:host ::ng-deep .application-builder .application-style-pill input {
+  background: transparent;
+  border: 0;
+  font-family: Consolas, 'SFMono-Regular', monospace;
+  font-size: 0.7rem;
+  outline: none;
+  padding: 5px 2px;
+}
+
+:host ::ng-deep .application-builder .application-section-grid {
+  display: grid;
+  gap: 7px;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  margin: 13px 0 16px;
+}
+
+:host ::ng-deep .application-builder .application-section-badge {
+  align-items: flex-start;
+  flex-direction: column;
+  gap: 5px;
+  min-height: 72px;
+  padding: 9px;
+}
+
+:host ::ng-deep .application-builder .application-section-badge.active {
+  background: var(--builder-soft-accent);
+  border-color: var(--builder-accent);
+}
+
+:host ::ng-deep .application-builder .application-section-badge > span {
+  font-size: 0.72rem;
+  font-weight: 650;
+}
+
+:host ::ng-deep .application-builder .application-section-badge > small {
+  color: var(--builder-muted);
+  font-size: 0.61rem;
+}
+
+:host ::ng-deep .application-builder .application-config-empty {
+  border: 1px dashed var(--builder-border);
+  border-radius: 5px;
+  color: var(--builder-muted);
+  font-size: 0.73rem;
+  margin: 0;
+  padding: 12px;
+}
+
+@media (max-width: 1100px) {
+  :host ::ng-deep .builder-page-layout > oa-layout > .section.content {
+    grid-template-areas: "toolbar canvas properties";
+    grid-template-columns: 10% 70% 20%;
+  }
+
+  :host ::ng-deep .application-builder > oa-layout > .section.content {
+    grid-template-areas: "toolbar canvas properties";
+    grid-template-columns: minmax(200px, 240px) minmax(0, 1fr) minmax(240px, 280px);
+  }
+}
+
+@media (max-width: 899px) {
+  :host {
+    display: block;
+    flex: initial;
+    height: auto;
+    min-height: 0;
+  }
+
+  .builder-page-layout {
+    flex: initial;
+    height: auto;
+    min-height: calc(100vh - 84px);
+    overflow: visible;
+  }
+
+  .application-builder {
+    height: auto;
+    min-height: calc(100vh - 110px);
+  }
+
+  :host ::ng-deep .builder-page-layout > oa-layout > .section.content {
+    grid-template-areas:
+      "toolbar"
+      "canvas"
+      "properties";
+    grid-template-columns: minmax(0, 1fr);
+    height: auto;
+    min-height: 0;
+  }
+
+  :host ::ng-deep .builder-page-layout .builder-region-toolbar,
+  :host ::ng-deep .builder-page-layout .builder-region-properties {
+    border: 0;
+    position: static;
+    height: auto;
+    max-height: none;
+    overflow-y: visible;
+  }
+
+  :host ::ng-deep .builder-page-layout .builder-region-canvas {
+    grid-area: canvas;
+    overflow-y: visible;
+  }
+
+  :host ::ng-deep .application-builder .builder-toolbar,
+  :host ::ng-deep .application-builder .builder-properties,
+  :host ::ng-deep .application-builder .builder-canvas {
+    max-height: none;
+  }
+
+  :host ::ng-deep .application-builder .builder-region-canvas .builder-canvas {
+    min-height: 560px;
+  }
+
+  :host ::ng-deep .application-builder .builder-header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  :host ::ng-deep .application-builder .builder-actions {
+    flex-wrap: wrap;
+    justify-content: flex-start;
+  }
+
+  :host ::ng-deep .application-builder .application-artboards {
+    grid-template-columns: repeat(auto-fill, minmax(160px, 200px));
+  }
+
+  :host ::ng-deep .application-builder .application-summary-cards {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 700px) {
+  :host ::ng-deep .builder-page-layout > oa-layout > .section.content {
+    grid-template-areas:
+      "toolbar"
+      "canvas"
+      "properties";
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  :host ::ng-deep .application-builder .application-summary-fields,
+  :host ::ng-deep .application-builder .application-summary-actions {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  :host ::ng-deep .application-builder .application-config-canvas,
+  :host ::ng-deep .application-builder .application-summary {
+    padding: 12px;
+  }
+}
+
+:host ::ng-deep .builder-page-layout.builder-toolbox-collapsed:not(.application-builder):not(.builder-no-panels) > oa-layout > .section.content {
+  grid-template-columns: 0 minmax(0, 80%) 20%;
+}
+
+:host ::ng-deep .builder-page-layout.builder-properties-collapsed:not(.application-builder):not(.builder-no-panels) > oa-layout > .section.content {
+  grid-template-columns: 10% minmax(0, 90%) 0;
+}
+
+:host ::ng-deep .builder-page-layout.builder-toolbox-collapsed.builder-properties-collapsed:not(.application-builder):not(.builder-no-panels) > oa-layout > .section.content {
+  grid-template-columns: 0 minmax(0, 1fr) 0;
+}
+
+:host ::ng-deep .application-builder.builder-toolbox-collapsed:not(.builder-no-panels) > oa-layout > .section.content {
+  grid-template-columns: 0 minmax(0, 1fr) minmax(260px, 300px);
+}
+
+:host ::ng-deep .application-builder.builder-properties-collapsed:not(.builder-no-panels) > oa-layout > .section.content {
+  grid-template-columns: minmax(220px, 260px) minmax(0, 1fr) 0;
+}
+
+:host ::ng-deep .application-builder.builder-toolbox-collapsed.builder-properties-collapsed:not(.builder-no-panels) > oa-layout > .section.content {
+  grid-template-columns: 0 minmax(0, 1fr) 0;
+}
+
+:host ::ng-deep .builder-page-layout.builder-toolbox-collapsed:not(.builder-no-panels) .builder-region-toolbar,
+:host ::ng-deep .builder-page-layout.builder-properties-collapsed:not(.builder-no-panels) .builder-region-properties {
+  overflow: hidden;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+:host ::ng-deep .builder-page-layout .builder-toolbar.collapsed,
+:host ::ng-deep .builder-page-layout .builder-properties.collapsed {
+  display: none;
+}
+
+:host ::ng-deep .application-builder.builder-toolbox-collapsed:not(.builder-no-panels) .builder-region-toolbar,
+:host ::ng-deep .application-builder.builder-properties-collapsed:not(.builder-no-panels) .builder-region-properties {
+  display: none;
+}
+
+:host ::ng-deep .application-builder.application-builder-no-panels .builder-region-toolbar,
+:host ::ng-deep .application-builder.application-builder-no-panels .builder-region-properties {
+  display: none;
+}
+
+:host ::ng-deep .application-builder .builder-toolbar.collapsed,
+:host ::ng-deep .application-builder .builder-properties.collapsed {
+  display: none;
+}
+
+.panel-anchor {
+  align-items: center;
+  background: var(--builder-surface);
+  border: 1px solid var(--builder-border);
+  border-radius: 10px;
+  box-shadow: 0 4px 16px rgba(21, 45, 62, 0.16);
+  color: var(--builder-muted);
+  cursor: pointer;
+  display: inline-flex;
+  height: 40px;
+  justify-content: center;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 40px;
+  z-index: 5;
+}
+
+.panel-anchor:hover,
+.panel-anchor:focus-visible {
+  border-color: var(--builder-accent);
+  color: var(--builder-accent);
+}
+
+.toolbox-anchor {
+  left: 8px;
+}
+
+.properties-anchor {
+  right: 8px;
+}
+
+:host ::ng-deep .application-builder.application-builder-no-panels > oa-layout > .section.content {
+  grid-template-areas: "canvas";
+  grid-template-columns: minmax(0, 1fr);
+}
+
+:host ::ng-deep .application-builder.application-builder-no-panels .builder-region-canvas {
+  grid-column: 1 / -1;
+}
+
+:host ::ng-deep .application-builder.application-builder-no-panels .builder-region-canvas .builder-canvas {
+  max-height: none;
+}
+
+:host ::ng-deep .builder-page-layout.builder-no-panels .builder-region-toolbar,
+:host ::ng-deep .builder-page-layout.builder-no-panels .builder-region-properties {
+  display: none;
+}
+
+:host ::ng-deep .builder-page-layout.builder-no-panels > oa-layout > .section.content {
+  grid-template-areas: "canvas";
+  grid-template-columns: minmax(0, 1fr);
+}
+
+:host ::ng-deep .builder-page-layout.builder-no-panels .builder-region-canvas {
+  grid-column: 1 / -1;
+}
+
+:host ::ng-deep .builder-page-layout .canvas-list.drop-target {
+  background: var(--builder-soft-accent);
+  box-shadow: inset 0 0 0 2px var(--builder-accent);
+}
+
+@media (max-width: 899px) {
+  :host ::ng-deep .builder-page-layout.builder-toolbox-collapsed:not(.application-builder-no-panels) > oa-layout > .section.content,
+  :host ::ng-deep .builder-page-layout.builder-properties-collapsed:not(.application-builder-no-panels) > oa-layout > .section.content {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+:host ::ng-deep .application-builder .application-section-grid {
+  gap: 12px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+:host ::ng-deep .application-builder .application-section-badge {
+  align-items: center;
+  background: var(--builder-surface);
+  border-radius: 6px;
+  box-shadow: 0 1px 3px rgba(36, 49, 74, 0.05);
+  gap: 8px;
+  justify-content: center;
+  min-height: 112px;
+  padding: 13px;
+  text-align: center;
+}
+
+:host ::ng-deep .application-builder .application-section-badge > oa-icon {
+  color: var(--builder-accent);
+  font-size: 1.1rem;
+}
+
+:host ::ng-deep .application-builder .application-section-badge > span {
+  font-size: 0.78rem;
+}
+
+:host ::ng-deep .application-builder .application-section-badge.active {
+  box-shadow: 0 0 0 2px var(--builder-soft-accent);
+}
+
+:host ::ng-deep .application-builder .application-artboards {
+  gap: 14px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  justify-content: stretch;
+  min-height: 0;
+  padding: 8px 0 18px;
+}
+
+:host ::ng-deep .application-builder .application-artboard-screen {
+  background: var(--builder-surface);
+  border-color: var(--builder-border);
+  border-radius: 6px;
+  box-shadow: 0 1px 3px rgba(36, 49, 74, 0.05);
+  color: var(--builder-text);
+  min-height: 112px;
+}
+
+:host ::ng-deep .application-builder .application-artboard.selected .application-artboard-screen,
+:host ::ng-deep .application-builder .application-artboard:hover .application-artboard-screen {
+  border-color: var(--builder-accent);
+  box-shadow: 0 0 0 2px var(--builder-soft-accent), 0 3px 9px rgba(36, 49, 74, 0.08);
+}
+
+:host ::ng-deep .application-builder .application-artboard:focus-visible .application-artboard-screen {
+  outline-color: var(--builder-accent);
+}
+
+:host ::ng-deep .application-builder .application-artboard-status,
+:host ::ng-deep .application-builder .application-artboard-nav,
+:host ::ng-deep .application-builder .application-artboard-caption {
+  display: none;
+}
+
+:host ::ng-deep .application-builder .application-artboard-topbar {
+  background: transparent;
+  color: var(--builder-text);
+  font-size: 0.78rem;
+  gap: 10px;
+  min-height: 65px;
+  padding: 14px 14px 6px;
+}
+
+:host ::ng-deep .application-builder .application-artboard-topbar > oa-icon:first-child {
+  align-items: center;
+  background: var(--builder-soft-accent);
+  border-radius: 7px;
+  color: var(--builder-accent);
+  display: inline-flex;
+  height: 34px;
+  justify-content: center;
+  width: 34px;
+}
+
+:host ::ng-deep .application-builder .application-artboard-topbar > span {
+  flex: 1;
+  font-weight: 650;
+}
+
+:host ::ng-deep .application-builder .application-artboard-content {
+  background: transparent;
+  min-height: 0;
+  padding: 0 14px 12px 58px;
+}
+
+:host ::ng-deep .application-builder .application-artboard-content .application-artboard-kicker,
+:host ::ng-deep .application-builder .application-artboard-content h3,
+:host ::ng-deep .application-builder .application-preview-lines,
+:host ::ng-deep .application-builder .application-preview-links,
+:host ::ng-deep .application-builder .application-preview-placeholder {
+  display: none;
+}
+
+:host ::ng-deep .application-builder .application-artboard-content p {
+  color: var(--builder-muted);
+  font-size: 0.69rem;
+  margin: -4px 0 0;
+}
+
+:host ::ng-deep .application-builder .auxiliary-collection {
+  background: var(--builder-surface);
+  border: 1px solid var(--builder-border);
+  border-radius: 6px;
+  box-shadow: 0 1px 3px rgba(36, 49, 74, 0.05);
+  margin: 8px 0 18px;
+  overflow: hidden;
+  padding: 0 12px 10px;
+}
+
+:host ::ng-deep .application-builder .auxiliary-collection .nested-heading {
+  border-bottom: 1px solid var(--builder-border);
+  margin: 0 -12px 8px;
+  padding: 11px 13px;
+}
+
+:host ::ng-deep .application-builder .builder-properties {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+}
+
+:host ::ng-deep .application-builder .builder-properties .panel-title {
+  border-bottom: 1px solid var(--builder-border);
+  margin: 0 0 10px;
+  padding: 0 12px 10px;
+}
+
+:host ::ng-deep .application-builder .builder-properties .property-list {
+  flex: 1 1 auto;
+}
+
+:host ::ng-deep .application-builder .builder-properties .property-group {
+  border-bottom: 1px solid var(--builder-border);
+  margin: 0;
+  padding: 9px 12px 14px;
+}
+
+:host ::ng-deep .application-builder .builder-properties .property-group h3 {
+  color: var(--builder-text);
+  font-size: 0.78rem;
+  margin: 0 0 10px;
+}
+
+:host ::ng-deep .application-builder .builder-properties .property-field {
+  gap: 5px;
+  margin: 0 0 10px;
+}
+
+:host ::ng-deep .application-builder .builder-properties .property-field > label {
+  color: var(--builder-muted);
+  font-size: 0.67rem;
+}
+
+:host ::ng-deep .application-builder .builder-properties .property-field input,
+:host ::ng-deep .application-builder .builder-properties .property-field select,
+:host ::ng-deep .application-builder .builder-properties .property-field textarea {
+  background: #f8f9fc;
+  border: 1px solid var(--builder-border);
+  border-radius: 5px;
+  color: var(--builder-text);
+  font-size: 0.73rem;
+  min-height: 35px;
+  padding: 7px 9px;
+}
+
+:host ::ng-deep .application-builder.builder-dark .builder-properties .property-field input,
+:host ::ng-deep .application-builder.builder-dark .builder-properties .property-field select,
+:host ::ng-deep .application-builder.builder-dark .builder-properties .property-field textarea {
+  background: var(--builder-panel);
+}
+
+:host ::ng-deep .application-builder .builder-properties .properties-footer {
+  background: var(--builder-surface);
+  border-top: 1px solid var(--builder-border);
+  color: var(--builder-muted);
+  font-size: 0.65rem;
+  margin: auto -12px 0;
+  padding: 10px 12px 2px;
+}
+
+:host ::ng-deep .application-builder .builder-region-toolbar .tool-group > h3 .tool-group-toggle[aria-expanded="true"] {
+  background: var(--builder-soft-accent);
+  color: var(--builder-accent);
+}
+
+:host ::ng-deep .application-builder .builder-region-toolbar .tool-group > h3 .tool-group-toggle[aria-expanded="true"] oa-icon {
+  color: var(--builder-accent);
+}

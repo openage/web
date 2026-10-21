@@ -4,6 +4,10 @@
 
 OA Pages is a framework for building dynamic web applications, leveraging JSON-based configurations to define the structure and behavior of the application.
 
+## Documentation
+
+Browse the human-readable [documentation index](docs/README.md), starting with the [system architecture guide](docs/architecture.md) for runtime and feature boundaries.
+
 
 ```mermaid
 flowchart TD
@@ -350,7 +354,7 @@ Supports pagination:
 ### Project Configuration
 
 #### Development Setup
-- Uses Angular 17 with standalone components
+- Uses Angular 21 with standalone components
 - ESLint configuration for code quality
 - EditorConfig for consistent coding style
 - Environment configurations:
@@ -388,7 +392,7 @@ Supports pagination:
 - Enhanced styles and application structure.
 
 ### Version 2.0
-- Upgraded to Angular 17.
+- Upgraded to Angular 17 at the time of the 2.0 release.
 - Introduced standalone components and new architecture.
 
 ---
