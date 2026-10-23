@@ -1,33 +1,13 @@
-export type WorkspaceMode = 'viewer' | 'editor' | 'code' | 'summary' | 'wysiwyg' | 'structure' | 'json' | 'config';
-
-export interface BuilderSectionMetadata {
-  code: string;
-  title: string;
-  type: string;
-  enabled?: boolean;
-}
-
 export interface BuilderCanvasSectionMetadata {
   code: string;
   title: string;
   path: string;
+  target?: string;
   group?: string;
   optional?: boolean;
   targets?: string[];
-}
-
-export interface BuilderTabMetadata {
-  code: string;
-  title: string;
-  icon: string;
-  sections: BuilderSectionMetadata[];
-  type?: string;
-  value?: string;
-  items?: BuilderTabMetadata[];
-  allowedControls?: string[];
-  workspaceMode?: WorkspaceMode;
-  workspacePath?: string;
-  sectionCode?: string;
+  itemType?: string;
+  itemAction?: { label: string; url: string };
 }
 
 export interface BuilderToolMetadata extends BuilderToolbarItem {
@@ -55,14 +35,14 @@ export interface BuilderToolbarItem {
 }
 
 export interface BuilderToolbarGroup {
+  code: string;
   title: string;
   icon?: string;
-  items: BuilderToolbarItem[];
+  tools: BuilderToolbarItem[];
 }
 
 export interface BuilderToolboxGroupMetadata extends BuilderToolbarGroup {
-  code: string;
-  items: BuilderToolMetadata[];
+  tools: BuilderToolMetadata[];
 }
 
 export interface BuilderPropertyMetadata {
@@ -83,7 +63,6 @@ export interface BuilderMetadata {
   itemCollectionPath: string;
   itemLabel: string;
   auxiliaryCollections?: Array<{ path: string; title: string }>;
-  actions: BuilderTabMetadata[];
   canvasSections?: BuilderCanvasSectionMetadata[];
   toolbox: { groups: BuilderToolboxGroupMetadata[] };
   propertySchemas: Record<string, BuilderPropertyMetadata[]>;

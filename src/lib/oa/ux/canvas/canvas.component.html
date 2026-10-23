@@ -1,113 +1,118 @@
-@if (builder.metadata(); as config) {
-<section class="builder-canvas" [ngClass]="className" [attr.data-root-document]="rootDocumentType"
+<section class="builder-canvas" [ngClass]="className" [attr.data-root-document]="value"
   [attr.aria-label]="options['ariaLabel'] || 'Workspace canvas'">
-  @if (showCanvasViewSwitch && canvasTabs.length) {
-  <div class="builder-tabs" role="tablist" aria-label="Workspace views">
-    @for (tab of canvasTabs; track tab.code) {
-    <button type="button" role="tab" [class.active]="activeTab() === tab.code"
-      [attr.aria-selected]="activeTab() === tab.code" (click)="builder.selectTab(tab.code)">
-      <oa-icon [value]="tab.icon"></oa-icon><span>{{ tab.title }}</span>
-    </button>
-    }
-  </div>
-  }
-  @if (builder.loadError()) { <div class="builder-notice" role="status">{{ builder.loadError() }}</div> }
+  <header class="canvas-heading">
+    <oa-icon [value]="options['icon'] || 'dashboard'"></oa-icon>
+    <h2>{{ title }}</h2>
+  </header>
 
-  @switch (activeWorkspaceMode) {
-  @case ('viewer') {
-  @if (viewerOptions['template']) {
-  <div class="summary-canvas">
-    <oa-html-viewer [value]="builder.workspaceData()" [options]="viewerOptions"></oa-html-viewer>
-  </div>
-  } @else {
-  <div class="canvas-empty"><oa-icon [value]="config.icon"></oa-icon><h3>Viewer template is not configured</h3>
-    <p>Set <code>options.viewer.template.code</code> on the canvas.</p></div>
-  }
-  }
-  @case ('code') {
-  <div class="json-canvas">
-    @if (builder.propertyError()) { <div class="application-config-error" role="alert">{{ builder.propertyError() }}</div> }
-    <oa-json-editor [value]="builder.workspaceData()" [options]="codeEditorOptions"
-      (valueChange)="builder.updateWorkspaceData($event)"></oa-json-editor>
-  </div>
-  }
-  @default {
-  <div class="structure-canvas" (click)="builder.selectWorkspace()">
-    <div class="canvas-guidance"><oa-icon value="info"></oa-icon><span>Drag tools here to add them. Select an item to edit its properties.</span></div>
-    @for (group of editorSectionGroups; track group.title) {
-    <section class="canvas-section-group">
-      <h2 class="canvas-group-title">{{ group.title }}</h2>
-      <div class="canvas-section-grid">
-      @for (section of group.sections; track section.code) {
-      @if (sectionAvailable(section)) {
-      <section class="canvas-section">
-      <div class="canvas-section-heading"><span>{{ section.title }}</span>
-        @if (sectionValue(section); as value) { @if (isArray(value)) { <span>{{ value.length }}</span> } }
-      </div>
-      @if (sectionValue(section); as value) {
-        @if (isArray(value)) {
-        <ng-container *ngTemplateOutlet="nodeList; context: { $implicit: objectItems(value), parentPath: section.path }"></ng-container>
-        } @else if (isObject(value)) {
+  @if (loadError) { <div class="builder-notice" role="status">{{ loadError }}</div> }
+
+  @if (visibleSections.length) {
+  <div class="canvas-section-grid">
+    @for (section of visibleSections; track section.code) {
+    <section class="canvas-section" cdkDropList
+      [cdkDropListData]="objectItems(sectionValue(section))"
+      [cdkDropListDisabled]="isArray(sectionValue(section))"
+      [id]="sectionDropZoneId(section)"
+      [cdkDropListConnectedTo]="toolboxDropListIds"
+      [class.drop-target]="isDropTargetAtPath(section, section.path)"
+      [class.selected]="selection?.sectionCode === section.code"
+      (cdkDropListDropped)="onDrop($event, section)">
+      <button type="button" class="canvas-section-heading"
+        [class.selected]="selection?.path === section.path" (click)="selectSection(section)">
+        <span>{{ section.title || section.code }}</span>
+        @if (sectionValue(section); as sectionData) {
+          @if (isArray(sectionData)) { <span>{{ sectionData.length }}</span> }
+        }
+      </button>
+
+      @if (sectionValue(section); as sectionData) {
+        @if (isArray(sectionData)) {
+        <div class="canvas-list" cdkDropList [cdkDropListData]="objectItems(sectionData)"
+          [id]="sectionDropListId(section)" [cdkDropListConnectedTo]="toolboxDropListIds"
+          [class.drop-target]="isDropTargetAtPath(section, section.path)"
+          (cdkDropListDropped)="onDrop($event, section)">
+          @for (item of objectItems(sectionData); track trackByCode($index, item); let index = $index) {
+          <article class="canvas-node" cdkDrag [cdkDragData]="{ path: itemPath(section.path, index), index }"
+            [class.selected]="isSelected(itemPath(section.path, index))"
+            (click)="selectItem(item, section, itemPath(section.path, index), index)">
+            <header class="node-header" cdkDragHandle>
+              <span class="node-icon"><oa-icon [value]="item['icon'] || item['control'] || 'widgets'"></oa-icon></span>
+              <span class="node-title"><strong>{{ itemLabel(item, index) }}</strong><small>{{ itemType(item, section) }}</small></span>
+              <span class="node-grip"><oa-icon value="drag_indicator"></oa-icon></span>
+            </header>
+            @if (itemActionUrl(item, section.itemAction); as actionUrl) {
+            <a class="canvas-item-action" [href]="actionUrl" (click)="$event.stopPropagation()">{{ section.itemAction?.label }}</a>
+            }
+            @if (isSelected(itemPath(section.path, index))) {
+            <div class="canvas-node-actions" role="group" aria-label="Selected item actions">
+              <button type="button" aria-label="Move item up" title="Move up" [disabled]="index === 0"
+                (click)="$event.stopPropagation(); performItemAction('move-up', item, section, itemPath(section.path, index), index)">
+                <oa-icon value="arrow_upward"></oa-icon></button>
+              <button type="button" aria-label="Move item down" title="Move down" [disabled]="index === objectItems(sectionData).length - 1"
+                (click)="$event.stopPropagation(); performItemAction('move-down', item, section, itemPath(section.path, index), index)">
+                <oa-icon value="arrow_downward"></oa-icon></button>
+              <button type="button" aria-label="Duplicate item" title="Duplicate"
+                (click)="$event.stopPropagation(); performItemAction('duplicate', item, section, itemPath(section.path, index), index)">
+                <oa-icon value="content_copy"></oa-icon></button>
+              <button type="button" aria-label="Delete item" title="Delete"
+                (click)="$event.stopPropagation(); performItemAction('delete', item, section, itemPath(section.path, index), index)">
+                <oa-icon value="delete"></oa-icon></button>
+            </div>
+            }
+            @for (collection of childCollections(item); track collection.key) {
+              <div class="canvas-child-list" [attr.aria-label]="collection.key"
+                cdkDropList
+                [cdkDropListDisabled]="collection.key !== 'components'"
+                [cdkDropListData]="collection.items"
+                [id]="sectionDropListId(section, itemPath(section.path, index) + '.' + collection.key)"
+                [cdkDropListConnectedTo]="toolboxDropListIds"
+                [class.drop-target]="isDropTargetAtPath(section, itemPath(section.path, index) + '.' + collection.key)"
+                (cdkDropListDropped)="onDrop($event, section, itemPath(section.path, index) + '.' + collection.key)">
+                @if (!collection.items.length && collection.key === 'components') {
+                <p class="canvas-empty">Drop a tool here.</p>
+                }
+                @for (child of collection.items; track trackByCode($index, child); let childIndex = $index) {
+                <button type="button" class="canvas-child-node" cdkDrag
+                  [cdkDragData]="{ path: itemPath(itemPath(section.path, index) + '.' + collection.key, childIndex), index: childIndex }"
+                  [class.selected]="isSelected(itemPath(itemPath(section.path, index) + '.' + collection.key, childIndex))"
+                  (click)="$event.stopPropagation(); selectItem(child, section, itemPath(itemPath(section.path, index) + '.' + collection.key, childIndex), childIndex)">
+                  <strong>{{ itemLabel(child, childIndex) }}</strong><small>{{ itemType(child, section) }}</small>
+                </button>
+                }
+              </div>
+            }
+          </article>
+          }
+          @if (!objectItems(sectionData).length) {
+          <p class="canvas-empty" [class.drop-target]="isDropTarget(section)">Drop a tool here.</p>
+          }
+        </div>
+        } @else if (isObject(sectionData)) {
         <button type="button" class="canvas-node canvas-object-node"
-          [class.selected]="builder.selected()?.path === section.path"
-          (click)="$event.stopPropagation(); selectObject(value, section.path)">
-          <strong>{{ objectLabel(value, section.title) }}</strong><small>{{ section.code }}</small>
+          [class.selected]="isSelected(section.path)"
+          (click)="selectSection(section)">
+          <strong>{{ itemLabel(sectionData, 0) }}</strong><small>{{ section.code }}</small>
         </button>
         } @else {
-        <p class="application-config-empty">This section is not configured yet.</p>
+        <p class="canvas-empty">This section is not configured yet.</p>
         }
       } @else {
-      <p class="application-config-empty">This section is not configured yet.</p>
+      <p class="canvas-empty">This section is not configured yet.</p>
       }
-      </section>
-      }
-      }
-      </div>
     </section>
     }
   </div>
-  }
+  } @else {
+  <div class="canvas-empty"><oa-icon value="widgets"></oa-icon><p>No canvas sections are configured.</p></div>
   }
 
-  @if (builder.validationErrors().length) {
+  @if (validationErrors.length) {
   <section class="validation-results" aria-live="polite">
     <h3><oa-icon value="warning"></oa-icon> Validation issues</h3>
-    @for (error of builder.validationErrors(); track error.path + error.message) {
-    <div class="validation-error"><code>{{ error.path }}</code><span>{{ error.message }}</span>
-      @if (error.suggestion) { <small>{{ error.suggestion }}</small> }</div>
+    @for (error of validationErrors; track error.path + error.message) {
+    <div class="validation-error"><code>{{ error.path }}</code><span>{{ error.message }}</span></div>
     }
   </section>
   }
 </section>
-}
-
-<ng-template #nodeList let-items let-parentPath="parentPath">
-  <div class="canvas-list" cdkDropList [cdkDropListData]="items" [id]="builder.dropListId(parentPath)"
-    [cdkDropListConnectedTo]="builder.dropListIds()"
-    [class.drop-target]="builder.isDropTarget(parentPath)"
-    (cdkDropListDropped)="builder.drop($event, parentPath)">
-    @for (item of items; track builder.trackByCode($index, item); let index = $index) {
-    <article class="canvas-node" cdkDrag [cdkDragData]="{ path: builder.itemPath(parentPath, index), index }"
-      [class.selected]="builder.selected()?.path === builder.itemPath(parentPath, index)"
-      (click)="$event.stopPropagation(); builder.selectItem(item, builder.itemPath(parentPath, index), index)">
-      <header class="node-header" cdkDragHandle>
-        <span class="node-icon"><oa-icon [value]="item['icon'] || item['control'] || 'widgets'"></oa-icon></span>
-        <span class="node-title"><strong>{{ item['title'] || item['label'] || item['name'] || item['code'] }}</strong>
-          <small>{{ item['control'] || item['type'] || 'Item' }} · {{ item['code'] }}</small></span>
-        <span class="node-grip"><oa-icon value="drag_indicator"></oa-icon></span>
-      </header>
-      @for (key of childKeys; track key) {
-        @if (builder.childItems(item, key); as children) {
-          @if (children.length) {
-          <div class="node-children">
-            <div class="nested-heading"><span>{{ key === 'sections' ? 'Sections' : 'Components' }}</span><span>{{ children.length }}</span></div>
-            <ng-container *ngTemplateOutlet="nodeList; context: { $implicit: children, parentPath: builder.itemPath(parentPath, index) + '.' + key }"></ng-container>
-          </div>
-          }
-        }
-      }
-    </article>
-    }
-    @if (!items.length) { <div class="drop-empty">Drop an item here</div> }
-  </div>
-</ng-template>

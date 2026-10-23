@@ -5,6 +5,7 @@ This folder contains human-readable architecture, configuration, and component g
 ## Start here
 
 - [System architecture](./architecture.md): runtime structure, routing, configuration-driven rendering, shared services, and SSR boundaries.
+- [Applegos runtime content data](./content-data-guide.md): map `/$content/` URLs to files in the external data directory and edit served content safely.
 - [Page metadata and controls](./page-meta-components.md): supported controls and the JSON shape used to compose pages.
 - [Component configuration guide](./component-configuration-guide.md): configuration examples for common controls.
 - [Theme developer guide](./theme-developer-guide.md): shared theme tokens and styling conventions.
@@ -23,7 +24,7 @@ This folder contains human-readable architecture, configuration, and component g
 
 - [Action](./action-component.md) · [Context menu](./context-menu-component.md) · [Form](./form-component.md) · [Layout](./layout-component.md)
 - [List](./list-component.md) · [JSON editor](./json-editor-component.md) · [Toggler](./toggler-component.md)
-- [Builder canvas](./oa-canvas-component.md) · [Builder toolbox](./oa-toolbar-component.md) · [Builder properties](./oa-properties-component.md) · [Workflow canvas](./oa-workflow-canvas-component.md)
+- [Builder canvas](./oa-canvas-component.md) · [Builder toolbox](./oa-toolbar-component.md) · [Builder properties](./oa-properties-component.md)
 
 ## Documentation maintenance
 

@@ -8,7 +8,7 @@
 </button>
 }
 @case ('toggle') {
-<oa-toggler [value]="value" [items]="items" view="button" (valueChange)="onToggleSelect($event)"></oa-toggler>
+<oa-toggler [class]="class" [value]="value" [items]="items" view="button" (valueChange)="onToggleSelect($event)"></oa-toggler>
 }
 @case ('button') {
 <button [class]="class" [style]="style" [disabled]="disabled" [oaMenu]="items" (oaMenuClose)="onSelect($event)">

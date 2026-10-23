@@ -1,0 +1,258 @@
+{
+  "id": "65e51a90a4c39f08873afdad",
+  "index": 1,
+  "code": "home",
+  "icon": "mat-dashboard",
+  "name": "home",
+  "title": "AppLegos | Enterprise applications, composed",
+  "handles": [],
+  "permissions": [],
+  "url": "/home",
+  "view": "",
+  "meta": {
+    "header": {
+      "enabled": true
+    },
+    "footer": {
+      "enabled": true
+    },
+    "actions": [],
+    "layout": {
+      "sections": [
+        {
+          "code": "hero-section",
+          "class": "applegos-home hero-section",
+          "container": {
+            "body": {
+              "class": "hero-shell"
+            }
+          },
+          "components": [
+            {
+              "control": "html",
+              "value": [
+                      "<div class='hero-copy'><p class='eyebrow'><span class='eyebrow-dot'></span>Enterprise application platform</p><h1>Build enterprise applications faster \u2014 <em>without starting from scratch.</em></h1><p class='hero-lead'>AppLegos brings configurable applications, reusable building blocks, workflows, data integration, and automation into one foundation built for change.</p><div class='hero-actions'><a class='al-button al-button-primary' href='#demo'>Request a demo <span aria-hidden='true'>\u2192</span></a><a class='al-button al-button-quiet' href='#platform'>Explore the platform <span aria-hidden='true'>\u2193</span></a></div><p class='hero-note'><span>\u25cf</span>Made for product teams and the developers who support them.</p></div>",
+                      "<div class='platform-window' aria-label='AppLegos application builder preview'><div class='window-bar'><span class='window-brand'><b>AL</b> AppLegos <em> / Application builder</em></span><span class='window-status'><i></i> Production ready</span><span class='window-dots'>\u2022\u2022\u2022</span></div><div class='window-body'><aside class='window-sidebar'><span>Overview</span><span class='side-active'>Applications</span><span>Workflows</span><span>Data sources</span><span>Components</span><span>Access control</span></aside><main class='window-main'><div class='window-heading'><div><small>APPLICATION</small><h3>Operations workspace</h3></div><span class='tiny-button'>Publish changes</span></div><div class='builder-grid'><div class='builder-canvas'><div class='canvas-toolbar'><span>Dashboard / Overview</span><span>Configure layout</span></div><div class='canvas-stats'><div><small>Open requests</small><strong>248</strong><span class='positive'>\u2191 18.2%</span></div><div><small>Workflow health</small><strong>98.6%</strong><span class='neutral'>Last 30 days</span></div></div><div class='chart'><span class='chart-label'>REQUEST VOLUME</span><div class='chart-bars'><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div></div></div><aside class='builder-panel'><small>COMPONENTS</small><div class='panel-item active'><b>\u25a6</b> KPI summary <span>\u22ee</span></div><div class='panel-item'><b>\u2301</b> Chart <span>\u22ee</span></div><div class='panel-item'><b>\u2637</b> Request list <span>\u22ee</span></div><small class='panel-label'>CONNECTED</small><div class='system-pill'><i></i> ERP data <span>Live</span></div><div class='system-pill'><i></i> Identity <span>Live</span></div></aside></div></main></div><span class='float-chip chip-workflow'><b>\u2197</b> Workflow connected</span><span class='float-chip chip-api'><b>\u2318</b> API sync complete</span></div>"
+              ]
+            }
+          ]
+        },
+        {
+          "code": "trust-section",
+          "class": "applegos-home trust-section",
+          "container": {
+            "body": {
+              "class": "trust-shell"
+            }
+          },
+          "components": [
+            {
+              "control": "html",
+              "value": [
+                      "<p class='trust-label'>Built for enterprise application delivery</p><div class='trust-items' aria-label='Platform credentials'><span>Enterprise Tech<b>50+ Platforms</b></span><span>Industry Solutions<b>Healthcare \u00b7 HR \u00b7 Ops</b></span><span>Applications Delivered<b>2,000+ Production Apps</b></span><span>Integration Ready<b>APIs \u00b7 Data \u00b7 Identity</b></span><span>Enterprise Availability<b>99.9% Uptime SLA</b></span></div>"
+              ]
+            }
+          ]
+        },
+        {
+          "code": "story-section",
+          "class": "applegos-home story-section",
+          "container": {
+            "body": {
+              "class": "story-shell"
+            }
+          },
+          "components": [
+            {
+              "control": "html",
+              "value": [
+                      "<div class='section-intro'><p class='eyebrow'>The application delivery gap</p><h2>Enterprise applications shouldn't require starting from zero.</h2><p>Move from one-off delivery to a composable operating model that turns proven work into a durable advantage.</p></div><div class='process-compare'><div class='process-track'><small>THE TRADITIONAL PATH</small><div class='process-line'><span>Requirements</span><i>\u2192</i><span>Development</span><i>\u2192</i><span>Integration</span><i>\u2192</i><span>Testing</span><i>\u2192</i><span>Deployment</span><i>\u2192</i><span>Maintenance</span></div></div><div class='reuse-callout'><strong>Reuse instead of rebuild.</strong><span>Keep the right controls, workflows, and integrations available for the next application.</span></div><div class='process-track app-legos'><small>THE APPLEGOS PATH</small><div class='process-line'><span>Configure</span><i>\u2192</i><span>Compose</span><i>\u2192</i><span>Integrate</span><i>\u2192</i><span>Automate</span><i>\u2192</i><span>Deploy</span></div></div></div>"
+              ]
+            }
+          ]
+        },
+        {
+          "code": "platform-section",
+          "class": "applegos-home platform-section",
+          "container": {
+            "body": {
+              "class": "platform-shell"
+            }
+          },
+          "components": [
+            {
+              "control": "html",
+              "value": [
+                      "<div id='platform' class='section-intro centered-intro'><p class='eyebrow'>A connected platform</p><h2>One platform. Every building block you need.</h2><p>Each capability is designed to work together, so teams can configure what is standard and extend what makes them different.</p></div><div class='ecosystem'><span class='eco-orbit orbit-one'></span><span class='eco-orbit orbit-two'></span><div class='eco-center'><b>AL</b><strong>AppLegos</strong><span>Application platform</span></div><div class='eco-node node-one'><b>\u25a6</b><strong>Application building blocks</strong><span>Reusable UI and app components</span></div><div class='eco-node node-two'><b>\u2301</b><strong>Configurable applications</strong><span>Build without rebuilding</span></div><div class='eco-node node-three'><b>\u2197</b><strong>Workflow automation</strong><span>Reusable business processes</span></div><div class='eco-node node-four'><b>\u2318</b><strong>Data &amp; API integration</strong><span>Connect systems and services</span></div><div class='eco-node node-five'><b>\u25c8</b><strong>Security &amp; identity</strong><span>Roles, access, governance</span></div><div class='eco-node node-six'><b>\u232c</b><strong>Extensibility</strong><span>Code when configuration is not enough</span></div></div>"
+              ]
+            }
+          ]
+        },
+        {
+          "code": "works-section",
+          "class": "applegos-home works-section",
+          "container": {
+            "body": {
+              "class": "works-shell"
+            }
+          },
+          "components": [
+            {
+              "control": "html",
+              "value": [
+                "<div class='section-intro'><p class='eyebrow'>How AppLegos works</p><h2>From an idea to a living application.</h2></div><div class='steps'><div class='step active'><small>01</small><b>Compose</b><p>Select trusted application components that already solve the common parts.</p></div><div class='step'><small>02</small><b>Configure</b><p>Shape screens, forms, rules, workflows, and business processes visually.</p></div><div class='step'><small>03</small><b>Connect</b><p>Bring together enterprise data and the external systems your teams use.</p></div><div class='step'><small>04</small><b>Deliver</b><p>Deploy quickly, learn in production, and evolve without throwing work away.</p></div></div>"
+              ]
+            }
+          ]
+        },
+        {
+          "code": "product-section",
+          "class": "applegos-home product-section",
+          "container": {
+            "body": {
+              "class": "product-shell"
+            }
+          },
+          "components": [
+            {
+              "control": "html",
+              "value": [
+                "<div class='product-heading'><div class='section-intro'><p class='eyebrow'>Product experience</p><h2>From configuration to production.</h2></div><p>One workspace for the people defining the work and the teams delivering it.</p></div><div class='product-showcase'><nav class='product-tabs' aria-label='Product views'><a class='selected' href='#application-builder' aria-current='page'>Application builder</a><a href='/home/features'>Workflow designer</a><a href='/home/services'>Data integration</a><a href='/home/features'>Forms</a><a href='/home/features'>Administration</a><a href='/home/features'>Analytics</a></nav><div class='product-screen' id='application-builder'><div class='screen-top'><span><b>AL</b> AppLegos <strong>Operations workspace</strong></span><span><i></i> Saved just now</span></div><div class='screen-content'><aside><small>WORKSPACE</small><b>Operations</b><span class='selected'>Work queue</span><span>Active workflows</span><span>Customers</span><span>Reports</span></aside><main><div class='screen-title'><div><small>WORK MANAGEMENT</small><h3>Service requests</h3></div><span class='screen-action'>+ New request</span></div><div class='screen-board'><div class='board-column'><small>NEW <span>12</span></small><div class='task-card selected'><b>Onboarding request</b><span>North region</span><i>Configured workflow</i></div><div class='task-card'><b>Supplier exception</b><span>Operations</span></div></div><div class='board-column'><small>IN PROGRESS <span>8</span></small><div class='task-card'><b>Contract review</b><span>Legal + Finance</span><i>Approval required</i></div><div class='task-card'><b>Data correction</b><span>Customer success</span></div></div><div class='board-column'><small>READY TO CLOSE <span>5</span></small><div class='task-card'><b>Access request</b><span>Identity</span><i>Automation complete</i></div></div></div></main><aside class='inspector'><small>PROPERTIES</small><b>Onboarding request</b><label>ASSIGNEE</label><span>Operations team</span><label>WORKFLOW</label><span>New supplier onboarding</span><label>DATA SOURCE</label><span>ERP / Suppliers</span></aside></div></div></div>"
+              ]
+            }
+          ]
+        },
+        {
+          "code": "personas-section",
+          "class": "applegos-home personas-section",
+          "container": {
+            "body": {
+              "class": "personas-shell"
+            }
+          },
+          "components": [
+            {
+              "control": "html",
+              "value": [
+                      "<div class='section-intro centered-intro'><p class='eyebrow'>Tailored platform experience</p><h2>Built for product leaders and engineering teams.</h2><p>AppLegos bridges vision and execution, giving product managers speed and developers total architectural control.</p></div><div class='personas-grid'><article class='persona-card persona-product'><div class='persona-header'><span class='persona-badge product-badge'><b>\u25a6</b> Product Managers</span><h3>Turn requirements into working applications faster.</h3><p class='persona-desc'>Empower product teams to model workflows, iterate on UI components, and deliver value without waiting on full dev sprints.</p></div><ul class='persona-features'><li><span class='feature-check'>\u2713</span><div><strong>Configure visually</strong><span>Build screens, forms, and navigation drag-and-drop.</span></div></li><li><span class='feature-check'>\u2713</span><div><strong>Reuse proven blocks</strong><span>Instantly leverage pre-tested UI and business logic.</span></div></li><li><span class='feature-check'>\u2713</span><div><strong>Model workflows</strong><span>Define multi-step operational logic and approvals.</span></div></li><li><span class='feature-check'>\u2713</span><div><strong>Accelerate delivery</strong><span>Dramatically reduce engineering bottlenecks.</span></div></li></ul><div class='persona-footer'><a class='persona-cta cta-product' href='#demo'>See product workflow <span aria-hidden='true'>\u2192</span></a></div></article><article class='persona-card persona-dev'><div class='persona-header'><span class='persona-badge dev-badge'><b>\u2318</b> Software Developers</span><h3>Build once. Reuse everywhere.</h3><p class='persona-desc'>Focus engineering time on core infrastructure and custom business logic, while AppLegos handles repetitive scaffolding.</p></div><ul class='persona-features'><li><span class='feature-check'>\u2713</span><div><strong>Extendable architecture</strong><span>Plug in custom APIs, custom code, and microservices.</span></div></li><li><span class='feature-check'>\u2713</span><div><strong>APIs &amp; integrations</strong><span>Seamlessly bind enterprise databases and REST endpoints.</span></div></li><li><span class='feature-check'>\u2713</span><div><strong>Reusable components</strong><span>Publish custom widgets back into the platform registry.</span></div></li><li><span class='feature-check'>\u2713</span><div><strong>Enterprise governance</strong><span>Role-based access, audit trails, and security defaults.</span></div></li></ul><div class='persona-footer'><a class='persona-cta cta-dev' href='/home/services'>Explore platform services <span aria-hidden='true'>\u2192</span></a></div></article></div>"
+              ]
+            }
+          ]
+        },
+        {
+          "code": "integrations-section",
+          "class": "applegos-home integrations-section",
+          "container": {
+            "body": {
+              "class": "integrations-shell"
+            }
+          },
+          "components": [
+            {
+              "control": "html",
+              "value": [
+                      "<div class='section-intro centered-intro'><p class='eyebrow'>Integration ecosystem</p><h2>Connect AppLegos to the enterprise ecosystem.</h2><p>Bring together systems through your existing APIs, data sources, and identity layer. Specific connectors are scoped with your team.</p></div><div class='integration-map' aria-label='Integration map'><i class='map-line line-one'></i><i class='map-line line-two'></i><i class='map-line line-three'></i><i class='map-line line-four'></i><i class='map-line line-five'></i><i class='map-line line-six'></i><div class='integration-node center-node'><b>AL</b><strong>AppLegos</strong><span>Compose the application layer</span></div><div class='integration-node map-one'><b>\u2318</b><span>REST APIs</span></div><div class='integration-node map-two'><b>\u25a4</b><span>Databases</span></div><div class='integration-node map-three'><b>\u25cc</b><span>Enterprise systems</span></div><div class='integration-node map-four'><b>\u25c8</b><span>Identity providers</span></div><div class='integration-node map-five'><b>\u2197</b><span>Cloud services</span></div><div class='integration-node map-six'><b>\u2301</b><span>Messaging systems</span></div></div>"
+              ]
+            }
+          ]
+        },
+        {
+          "code": "enterprise-section",
+          "class": "applegos-home enterprise-section",
+          "container": {
+            "body": {
+              "class": "enterprise-shell enterprise-section"
+            }
+          },
+          "components": [
+            {
+              "control": "html",
+              "value": [
+                      "<div class='section-intro'><p class='eyebrow'>Enterprise by design</p><h2>Move quickly without losing control.</h2><p>AppLegos provides the operational foundation teams need as applications, users, and requirements grow.</p></div><div class='enterprise-list'><span><b>\u2713</b>Security</span><span><b>\u2713</b>Identity &amp; access management</span><span><b>\u2713</b>Role-based access</span><span><b>\u2713</b>Scalability</span><span><b>\u2713</b>API integration</span><span><b>\u2713</b>Auditability</span><span><b>\u2713</b>Configuration management</span><span><b>\u2713</b>Deployment automation</span></div>"
+              ]
+            }
+          ]
+        },
+        {
+          "code": "use-cases-section",
+          "class": "applegos-home use-cases-section",
+          "container": {
+            "body": {
+              "class": "use-cases-shell"
+            }
+          },
+          "components": [
+            {
+              "control": "html",
+              "value": [
+                      "<div class='section-intro'><p class='eyebrow'>Where teams apply it</p><h2>Applications that make operations easier to run.</h2><p>Explore real application patterns supported in the platform today.</p></div><div class='use-case-list'><a href='/home/use-cases/venue-ticketing'><b>Visitor and ticketing operations</b><span>Configure high-volume service journeys without rebuilding the experience.</span><i>\u2192</i></a><a href='/home/use-cases/university-management'><b>Education administration</b><span>Connect student, faculty, scheduling, and finance work in one system.</span><i>\u2192</i></a><a href='/home/use-cases/attandence-management'><b>HR and workforce management</b><span>Replace fragmented workforce processes with configurable operations tools.</span><i>\u2192</i></a><a href='/home/use-cases/servana'><b>Healthcare service operations</b><span>Coordinate providers, requests, and decisions across service teams.</span><i>\u2192</i></a></div>"
+              ]
+            }
+          ]
+        },
+        {
+          "code": "demo-section",
+          "class": "applegos-home demo-section",
+          "container": {
+            "body": {
+              "class": "demo-shell"
+            }
+          },
+          "components": [
+            {
+              "control": "html",
+              "value": [
+                "<div id='demo'><p class='eyebrow'>Start with a conversation</p><h2>Ready to build your next enterprise application faster?</h2><p>See how AppLegos helps your team compose, configure, integrate, and deliver with less development effort.</p></div>"
+              ]
+            },
+            {
+              "control": "form",
+              "options": {
+                "class": "demo-form",
+                "sections": [
+                  {
+                    "code": "row",
+                    "class": "demo-form-row"
+                  }
+                ],
+                "fields": [
+                  {
+                    "control": "input",
+                    "group": "row",
+                    "key": "from.email",
+                    "placeholder": "Work email address",
+                    "aria-label": "Work email address"
+                  }
+                ],
+                "actions": [
+                  {
+                    "code": "submit",
+                    "group": "row",
+                    "handler": "service",
+                    "view": "button",
+                    "class": "primary",
+                    "icon": "mat-arrow-right",
+                    "title": "Request a demo",
+                    "config": {
+                      "target": {
+                        "service": "send-it",
+                        "collection": "messages",
+                        "method": "create"
+                      }
+                    }
+                  }
+                ]
+              },
+              "value": {
+                "from": {
+                  "email": ""
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "status": "active"
+}

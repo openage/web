@@ -361,6 +361,30 @@ export class LayoutComponent implements OnInit, OnChanges {
     }
   }
 
+  isTabPanel(section: { parent?: string }): boolean {
+    return !!section.parent && this.sections[section.parent]?.type === 'tabbed';
+  }
+
+  onTabKeydown(event: KeyboardEvent, section: any, tab: any): void {
+    if (event.target !== event.currentTarget || !Array.isArray(section.sections)) return;
+    const tabs = section.sections;
+    const currentIndex = tabs.indexOf(tab);
+    if (currentIndex < 0) return;
+
+    let nextIndex = currentIndex;
+    if (event.key === 'ArrowRight') nextIndex = (currentIndex + 1) % tabs.length;
+    else if (event.key === 'ArrowLeft') nextIndex = (currentIndex - 1 + tabs.length) % tabs.length;
+    else if (event.key === 'Home') nextIndex = 0;
+    else if (event.key === 'End') nextIndex = tabs.length - 1;
+    else if (event.key !== 'Enter' && event.key !== ' ') return;
+
+    event.preventDefault();
+    const nextTab = tabs[nextIndex];
+    this.selectSection(nextTab);
+    const currentTab = event.currentTarget as HTMLElement;
+    currentTab.parentElement?.querySelectorAll<HTMLElement>('[role="tab"]')[nextIndex]?.focus();
+  }
+
   /**
    * Select the next section in the list.
    */

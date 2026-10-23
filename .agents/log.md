@@ -1,5 +1,88 @@
 # Change log
 
+## 2026-10-23 — Restore builder grid after adding preview wrapper
+
+### Key Changes
+- Updated the configured `oa-layout` content and editor grid selectors to match its new `.builder-editor-surface` parent.
+
+### Verification
+- `npm.cmd run build:local -- --progress=false` — passed.
+- `git diff --check` — passed.
+
+## 2026-10-23 — OA Page Builder preview modes
+
+### Intent
+Align the OA page builder more closely with OpenPage's JSON-backed visual editing workflow by adding an immediate responsive preview.
+
+### Key Changes
+- Added Edit and Preview modes to page builder workspaces.
+- Added desktop, tablet, and mobile preview frame widths.
+- Rendered the current OA page layout with the existing `oa-layout` runtime, preserving OA page JSON as the source of truth.
+- Documented that prompt-based AI editing is not yet configured, data-dependent previews use the builder's current context, and CSS media queries follow the app window width.
+
+### Verification
+- `npm.cmd run build:local -- --progress=false` — passed.
+- `git diff --check` — passed.
+
+## 2026-10-22 — Render builder regions in the configured editor grid
+
+### Intent
+Keep the application builder's Canvas and Properties visible beside the Toolbox instead of stacking them below the clipped builder viewport.
+
+### Key Changes
+- The outer `content` wrapper now remains full width; the three-column grid is applied to its nested `editor` section, which directly contains the configured controls.
+- Narrow layouts continue to stack the regions vertically.
+- Updated the builder page guide to describe its responsive layout.
+
+### Verification
+- `npm.cmd run build:local -- --progress=false` — passed.
+- Browser check at `/console/applications/www-applegos/builder` confirmed the toolbar, Canvas, and Properties occupy distinct grid columns within the builder viewport.
+
+## 2026-10-22 — Emit Canvas section selections and select dropped tools
+
+### Intent
+Make section-heading clicks observable for every section value and keep successful Canvas tool drops focused on the inserted item.
+
+### Key Changes
+- Canvas now emits the complete section value, including arrays, on heading clicks.
+- The builder keeps array-valued section selection separate from the object-only Properties form.
+- Successful toolbox insertions, including metadata values, become the active selection.
+- Updated Canvas and builder guides and added focused coverage for section events and dropped-item selection.
+
+### Verification
+- `npm.cmd run build:local -- --progress=false` — passed.
+- `npx.cmd tsc --noEmit -p tsconfig.app.json` — passed.
+- Targeted ESLint for the changed TypeScript files — passed.
+- Focused Angular tests remain blocked by existing unrelated application compilation errors in other components and templates.
+
+## 2026-10-21 — Compose builder views as accessible layout tabs
+
+### Intent
+Give page and application builders separately composed Viewer, Editor, and Code tabs, while retaining synchronized context-bar navigation.
+
+### Key Changes
+- Added recursive builder-control discovery for nested layout metadata and kept the Editor canvas fixed to Editor mode.
+- Synchronized context-bar view toggles with selected layout tabs and made layout tabs keyboard-operable with ARIA tab semantics.
+- Updated the builder and canvas guides for the separate-view composition.
+
+### Verification
+- `npm.cmd run build:local -- --progress=false` — passed.
+- Both Applegos builder JSON files validated against `.oa/schemas/nav.schema.json`; referenced templates and controls were checked.
+- Focused Angular unit tests are blocked because the test build reports existing compilation errors in unrelated application components. Browser verification was not run because Applegos is configured with `env: "prod"`.
+
+## 2026-10-20 — Document local Applegos content source
+
+### Intent
+Help coding agents trace local `/$content/` URLs to the corresponding served content files when a content update is requested.
+
+### Key Changes
+- Added `docs/content-data-guide.md` with URL decoding, path mapping to `D:\code\oa\solutions\applegos\data`, and a content-editing workflow.
+- Linked the guide from the docs index and architecture guide and added it to Copilot, VS Code, and agent memory guidance.
+
+### Verification
+- Confirmed the local environment URL resolves to `system/applications/local.json` and that the corresponding file exists in the external data root.
+- Confirmed the external directory contains JSON content, templates, and static assets organized under directories including `system/` and `assets/`.
+
 ## 2026-10-20 — Establish docs review and maintenance workflow
 
 ### Intent
@@ -155,3 +238,32 @@ Align navigation control names and builder option shapes with the requested OA c
 - Focused builder Vitest suites passed (3 files, 10 tests).
 - Both navigation documents validate with the requested controls and option locations.
 - `git diff --check` passed in both repositories.
+
+## 2026-10-21 — Inline builder workspace ownership
+
+### Intent
+Keep builder state and behavior on `BuilderPageComponent` and remove the separate controller abstraction.
+
+### Key Changes
+- Passed the builder page instance directly to toolbox, canvas, and properties controls.
+- Replaced the controller model with a shared `BuilderWorkspace` type contract.
+- Updated builder architecture and control guides to reflect page-owned workspace behavior.
+
+### Verification
+- `npm.cmd run build:local -- --progress=false` — passed.
+- Focused Vitest execution was blocked during Angular test-build compilation by unrelated errors in other components (including missing Quill imports/styles and template/type errors).
+- `git diff --check` — passed.
+
+## 2026-10-23 — Application builder controls for Console data
+
+### Intent
+Make Canvas, Toolbox, and Properties behavior match the application builder metadata and supplied application shape.
+
+### Key Changes
+- Aligned the Application Canvas section group with the configured `content` Toolbox group and gave Pages/Services cards explicit item labels.
+- Enabled compatible drops on object and temporarily visible optional sections; allowed the builder to create missing configured section collections.
+- Routed array section selections to an empty `collection` Properties schema rather than presenting blank fields for an individual item.
+
+### Verification
+- `npm.cmd run build:local -- --progress=false` and targeted ESLint passed. Both Applegos builder navigation files passed Draft 2020-12 schema validation, and Canvas group references plus the empty collection schemas were checked against the configured Toolbox/Properties options.
+- Focused Vitest execution remains blocked while Angular compiles unrelated existing application errors (including AddressEditor template/type errors and missing Quill modules/styles). Browser verification was not run because Applegos `.oa/settings/default.json` has `env: prod`.

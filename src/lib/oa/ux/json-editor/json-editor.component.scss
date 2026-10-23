@@ -9,6 +9,16 @@
   margin-bottom: 10px !important;
 }
 
+textarea.input {
+  box-sizing: border-box;
+  display: block;
+  font-family: var(--font-monospace, ui-monospace, SFMono-Regular, Consolas, monospace);
+  min-height: 240px;
+  resize: vertical;
+  white-space: pre;
+  width: 100%;
+}
+
 .json-editor-error {
   color: #b42318;
   font-size: 0.8rem;

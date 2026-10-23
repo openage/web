@@ -1,5 +1,6 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, signal, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { CommonModule } from '@angular/common';
 import { ContextService } from '../../lib/oa/core/services/context.service';
 import { NavService } from '../../lib/oa/core/services/nav.service';
 import { JsonViewerComponent } from '../../lib/oa/ux/json-viewer/json-viewer.component';
@@ -21,11 +22,12 @@ interface DiagnosticEntry {
   templateUrl: './diagnostics.component.html',
   styleUrl: './diagnostics.component.scss',
   imports: [
+    CommonModule,
     JsonViewerComponent,
     IconComponent,
   ]
 })
-export class DiagnosticsComponent {
+export class DiagnosticsComponent implements OnInit {
 
   options = {
     limit: 50,
@@ -128,7 +130,7 @@ export class DiagnosticsComponent {
         break;
       case 'edit':
         if (event.page?.code) {
-          this.router.navigate(['/canvas', 'pages', event.page.code, 'builder']);
+          this.router.navigate(['/console', 'pages', event.page.code, 'builder']);
         }
         break;
       default:

@@ -23,7 +23,7 @@ export class ValidationService {
 
   constructor() { }
 
-  validate(data: unknown, schema: Record<string, unknown>): BuilderValidationError[] {
+  isObjectValid(data: unknown, schema: Record<string, unknown>): BuilderValidationError[] {
     const errors: BuilderValidationError[] = [];
     const root = schema as SchemaNode;
     this.validateNode(data, root, root, '$', errors, 0);
@@ -195,6 +195,8 @@ export class ValidationService {
     }
   }
 
+
+
   isGSTValid(value: string): any {
     if (!this.gst.test(value)) {
       return { code: 'GST_DMC' };
@@ -241,6 +243,10 @@ export class ValidationService {
     if (!value || !this.code.test(value) || value.length < 3) {
       return { code: 'CODE_DMC' };
     }
+  }
+
+  idObjectValid(value: any, schema: any) {
+    return
   }
 
   isUserCodeValid(value: string): any {

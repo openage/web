@@ -12,7 +12,7 @@ describe('ValidationService', () => {
 
   it('reports missing required properties and invalid nested types', () => {
     const service = TestBed.inject(ValidationService);
-    const errors = service.validate(
+    const errors = service.isObjectValid(
       { meta: { layout: { sections: 'not-an-array' } } },
       {
         type: 'object',
@@ -35,7 +35,7 @@ describe('ValidationService', () => {
 
   it('resolves local schema references and validates array items', () => {
     const service = TestBed.inject(ValidationService);
-    const errors = service.validate(
+    const errors = service.isObjectValid(
       { sections: [{ title: '' }, { title: 'Valid' }] },
       {
         type: 'object',
@@ -63,13 +63,13 @@ describe('ValidationService', () => {
         { type: 'number' }
       ]
     };
-    expect(service.validate('value', schema).length).toBe(0);
-    expect(service.validate(true, schema).length).toBe(1);
+    expect(service.isObjectValid('value', schema).length).toBe(0);
+    expect(service.isObjectValid(true, schema).length).toBe(1);
   });
 
   it('reports required, minimum-length, and array-item schema violations at their paths', () => {
     const service = TestBed.inject(ValidationService);
-    const errors = service.validate(
+    const errors = service.isObjectValid(
       { code: '', services: [false] },
       {
         type: 'object',

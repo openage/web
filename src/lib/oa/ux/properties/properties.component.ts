@@ -1,9 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
-import { IconComponent } from '../icon/icon.component';
 import { BuilderValidationError } from '../builder/builder-metadata.model';
 import { ConstantService } from '../../core/services/constant.service';
-import { BuilderController } from '../builder/builder-controller.model';
 
 interface PropertiesField {
   key: string;
@@ -19,7 +17,7 @@ interface PropertiesField {
 }
 
 interface PropertiesOptions {
-  schema?: Record<string, PropertiesField[] | { groups: string[] }>;
+  types?: Record<string, PropertiesField[]>;
   data?: Record<string, unknown>;
   lookups?: Record<string, unknown>;
   validationSchema?: Record<string, unknown>;
@@ -28,31 +26,23 @@ interface PropertiesOptions {
   [key: string]: unknown;
 }
 
-interface PropertyTarget {
-  target: string;
-  properties?: PropertiesField[];
-  groups?: string[];
-}
-
-interface PropertyGroupDefinition {
-  title?: string;
-  properties: PropertiesField[];
-}
-
 @Component({
   selector: 'oa-properties',
   standalone: true,
-  imports: [CommonModule, IconComponent],
+  imports: [CommonModule],
   templateUrl: './properties.component.html'
 })
 export class PropertiesComponent {
   private readonly constants = inject(ConstantService);
-  @Input({ required: true }) builder!: BuilderController;
-  @Input() data: Record<string, unknown> = {};
-  @Input() set value(value: unknown) {
-    this.hasRegistry = Array.isArray(value);
-    this.registry = this.hasRegistry ? value as Array<{ target: string; properties: PropertiesField[] }> : [];
+
+  private currentValue: Record<string, unknown> = {};
+
+  @Input() set value(value: Record<string, unknown> | null | undefined) {
+    this.currentValue = value && typeof value === 'object' && !Array.isArray(value) ? value : {};
     this.refreshProperties();
+  }
+  get value(): Record<string, unknown> {
+    return this.currentValue;
   }
 
   @Input() set type(value: string) {
@@ -64,22 +54,32 @@ export class PropertiesComponent {
     this.currentOptions = value ?? {};
     this.refreshProperties();
   }
-
-  @Output() readonly dataChange = new EventEmitter<Record<string, unknown>>();
+  @Output() readonly valueChange = new EventEmitter<Record<string, unknown>>();
 
   properties: PropertiesField[] = [];
+  rawComponentError = '';
   private currentType = 'workspace';
   private currentOptions: PropertiesOptions = {};
-  private registry: PropertyTarget[] = [];
-  private hasRegistry = false;
-
-  get optionsValue(): PropertiesOptions {
-    return this.currentOptions;
-  }
 
   get className(): string {
     const value = this.currentOptions['class'];
     return typeof value === 'string' ? value : '';
+  }
+
+  get title(): string {
+    return String(this.currentOptions['title'] || 'Properties');
+  }
+
+  get selectionType(): string {
+    return this.currentType;
+  }
+
+  get hasPropertyFields(): boolean {
+    return this.properties.length > 0;
+  }
+
+  jsonValue(value: unknown): string {
+    return JSON.stringify(value ?? {}, null, 2) ?? '';
   }
 
   getGroups(): Array<{ name: string; properties: PropertiesField[] }> {
@@ -95,9 +95,8 @@ export class PropertiesComponent {
 
   getValue(object: unknown, path: string): unknown {
     if (!path || !object || typeof object !== 'object') return '';
-    const segments = this.pathSegments(path);
     let value: unknown = object;
-    for (const segment of segments) {
+    for (const segment of this.pathSegments(path)) {
       if (!value || typeof value !== 'object') return '';
       value = Array.isArray(value)
         ? value[Number(segment)]
@@ -110,7 +109,8 @@ export class PropertiesComponent {
     const segments = this.pathSegments(path);
     if (!segments.length) return;
 
-    let value: Record<string, unknown> | unknown[] = object;
+    const updated = structuredClone(object);
+    let value: Record<string, unknown> | unknown[] = updated;
     for (let index = 0; index < segments.length - 1; index++) {
       const segment = segments[index];
       const nextSegment = segments[index + 1];
@@ -122,15 +122,35 @@ export class PropertiesComponent {
       value = child as Record<string, unknown> | unknown[];
     }
 
-    const finalSegment = segments[segments.length - 1];
-    this.writeSegment(value, finalSegment, this.parseJsonInput(input));
-    this.dataChange.emit(this.data);
+    this.writeSegment(value, segments[segments.length - 1], input);
+    this.valueChange.emit(updated);
+    this.rawComponentError = '';
+  }
+
+  updateProperty(property: PropertiesField, event: Event): void {
+    const target = event.target;
+    if (property.type === 'boolean' && target instanceof HTMLInputElement) {
+      this.setValue(this.currentValue, property.key, target.checked);
+      return;
+    }
+    if (property.type === 'json' && target instanceof HTMLTextAreaElement) {
+      try {
+        this.setValue(this.currentValue, property.key, JSON.parse(target.value) as unknown);
+      } catch (error) {
+        this.rawComponentError = error instanceof Error ? error.message : 'Invalid JSON.';
+      }
+      return;
+    }
+    if (target instanceof HTMLInputElement || target instanceof HTMLTextAreaElement || target instanceof HTMLSelectElement) {
+      this.setValue(this.currentValue, property.key,
+        property.type === 'number' && target.value !== '' ? Number(target.value) : target.value);
+    }
   }
 
   getLookup(key: string): unknown[] {
     const lookup = this.currentOptions.lookups?.[key];
     if (Array.isArray(lookup)) return lookup;
-    const dataLookups = (this.currentOptions['data'] as Record<string, unknown> | undefined)?.['lookups'];
+    const dataLookups = this.currentOptions.data?.['lookups'];
     const configured = dataLookups && typeof dataLookups === 'object'
       ? (dataLookups as Record<string, unknown>)[key]
       : undefined;
@@ -173,20 +193,18 @@ export class PropertiesComponent {
   }
 
   hasValidationError(property: PropertiesField): boolean {
-    const base = String(this.currentOptions['selectionPath'] || '').replace(/\.(\d+)(?=\.|$)/g, '[$1]');
-    const path = `$.${[base, property.key].filter(Boolean).join('.')}`.replace(/\.(\d+)(?=\.|$)/g, '[$1]');
+    const path = this.validationPath(property);
     return (this.currentOptions.validationErrors || []).some((error) => error.path === path);
   }
 
   validationError(property: PropertiesField): string {
-    const base = String(this.currentOptions['selectionPath'] || '').replace(/\.(\d+)(?=\.|$)/g, '[$1]');
-    const path = `$.${[base, property.key].filter(Boolean).join('.')}`.replace(/\.(\d+)(?=\.|$)/g, '[$1]');
+    const path = this.validationPath(property);
     return (this.currentOptions.validationErrors || []).find((error) => error.path === path)?.message || '';
   }
 
   displayValue(value: unknown): string {
     if (value === null || value === undefined) return '';
-    return typeof value === 'object' ? JSON.stringify(value, null, 2) : String(value);
+    return typeof value === 'object' ? JSON.stringify(value, null, 2) ?? '' : String(value);
   }
 
   optionValue(option: unknown): string {
@@ -206,40 +224,20 @@ export class PropertiesComponent {
   }
 
   private refreshProperties(): void {
-    if (this.hasRegistry) {
-      const target = this.registry.find((entry) => entry.target === this.currentType) ||
-        this.registry.find((entry) => entry.target === 'section' && this.currentType !== 'workspace') ||
-        this.registry.find((entry) => entry.target === 'item' && this.currentType !== 'workspace') ||
-        this.registry.find((entry) => entry.target === 'default');
-      this.properties = target ? this.resolveTargetProperties(target) : [];
-      return;
-    }
-    const definitions = this.currentOptions.schema;
-    const definition = definitions?.[this.currentType] ??
-      (this.currentType !== 'workspace' ? definitions?.['section'] : undefined) ??
-      definitions?.['item'] ?? definitions?.['workspace'];
-    this.properties = Array.isArray(definition) ? definition : this.resolvePropertyGroups(definition?.groups || []);
+    const configured = this.currentOptions.types?.[this.currentType] ??
+      this.currentOptions.types?.['default'];
+    this.properties = configured ?? this.inferProperties(this.currentValue);
   }
 
-  private resolveTargetProperties(target: PropertyTarget): PropertiesField[] {
-    const direct = Array.isArray(target.properties) ? target.properties : [];
-    return [...this.resolvePropertyGroups(target.groups || []), ...direct];
-  }
-
-  private resolvePropertyGroups(groups: string[]): PropertiesField[] {
-    const propertyData = this.currentOptions.data?.['properties'];
-    const definitions = propertyData && typeof propertyData === 'object' && !Array.isArray(propertyData)
-      ? propertyData as Record<string, PropertyGroupDefinition | PropertiesField[]>
-      : {};
-    return groups.flatMap((name) => {
-      const definition = definitions[name];
-      if (Array.isArray(definition)) return definition.map((property) => ({ ...property, group: property.group || name }));
-      if (!definition || !Array.isArray(definition.properties)) return [];
-      return definition.properties.map((property) => ({
-        ...property,
-        group: property.group || definition.title || name
-      }));
-    });
+  private inferProperties(value: Record<string, unknown>): PropertiesField[] {
+    return Object.entries(value).map(([key, current]) => ({
+      key,
+      label: key.replace(/([a-z0-9])([A-Z])/g, '$1 $2').replace(/^./, (letter) => letter.toUpperCase()),
+      type: typeof current === 'boolean' ? 'boolean'
+        : typeof current === 'number' ? 'number'
+          : current !== null && typeof current === 'object' ? 'json'
+            : 'text'
+    }));
   }
 
   private fieldSchema(property: PropertiesField): Record<string, unknown> | undefined {
@@ -278,32 +276,21 @@ export class PropertiesComponent {
     return false;
   }
 
+  private validationPath(property: PropertiesField): string {
+    const base = String(this.currentOptions['selectionPath'] || '').replace(/\.(\d+)(?=\.|$)/g, '[$1]');
+    return `$.${[base, property.key].filter(Boolean).join('.')}`.replace(/\.(\d+)(?=\.|$)/g, '[$1]');
+  }
+
   private pathSegments(path: string): string[] {
     return path.match(/[^.[\]]+|\[\d+\]/g)?.map((segment) => segment.replace(/^\[|\]$/g, '')) ?? [];
   }
 
   private readSegment(object: Record<string, unknown> | unknown[], segment: string): unknown {
-    return Array.isArray(object)
-      ? object[Number(segment)]
-      : object[segment];
+    return Array.isArray(object) ? object[Number(segment)] : object[segment];
   }
 
   private writeSegment(object: Record<string, unknown> | unknown[], segment: string, value: unknown): void {
-    if (Array.isArray(object)) {
-      object[Number(segment)] = value;
-    } else {
-      object[segment] = value;
-    }
-  }
-
-  private parseJsonInput(value: unknown): unknown {
-    if (typeof value !== 'string') return value;
-    const trimmed = value.trim();
-    if (!trimmed.startsWith('{') && !trimmed.startsWith('[')) return value;
-    try {
-      return JSON.parse(trimmed) as unknown;
-    } catch {
-      return value;
-    }
+    if (Array.isArray(object)) object[Number(segment)] = value;
+    else object[segment] = value;
   }
 }

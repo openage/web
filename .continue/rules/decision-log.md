@@ -1,5 +1,15 @@
 # Decision Log
 
+### [2026-10-23] Add OA Page Preview and Viewport Controls
+- **Context**: OpenPage combines JSON-backed visual editing with an immediate preview; OA's page builder edited the JSON document but only showed the structural canvas.
+- **Decision**: Add an Edit/Preview switch and desktop, tablet, and mobile preview widths. Render the current OA page layout and configured controls through `oa-layout`, keeping the OA page document as the source of truth.
+- **Consequences**: Page authors can inspect the rendered result without leaving the builder, while save and validation continue to operate on the original OA metadata. Preview uses the builder's current runtime context and window media-query width; prompt-based AI generation is not configured.
+
+### [2026-10-23] Keep Builder Grid Selectors Aligned With Preview Wrapper
+- **Context**: The preview workbench wraps the configured builder `oa-layout` in an editor surface, changing its DOM parent and invalidating direct-child grid selectors.
+- **Decision**: Scope the existing content/editor grid selectors to the new editor surface wrapper.
+- **Consequences**: Application and page builder metadata continue to control the toolbar, canvas, and properties layout after the preview wrapper is added.
+
 This log records key architectural decisions and significant code changes. AI agents must consult this log before making changes and append new entries after completing a task.
 
 ## Format
@@ -10,6 +20,26 @@ This log records key architectural decisions and significant code changes. AI ag
 - **Consequences**: What are the implications?
 
 ---
+
+### [2026-10-23] Support Application Builder Collection and Object Drops
+- **Context**: Application Canvas metadata can contain optional nested paths and collection targets that do not exist in the loaded application yet; array-section selection also has no object form for Properties to edit.
+- **Decision**: Expose compatible optional sections during toolbox drags, allow object sections to receive tools, create configured `sections` and `components` collections when missing, and route array selections to an explicitly empty `collection` property schema. Align configured section groups and item labels with the available Toolbox groups and application data.
+- **Consequences**: Application metadata tools can be dropped or inserted into missing configured collections, Pages/Services do not display misleading blank item fields, and Canvas records without `control`/`type` retain a meaningful card subtitle.
+
+### [2026-10-22] Emit Canvas Section Selection and Select Dropped Tools
+- **Context**: Clicking array-valued canvas section headings did not emit a selection, and newly inserted metadata tools were not selected consistently with inserted collection items.
+- **Decision**: Emit the section's actual value on every heading click, keep array-valued section selection separate from object editing in the builder, and select successfully inserted values after toolbox drops.
+- **Consequences**: Canvas consumers receive full section values, including arrays; the builder can track the active section/group without passing arrays to the object-only Properties control, and successful drops focus the inserted value.
+
+### [2026-10-22] Apply Builder Grid to the Configured Editor Section
+- **Context**: The application builder placed its toolbar, canvas, and properties inside the configured `editor` section, while the three-column grid targeted only the outer `content` wrapper. A later stale block also reset that wrapper to block layout.
+- **Decision**: Keep the outer content wrapper full-width and apply the three-column grid to its nested editor section, stacking the editor regions at narrow breakpoints.
+- **Consequences**: The builder regions render side by side on wider screens and remain vertically stacked on narrow screens without being clipped as off-screen content.
+
+### [2026-10-20] Map Local Content URLs to Applegos Data Source
+- **Context**: Local application content is served from `http://localhost:8080/%24content/`, while its source files live outside the pages-app repository.
+- **Decision**: Treat `D:\code\oa\solutions\applegos\data` as the local `/$content/` source of truth. Decode `%24content`, map the remainder of the URL path beneath that root, inspect the specific file and related metadata, and edit the external data file for content-only requests.
+- **Consequences**: Added a human-readable mapping/editing guide and wired it into project instructions so agents can locate content without changing a shadow copy or confusing data with app source. External write access remains subject to the active workspace's filesystem permissions.
 
 ### [2026-10-20] Human-Readable Documentation Review and Maintenance
 - **Context**: The docs folder lacked a central index and architecture overview, while some builder and theme guides referenced stale source paths or contracts.
@@ -75,3 +105,23 @@ This log records key architectural decisions and significant code changes. AI ag
 - **Context**: Application workspaces displayed the configured context-bar view switch and a second canvas-level copy.
 - **Decision**: Hide the canvas-level switch for application workspaces and retain it for page and workflow workspaces that do not have the configured context-bar switch.
 - **Consequences**: Applications show one Viewer, Editor, and Code switch, while page and workflow workspaces keep their view navigation.
+
+### [2026-10-20] Align Page Builder Control Metadata
+- **Context**: The Console page builder exposed empty toolbar and Properties controls and fewer canvas options than the application builder.
+- **Decision**: Configure page-builder toolbar seeds, property target groups, canvas validation/viewer/code settings, and grouped canvas sections using the same shared control contracts as the application builder.
+- **Consequences**: Page metadata can add data sources, actions, layout sections, and page components from the Editor; page properties are editable by selection target, and Viewer provides a metadata overview rather than a live page render.
+
+### [2026-10-21] Compose Builder Views as Layout Tabs
+- **Context**: Viewer, Editor, and Code were switched inside one canvas component, which made the view layout difficult to compose independently.
+- **Decision**: Represent each builder view as its own tabbed layout section with dedicated components. Keep the context-bar toggle and layout tabs synchronized through the active view state.
+- **Consequences**: Page and application builders share the same view composition pattern; the canvas is pinned to Editor while separate Viewer and Code components consume the shared workspace data.
+
+### [2026-10-21] Keep Builder Logic in the Page Component
+- **Context**: Builder behavior already lived in `BuilderPageComponent`; the separate controller model only described the API used by library controls.
+- **Decision**: Keep the state and behavior in `BuilderPageComponent`, pass the component instance directly to its controls, and retain only a shared `BuilderWorkspace` type contract in the library.
+- **Consequences**: Removed the redundant controller model and forwarding getter without changing the child controls' typed workspace API.
+
+### [2026-10-21] Store Builder Tool and Property Registries in Options
+- **Context**: The application builder declared toolbox groups and property target registries in component `value`, while the existing options structure is the configuration location for those control definitions.
+- **Decision**: Store toolbar groups in `toolbar.options.groups` and property targets in `properties.options.data.properties.targets`, alongside reusable field groups. Continue accepting the previous `value` shapes for compatibility.
+- **Consequences**: The builder controls can consume the options-based metadata without changing the existing configured tools or property editors; page and application metadata authors have one consistent configuration location.

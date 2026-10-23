@@ -9,6 +9,7 @@ import { MenuDirective } from '../../directives/menu.directive';
 import { TogglerComponent } from '../toggler/toggler.component';
 import { AddFormPopUpComponent } from '../add-form-pop-up/add-form-pop-up.component';
 import { ContentService } from '../../core/services/content.service';
+import { ValidationService } from '../../core/services/validation.service';
 
 
 @Component({
@@ -72,6 +73,7 @@ export class ActionComponent implements OnInit, OnChanges {
   // shareService = inject(ShareService);
   context = inject(ContextService);
   dataService = inject(DataService);
+  validationService = inject(ValidationService);
 
   // private initialData = new Map<string, any>();
 
@@ -370,6 +372,11 @@ export class ActionComponent implements OnInit, OnChanges {
     let data: any;
 
     switch (method) {
+
+      case 'validate':
+        this.validationService.isObjectValid(value, this.options.config.schema);
+
+        break;
       case 'reset':
         {
           const original: any = {}

@@ -36,7 +36,9 @@
   </button>
   } @else {
   <div [id]="item.code" class="section {{item.code}} {{class}} {{item.type}}" [ngStyle]="item.style"
-    [ngClass]="item.class" [class.hidden]="item.selected === false">
+    [ngClass]="item.class" [class.hidden]="item.selected === false"
+    [attr.role]="isTabPanel(item) ? 'tabpanel' : null"
+    [attr.aria-labelledby]="isTabPanel(item) ? item.code + '-tab' : null">
     <!-- (click)="selectSection(item)" -->
     @if(item.container) {
     <ng-container *ngTemplateOutlet="renderContainer; context: { item: item, type: 'section' }">
@@ -87,9 +89,12 @@
 <ng-template #renderContainer let-item="item" let-type="type">
   @switch (item.type) {
   @case ('tabbed') {
-  <div class="header tabs" [ngClass]="item.container.header?.class" [ngStyle]="item.container.header?.style">
+  <div class="header tabs" role="tablist" [attr.aria-label]="item.title || item.code || 'Sections'"
+    [ngClass]="item.container.header?.class" [ngStyle]="item.container.header?.style">
     @for (tab of item.sections; track $index) {
-    <div [class.active]="tab.selected" (click)="selectSection(tab)">
+    <div [id]="tab.code + '-tab'" role="tab" [attr.aria-controls]="tab.code"
+      [attr.aria-selected]="tab.selected === true" [tabIndex]="tab.selected ? 0 : -1"
+      [class.active]="tab.selected" (click)="selectSection(tab)" (keydown)="onTabKeydown($event, item, tab)">
       <ng-container *ngTemplateOutlet="renderHeader; context: { header: tab.container.header, item: tab }">
       </ng-container>
     </div>

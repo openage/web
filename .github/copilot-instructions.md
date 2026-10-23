@@ -10,6 +10,7 @@
 
 ## Working in this repository
 - At workspace initialization, review `docs/README.md` and `docs/architecture.md`; use the index to understand available feature/component guides. Before each code change, inspect the relevant implementation, nearby tests, current Git diff, and the closest human-readable guide.
+- For local Applegos content URLs under `http://localhost:8080/%24content/`, follow `docs/content-data-guide.md`: decode `%24content` as `$content`, map the URL-relative path to `D:\code\oa\solutions\applegos\data`, inspect the exact file and related metadata, and edit that data file when the request concerns served content.
 - Follow the Angular 21 standards in `.continue/rules/architecture-and-style.md`: standalone declarations, `inject()`-based dependency injection, signals for local reactive state, and modern template control flow (`@if`, `@for`, `@switch`, `@defer`). Do not introduce NgModules, deprecated structural directives, constructor injection, or new Jasmine/Karma tests.
 - Use RxJS for asynchronous streams, event handling, and service-level cross-component messaging; use `toSignal` / `toObservable` at Angular boundaries where appropriate. Use `linkedSignal` or `resource` when they fit the data flow and the repository's established APIs.
 - Keep TypeScript strict and fully typed; avoid `any`. Use accessible semantic HTML, labels, keyboard support, and ARIA where needed. Prefer Angular host metadata/bindings and `inject()` over `@HostBinding` / `@HostListener` and constructor injection for new code.

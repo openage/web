@@ -1,9 +1,13 @@
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { CommonModule } from '@angular/common';
-import { Component, Input, inject, signal } from '@angular/core';
+import { Component, EventEmitter, Input, Output, signal } from '@angular/core';
 import { IconComponent } from '../icon/icon.component';
-import { BuilderController } from '../builder/builder-controller.model';
-import { BuilderToolbarGroup, BuilderToolbarItem, BuilderToolboxGroupMetadata } from '../builder/builder-metadata.model';
+import { BuilderToolbarGroup, BuilderToolbarItem } from '../builder/builder-metadata.model';
+
+export interface ToolboxDrag {
+  groupCode: string;
+  tool: BuilderToolbarItem;
+}
 
 @Component({
   selector: 'oa-toolbox',
@@ -12,93 +16,85 @@ import { BuilderToolbarGroup, BuilderToolbarItem, BuilderToolboxGroupMetadata } 
   templateUrl: './toolbox.component.html'
 })
 export class ToolboxComponent {
-  @Input({ required: true }) builder!: BuilderController;
   @Input() options: Record<string, unknown> = {};
-  @Input() value: unknown;
+  @Input() value = '';
+  @Input() connectedTo: string[] = [];
+  @Input() disabled = false;
+  @Input() workspaceType = 'Workspace';
+
+  @Output() readonly toolDragStart = new EventEmitter<BuilderToolbarItem>();
+  @Output() readonly toolDragEnd = new EventEmitter<void>();
+  @Output() readonly toolSelected = new EventEmitter<BuilderToolbarItem>();
 
   readonly collapsedGroups = signal(new Set<string>());
-
-  get sectionSelected(): boolean {
-    const selection = this.builder.selected();
-    return !!selection && (selection.type === 'section' ||
-      /(?:^|\.)sections\.\d+(?:\.|$)/.test(selection.path));
-  }
-
-  get emptyToolsMessage(): string {
-    if (this.builder.toolSearch().trim()) return 'No tools match this search.';
-    return this.sectionSelected ? 'No tools are configured for this section.' : 'No tools match this search.';
-  }
+  readonly search = signal('');
 
   get toolGroups(): BuilderToolbarGroup[] {
-    if (Array.isArray(this.value)) {
-      return this.value.filter((group): group is BuilderToolbarGroup =>
-        !!group && typeof group === 'object' && Array.isArray((group as BuilderToolbarGroup).items)
-      );
-    }
-    const groups = this.options['groups'];
-    if (Array.isArray(groups)) return groups as BuilderToolbarGroup[];
-    return this.builder.metadata()?.toolbox.groups ?? [];
+    const configured = this.options['groups'];
+    if (!Array.isArray(configured)) return [];
+    return configured.filter((group): group is BuilderToolbarGroup =>
+      !!group && typeof group === 'object' &&
+      typeof (group as Record<string, unknown>)['code'] === 'string' &&
+      !!((group as Record<string, unknown>)['code'] as string).trim() &&
+      typeof (group as Record<string, unknown>)['title'] === 'string' &&
+      !!((group as Record<string, unknown>)['title'] as string).trim() &&
+      Array.isArray((group as Record<string, unknown>)['tools'])
+    );
   }
 
   get filteredToolGroups(): BuilderToolbarGroup[] {
-    const query = this.builder.toolSearch().trim().toLowerCase();
-    const allowedControls = Array.isArray(this.value) ? undefined : this.builder.currentTab()?.allowedControls;
-    const selection = this.builder.selected();
+    const query = this.search().trim().toLowerCase();
     return this.toolGroups
       .map((group) => ({
         ...group,
-        items: group.items.filter((tool) => {
-          const control = this.itemControl(tool);
-          const target = tool.target;
-          const exactCollectionTarget = !!target && !['meta', 'components', 'sections'].includes(target);
-          const collectionAvailable = !exactCollectionTarget ||
-            this.builder.dropListIds().includes(this.builder.dropListId(target!));
-          const requiresSection = (tool.targets || (tool.target ? [tool.target] : [])).includes('components');
-          const hasComponentTarget = !requiresSection || !!this.builder.componentTargetPath();
-          const targetsSelection = collectionAvailable && hasComponentTarget && (!selection || (this.sectionSelected
-            ? this.itemTargetsSelectedSection(tool)
-            : this.itemTargetsSelectedComponent(tool, selection.item, selection.path)));
-          const allowed = !allowedControls || allowedControls.includes(control) ||
-            (!!tool.target && allowedControls.includes(tool.code || tool.target));
-          const label = tool.title || tool.label || tool.code || control;
-          return targetsSelection && allowed &&
-            (!query || `${label} ${control} ${group.title}`.toLowerCase().includes(query));
-        })
+        tools: group.tools.filter((tool) => !query ||
+          `${tool.title || ''} ${tool.label || ''} ${tool.code || ''} ${tool.control || ''}`.toLowerCase().includes(query))
       }))
-      .filter((group) => group.items.length > 0);
-  }
-
-  groupExpanded(title: string): boolean {
-    if (this.builder.toolSearch().trim()) return true;
-    const selection = this.builder.selected();
-    const group = this.filteredToolGroups.find((candidate) => candidate.title === title);
-    if (selection && group?.items.some((item) => this.itemTargetsSelectedSection(item))) return true;
-    return !this.collapsedGroups().has(title);
-  }
-
-  toggleGroup(title: string): void {
-    this.collapsedGroups.update((collapsed) => {
-      const next = new Set(collapsed);
-      if (next.has(title)) next.delete(title);
-      else next.add(title);
-      return next;
-    });
+      .filter((group) => group.tools.length > 0)
+      .sort((left, right) => Number(right.code === this.value) - Number(left.code === this.value));
   }
 
   get className(): string {
     return typeof this.options['class'] === 'string' ? this.options['class'] : '';
   }
 
+  get emptyToolsMessage(): string {
+    return this.search().trim() ? 'No tools match this search.' : 'No tools are configured for this section.';
+  }
+
+  groupCode(group: BuilderToolbarGroup, index: number): string {
+    return group.code || `group-${index}`;
+  }
+
+  groupSelected(group: BuilderToolbarGroup): boolean {
+    return group.code === this.value;
+  }
+
+  groupExpanded(group: BuilderToolbarGroup, index: number): boolean {
+    if (this.search().trim() || this.groupSelected(group)) return true;
+    return !this.collapsedGroups().has(this.groupCode(group, index));
+  }
+
+  toggleGroup(group: BuilderToolbarGroup, index: number): void {
+    const code = this.groupCode(group, index);
+    this.collapsedGroups.update((collapsed) => {
+      const next = new Set(collapsed);
+      if (next.has(code)) next.delete(code);
+      else next.add(code);
+      return next;
+    });
+  }
+
   onDragStarted(tool: BuilderToolbarItem): void {
-    this.builder.startToolDrag(tool);
+    this.toolDragStart.emit(tool);
   }
 
   onDragEnded(): void {
-    this.builder.clearToolDrag();
+    this.toolDragEnd.emit();
   }
 
-  itemControl(item: BuilderToolbarItem): string {
-    return item.control || item.code || '';
+  selectTool(tool: BuilderToolbarItem): void {
+    this.toolSelected.emit(tool);
   }
 
   itemLabel(item: BuilderToolbarItem): string {
@@ -109,26 +105,4 @@ export class ToolboxComponent {
     return typeof item['description'] === 'string' ? item['description'] : this.itemLabel(item);
   }
 
-  private itemTargetsSelectedSection(item: BuilderToolbarItem): boolean {
-    const targets = item.targets ?? (item.target ? [item.target] : []);
-    return targets.some((target) => target === 'components' || target === 'sections');
-  }
-
-  private itemTargetsSelectedComponent(item: BuilderToolbarItem, selected: Record<string, unknown>, path: string): boolean {
-    const targets = item.targets ?? (item.target ? [item.target] : []);
-    const control = typeof selected['control'] === 'string' ? selected['control'] : '';
-    const collection = path.replace(/\.\d+(?:\..*)?$/, '');
-    return targets.some((target) => target === 'components'
-      ? !!this.builder.componentTargetPath()
-      : target === collection || (!!control && target === control));
-  }
-
-  addItem(item: BuilderToolbarItem): void {
-    if (this.builder.toolDragInProgress()) return;
-    if (item.target || item.targets?.includes('components') || item.control) {
-      this.builder.addConfiguredItem(item);
-      return;
-    }
-    this.builder.addToolFromClick(item as BuilderToolboxGroupMetadata['items'][number]);
-  }
 }

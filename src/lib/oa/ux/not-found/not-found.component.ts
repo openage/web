@@ -1,12 +1,12 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, inject, Input, OnInit } from '@angular/core';
 import { ConstantService } from '../../core/services/constant.service';
 import { ActionComponent } from '../action/action.component';
 
 @Component({
-    selector: 'oa-not-found',
-    imports: [ActionComponent],
-    templateUrl: './not-found.component.html',
-    styleUrls: ['./not-found.component.css']
+  selector: 'oa-not-found',
+  imports: [ActionComponent],
+  templateUrl: './not-found.component.html',
+  styleUrls: ['./not-found.component.scss']
 })
 export class NotFoundComponent implements OnInit {
 
@@ -28,9 +28,7 @@ export class NotFoundComponent implements OnInit {
   @Input()
   actions?: any[];
 
-  constructor(
-    private constantService: ConstantService
-  ) { }
+  private constantService = inject(ConstantService);
 
   ngOnInit() {
 

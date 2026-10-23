@@ -1,8 +1,8 @@
 @if(text)
 {
 <div class="oa-input">
-  <pre class="input json" contenteditable="true" (focus)="onSelect()" (blur)="onTextChange($event)"
-    [innerHTML]="text"></pre>
+  <textarea class="input json" spellcheck="false" aria-label="JSON source" [value]="text || ''"
+    (focus)="onSelect()" (blur)="onBlur()" (input)="onTextChange($event)" (keydown)="onKeydown($event)"></textarea>
   @if (parseError) { <p class="json-editor-error" role="alert">{{ parseError }}</p> }
 </div>
 }

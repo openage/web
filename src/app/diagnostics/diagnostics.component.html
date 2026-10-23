@@ -157,26 +157,8 @@
             <span class="badge-count">{{ allPages().length }}</span>
         </h2>
 
-        <div class="diagnostics-grid">
-            @for (node of pageTree(); track node.code) {
-            <div class="action-card clickable" (click)="onPageAction({type: 'navigate', page: node})">
-                <div class="card-icon info">
-                    <oa-icon [value]="node.icon || 'description'"></oa-icon>
-                </div>
-                <div class="action-info">
-                    <h4>{{ node.title || node.name }}</h4>
-                    <p class="value">/{{ node.code }}</p>
-                </div>
-                <div class="card-actions">
-                    <button (click)="$event.stopPropagation(); onPageAction({type: 'edit', page: node})" title="Edit">
-                        <oa-icon value="edit"></oa-icon>
-                    </button>
-                    <button (click)="$event.stopPropagation(); onPageAction({type: 'json', page: node})" title="View JSON">
-                        <oa-icon value="code"></oa-icon>
-                    </button>
-                </div>
-            </div>
-            }
+        <div class="page-tree" role="tree" aria-label="Application pages">
+            <ng-container *ngTemplateOutlet="pageNodes; context: { $implicit: pageTree() }"></ng-container>
         </div>
     </section>
 </main>
@@ -192,3 +174,35 @@
     </div>
 </div>
 }
+
+<ng-template #pageNodes let-nodes>
+    <div class="page-tree-list">
+        @for (node of nodes; track node.code) {
+        <div class="page-tree-node" role="treeitem" [attr.aria-label]="node.title || node.name || node.code">
+            <div class="page-tree-row">
+                <button type="button" class="page-tree-main" (click)="onPageAction({type: 'navigate', page: node})">
+                    <span class="page-tree-icon"><oa-icon [value]="node.icon || 'description'"></oa-icon></span>
+                    <span class="page-tree-label">
+                        <strong>{{ node.title || node.name }}</strong>
+                        <small>/{{ node.code }}</small>
+                    </span>
+                </button>
+                <div class="card-actions">
+                    <button class="page-edit-action" type="button"
+                        (click)="onPageAction({type: 'edit', page: node})" title="Edit page" aria-label="Edit page">
+                        <oa-icon value="edit"></oa-icon><span>Edit</span>
+                    </button>
+                    <button type="button" (click)="onPageAction({type: 'json', page: node})" title="View JSON" aria-label="View page JSON">
+                        <oa-icon value="code"></oa-icon>
+                    </button>
+                </div>
+            </div>
+            @if (node.items?.length) {
+            <div class="page-tree-children" role="group">
+                <ng-container *ngTemplateOutlet="pageNodes; context: { $implicit: node.items }"></ng-container>
+            </div>
+            }
+        </div>
+        }
+    </div>
+</ng-template>

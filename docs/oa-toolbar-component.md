@@ -1,16 +1,41 @@
 # OA toolbox component
 
-`<oa-toolbox>` renders configured builder tools in grouped sections. Its source and template are [toolbox.component.ts](../src/lib/oa/ux/toolbox/toolbox.component.ts) and [toolbox.component.html](../src/lib/oa/ux/toolbox/toolbox.component.html).
+`<oa-toolbox>` renders a searchable, grouped set of builder tools. It is a presentation and drag source: it emits the selected or dragged tool, while the owning builder decides where and how to insert it. The implementation and template are [toolbox.component.ts](../src/lib/oa/ux/toolbox/toolbox.component.ts) and [toolbox.component.html](../src/lib/oa/ux/toolbox/toolbox.component.html).
 
-## Inputs
+## Configuration
 
-- `builder` (required): the shared builder controller for toolbox filtering, drag/drop, and item creation.
-- `value`: optional declarative menu model. Each group has `title`, optional `icon`, and `items`; each item may declare `title`, `label`, `icon`, `target`, `targets`, `control`, `value`, and `options`. When present, this model is rendered directly as configured groups and entries.
-- `options`: optional metadata object. `groups` defines legacy typed toolbox groups when `value` is absent; if omitted, groups come from active builder metadata. `collapsible` enables or disables the panel collapse control (enabled by default in the builder page). `title`, `eyebrow`, and `class` customize the visible heading and CSS class.
-- `connectedTo`: optional IDs of connected CDK drop lists.
+The component reads its groups from `options.groups`. A valid group has a non-empty `code`, a non-empty `title`, and a `tools` array; an optional `icon` is shown beside the group title. Each tool can provide a `title` or `label`, `icon`, `description`, and builder metadata such as `code`, `control`, `target`/`targets`, `value`, and `options`. The toolbox preserves and emits the configured tool object; it does not interpret its target or seed data.
 
-For configured menu entries with `target`, `value` is a cloned seed inserted into the configured collection (or assigned to the matching `meta.<code>` property for `target: "meta"`). A component factory uses `targets: ["components"]` and `control`; its value is cloned into the new component and configured options are merged under `options`. Entries without a value create the requested control without a seed. The source metadata is never mutated, and each insertion receives independent data.
+```html
+<oa-toolbox
+  [options]="{ title: 'Application tools', groups: toolGroups }"
+  [value]="selectedGroupCode"
+  [connectedTo]="canvasDropListIds"
+  [disabled]="!workspaceValid"
+  [workspaceType]="'application'"
+  (toolSelected)="addTool($event)"
+  (toolDragStart)="beginToolDrag($event)"
+  (toolDragEnd)="endToolDrag()">
+</oa-toolbox>
+```
 
-Legacy groups use the builder metadata shape: each group has a `code`, `title`, and `items`; each tool has a `code`, `type`, `title`, `icon`, and optional `description`. Groups render as accessible, independently collapsible sections and expand while a search is active. Selection filtering and updates use the selected path in the shared BuilderController. The component supports click-to-add and drag/drop.
+| Input | Purpose |
+| --- | --- |
+| `options.groups` | Ordered group definitions, each with `code`, `title`, and `tools`. |
+| `options.title`, `options.eyebrow`, `options.class` | Panel heading, kicker, and additional CSS class. Defaults are “Tools” and “Workspace”. |
+| `value` | Code of the selected group. That group is highlighted, expanded, and sorted to the front. |
+| `connectedTo` | IDs of compatible CDK drop lists, usually supplied by the builder canvas. |
+| `disabled` | Disables toolbox buttons, preventing selection and dragging while disabled. |
+| `workspaceType` | Workspace label displayed in the footer, followed by “builder”. |
 
-When embedded by the builder page, toolbox groups expand when their tools apply to the selected canvas section. A drag records its tool in the shared controller; eligible canvas collection paths are connected drop lists and receive a highlight. Dropping clones the configured seed into the selected path. The panel is visible only in Editor. Its header collapse control toggles shared state; set `options.collapsible` to `false` to remove the control.
+## Search and groups
+
+Search matches each tool's `title`, `label`, `code`, and `control`, case-insensitively. It does not search group titles. Empty groups are hidden while searching; if none remain, the toolbox says either “No tools match this search” or “No tools are configured for this section.” Searching expands all matching groups. Outside search, groups start expanded, can be collapsed independently, and the selected group stays expanded.
+
+## Dragging and selection
+
+- Clicking a tool emits it through `toolSelected`, which the parent can use for click-to-add.
+- Starting a drag emits the tool through `toolDragStart`; ending it emits `toolDragEnd` with no payload.
+- CDK drag data includes both the tool and its group code. The toolbox drop list connects to the IDs in `connectedTo` so the canvas can accept the drag.
+
+These outputs do not mutate the workspace. The parent handles target matching, insertion, validation, dirty state, and persistence. In the page builder, the builder coordinator handles those operations and the canvas reports the actual drop target.

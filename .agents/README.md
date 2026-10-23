@@ -5,6 +5,7 @@ This repository keeps durable agent context in a few focused, version-controlled
 ## Canonical sources
 
 - [Human-readable project documentation](../docs/README.md): documentation index; read [system architecture](../docs/architecture.md) during workspace initialization and the closest feature/component guide before edits.
+- [Applegos runtime content data](../docs/content-data-guide.md): maps local `/$content/` URLs to the external content source under `D:\code\oa\solutions\applegos\data`.
 - [Architecture and style](../.continue/rules/architecture-and-style.md): stable project structure, conventions, constraints, and agent workflow.
 - [Decision log](../.continue/rules/decision-log.md): accepted decisions and significant changes, with context and consequences.
 - [Work log](log.md): concise milestones and implementation notes. This is historical context, not an authority over current code.

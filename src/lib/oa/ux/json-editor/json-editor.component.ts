@@ -28,6 +28,7 @@ export class JsonEditorComponent implements OnInit, OnChanges {
   text?: string;
   initialized = false;
   parseError = '';
+  private focused = false;
 
   context = inject(ContextService);
   dataService = inject(DataService);
@@ -43,6 +44,7 @@ export class JsonEditorComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(): void {
+    if (this.focused) return;
     if (typeof this.value === 'string') {
       const value = this.context.data().get(this.value);
 
@@ -71,10 +73,10 @@ export class JsonEditorComponent implements OnInit, OnChanges {
   init() {
     this.parseError = '';
     if (typeof this.value === 'string') {
-      this.text = this.syntaxHighlight(this.value);
+      this.text = this.value;
     } else {
       const value = this.safeStringify(this.value || {});
-      this.text = this.syntaxHighlight(value);
+      this.text = value;
     }
   }
 
@@ -100,12 +102,24 @@ export class JsonEditorComponent implements OnInit, OnChanges {
   }
 
   onSelect() {
-
+    this.focused = true;
   }
+
+  onBlur(): void {
+    this.focused = false;
+  }
+
   onTextChange(event: Event): void {
     const target = event.target;
     if (!(target instanceof HTMLElement)) return;
-    const subject = target instanceof HTMLInputElement ? target.value : target.innerText;
+    const subject = target instanceof HTMLInputElement || target instanceof HTMLTextAreaElement
+      ? target.value
+      : target.innerText;
+    this.updateText(subject);
+  }
+
+  private updateText(subject: string): void {
+    this.text = subject;
     if (!subject.trim()) {
       this.parseError = 'JSON cannot be empty.';
       return;
@@ -118,6 +132,20 @@ export class JsonEditorComponent implements OnInit, OnChanges {
     } catch (error) {
       this.parseError = error instanceof Error ? `Invalid JSON: ${error.message}` : 'Invalid JSON.';
     }
+  }
+
+  onKeydown(event: KeyboardEvent): void {
+    if (!(event.target instanceof HTMLTextAreaElement)) return;
+    if (event.key === 'Escape') {
+      event.target.blur();
+      return;
+    }
+    if (event.key !== 'Tab' || event.shiftKey) return;
+    event.preventDefault();
+    const textarea = event.target;
+    const start = textarea.selectionStart;
+    textarea.setRangeText('  ', start, textarea.selectionEnd, 'end');
+    this.updateText(textarea.value);
   }
 
   syntaxHighlight(json: string) {

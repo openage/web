@@ -1,42 +1,20 @@
-# Builder workspace
+# Builder control data flow
 
-The metadata-driven workspace is hosted by [BuilderPageComponent](./builder-page-component.md), which extends the dynamic-page lifecycle and supplies a shared [BuilderController](../src/lib/oa/ux/builder/builder-controller.model.ts) to its toolbox, canvas, and properties controls. The page-builder component is the controller for those sibling components; they do not share direct component state. The page component and metadata types are under `src/app/page-builder/`; reusable builder contracts and controls are under `src/lib/oa/ux/`.
+Builder page composition uses one configured `canvas`, one `toolbar`, and one `properties` control. Their inputs and outputs are connected by [BuilderPageComponent](../src/app/page-builder/builder-page.component.ts); the controls do not receive a shared builder/workspace object.
 
-## Routes and metadata sources
+## Data and selection
 
-The main builder route is `/:area/:collection/:code/builder`. The page builder is also available at `/canvas/pages/:code/builder`; `/canvas/applications/:code/builder` redirects to the Console application-builder route. Route guards and `RouteDataResolver` continue to enforce the normal page access and metadata lifecycle.
+The canvas resolves its configured `value` from `ContextService.data` and renders its configured `options.sections`. Clicking a section heading emits its complete section value, including arrays, with the property target code, canvas section code, path, and index. Selecting an object emits that object with its item path and index. The page coordinator passes object selections to Properties and uses section/group codes to drive Toolbox selection; array-valued section selections are not treated as editable objects.
 
-The page derives workspace metadata from the active page's `meta.builder`, route `data.builderMetadata`, or route `data.builderMetadataUrl`. Component metadata can provide additional configuration: declarative toolbar entries through `toolbar.value` (or legacy typed groups through `toolbar.options.groups`), editable target fields through `properties.value` (or legacy schema fields through `properties.options.schema`), and validation through the selected canvas control's `options.schema`. Canvas schema is the validation source when provided; otherwise the normalized builder metadata supplies the fallback.
+Properties receives the selected object as `value`, chooses its form fields from `options.types` using the selection code as `type`, and emits edited values. The coordinator applies an edit to the selected path, updates the context-data entry, validates, and marks the document dirty. After a toolbox tool is dropped and inserted successfully, the coordinator selects the new item. The builder renders this configured editing layout directly; it has no view tabs or Code editor. The coordinator also handles click-to-add, item reorder and actions, Save, and Validate.
 
-The canonical metadata interfaces are in [builder-metadata.model.ts](../src/lib/oa/ux/builder/builder-metadata.model.ts), re-exported by [the page-builder model](../src/app/page-builder/builder-metadata.model.ts). Core properties include:
+Toolbox groups live in `options.groups` as `{ code, title, tools }`. The selected group code is passed through the Toolbox `value` input; Toolbox moves that group to the top and expands it. Search filters tool names across groups. Selecting or starting to drag a tool emits only the tool object; the page resolves its group from the configuration for Canvas target highlighting. Dropping a tool emits its exact target path so the page can clone and insert the configured seed at the appropriate collection or metadata path.
 
-| Property | Purpose |
-| --- | --- |
-| `workspaceType` | Selects the page, application, or workflow workspace behavior. |
-| `itemCollectionPath` / `itemLabel` | Identifies the primary editable collection and its label. |
-| `auxiliaryCollections` | Declares other editable arrays, such as page data and actions or application services. |
-| `actions` | Declares the Viewer, Editor, and Code views. Legacy view codes are normalized to these modes. |
-| `toolbox.groups` | Supplies legacy typed toolbox groups when the toolbar control does not define its own `options.groups`. |
-| `propertySchemas` | Defines property fields when the properties control does not define `options.schema`. |
-| `validationSchema` | Supplies a JSON Schema subset when the canvas does not define `options.schema`. |
-| `defaultData` | Provides initial workspace data when no saved draft or loaded document is available. |
-| `canvasSections` | Declares editable workspace collection paths when not defined on the canvas control. |
+## Configuration contract
 
-## Workspace shapes
+- Canvas `options.sections` entries require `code` and `path`; use `target` to choose the Properties target and `targets` to declare compatible toolbox insertions. `group` maps a canvas selection to a toolbox group code.
+- Toolbox `options.groups` entries contain `code`, `title`, and `tools`, with optional `icon`. Tools use `target` for a single target or `targets` for multiple targets. Component factories commonly use `targets: ["components"]` and `control`.
+- Properties `options.types` maps selection codes to arrays of field/control definitions.
+- `options.schema` on Canvas remains the workspace validation schema; the page coordinator validates before save or insertion.
 
-- Page workspaces edit nested `meta.layout.sections`, including child `sections` and `components`. Page data sources and actions are auxiliary collections.
-- Application workspaces use `navs` for their primary collection and may edit auxiliary `services`, shell metadata, styles, and layout sections.
-- Workflow workspaces use the configured primary item path, commonly `nodes`, with auxiliary collections such as `connections` and `triggers` when declared.
-
-Use the current Console navigation metadata and the example in the [builder page guide](./builder-page-component.md) as references. Avoid copying older examples that use the former registry-driven metadata shape.
-
-## Editing and saving
-
-- The toolbox supports configured item insertion, filtering, and drag/drop.
-- Viewer renders the configured template from the shared workspace object, Editor displays configured collection paths, and Code edits that same object. The toolbox and Properties panel appear only in Editor.
-- The canvas supports nested sections and components, selection, drag/drop, and validation according to its options. Workflow workspaces use the same canvas and controller contract.
-- The properties panel edits fields declared for the active target and emits changes to the builder controller.
-- The controller clones workspace and seed data before edits, validates changes against the supported JSON Schema subset, and tracks dirty state. The subset includes `type`, `required`, `properties`, `items`, `enum`, `const`, local `$ref`, `oneOf`, `minLength`, `minItems`, `minimum`, and `maximum`; see the [validation service guide](./validation-service.md).
-- Save stores a local draft through the configured cache; it does not publish workspace changes to a server.
-
-Builder controls are documented individually in the [canvas](./oa-canvas-component.md), [toolbox](./oa-toolbar-component.md), [properties](./oa-properties-component.md), and [workflow canvas](./oa-workflow-canvas-component.md) guides. The route-level composition and metadata adaptation are covered in the [builder page guide](./builder-page-component.md).
+See [the builder page guide](./builder-page-component.md), [canvas guide](./oa-canvas-component.md), [toolbox guide](./oa-toolbar-component.md), and [Properties guide](./oa-properties-component.md) for their respective contracts.

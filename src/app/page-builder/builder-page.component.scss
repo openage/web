@@ -1,11 +1,11 @@
 :host {
-  --builder-surface: var(--oa-builder-surface, var(--surface, #fff));
-  --builder-panel: var(--oa-builder-panel, var(--background, #f4f7fa));
-  --builder-border: var(--oa-builder-border, var(--border, #dce4eb));
-  --builder-text: var(--oa-builder-text, var(--text-primary, #193143));
-  --builder-muted: var(--oa-builder-muted, var(--text-secondary, #687b89));
-  --builder-accent: var(--oa-builder-accent, var(--primary, #16779b));
-  --builder-soft-accent: var(--oa-builder-accent-soft, rgba(var(--primary-rgb, 22 119 155), 0.09));
+  --builder-surface: var(--oa-builder-surface, #fff);
+  --builder-panel: var(--oa-builder-panel, #f6f6f4);
+  --builder-border: var(--oa-builder-border, #e4e3df);
+  --builder-text: var(--oa-builder-text, #1d1d1b);
+  --builder-muted: var(--oa-builder-muted, #777671);
+  --builder-accent: var(--oa-builder-accent, #4f46e5);
+  --builder-soft-accent: var(--oa-builder-accent-soft, rgba(79, 70, 229, 0.09));
   display: flex;
   flex: 1 1 0;
   flex-direction: column;
@@ -15,9 +15,7 @@
 }
 
 .builder-page-layout {
-  background:
-    radial-gradient(ellipse at 8% 0%, rgba(var(--primary-rgb, 22 119 155), 0.07), transparent 32rem),
-    var(--builder-panel);
+  background: var(--builder-panel);
   box-sizing: border-box;
   color: var(--builder-text);
   flex: 1 1 0;
@@ -29,13 +27,13 @@
 }
 
 .builder-page-layout.builder-dark {
-  --builder-surface: #192632;
-  --builder-panel: #101922;
-  --builder-border: #2b3d4b;
-  --builder-text: #e5edf3;
-  --builder-muted: #a5b4bf;
-  --builder-accent: #67c5e5;
-  --builder-soft-accent: rgba(103, 197, 229, 0.13);
+  --builder-surface: #1f1f1d;
+  --builder-panel: #161615;
+  --builder-border: #333330;
+  --builder-text: #eeede9;
+  --builder-muted: #a4a39d;
+  --builder-accent: #8b85ff;
+  --builder-soft-accent: rgba(139, 133, 255, 0.14);
   color-scheme: dark;
 }
 
@@ -47,45 +45,177 @@
   display: contents;
 }
 
-:host ::ng-deep .builder-page-layout > oa-layout > .section.content {
+.builder-workspace-bar {
+  align-items: center;
+  background: var(--builder-surface);
+  border: 1px solid var(--builder-border);
+  border-radius: 8px;
+  color: var(--builder-text);
+  display: flex;
+  flex: 0 0 auto;
+  gap: 12px;
+  justify-content: space-between;
+  margin: 10px auto;
+  max-width: 1600px;
+  min-height: 44px;
+  padding: 5px 10px;
+  position: relative;
+  z-index: 2;
+}
+
+.builder-workspace-title {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.builder-workspace-title strong {
+  font-size: 0.78rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.builder-workspace-title span {
+  color: var(--builder-muted);
+  font-size: 0.64rem;
+}
+
+.builder-view-controls,
+.builder-viewport-controls {
+  align-items: center;
+  background: var(--builder-panel);
+  border: 1px solid var(--builder-border);
+  border-radius: 6px;
+  display: flex;
+  gap: 2px;
+  padding: 3px;
+}
+
+.builder-view-controls button,
+.builder-viewport-controls button {
+  background: transparent;
+  border: 0;
+  border-radius: 4px;
+  color: var(--builder-muted);
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.68rem;
+  min-height: 29px;
+  padding: 4px 10px;
+}
+
+.builder-view-controls button.active,
+.builder-viewport-controls button.active {
+  background: var(--builder-surface);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+  color: var(--builder-text);
+}
+
+.builder-view-controls button:focus-visible,
+.builder-viewport-controls button:focus-visible {
+  outline: 2px solid var(--builder-accent);
+  outline-offset: 1px;
+}
+
+.builder-editor-surface {
+  flex: 1 1 0;
+  min-height: 0;
+  position: relative;
+}
+
+:host ::ng-deep .builder-editor-surface > oa-layout {
+  display: block;
+  height: 100%;
+  min-height: 0;
+}
+
+:host ::ng-deep .builder-editor-surface > oa-layout > .section.content {
+  height: 100%;
+  min-height: 0;
+}
+
+.builder-editor-surface.preview-active > oa-layout {
+  display: none;
+}
+
+.builder-live-preview {
+  align-items: flex-start;
+  background: var(--builder-panel);
+  display: flex;
+  height: 100%;
+  justify-content: center;
+  overflow: auto;
+  padding: clamp(12px, 3vw, 32px);
+}
+
+.builder-preview-frame {
+  background: var(--builder-surface);
+  border: 1px solid var(--builder-border);
+  border-radius: 8px;
+  box-shadow: 0 8px 28px rgba(20, 20, 20, 0.12);
+  box-sizing: border-box;
+  color: var(--builder-text);
+  min-height: min(720px, 100%);
+  overflow: auto;
+  transition: width 180ms ease;
+  width: 100%;
+}
+
+.builder-preview-frame.viewport-tablet {
+  width: min(820px, 100%);
+}
+
+.builder-preview-frame.viewport-mobile {
+  border-radius: 20px;
+  min-height: 680px;
+  width: min(390px, 100%);
+}
+
+:host ::ng-deep .builder-preview-page {
+  display: block;
+  min-height: 100%;
+}
+
+.builder-preview-empty {
+  align-items: center;
+  color: var(--builder-muted);
+  display: flex;
+  justify-content: center;
+  min-height: 220px;
+}
+
+@media (max-width: 720px) {
+  .builder-workspace-bar {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .builder-workspace-title {
+    flex: 1 1 100%;
+    text-align: center;
+  }
+
+  .builder-editor-surface {
+    overflow: auto;
+  }
+}
+
+:host ::ng-deep .builder-editor-surface > oa-layout > .section.content {
+  box-sizing: border-box;
+  display: block;
+  height: 100%;
+  overflow: hidden;
+}
+
+:host ::ng-deep .builder-editor-surface > oa-layout > .section.content > .section.editor {
   box-sizing: border-box;
   display: grid;
   gap: 0;
   grid-template-areas: "toolbar canvas properties";
-  grid-template-columns: 10% 70% 20%;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 7fr) minmax(0, 2fr);
   height: 100%;
   margin: 0 auto;
-  max-width: none;
-  min-height: 0;
-}
-
-.application-builder {
-  --builder-surface: #fff;
-  --builder-panel: #f8fafc;
-  --builder-border: #e2e8f0;
-  --builder-text: #0f172a;
-  --builder-muted: #64748b;
-  --builder-accent: #4f46e5;
-  --builder-soft-accent: rgba(79, 70, 229, 0.1);
-  background: var(--builder-panel);
-  min-height: 0;
-  padding: 0;
-}
-
-.application-builder.builder-dark {
-  --builder-surface: #20283a;
-  --builder-panel: #171e2d;
-  --builder-border: #354056;
-  --builder-text: #eef2fb;
-  --builder-muted: #a6b0c3;
-  --builder-accent: #a99fff;
-  --builder-soft-accent: rgba(169, 159, 255, 0.15);
-  background: #171e2d;
-}
-
-:host ::ng-deep .application-builder > oa-layout > .section.content {
-  gap: 0;
-  grid-template-columns: minmax(220px, 260px) minmax(0, 1fr) minmax(260px, 300px);
   max-width: none;
   min-height: 0;
 }
@@ -122,50 +252,6 @@
   max-height: 100%;
   overflow-y: auto;
   align-self: start;
-}
-
-:host ::ng-deep .application-builder .builder-region-toolbar,
-:host ::ng-deep .application-builder .builder-region-properties {
-  background: var(--builder-surface);
-  min-height: 0;
-}
-
-:host ::ng-deep .application-builder .builder-region-toolbar {
-  padding: 0 12px;
-}
-
-:host ::ng-deep .application-builder .builder-region-toolbar {
-  border-right: 1px solid var(--builder-border);
-}
-
-:host ::ng-deep .application-builder .builder-region-properties {
-  border-left: 1px solid var(--builder-border);
-}
-
-:host ::ng-deep .application-builder .builder-toolbar,
-:host ::ng-deep .application-builder .builder-properties,
-:host ::ng-deep .application-builder .builder-canvas {
-  background: var(--builder-surface);
-  border: 0;
-  border-radius: 0;
-  box-shadow: none;
-  height: auto;
-  max-height: none;
-}
-
-:host ::ng-deep .application-builder .builder-toolbar,
-:host ::ng-deep .application-builder .builder-properties {
-  padding: 12px 0;
-}
-
-:host ::ng-deep .application-builder .builder-region-canvas .builder-canvas {
-  min-height: 100%;
-  max-height: none;
-}
-
-:host ::ng-deep .application-builder .builder-toolbar,
-:host ::ng-deep .application-builder .builder-properties {
-  padding: 13px 12px;
 }
 
 :host ::ng-deep .application-builder .builder-header {
@@ -1141,14 +1227,9 @@
 }
 
 @media (max-width: 1100px) {
-  :host ::ng-deep .builder-page-layout > oa-layout > .section.content {
+  :host ::ng-deep .builder-editor-surface > oa-layout > .section.content > .section.editor {
     grid-template-areas: "toolbar canvas properties";
-    grid-template-columns: 10% 70% 20%;
-  }
-
-  :host ::ng-deep .application-builder > oa-layout > .section.content {
-    grid-template-areas: "toolbar canvas properties";
-    grid-template-columns: minmax(200px, 240px) minmax(0, 1fr) minmax(240px, 280px);
+    grid-template-columns: minmax(0, 1fr) minmax(0, 7fr) minmax(0, 2fr);
   }
 }
 
@@ -1172,7 +1253,7 @@
     min-height: calc(100vh - 110px);
   }
 
-  :host ::ng-deep .builder-page-layout > oa-layout > .section.content {
+  :host ::ng-deep .builder-editor-surface > oa-layout > .section.content > .section.editor {
     grid-template-areas:
       "toolbar"
       "canvas"
@@ -1202,7 +1283,7 @@
     max-height: none;
   }
 
-  :host ::ng-deep .application-builder .builder-region-canvas .builder-canvas {
+  :host ::ng-deep .builder-page-layout .builder-region-canvas .builder-canvas {
     min-height: 560px;
   }
 
@@ -1225,8 +1306,87 @@
   }
 }
 
+.builder-closed-state {
+  align-items: center;
+  background: var(--builder-surface);
+  border: 1px solid var(--builder-border);
+  border-radius: 12px;
+  color: var(--builder-text);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: clamp(24px, 8vh, 80px) auto;
+  max-width: 520px;
+  padding: 32px;
+  text-align: center;
+}
+
+.builder-closed-state h2,
+.builder-close-dialog h2 {
+  margin: 0;
+}
+
+.builder-closed-state p,
+.builder-close-dialog p {
+  color: var(--builder-muted);
+  margin: 0;
+}
+
+.builder-closed-state button,
+.builder-close-actions button {
+  border: 1px solid var(--builder-border);
+  border-radius: 7px;
+  cursor: pointer;
+  font: inherit;
+  font-weight: 650;
+  padding: 9px 14px;
+}
+
+.builder-closed-state button.primary,
+.builder-close-actions button.danger {
+  background: var(--builder-accent);
+  border-color: var(--builder-accent);
+  color: #fff;
+}
+
+.builder-close-backdrop {
+  align-items: center;
+  background: rgba(11, 20, 28, 0.52);
+  display: flex;
+  inset: 0;
+  justify-content: center;
+  padding: 18px;
+  position: fixed;
+  z-index: 1200;
+}
+
+.builder-close-dialog {
+  background: var(--builder-surface);
+  border: 1px solid var(--builder-border);
+  border-radius: 12px;
+  box-shadow: 0 22px 60px rgba(0, 0, 0, 0.24);
+  color: var(--builder-text);
+  display: grid;
+  gap: 14px;
+  max-width: 440px;
+  padding: 24px;
+  width: 100%;
+}
+
+.builder-close-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 9px;
+  justify-content: flex-end;
+}
+
+.builder-close-actions button.secondary {
+  background: var(--builder-panel);
+  color: var(--builder-text);
+}
+
 @media (max-width: 700px) {
-  :host ::ng-deep .builder-page-layout > oa-layout > .section.content {
+  :host ::ng-deep .builder-editor-surface > oa-layout > .section.content > .section.editor {
     grid-template-areas:
       "toolbar"
       "canvas"
@@ -1245,51 +1405,19 @@
   }
 }
 
-:host ::ng-deep .builder-page-layout.builder-toolbox-collapsed:not(.application-builder):not(.builder-no-panels) > oa-layout > .section.content {
-  grid-template-columns: 0 minmax(0, 80%) 20%;
-}
 
-:host ::ng-deep .builder-page-layout.builder-properties-collapsed:not(.application-builder):not(.builder-no-panels) > oa-layout > .section.content {
-  grid-template-columns: 10% minmax(0, 90%) 0;
-}
 
-:host ::ng-deep .builder-page-layout.builder-toolbox-collapsed.builder-properties-collapsed:not(.application-builder):not(.builder-no-panels) > oa-layout > .section.content {
-  grid-template-columns: 0 minmax(0, 1fr) 0;
-}
 
-:host ::ng-deep .application-builder.builder-toolbox-collapsed:not(.builder-no-panels) > oa-layout > .section.content {
-  grid-template-columns: 0 minmax(0, 1fr) minmax(260px, 300px);
-}
 
-:host ::ng-deep .application-builder.builder-properties-collapsed:not(.builder-no-panels) > oa-layout > .section.content {
-  grid-template-columns: minmax(220px, 260px) minmax(0, 1fr) 0;
-}
 
-:host ::ng-deep .application-builder.builder-toolbox-collapsed.builder-properties-collapsed:not(.builder-no-panels) > oa-layout > .section.content {
-  grid-template-columns: 0 minmax(0, 1fr) 0;
-}
 
-:host ::ng-deep .builder-page-layout.builder-toolbox-collapsed:not(.builder-no-panels) .builder-region-toolbar,
-:host ::ng-deep .builder-page-layout.builder-properties-collapsed:not(.builder-no-panels) .builder-region-properties {
-  overflow: hidden;
-  padding-left: 0;
-  padding-right: 0;
-}
 
 :host ::ng-deep .builder-page-layout .builder-toolbar.collapsed,
 :host ::ng-deep .builder-page-layout .builder-properties.collapsed {
   display: none;
 }
 
-:host ::ng-deep .application-builder.builder-toolbox-collapsed:not(.builder-no-panels) .builder-region-toolbar,
-:host ::ng-deep .application-builder.builder-properties-collapsed:not(.builder-no-panels) .builder-region-properties {
-  display: none;
-}
 
-:host ::ng-deep .application-builder.application-builder-no-panels .builder-region-toolbar,
-:host ::ng-deep .application-builder.application-builder-no-panels .builder-region-properties {
-  display: none;
-}
 
 :host ::ng-deep .application-builder .builder-toolbar.collapsed,
 :host ::ng-deep .application-builder .builder-properties.collapsed {
@@ -1320,40 +1448,13 @@
   color: var(--builder-accent);
 }
 
-.toolbox-anchor {
-  left: 8px;
-}
 
-.properties-anchor {
-  right: 8px;
-}
 
-:host ::ng-deep .application-builder.application-builder-no-panels > oa-layout > .section.content {
-  grid-template-areas: "canvas";
-  grid-template-columns: minmax(0, 1fr);
-}
 
-:host ::ng-deep .application-builder.application-builder-no-panels .builder-region-canvas {
-  grid-column: 1 / -1;
-}
 
-:host ::ng-deep .application-builder.application-builder-no-panels .builder-region-canvas .builder-canvas {
-  max-height: none;
-}
 
-:host ::ng-deep .builder-page-layout.builder-no-panels .builder-region-toolbar,
-:host ::ng-deep .builder-page-layout.builder-no-panels .builder-region-properties {
-  display: none;
-}
 
-:host ::ng-deep .builder-page-layout.builder-no-panels > oa-layout > .section.content {
-  grid-template-areas: "canvas";
-  grid-template-columns: minmax(0, 1fr);
-}
 
-:host ::ng-deep .builder-page-layout.builder-no-panels .builder-region-canvas {
-  grid-column: 1 / -1;
-}
 
 :host ::ng-deep .builder-page-layout .canvas-list.drop-target {
   background: var(--builder-soft-accent);
@@ -1361,10 +1462,133 @@
 }
 
 @media (max-width: 899px) {
-  :host ::ng-deep .builder-page-layout.builder-toolbox-collapsed:not(.application-builder-no-panels) > oa-layout > .section.content,
-  :host ::ng-deep .builder-page-layout.builder-properties-collapsed:not(.application-builder-no-panels) > oa-layout > .section.content {
-    grid-template-columns: minmax(0, 1fr);
+}
+
+:host ::ng-deep .builder-page-layout .builder-view-tabs {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+}
+
+:host ::ng-deep .builder-page-layout .builder-view-tabs-header {
+  border-bottom: 1px solid var(--builder-border);
+  flex: 0 0 auto;
+}
+
+:host ::ng-deep .builder-page-layout .builder-view-tabs-header > div {
+  cursor: pointer;
+}
+
+:host ::ng-deep .builder-page-layout .builder-view-tabs-header > [role="tab"]:focus-visible {
+  outline: 2px solid var(--builder-accent);
+  outline-offset: -2px;
+}
+
+:host ::ng-deep .builder-page-layout .builder-view-tabs-body {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: hidden;
+}
+
+:host ::ng-deep .builder-page-layout .builder-editor-view {
+  height: 100%;
+  min-height: 0;
+}
+
+:host ::ng-deep .builder-page-layout .builder-editor-view > .builder-editor-body {
+  box-sizing: border-box;
+  display: grid;
+  gap: 0;
+  grid-template-areas: "toolbar canvas properties";
+  grid-template-columns: minmax(0, 1fr) minmax(0, 7fr) minmax(0, 2fr);
+  height: 100%;
+  min-height: 0;
+}
+
+:host ::ng-deep .application-builder .builder-editor-view {
+  height: 100%;
+}
+
+:host ::ng-deep .builder-page-layout .builder-editor-view > .builder-editor-body > .component.builder-region-toolbar,
+:host ::ng-deep .builder-page-layout .builder-editor-view > .builder-editor-body > .component.builder-region-canvas,
+:host ::ng-deep .builder-page-layout .builder-editor-view > .builder-editor-body > .component.builder-region-properties {
+  box-sizing: border-box;
+  height: 100%;
+  max-height: 100%;
+  min-height: 0;
+  min-width: 0;
+  overflow-y: auto;
+}
+
+:host ::ng-deep .builder-page-layout .builder-editor-view > .builder-editor-body > .component.builder-region-toolbar {
+  grid-area: toolbar;
+}
+
+:host ::ng-deep .builder-page-layout .builder-editor-view > .builder-editor-body > .component.builder-region-canvas {
+  grid-area: canvas;
+}
+
+:host ::ng-deep .builder-page-layout .builder-editor-view > .builder-editor-body > .component.builder-region-properties {
+  grid-area: properties;
+}
+
+:host ::ng-deep .builder-page-layout .builder-viewer-view,
+:host ::ng-deep .builder-page-layout .builder-code-view {
+  box-sizing: border-box;
+  height: 100%;
+  min-height: 0;
+  overflow: auto;
+}
+
+:host ::ng-deep .builder-page-layout .builder-viewer-content,
+:host ::ng-deep .builder-page-layout .builder-code-content {
+  box-sizing: border-box;
+  height: 100%;
+  min-height: 0;
+  overflow: auto;
+}
+
+
+
+
+
+
+
+
+@media (max-width: 899px) {
+  :host ::ng-deep .builder-editor-surface > oa-layout > .section.content {
+    height: auto;
+    min-height: calc(100vh - 84px);
+    overflow: visible;
   }
+
+  :host ::ng-deep .builder-page-layout .builder-view-tabs {
+    height: auto;
+    min-height: calc(100vh - 84px);
+  }
+
+  :host ::ng-deep .builder-page-layout .builder-view-tabs-body {
+    overflow: visible;
+  }
+
+  :host ::ng-deep .builder-page-layout .builder-editor-view > .builder-editor-body {
+    grid-template-areas:
+      "toolbar"
+      "canvas"
+      "properties";
+    grid-template-columns: minmax(0, 1fr);
+    height: auto;
+  }
+
+  :host ::ng-deep .builder-page-layout .builder-editor-view > .builder-editor-body > .component.builder-region-toolbar,
+  :host ::ng-deep .builder-page-layout .builder-editor-view > .builder-editor-body > .component.builder-region-canvas,
+  :host ::ng-deep .builder-page-layout .builder-editor-view > .builder-editor-body > .component.builder-region-properties {
+    height: auto;
+    max-height: none;
+    overflow-y: visible;
+  }
+
 }
 
 :host ::ng-deep .application-builder .application-section-grid {
@@ -1563,4 +1787,117 @@
 
 :host ::ng-deep .application-builder .builder-region-toolbar .tool-group > h3 .tool-group-toggle[aria-expanded="true"] oa-icon {
   color: var(--builder-accent);
+}
+
+/* Application editor uses the same three-column workspace proportions as pages. */
+:host ::ng-deep .application-builder .builder-view-tabs {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+  overflow: hidden;
+}
+
+:host ::ng-deep .application-builder .builder-view-tabs-header {
+  flex: 0 0 auto;
+}
+
+:host ::ng-deep .application-builder .builder-view-tabs-body {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: hidden;
+}
+
+:host ::ng-deep .application-builder .builder-editor-view {
+  height: 100%;
+  min-height: 0;
+}
+
+:host ::ng-deep .application-builder .builder-editor-view > .builder-editor-body {
+  box-sizing: border-box;
+  display: grid;
+  gap: 0;
+  grid-template-areas: "toolbar canvas properties";
+  grid-template-columns: minmax(0, 1fr) minmax(0, 7fr) minmax(0, 2fr);
+  height: 100%;
+  min-height: 0;
+}
+
+:host ::ng-deep .application-builder .builder-editor-view > .builder-editor-body > .component.builder-region-toolbar,
+:host ::ng-deep .application-builder .builder-editor-view > .builder-editor-body > .component.builder-region-canvas,
+:host ::ng-deep .application-builder .builder-editor-view > .builder-editor-body > .component.builder-region-properties {
+  box-sizing: border-box;
+  height: 100%;
+  max-height: 100%;
+  min-height: 0;
+  min-width: 0;
+  overflow-y: auto;
+}
+
+:host ::ng-deep .application-builder .builder-editor-view > .builder-editor-body > .component.builder-region-toolbar {
+  grid-area: toolbar;
+}
+
+:host ::ng-deep .application-builder .builder-editor-view > .builder-editor-body > .component.builder-region-canvas {
+  grid-area: canvas;
+}
+
+:host ::ng-deep .application-builder .builder-editor-view > .builder-editor-body > .component.builder-region-properties {
+  grid-area: properties;
+}
+
+
+
+
+:host ::ng-deep .application-builder .builder-viewer-view,
+:host ::ng-deep .application-builder .builder-code-view {
+  box-sizing: border-box;
+  height: 100%;
+  min-height: 0;
+  overflow: auto;
+}
+
+@media (max-width: 899px) {
+  :host ::ng-deep .application-builder .builder-view-tabs {
+    height: auto;
+    min-height: calc(100vh - 84px);
+    overflow: visible;
+  }
+
+  :host ::ng-deep .application-builder .builder-view-tabs-body {
+    overflow: visible;
+  }
+
+  :host ::ng-deep .application-builder .builder-editor-view > .builder-editor-body {
+    grid-template-areas: "toolbar" "canvas" "properties";
+    grid-template-columns: minmax(0, 1fr);
+    height: auto;
+  }
+
+  :host ::ng-deep .application-builder .builder-editor-view > .builder-editor-body > .component.builder-region-toolbar,
+  :host ::ng-deep .application-builder .builder-editor-view > .builder-editor-body > .component.builder-region-canvas,
+  :host ::ng-deep .application-builder .builder-editor-view > .builder-editor-body > .component.builder-region-properties {
+    height: auto;
+    max-height: none;
+    overflow-y: visible;
+  }
+
+  :host ::ng-deep .application-builder .builder-viewer-view,
+  :host ::ng-deep .application-builder .builder-code-view {
+    height: auto;
+  }
+}
+
+/* Keep the requested dotted canvas and draw it from the active theme colors. */
+:host ::ng-deep .builder-page-layout .structure-canvas,
+:host ::ng-deep .builder-page-layout .application-stage {
+  background-color: var(--builder-panel);
+  background-image: radial-gradient(color-mix(in srgb, var(--builder-border) 82%, transparent) 0.8px, transparent 0.8px);
+  background-size: 18px 18px;
+}
+
+:host ::ng-deep .application-builder.builder-dark .application-stage {
+  background-color: var(--builder-panel);
+  background-image: radial-gradient(color-mix(in srgb, var(--builder-border) 82%, transparent) 0.8px, transparent 0.8px);
+  background-size: 18px 18px;
 }

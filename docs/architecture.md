@@ -25,7 +25,9 @@ The dynamic builder route is `/:area/:collection/:code/builder`; `canvas/pages/:
 
 Application metadata controls shared shell elements, theme, and navigation. Page metadata controls data sources, actions, layout sections, and components. Nested sections and component arrays are rendered through the common layout path, so new user-facing page behavior should normally extend the metadata contract or reusable control rather than add a route-specific hard-coded screen.
 
-Builder metadata configures workspace type, actions/views, item collections, toolbox entries, editable properties, and validation schema. `BuilderPageComponent` adapts page/route metadata and passes a shared `BuilderController` to the toolbox, canvas, and properties controls. See [the builder page guide](./builder-page-component.md), [workspace guide](./builder-workspace.md), and [page metadata guide](./page-meta-components.md).
+In local Applegos development, runtime application and page content may be served from the separate data repository through `/$content/` URLs. Map those URLs to the external data root using the [runtime content data guide](./content-data-guide.md); do not confuse served content files with application source code.
+
+Builder metadata configures the canvas, toolbox groups, editable properties, and validation schema. `BuilderPageComponent` coordinates their data and events: the canvas reads the configured root from `ContextService.data`, the toolbox emits selected tools, and Properties emits edited objects. The controls do not receive a shared builder workspace object. See [the builder page guide](./builder-page-component.md), [control data-flow guide](./builder-workspace.md), and [page metadata guide](./page-meta-components.md).
 
 ## State and data responsibilities
 

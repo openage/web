@@ -45,6 +45,7 @@ export abstract class PageBaseComponent implements OnInit, OnDestroy {
   abstract setContext(items: any[]): any[] | void;
 
   constructor() { }
+
   ngOnInit(): void {
     this._route.data
       .pipe(takeUntilDestroyed(this.destroyRef))
