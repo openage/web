@@ -7,34 +7,40 @@ export const environment = {
     host: 'localhost:4210',
   },
 
-  code: 'mo',
-  name: 'Fulfilment',
-  host: 'mo.applegos.in', // this is only for local debugging
-  title: 'Fulfilment',
+  code: 'website',
+  name: 'Website',
+  host: 'www.applegos.in', // this is only for local debugging
+  title: 'Applegos',
   version: '1.0.0',
-  ref: 'https://api.openage.in/system/v1/api/applications/host:{{host}}', // prod
+  ref: 'https://api.openage.in/system/beta/api/applications/host:{{host}}?env=qa', // prod
 
   organization: { code: undefined },
   tenant: { code: undefined },
+
+  theme: null,
+  logo: null,
+  splash: null,
+  favicon: null,
+  styles: [],
+
   captcha: {
     provider: 'google',
     type: 'recaptcha',
     key: undefined
   },
-  theme: undefined,
-  styles: [],
   session: {
     timeout: 0,
     cache: {
-      duration: 1,
-      storage: 'session'
+      duration: 10,
+      storage: 'local'
     }
   },
   errors: [],
-  meta: {},
+  meta: null,
 
   // if services section exists then it would be used
   services: [],
+
   // if navs section exists then it would be used
   navs: []
 };

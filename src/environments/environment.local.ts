@@ -13,7 +13,7 @@ export const environment = {
   host: 'www.applegos.in', // this is only for local debugging
   title: 'Applegos',
   version: '1.0.0',
-  // ref: 'https://api.openage.in/system/v1/api/applications/host:{{host}}', // prod
+  // ref: 'https://api.openage.in/system/beta/api/applications/host:{{host}}', // prod
   ref: 'http://localhost:8080/%24content/system/applications/local.json',
 
   organization: { code: undefined },

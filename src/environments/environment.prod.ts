@@ -12,7 +12,7 @@ export const environment = {
   host: 'mo.applegos.in', // this is only for local debugging
   title: 'Fulfilment',
   version: '1.0.0',
-  ref: 'https://api.openage.in/system/v1/api/applications/host:{{host}}', // prod
+  ref: 'https://api.openage.in/system/beta/api/applications/host:{{host}}', // prod
 
   organization: { code: undefined },
   tenant: { code: undefined },
