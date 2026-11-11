@@ -237,7 +237,8 @@ export class EnvironmentService {
     url = this.injectUrl(url);
 
     const headers: any = new Headers();
-    headers.append('Content-Type', 'application/json')
+    // HACK: prevent CORS error when getting assets from https://openage.github.io/assets
+    // headers.append('Content-Type', 'application/json')
 
     // TODO: Temporary hack to prevent headers
 
