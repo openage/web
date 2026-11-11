@@ -35,10 +35,19 @@
     {{getPopupButtonLabel(item)}}
   </button>
   } @else {
-  <div [id]="item.code" class="section {{item.code}} {{class}} {{item.type}}" [ngStyle]="item.style"
+  <div [id]="item.anchor || item.code" class="section {{item.code}} {{class}} {{item.type}}" [class.floatable]="isFloatingSection(item)" [ngStyle]="sectionStyle(item)"
     [ngClass]="item.class" [class.hidden]="item.selected === false"
     [attr.role]="isTabPanel(item) ? 'tabpanel' : null"
     [attr.aria-labelledby]="isTabPanel(item) ? item.code + '-tab' : null">
+    @if (isFloatingSection(item)) {
+    <button type="button" class="section-float-handle" aria-label="Move floating section"
+      title="Drag to move" (pointerdown)="startSectionDrag($event, item)"
+      (pointermove)="moveSectionDrag($event, item)" (pointerup)="endSectionDrag($event, item)"
+      (pointercancel)="endSectionDrag($event, item)">
+      <span>{{ getSectionTitle(item) }}</span>
+      <oa-icon value="drag_indicator"></oa-icon>
+    </button>
+    }
     <!-- (click)="selectSection(item)" -->
     @if(item.container) {
     <ng-container *ngTemplateOutlet="renderContainer; context: { item: item, type: 'section' }">

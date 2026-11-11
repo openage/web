@@ -214,7 +214,7 @@ oa-canvas {
 .builder-canvas,
 .builder-properties {
   background: color-mix(in srgb, var(--builder-surface) 94%, transparent);
-  border: 1px solid var(--builder-border);
+  // border: 1px solid var(--builder-border);
   border-radius: 15px;
   box-shadow: 0 8px 28px rgba(21, 45, 62, 0.055);
   min-width: 0;
@@ -227,8 +227,26 @@ oa-canvas {
   overflow: hidden;
 }
 
+oa-toolbox {
+  display: block;
+  height: 100%;
+  min-height: 0;
+}
+
 .builder-toolbar {
+  box-sizing: border-box;
+  height: 100%;
+  min-height: 0;
   padding: 15px 13px 11px;
+}
+
+.builder-toolbar > .tool-groups {
+  flex: 1 1 0;
+  min-height: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-gutter: stable;
 }
 
 .panel-title {
@@ -325,6 +343,10 @@ oa-canvas {
 .tool-list {
   display: grid;
   gap: 5px;
+}
+
+.tool-list[hidden] {
+  display: none;
 }
 
 .tool-item {
@@ -439,7 +461,10 @@ oa-canvas {
 
 .builder-canvas > .canvas-section-grid {
   flex: 1;
+  min-height: 0;
+  min-width: 0;
   overflow: auto;
+  overscroll-behavior: contain;
   padding: 14px;
 }
 
@@ -1053,7 +1078,8 @@ oa-canvas {
 .canvas-section-grid {
   display: grid;
   gap: 12px;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 270px), 1fr));
+  grid-template-columns: minmax(0, 1fr);
+  min-width: 0;
 }
 
 .canvas-section {
@@ -1096,6 +1122,100 @@ oa-canvas {
   gap: 7px;
 }
 
+.canvas-page-tree-section .canvas-list {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.canvas-page-tree-section .canvas-node {
+  border-radius: 7px;
+  margin-inline-start: calc(var(--page-tree-depth, 0) * 24px);
+  position: relative;
+  width: calc(100% - (var(--page-tree-depth, 0) * 24px));
+}
+
+.canvas-page-tree-section .canvas-page-node.page-tree-child::before {
+  border-top: 1px solid var(--builder-border);
+  content: '';
+  left: -13px;
+  position: absolute;
+  top: 50%;
+  width: 12px;
+}
+
+.canvas-page-tree-section .canvas-page-node .node-header {
+  min-height: 48px;
+  padding: 5px 8px;
+}
+
+.page-tree-toggle,
+.page-tree-toggle-spacer {
+  align-items: center;
+  background: transparent;
+  border: 0;
+  border-radius: 5px;
+  color: var(--builder-muted);
+  display: inline-flex;
+  flex: 0 0 26px;
+  height: 28px;
+  justify-content: center;
+  padding: 0;
+  width: 26px;
+}
+
+.page-tree-toggle {
+  cursor: pointer;
+}
+
+.page-tree-toggle:hover,
+.page-tree-toggle:focus-visible {
+  background: var(--builder-soft-accent);
+  color: var(--builder-accent);
+}
+
+.canvas-page-tree-section .canvas-child-list {
+  border-top: 0;
+  gap: 0;
+  margin: 0 0 8px 25px;
+  padding: 0 0 0 14px;
+  position: relative;
+}
+
+.canvas-page-tree-section .canvas-child-list::before {
+  border-left: 1px solid var(--builder-border);
+  content: '';
+  inset: 0 auto 12px 2px;
+  position: absolute;
+}
+
+.canvas-page-tree-section .canvas-page-tree-node {
+  border: 0;
+  border-radius: 0;
+  min-height: 34px;
+  padding: 7px 10px;
+  position: relative;
+}
+
+.canvas-page-tree-section .canvas-page-tree-node::before {
+  border-top: 1px solid var(--builder-border);
+  content: '';
+  left: -12px;
+  position: absolute;
+  top: 17px;
+  width: 12px;
+}
+
+.canvas-page-tree-section .canvas-page-tree-node:last-child::after {
+  background: var(--builder-surface);
+  bottom: 0;
+  content: '';
+  left: -13px;
+  position: absolute;
+  top: 18px;
+  width: 3px;
+}
+
 .canvas-node {
   background: var(--builder-surface);
   border: 1px solid var(--builder-border);
@@ -1125,13 +1245,35 @@ oa-canvas {
   padding: 9px 11px;
 }
 
+.node-select {
+  align-items: center;
+  background: transparent;
+  border: 0;
+  color: inherit;
+  cursor: pointer;
+  display: flex;
+  flex: 1 1 auto;
+  font: inherit;
+  gap: 10px;
+  min-width: 0;
+  padding: 0;
+  text-align: left;
+}
+
 .canvas-item-action {
+  align-items: center;
   display: inline-flex;
+  gap: 5px;
   margin: 0.25rem 0.5rem 0.5rem;
   color: var(--builder-accent, #315efb);
   font-size: 0.8rem;
   font-weight: 600;
   text-decoration: none;
+}
+
+.canvas-item-action oa-icon {
+  display: inline-flex;
+  font-size: 1rem;
 }
 
 .canvas-item-action:hover,

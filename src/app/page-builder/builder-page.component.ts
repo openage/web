@@ -16,7 +16,6 @@ import { BuilderMetadata, BuilderSelection, BuilderToolbarItem, BuilderToolMetad
 import { ToolboxComponent, ToolboxDrag } from '../../lib/oa/ux/toolbox/toolbox.component';
 import { PropertiesComponent } from '../../lib/oa/ux/properties/properties.component';
 import { CanvasComponent, CanvasItemAction, CanvasItemDrop, CanvasSelection, CanvasToolDrop } from '../../lib/oa/ux/canvas/canvas.component';
-import { validatePage } from './page-document.validator';
 
 @Component({
   // eslint-disable-next-line @angular-eslint/component-selector
@@ -43,7 +42,6 @@ export class BuilderPageComponent extends DynamicPageComponent implements AfterV
   private readonly cache = inject(CacheService);
   private readonly validator = inject(ValidationService);
   readonly builderContext = inject(ContextService);
-  readonly appSource = this.builderContext.appSource;
   private readonly builderLogger = new Logger(BuilderPageComponent);
   private cachedBuilderSource?: object;
   private cachedBuilderComponents?: any[];
@@ -264,10 +262,6 @@ export class BuilderPageComponent extends DynamicPageComponent implements AfterV
 
     const workspace = this.normalizeWorkspace(structuredClone(data));
     this.workspaceData.set(workspace);
-    if (metadata.workspaceType === 'application') {
-      const source = this.getBuilderPath(workspace, 'meta.src');
-      this.builderContext.appSource.set(typeof source === 'string' && source.trim() ? source.trim() : undefined);
-    }
     this.setSelection(null);
     this.markChanged();
     this.propertyError.set('');
@@ -295,9 +289,6 @@ export class BuilderPageComponent extends DynamicPageComponent implements AfterV
     const propertiesOptions = optionsFor(['properties']);
     const canvasOptions = optionsFor(['canvas']);
     const builder = metadata as BuilderMetadata;
-    const configuredType = canvasOptions?.['type'];
-    const workspaceType = builder.workspaceType || (typeof configuredType === 'string' ? configuredType : undefined) ||
-      this.routeParam('workspaceType') || 'page';
     const pageData = pageMetadata?.['data'];
     const defaultDataEntry = Array.isArray(pageData)
       ? pageData.find((item) => item && typeof item === 'object' && 'data' in item) as { data?: unknown } | undefined
@@ -305,33 +296,31 @@ export class BuilderPageComponent extends DynamicPageComponent implements AfterV
     const defaultData = builder.defaultData ||
       (defaultDataEntry?.data && typeof defaultDataEntry.data === 'object'
         ? defaultDataEntry.data as Record<string, unknown>
-        : workspaceType === 'application'
-          ? { code: 'new-application', title: 'New Application', services: [], navs: [] }
-          : {});
-    const auxiliaryCollections = builder.auxiliaryCollections || (
-      workspaceType === 'application'
-        ? [{ path: 'services', title: 'Services' }]
-        : workspaceType === 'page'
-          ? [{ path: 'meta.data', title: 'Data sources' }, { path: 'meta.actions', title: 'Actions' }]
-          : []
-    );
+        : {});
+    const canvasSections = (Array.isArray(canvasOptions?.['sections'])
+      ? canvasOptions['sections'] as BuilderMetadata['canvasSections']
+      : builder.canvasSections) || [];
+    const configuredCollections = canvasSections
+      .filter((section) => !!section.path && Array.isArray(this.getBuilderPath(defaultData, section.path)))
+      .map((section) => ({ path: section.path, title: section.title }));
+    const itemCollectionPath = builder.itemCollectionPath || configuredCollections[0]?.path || 'items';
+    const auxiliaryCollections = builder.auxiliaryCollections ||
+      configuredCollections.filter((collection) => collection.path !== itemCollectionPath);
 
     this.cachedBuilderSource = metadata;
     this.cachedBuilderComponents = this.components;
     this.cachedBuilderLayout = this.layout;
     this.cachedBuilderMetadata = {
       ...builder,
-      workspaceType,
       title: builder.title || this.page?.title || 'Builder',
       icon: builder.icon || (typeof canvasOptions?.['icon'] === 'string'
         ? canvasOptions['icon']
         : this.page?.icon || 'dashboard'),
-      itemCollectionPath: builder.itemCollectionPath || (workspaceType === 'application'
-        ? 'navs'
-        : workspaceType === 'page'
-          ? 'meta.layout.sections'
-          : 'items'),
-      itemLabel: builder.itemLabel || (workspaceType === 'application' ? 'Navigation items' : 'Items'),
+      itemCollectionPath,
+      itemLabel: builder.itemLabel || configuredCollections[0]?.title || 'Items',
+      dataKey: builder.dataKey || (typeof canvasOptions?.['value'] === 'string'
+        ? String(canvasOptions['value']).split('.')[0]
+        : undefined),
       auxiliaryCollections,
       defaultData,
       toolbox: {
@@ -341,19 +330,11 @@ export class BuilderPageComponent extends DynamicPageComponent implements AfterV
       validationSchema: (canvasOptions?.['schema'] as BuilderMetadata['validationSchema'] | undefined) ?? builder.validationSchema ?? {},
       canvasSections: Array.isArray(canvasOptions?.['sections'])
         ? canvasOptions['sections'] as BuilderMetadata['canvasSections']
-        : builder.canvasSections
+        : builder.canvasSections,
+      persistence: builder.persistence,
+      preview: builder.preview
     };
     return this.cachedBuilderMetadata;
-  }
-
-  workspaceType(): string {
-    return this.metadata()?.workspaceType || this.routeParam('workspaceType') || this.builderType || 'page';
-  }
-
-  get builderType(): string {
-    if (this.builderMetadata?.workspaceType) return this.builderMetadata.workspaceType;
-    const canvas = this.builderConfiguredComponents.find((component: any) => component.control === 'canvas');
-    return canvas?.options?.type || this.routeParam('workspaceType') || 'page';
   }
 
   private get builderConfiguredComponents(): any[] {
@@ -373,7 +354,7 @@ export class BuilderPageComponent extends DynamicPageComponent implements AfterV
     const canvas = this.builderConfiguredComponents.find((component: any) => component.control === 'canvas');
     return typeof canvas?.value === 'string'
       ? canvas.value.split('.')[0]
-      : this.workspaceType() === 'application' ? 'application' : 'page';
+      : this.metadata()?.dataKey || 'data';
   }
 
   override ngAfterViewInit(): void {
@@ -461,9 +442,8 @@ export class BuilderPageComponent extends DynamicPageComponent implements AfterV
   });
 
   readonly previewLayout = computed<Record<string, unknown>>(() => {
-    const meta = this.workspaceData()['meta'];
-    if (!meta || typeof meta !== 'object' || Array.isArray(meta)) return { sections: [] };
-    const layout = (meta as Record<string, unknown>)['layout'];
+    const path = this.metadata()?.preview?.layoutPath;
+    const layout = path ? this.getBuilderPath(this.workspaceData(), path) : undefined;
     return layout && typeof layout === 'object' && !Array.isArray(layout)
       ? layout as Record<string, unknown>
       : { sections: [] };
@@ -472,9 +452,8 @@ export class BuilderPageComponent extends DynamicPageComponent implements AfterV
     (this.previewLayout()['sections'] as unknown[]).length > 0);
 
   readonly previewComponents = computed<any[]>(() => {
-    const meta = this.workspaceData()['meta'];
-    if (!meta || typeof meta !== 'object' || Array.isArray(meta)) return [];
-    const components = (meta as Record<string, unknown>)['components'];
+    const path = this.metadata()?.preview?.componentsPath;
+    const components = path ? this.getBuilderPath(this.workspaceData(), path) : undefined;
     return Array.isArray(components) ? components : [];
   });
 
@@ -523,7 +502,6 @@ export class BuilderPageComponent extends DynamicPageComponent implements AfterV
     this.loading.set(true);
     this.loadError.set('');
     try {
-      const type = this.routeParam('workspaceType') || this.builderType || this.workspaceType();
       this.pageCode.set(this.routeParam('code') || '');
       this.routeBuilderMetadata =
         this.route.snapshot.data['builderMetadata'] as BuilderMetadata | undefined ||
@@ -531,14 +509,11 @@ export class BuilderPageComponent extends DynamicPageComponent implements AfterV
       const metadataUrl = this.route.snapshot.data['builderMetadataUrl'] as string | undefined;
       if (metadataUrl) {
         const loaded = await firstValueFrom(this.http.get<BuilderMetadata>(metadataUrl));
-        if (loaded.workspaceType !== type) {
-          throw new Error(`Metadata at "${metadataUrl}" is for "${loaded.workspaceType}", not "${type}".`);
-        }
         this.routeBuilderMetadata = loaded;
         this.cachedBuilderSource = undefined;
       }
       const metadata = this.builderMetadata;
-      if (!metadata) throw new Error(`No builder metadata is available for workspace type "${type}".`);
+      if (!metadata) throw new Error('No builder metadata is available.');
       this.validateBuilderMetadata(metadata);
       this.metadata.set(metadata);
       const configuredData = this.toWorkspaceRecord(this.builderContext.data().get(this.builderDataKey));
@@ -564,19 +539,18 @@ export class BuilderPageComponent extends DynamicPageComponent implements AfterV
 
   private validateBuilderMetadata(metadata: BuilderMetadata): void {
     if (!metadata || typeof metadata !== 'object') throw new Error('Builder metadata must be an object.');
-    if (!metadata.workspaceType?.trim()) throw new Error('Builder metadata must define a workspaceType.');
     if (!metadata.title?.trim() || !metadata.icon?.trim() || !metadata.itemCollectionPath?.trim()) {
-      throw new Error(`Builder metadata for "${metadata.workspaceType}" must include title, icon, and itemCollectionPath.`);
+      throw new Error('Builder metadata must include title, icon, and itemCollectionPath.');
     }
 
     if (!metadata.defaultData || typeof metadata.defaultData !== 'object' ||
       !metadata.validationSchema || typeof metadata.validationSchema !== 'object' ||
       !metadata.propertySchemas || typeof metadata.propertySchemas !== 'object') {
-      throw new Error(`Builder metadata for "${metadata.workspaceType}" must include defaultData, propertySchemas, and validationSchema.`);
+      throw new Error('Builder metadata must include defaultData, propertySchemas, and validationSchema.');
     }
     if (!metadata.toolbox || !Array.isArray(metadata.toolbox.groups) ||
       metadata.toolbox.groups.some((group) => !group.code?.trim() || !group.title?.trim() || !Array.isArray(group.tools))) {
-      throw new Error(`Builder metadata for "${metadata.workspaceType}" must define valid toolbox groups.`);
+      throw new Error('Builder metadata must define valid toolbox groups.');
     }
   }
 
@@ -601,9 +575,6 @@ export class BuilderPageComponent extends DynamicPageComponent implements AfterV
     const next = structuredClone(this.workspaceData());
     this.setBuilderPath(next, path, value);
     this.workspaceData.set(next);
-    if (path === 'meta.src') {
-      this.builderContext.appSource.set(typeof value === 'string' && value.trim() ? value.trim() : undefined);
-    }
     this.markChanged();
   }
 
@@ -621,12 +592,12 @@ export class BuilderPageComponent extends DynamicPageComponent implements AfterV
   selectItem(item: Record<string, unknown>, path: string, index: number): void {
     const collection = this.metadata()?.auxiliaryCollections?.find((candidate) => path.startsWith(`${candidate.path}.`));
     const isLayoutSection = /(?:^|\.)sections\.\d+(?:\.|$)/.test(path);
-    const isApplicationNav = this.workspaceType() === 'application' &&
-      path.startsWith(`${this.metadata()?.itemCollectionPath || 'navs'}.`);
-    const isPageComponent = this.workspaceType() === 'page' && /\.components\.\d+(?:\.|$)/.test(path);
-    const type = String(isPageComponent ? item['control'] || 'component' : isLayoutSection ? 'section' : collection
-      ? (collection.path.endsWith('services') ? 'service' : item['type'] || path.split('.').at(-2) || 'item')
-      : isApplicationNav ? 'application-nav' : item['type'] || item['control'] || item['code'] || path.split('.').at(-1) || 'item');
+    const configuredSection = this.metadata()?.canvasSections?.find((section) =>
+      section.path === path.replace(/\.\d+(?:\..*)?$/, '') || path.startsWith(`${section.path}.`));
+    const type = String(configuredSection?.target || (item['control'] ? item['control'] : undefined) ||
+      (isLayoutSection ? 'section' : undefined) || item['type'] ||
+      (collection ? collection.title.replace(/s$/, '').toLowerCase() : undefined) ||
+      item['code'] || path.split('.').at(-1) || 'item');
     this.setSelection({ type, item, index, path });
     this.propertyError.set('');
   }
@@ -672,47 +643,17 @@ export class BuilderPageComponent extends DynamicPageComponent implements AfterV
       this.loadError.set('Resolve schema validation errors before adding items.');
       return;
     }
-    if (!tool.allowedDropTargets.includes(metadata.workspaceType) && !tool.allowedDropTargets.includes('canvas')) {
-      this.loadError.set(`${tool.title} cannot be added to a ${metadata.workspaceType} workspace.`);
-      return;
-    }
-
     const auxiliary = metadata.auxiliaryCollections || [];
-    const auxiliaryPath = tool.type === 'data-source'
-      ? auxiliary.find((collection) => collection.path.endsWith('.data'))?.path
-      : tool.type === 'action'
-        ? auxiliary.find((collection) => collection.path.endsWith('.actions'))?.path
-        : tool.type === 'service'
-          ? auxiliary.find((collection) => collection.path.endsWith('.services'))?.path
-          : undefined;
+    const toolTargets = tool.targets ?? (tool.target ? [tool.target] : []);
+    const configuredTarget = metadata.canvasSections?.find((section) =>
+      [section.code, section.path, section.target, ...(section.targets || [])]
+        .some((candidate) => !!candidate && toolTargets.includes(candidate)))?.path;
+    const auxiliaryPath = auxiliary.find((collection) =>
+      collection.path === configuredTarget || toolTargets.includes(collection.path))?.path;
     const droppingAtRoot = targetPath === metadata.itemCollectionPath;
     let path = droppingAtRoot && auxiliaryPath
       ? auxiliaryPath
       : targetPath || auxiliaryPath || metadata.itemCollectionPath;
-    if (metadata.workspaceType === 'page' && !targetPath && !auxiliaryPath && path === metadata.itemCollectionPath && tool.type !== 'section') {
-      const selection = this.selected();
-      if (selection?.type === 'section') {
-        path = `${selection.path}.components`;
-      } else {
-        const section = this.createItem({
-          type: 'section',
-          title: 'New Section',
-          components: [],
-          sections: [],
-          container: { header: { title: 'New Section' }, body: {} }
-        }, 'section');
-        const next = structuredClone(this.workspaceData());
-        const sections = this.getBuilderPath(next, metadata.itemCollectionPath) as Record<string, unknown>[];
-        sections.push(section);
-        const sectionPath = `${metadata.itemCollectionPath}.${sections.length - 1}`;
-        this.setBuilderPath(next, `${sectionPath}.components`, [this.createItem(tool.defaultProperties, tool.type)]);
-        this.workspaceData.set(next);
-        this.markChanged();
-        this.selectItem(section, sectionPath, sections.length - 1);
-        return;
-      }
-    }
-
     const next = structuredClone(this.workspaceData());
     const target = this.getBuilderPath(next, path);
     if (!Array.isArray(target)) {
@@ -781,11 +722,7 @@ export class BuilderPageComponent extends DynamicPageComponent implements AfterV
     if (!Array.isArray(parent) || !Number.isInteger(index) || !parent[index]) return;
 
     const duplicate = structuredClone(parent[index]) as Record<string, unknown>;
-    if (this.metadata()?.workspaceType === 'page' && parentPath === 'meta.layout.sections') {
-      duplicate['code'] = this.uniqueSectionCode(`${String(duplicate['code'] || 'section')}-copy`, parent as Record<string, unknown>[]);
-    } else if (this.metadata()?.workspaceType !== 'page') {
-      this.regenerateBuilderIds(duplicate);
-    }
+    this.regenerateBuilderIds(duplicate);
     parent.splice(index + 1, 0, duplicate);
     this.workspaceData.set(next);
     this.markChanged();
@@ -853,25 +790,6 @@ export class BuilderPageComponent extends DynamicPageComponent implements AfterV
     const metadata = this.metadata();
     if (!metadata) return structuredClone(source);
     const workspace = structuredClone(source);
-    if (metadata.workspaceType === 'page') return workspace;
-    if (metadata.workspaceType === 'application') {
-      const existingMeta = workspace['meta'];
-      const meta = existingMeta && typeof existingMeta === 'object' && !Array.isArray(existingMeta)
-        ? existingMeta as Record<string, unknown>
-        : {};
-      workspace['meta'] = meta;
-      for (const [key, fallback] of [
-        ['layout', { type: 'workspace', sections: [] }],
-        ['header', { enabled: true }],
-        ['footer', { enabled: true }]
-      ] as const) {
-        const value = meta[key];
-        if (!value || typeof value !== 'object' || Array.isArray(value)) {
-          meta[key] = structuredClone(fallback);
-        }
-      }
-      if (!Array.isArray(workspace['styles'])) workspace['styles'] = [];
-    }
     if (!Array.isArray(this.getBuilderPath(workspace, metadata.itemCollectionPath))) {
       this.setBuilderPath(workspace, metadata.itemCollectionPath, []);
     }
@@ -952,13 +870,6 @@ export class BuilderPageComponent extends DynamicPageComponent implements AfterV
     const metadata = this.metadata();
     if (!metadata) return;
     const value = this.workspaceData();
-    if (metadata.workspaceType === 'page') {
-      const result = validatePage(value);
-      this.validationErrors.set(this.asBuilderErrors(result.errors));
-      this.validationWarnings.set(result.warnings);
-      this.loadError.set(result.errors.length ? `Validation found ${result.errors.length} issue(s).` : '');
-      return;
-    }
     const errors = this.validator.isObjectValid(value, metadata.validationSchema);
     this.validationErrors.set(errors);
     this.validationWarnings.set([]);
@@ -1029,20 +940,8 @@ export class BuilderPageComponent extends DynamicPageComponent implements AfterV
       return;
     }
 
-    if (this.metadata()?.workspaceType === 'page') {
-      if (config.target === 'sections') {
-        this.addPageSection(dropTargetPath);
-        return;
-      }
-      const pageControl = config.control || config.code;
-      if (pageControl === 'html' || pageControl === 'form') {
-        this.addPageComponent(pageControl, dropTargetPath, config);
-        return;
-      }
-    }
-
     const seed = config.value === undefined ? undefined : structuredClone(config.value);
-    if (config.target) {
+    if (config.target && !(config.target === 'components' && config.control)) {
       this.insertConfiguredTarget(config, seed, dropTargetPath);
       return;
     }
@@ -1073,59 +972,6 @@ export class BuilderPageComponent extends DynamicPageComponent implements AfterV
       return;
     }
     this.insertConfiguredValue(targetPath, instance, true);
-  }
-
-  addPageSection(dropTargetPath?: string): void {
-    if (this.metadata()?.workspaceType !== 'page') return;
-    const path = dropTargetPath || 'meta.layout.sections';
-    const sections = this.getBuilderPath(this.workspaceData(), path);
-    if (!Array.isArray(sections)) {
-      this.loadError.set('The page sections collection is missing.');
-      return;
-    }
-    const section: Record<string, unknown> = {
-      code: this.uniqueSectionCode('new-section', sections as Record<string, unknown>[]),
-      components: [{ control: 'html', value: [''] }]
-    };
-    const next = structuredClone(this.workspaceData());
-    const nextSections = this.getBuilderPath(next, path) as Record<string, unknown>[];
-    nextSections.push(section);
-    this.workspaceData.set(next);
-    this.markChanged();
-    this.selectItem(section, `${path}.${nextSections.length - 1}`, nextSections.length - 1);
-  }
-
-  addPageComponent(control: 'html' | 'form', dropTargetPath?: string, config?: BuilderToolbarItem): void {
-    if (this.metadata()?.workspaceType !== 'page') return;
-    const path = dropTargetPath || this.componentTargetPath();
-    const components = path ? this.getBuilderPath(this.workspaceData(), path) : undefined;
-    if (!path || !Array.isArray(components)) {
-      this.loadError.set('Select a section before adding a component.');
-      return;
-    }
-    const seed = config?.value === undefined ? undefined : structuredClone(config.value);
-    const component: Record<string, unknown> = control === 'html'
-      ? { control: 'html', value: seed ?? [''] }
-      : {
-        control: 'form',
-        options: { class: '', sections: [], fields: [], actions: [], ...(config?.options || {}) },
-        value: seed && typeof seed === 'object' && !Array.isArray(seed) ? seed : {}
-      };
-    const next = structuredClone(this.workspaceData());
-    const nextComponents = this.getBuilderPath(next, path) as Record<string, unknown>[];
-    nextComponents.push(component);
-    this.workspaceData.set(next);
-    this.markChanged();
-    this.selectItem(component, `${path}.${nextComponents.length - 1}`, nextComponents.length - 1);
-  }
-
-  private uniqueSectionCode(base: string, sections: Record<string, unknown>[]): string {
-    const codes = new Set(sections.map((section) => String(section['code'] || '')));
-    if (!codes.has(base)) return base;
-    let candidate = `${base}-2`;
-    let suffix = 3;
-    while (codes.has(candidate)) candidate = `${base}-${suffix++}`;
-    return candidate;
   }
 
   private insertConfiguredTarget(config: BuilderToolbarItem, seed: unknown, dropTargetPath?: string): void {
@@ -1216,7 +1062,7 @@ export class BuilderPageComponent extends DynamicPageComponent implements AfterV
     return undefined;
   }
 
-  private sectionTargetPath(): string {
+  private sectionTargetPath(): string | undefined {
     const selection = this.selected();
     if (selection) {
       const item = this.getBuilderPath(this.workspaceData(), selection.path);
@@ -1232,7 +1078,7 @@ export class BuilderPageComponent extends DynamicPageComponent implements AfterV
     if (configured) return configured.path;
     const configuredPath = this.metadata()?.canvasSections?.find((section) => section.path.endsWith('.sections'));
     if (configuredPath) return configuredPath.path;
-    return 'meta.layout.sections';
+    return undefined;
   }
 
   // ----- Persistence flow -----
@@ -1244,15 +1090,16 @@ export class BuilderPageComponent extends DynamicPageComponent implements AfterV
       this.loadError.set('Not saved, fix the errors first.');
       return;
     }
-    const key = this.draftKey(metadata.workspaceType, this.pageCode() || String(this.workspaceData()['code'] || 'new'));
+    const key = this.draftKey(this.pageCode() || String(this.workspaceData()['code'] || 'new'));
     try {
-      if (metadata.workspaceType === 'page') {
-        const id = this.workspaceData()['id'];
+      if (metadata.persistence) {
+        const id = this.getBuilderPath(this.workspaceData(), metadata.persistence.idPath || 'id');
         if (typeof id !== 'string' && typeof id !== 'number') {
-          throw new Error('Page document is missing its id; it cannot be saved.');
+          throw new Error(`The document is missing its "${metadata.persistence.idPath || 'id'}" value; it cannot be saved.`);
         }
         await this.dataService.update(id, structuredClone(this.workspaceData()), {
-          service: 'system', collection: 'navs'
+          service: metadata.persistence.service,
+          collection: metadata.persistence.collection
         });
       }
       this.cache.set(key, structuredClone(this.workspaceData()));
@@ -1260,7 +1107,7 @@ export class BuilderPageComponent extends DynamicPageComponent implements AfterV
       this.saved.set(true);
       this.dirty.set(false);
       this.savedWorkspace.set(structuredClone(this.workspaceData()));
-      this.loadError.set(metadata.workspaceType === 'page' ? 'Page saved.' : 'Saved as a local draft.');
+      this.loadError.set(metadata.persistence ? 'Saved.' : 'Saved as a local draft.');
       this.syncBuilderContextActions();
     } catch (error) {
       const message = error instanceof Error ? error.message : String(error);
@@ -1278,36 +1125,34 @@ export class BuilderPageComponent extends DynamicPageComponent implements AfterV
     }
 
     const actions = (this.previousContextActions || []).map((action) => ({ ...action }));
-    if (this.workspaceType() === 'application') {
-      actions.push(
-        new Action({
-          code: 'application-builder-save',
-          title: 'Save',
-          icon: 'save',
-          view: 'button',
-          class: 'context-menu-action default primary',
-          isDisabled: !this.dirty() || !this.workspaceValid(),
-          display: this.dirty() && this.workspaceValid() ? undefined : 'disabled',
-          event: () => this.dirty() && this.workspaceValid() && void this.saveDraft()
-        }),
-        new Action({
-          code: 'application-builder-validate',
-          title: 'Validate',
-          icon: 'fact_check',
-          view: 'button',
-          class: 'context-menu-action default primary',
-          event: () => this.validateWorkspace()
-        }),
-        new Action({
-          code: 'application-builder-cancel',
-          title: 'Cancel',
-          icon: 'close',
-          view: 'button',
-          class: 'context-menu-action default primary',
-          event: () => this.closeBuilder()
-        })
-      );
-    }
+    actions.push(
+      new Action({
+        code: 'builder-save',
+        title: 'Save',
+        icon: 'save',
+        view: 'button',
+        class: 'context-menu-action default primary',
+        isDisabled: !this.dirty() || !this.workspaceValid(),
+        display: this.dirty() && this.workspaceValid() ? undefined : 'disabled',
+        event: () => this.dirty() && this.workspaceValid() && void this.saveDraft()
+      }),
+      new Action({
+        code: 'builder-validate',
+        title: 'Validate',
+        icon: 'fact_check',
+        view: 'button',
+        class: 'context-menu-action default primary',
+        event: () => this.validateWorkspace()
+      }),
+      new Action({
+        code: 'builder-cancel',
+        title: 'Cancel',
+        icon: 'close',
+        view: 'button',
+        class: 'context-menu-action default primary',
+        event: () => this.closeBuilder()
+      })
+    );
     this.installedContextActions = actions;
     this.builderContext.actions.set(actions);
   }
@@ -1328,7 +1173,7 @@ export class BuilderPageComponent extends DynamicPageComponent implements AfterV
   }
 
   isTool(value: unknown): value is BuilderToolMetadata {
-    return !!value && typeof value === 'object' && 'allowedDropTargets' in value && 'defaultProperties' in value;
+    return !!value && typeof value === 'object' && 'defaultProperties' in value;
   }
 
   addToolFromClick(tool: BuilderToolMetadata): void {
@@ -1345,8 +1190,11 @@ export class BuilderPageComponent extends DynamicPageComponent implements AfterV
     const targets = tool.targets ?? (tool.target ? [tool.target] : []);
     if (tool.target === 'meta') return false;
     if (targets.length) return targets.some((target) => target === targetPath || targetPath.endsWith(`.${target}`));
-    const allowed = (tool as Partial<BuilderToolMetadata>).allowedDropTargets;
-    return !Array.isArray(allowed) || allowed.includes(this.workspaceType()) || allowed.includes('canvas');
+    return !targets.length || targets.some((target) => {
+      if (target === targetPath || targetPath.endsWith(`.${target}`)) return true;
+      return this.metadata()?.canvasSections?.some((section) =>
+        section.path === targetPath && [section.code, section.target, ...(section.targets || [])].includes(target));
+    });
   }
 
   isDropTarget(targetPath: string): boolean {
@@ -1363,8 +1211,8 @@ export class BuilderPageComponent extends DynamicPageComponent implements AfterV
     setTimeout(() => this.toolDragInProgress.set(false), 0);
   }
 
-  private draftKey(type: string, code: string): string {
-    return `builder-draft:${type}:${code}`;
+  private draftKey(code: string): string {
+    return `builder-draft:${code}`;
   }
 
   private routeParam(key: string): string | null {
@@ -1389,27 +1237,12 @@ export class BuilderPageComponent extends DynamicPageComponent implements AfterV
     this.saved.set(false);
     this.loadError.set('');
     const metadata = this.metadata();
-    if (metadata?.workspaceType === 'page') {
-      const result = validatePage(this.workspaceData());
-      this.validationErrors.set(this.asBuilderErrors(result.errors));
-      this.validationWarnings.set(result.warnings);
-      if (result.errors.length) this.loadError.set(`Validation found ${result.errors.length} issue(s).`);
-    } else if (metadata) {
+    if (metadata) {
       const errors = this.validator.isObjectValid(this.workspaceData(), metadata.validationSchema);
       this.validationErrors.set(errors);
       this.validationWarnings.set([]);
       if (errors.length) this.loadError.set(`Validation found ${errors.length} issue(s).`);
     }
     this.syncBuilderContextActions();
-  }
-
-  private asBuilderErrors(messages: string[]): BuilderValidationError[] {
-    return messages.map((message) => {
-      const separator = message.indexOf(':');
-      return {
-        path: separator >= 0 ? message.slice(0, separator) : 'page',
-        message: separator >= 0 ? message.slice(separator + 1).trim() : message
-      };
-    });
   }
 }

@@ -2,6 +2,19 @@
 
 All notable changes to this project are documented in this file.
 
+## [3.4.0] - 2026-11-11
+
+### Added
+- Add a toolbox and properties editor for configuring dynamic page metadata.
+- Add diagnostics views and remove the legacy debug-only workspace.
+
+### Changed
+- Improve the list control with template rendering, loading states, and more resilient error handling.
+- Refine builder layout and preview behavior so toolbar, canvas, and properties stay aligned with the configured editor grid.
+
+### Fixed
+- Keep builder item selection in sync after metadata insertions and improve handling for empty or invalid data states.
+
 ## [3.3.0] - 2026-10-14
 
 ### Added
@@ -61,4 +74,5 @@ All notable changes to this project are documented in this file.
 
 [3.2.0]: https://gitlab.com/oa-pages/ux/pages-app/-/compare/f7914219bb9935168bc67e869b85c61692a9a430...76980c8dee66ccba5698099339df5f6de7f9311b
 [3.3.0]: https://gitlab.com/oa-pages/ux/pages-app/-/compare/113f31ea2e99d0f4a0bdd59d2c671a0c4609f347...1b0895f521f6f5a7f77f84bfb283837b3a23809e
+[3.4.0]: https://gitlab.com/oa-pages/ux/pages-app/-/compare/a45dfccd...fc2b3670
 

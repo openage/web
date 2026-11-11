@@ -86,7 +86,38 @@ export abstract class PageBaseComponent implements OnInit, OnDestroy {
     if (this.isCurrent) {
       this.context.entity.set(undefined);
       this._init();
+      this.scrollToRouteFragment();
     }
+  }
+
+  private scrollToRouteFragment(): void {
+    const fragment = this.router.parseUrl(this.router.url).fragment;
+    if (!fragment || typeof window === 'undefined') return;
+
+    let targetId = fragment;
+    try {
+      targetId = decodeURIComponent(fragment);
+    } catch {
+      // Keep the fragment as-is when it contains malformed URI encoding.
+    }
+
+    // The page markup is assembled from dynamic components after NavigationEnd.
+    // Router's anchor scrolling can run before that markup exists, so retry briefly
+    // until the target has been rendered.
+    let attempts = 0;
+    const scrollWhenRendered = () => {
+      const target = document.getElementById(targetId) || document.getElementsByName(targetId).item(0);
+      if (target) {
+        target.scrollIntoView({
+          behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth',
+          block: 'start'
+        });
+      } else if (++attempts < 40) {
+        window.setTimeout(scrollWhenRendered, 50);
+      }
+    };
+
+    window.setTimeout(scrollWhenRendered, 0);
   }
 
   params = (key: string, value?: any) => {

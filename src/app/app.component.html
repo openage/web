@@ -32,7 +32,7 @@
   }
   <div class="page-body {{styles()?.content?.class}}" [style]="styles()?.content?.style" [class.with-header]="header()">
     @if (header()) {
-    <page-header></page-header>
+    <page-header id="header"></page-header>
     }
     <ng-container *ngTemplateOutlet="bodyTemplate"></ng-container>
     @if (footer()) {
@@ -43,7 +43,7 @@
 
 <ng-template #stickyHeaderLayout>
   @if (header()) {
-  <page-header></page-header>
+  <page-header id="header"></page-header>
   }
   <div class="page-body {{styles()?.content?.class}}" [style]="styles()?.content?.style" [class.with-header]="header()"
     [class.with-side-bar]="sidebar()">
@@ -68,11 +68,13 @@
 <ng-template #bodyTemplate>
   <div #pageBody class="page-content">
     <oa-context-menu></oa-context-menu>
-    <oa-core-tasks-progress-footer></oa-core-tasks-progress-footer>
-    @if (underMaintenance()) {
-    <oa-not-available code="maintenance"></oa-not-available>
-    } @else {
-    <router-outlet></router-outlet>
-    }
+    <div class="page-body-content">
+      <oa-core-tasks-progress-footer></oa-core-tasks-progress-footer>
+      @if (underMaintenance()) {
+      <oa-not-available code="maintenance"></oa-not-available>
+      } @else {
+      <router-outlet></router-outlet>
+      }
+    </div>
   </div>
 </ng-template>

@@ -18,7 +18,6 @@ export interface BuilderToolMetadata extends BuilderToolbarItem {
   category: string;
   description?: string;
   defaultProperties: Record<string, unknown>;
-  allowedDropTargets: string[];
 }
 
 export interface BuilderToolbarItem {
@@ -57,11 +56,13 @@ export interface BuilderPropertyMetadata {
 }
 
 export interface BuilderMetadata {
-  workspaceType: string;
   title: string;
   icon: string;
   itemCollectionPath: string;
   itemLabel: string;
+  dataKey?: string;
+  persistence?: { service: string; collection: string; idPath?: string };
+  preview?: { layoutPath: string; componentsPath?: string };
   auxiliaryCollections?: Array<{ path: string; title: string }>;
   canvasSections?: BuilderCanvasSectionMetadata[];
   toolbox: { groups: BuilderToolboxGroupMetadata[] };

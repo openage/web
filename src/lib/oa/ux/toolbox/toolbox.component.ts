@@ -20,13 +20,12 @@ export class ToolboxComponent {
   @Input() value = '';
   @Input() connectedTo: string[] = [];
   @Input() disabled = false;
-  @Input() workspaceType = 'Workspace';
 
   @Output() readonly toolDragStart = new EventEmitter<BuilderToolbarItem>();
   @Output() readonly toolDragEnd = new EventEmitter<void>();
   @Output() readonly toolSelected = new EventEmitter<BuilderToolbarItem>();
 
-  readonly collapsedGroups = signal(new Set<string>());
+  readonly expandedGroup = signal<string | null | undefined>(null);
   readonly search = signal('');
 
   get toolGroups(): BuilderToolbarGroup[] {
@@ -71,18 +70,26 @@ export class ToolboxComponent {
   }
 
   groupExpanded(group: BuilderToolbarGroup, index: number): boolean {
-    if (this.search().trim() || this.groupSelected(group)) return true;
-    return !this.collapsedGroups().has(this.groupCode(group, index));
+    const visibleGroups = this.filteredToolGroups;
+    const configuredExpansion = this.expandedGroup();
+    let expandedCode = configuredExpansion === undefined
+      ? visibleGroups.find((candidate) => candidate.code === this.value)?.code ||
+        this.groupCode(visibleGroups[0] || group, 0)
+      : configuredExpansion;
+    if (this.search().trim() && expandedCode &&
+      !visibleGroups.some((candidate, candidateIndex) => this.groupCode(candidate, candidateIndex) === expandedCode)) {
+      expandedCode = this.groupCode(visibleGroups[0] || group, 0);
+    }
+    return this.groupCode(group, index) === expandedCode;
   }
 
   toggleGroup(group: BuilderToolbarGroup, index: number): void {
     const code = this.groupCode(group, index);
-    this.collapsedGroups.update((collapsed) => {
-      const next = new Set(collapsed);
-      if (next.has(code)) next.delete(code);
-      else next.add(code);
-      return next;
-    });
+    const expandedCode = this.expandedGroup() === undefined
+      ? this.filteredToolGroups.find((candidate) => candidate.code === this.value)?.code ||
+        this.groupCode(this.filteredToolGroups[0] || group, 0)
+      : this.expandedGroup();
+    this.expandedGroup.set(expandedCode === code ? null : code);
   }
 
   onDragStarted(tool: BuilderToolbarItem): void {

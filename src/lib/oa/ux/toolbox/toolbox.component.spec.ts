@@ -10,14 +10,20 @@ describe('ToolboxComponent configured groups', () => {
     { code: 'services', title: 'Services', tools: [secondTool] }
   ];
 
-  it('selects and places the group matching the input value first', () => {
+  it('shows every group and keeps groups collapsed until opened', () => {
     const toolbox = new ToolboxComponent();
     toolbox.options = { groups };
     toolbox.value = 'services';
 
     expect(toolbox.filteredToolGroups.map((group) => group.code)).toEqual(['services', 'navigation']);
     expect(toolbox.groupSelected(toolbox.filteredToolGroups[0])).toBe(true);
+    expect(toolbox.filteredToolGroups).toHaveLength(2);
+    expect(toolbox.groupExpanded(toolbox.filteredToolGroups[0], 0)).toBe(false);
+    expect(toolbox.groupExpanded(toolbox.filteredToolGroups[1], 1)).toBe(false);
+
+    toolbox.toggleGroup(toolbox.filteredToolGroups[0], 0);
     expect(toolbox.groupExpanded(toolbox.filteredToolGroups[0], 0)).toBe(true);
+    expect(toolbox.groupExpanded(toolbox.filteredToolGroups[1], 1)).toBe(false);
   });
 
   it('emits only the tool object when dragging starts', () => {

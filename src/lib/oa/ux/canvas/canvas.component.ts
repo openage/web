@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
+import { Component, EventEmitter, inject, Input, Output, signal } from '@angular/core';
 import { CdkDrag, CdkDropList, CdkDragDrop } from '@angular/cdk/drag-drop';
 import { ContextService } from '../../core/services/context.service';
 import { IconComponent } from '../icon/icon.component';
@@ -34,7 +34,7 @@ interface CanvasSection {
   group?: string;
   optional?: boolean;
   itemType?: string;
-  itemAction?: { label: string; url: string };
+  itemAction?: { label: string; url: string; icon?: string };
 }
 
 export interface ToolboxDrag {
@@ -47,6 +47,15 @@ export interface CanvasItemDrop {
   targetPath: string;
 }
 
+interface PageTreeRow {
+  item: Record<string, unknown>;
+  index: number;
+  depth: number;
+  key: string;
+  parentKey?: string;
+  hasChildren: boolean;
+}
+
 @Component({
   selector: 'oa-canvas',
   standalone: true,
@@ -55,6 +64,7 @@ export interface CanvasItemDrop {
 })
 export class CanvasComponent {
   private readonly context = inject(ContextService);
+  readonly expandedPageNodes = signal<Set<string> | null>(null);
 
   @Input() value: unknown;
   @Input() options: Record<string, unknown> = {};
@@ -179,6 +189,125 @@ export class CanvasComponent {
       ? value.filter((item): item is Record<string, unknown> =>
         !!item && typeof item === 'object' && !Array.isArray(item))
       : [];
+  }
+
+  pageTreeRows(value: unknown): PageTreeRow[] {
+    const pages = this.objectItems(value);
+    const byCode = new Map<string, number>();
+    const byId = new Map<string, number>();
+    pages.forEach((page, index) => {
+      if (typeof page['code'] === 'string' && page['code']) byCode.set(page['code'], index);
+      if (page['id'] !== undefined && page['id'] !== null) byId.set(String(page['id']), index);
+    });
+
+    const parents = pages.map((page, index): number | undefined => {
+      const explicitParent = page['parentCode'] ?? page['parentId'] ?? page['parent'];
+      const parentValue = explicitParent && typeof explicitParent === 'object'
+        ? (explicitParent as Record<string, unknown>)['code'] ?? (explicitParent as Record<string, unknown>)['id']
+        : explicitParent;
+      const explicitIndex = parentValue === undefined || parentValue === null
+        ? undefined
+        : byCode.get(String(parentValue)) ?? byId.get(String(parentValue));
+      if (explicitIndex !== undefined && explicitIndex !== index) return explicitIndex;
+
+      const code = typeof page['code'] === 'string' ? page['code'] : '';
+      const codeSegments = code.split('.');
+      for (let length = codeSegments.length - 1; length > 0; length--) {
+        const codeParent = byCode.get(codeSegments.slice(0, length).join('.'));
+        if (codeParent !== undefined && codeParent !== index) return codeParent;
+      }
+
+      const url = this.normalizedPagePath(page['url']);
+      if (url) {
+        let parentPath = url.slice(0, url.lastIndexOf('/'));
+        while (parentPath) {
+          const match = pages.findIndex((candidate) => this.normalizedPagePath(candidate['url']) === parentPath);
+          if (match >= 0 && match !== index) return match;
+          parentPath = parentPath.slice(0, parentPath.lastIndexOf('/'));
+        }
+      }
+      return undefined;
+    });
+
+    const children = pages.map((): number[] => []);
+    const roots: number[] = [];
+    parents.forEach((parentIndex, index) => {
+      if (parentIndex === undefined || this.wouldCreatePageCycle(parents, index, parentIndex)) roots.push(index);
+      else children[parentIndex].push(index);
+    });
+
+    const rows: PageTreeRow[] = [];
+    const visited = new Set<number>();
+    const visit = (index: number, depth: number, parentKey?: string): void => {
+      if (visited.has(index)) return;
+      visited.add(index);
+      const item = pages[index];
+      const key = this.pageTreeKey(item, index);
+      rows.push({ item, index, depth, key, parentKey, hasChildren: children[index].length > 0 });
+      children[index].forEach((childIndex) => visit(childIndex, depth + 1, key));
+    };
+    roots.forEach((index) => visit(index, 0));
+    pages.forEach((_page, index) => visit(index, 0));
+    return rows;
+  }
+
+  isPageExpanded(row: PageTreeRow): boolean {
+    if (!row.hasChildren) return false;
+    const expanded = this.expandedPageNodes();
+    return expanded === null || expanded.has(row.key);
+  }
+
+  togglePageNode(row: PageTreeRow): void {
+    if (!row.hasChildren) return;
+    const rows = this.pageTreeRows(this.sectionValue(
+      this.canvasSections.find((section) => section.code === 'pages') || { code: 'pages', title: 'Pages', path: 'navs' }
+    ));
+    const expanded = this.expandedPageNodes() ?? new Set(rows.filter((candidate) => candidate.hasChildren).map((candidate) => candidate.key));
+    const next = new Set(expanded);
+    if (next.has(row.key)) next.delete(row.key);
+    else next.add(row.key);
+    this.expandedPageNodes.set(next);
+  }
+
+  pageTreeRowVisible(row: PageTreeRow, rows: PageTreeRow[]): boolean {
+    const byKey = new Map(rows.map((candidate) => [candidate.key, candidate]));
+    let parentKey = row.parentKey;
+    while (parentKey) {
+      const parent = byKey.get(parentKey);
+      if (!parent || !this.isPageExpanded(parent)) return false;
+      parentKey = parent.parentKey;
+    }
+    return true;
+  }
+
+  canvasRows(section: CanvasSection, value: unknown): PageTreeRow[] {
+    if (section.code === 'pages') return this.pageTreeRows(value);
+    return this.objectItems(value).map((item, index) => ({
+      item, index, depth: 0, key: `${section.code}-${this.pageTreeKey(item, index)}`, hasChildren: false
+    }));
+  }
+
+  private pageTreeKey(item: Record<string, unknown>, index: number): string {
+    return item['id'] !== undefined && item['id'] !== null
+      ? String(item['id'])
+      : `${String(item['code'] ?? 'page')}-${index}`;
+  }
+
+  private normalizedPagePath(value: unknown): string {
+    if (typeof value !== 'string' || !value.trim()) return '';
+    const normalized = value.split(/[?#]/, 1)[0].replace(/\\/g, '/').replace(/\/{2,}/g, '/').replace(/\/$/, '');
+    return normalized.startsWith('/') ? normalized : `/${normalized}`;
+  }
+
+  private wouldCreatePageCycle(parents: Array<number | undefined>, index: number, candidate: number): boolean {
+    const visited = new Set<number>([index]);
+    let current: number | undefined = candidate;
+    while (current !== undefined) {
+      if (visited.has(current)) return true;
+      visited.add(current);
+      current = parents[current];
+    }
+    return false;
   }
 
   itemPath(parentPath: string, index: number): string {

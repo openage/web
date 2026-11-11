@@ -1,51 +1,42 @@
 <aside class="builder-toolbar" [ngClass]="className" aria-label="Builder toolbox">
-  <div class="panel-title">
-    <div>
-      <span class="panel-kicker workspace-kicker">{{ options['eyebrow'] || 'Workspace' }}</span>
-      <h2>{{ options['title'] || 'Tools' }}</h2>
-    </div>
-  </div>
-
   <label class="tool-search">
     <oa-icon value="search"></oa-icon>
-    <input type="search" placeholder="Search tools" [value]="search()"
+    <input type="search" aria-label="Search tools" placeholder="Search" [value]="search()"
       (input)="search.set($any($event.target).value)" />
   </label>
 
-  @for (group of filteredToolGroups; track groupCode(group, $index); let groupIndex = $index) {
-  <section class="tool-group" [class.selected]="groupSelected(group)">
-    <h3>
-      <button type="button" class="tool-group-toggle" [class.selected]="groupSelected(group)"
-        [attr.aria-expanded]="groupExpanded(group, groupIndex)"
-        [attr.aria-controls]="'oa-tool-group-' + groupCode(group, groupIndex)"
-        (click)="toggleGroup(group, groupIndex)">
-        @if (group.icon) { <oa-icon [value]="group.icon"></oa-icon> }
-        <span>{{ group.title }}</span>
-        <oa-icon class="tool-group-chevron" value="expand_more"></oa-icon>
-      </button>
-    </h3>
-    <div class="tool-list" cdkDropList [cdkDropListData]="group.tools"
-      [cdkDropListConnectedTo]="connectedTo" [id]="'oa-tool-group-' + groupCode(group, groupIndex)"
-      [hidden]="!groupExpanded(group, groupIndex)">
-      @for (tool of group.tools; track $index) {
-      <button type="button" class="tool-item" cdkDrag
-        [cdkDragData]="{ groupCode: groupCode(group, groupIndex), tool }"
-        (cdkDragStarted)="onDragStarted(tool)"
-        (cdkDragEnded)="onDragEnded()" (click)="selectTool(tool)"
-        [disabled]="disabled" [title]="itemTitle(tool)">
-        <oa-icon [value]="tool.icon || 'widgets'"></oa-icon>
-        <span>{{ itemLabel(tool) }}</span>
-        <oa-icon class="tool-grip" value="drag_indicator"></oa-icon>
-      </button>
-      }
-    </div>
-  </section>
-  }
-  @if (!filteredToolGroups.length) {
-  <p class="empty-hint">{{ emptyToolsMessage }}</p>
-  }
+  <div class="tool-groups">
+    @for (group of filteredToolGroups; track groupCode(group, $index); let groupIndex = $index) {
+    <section class="tool-group" [class.selected]="groupSelected(group)">
+      <h3>
+        <button type="button" class="tool-group-toggle" [class.selected]="groupSelected(group)"
+          [attr.aria-expanded]="groupExpanded(group, groupIndex)"
+          [attr.aria-controls]="'oa-tool-group-' + groupCode(group, groupIndex)"
+          (click)="toggleGroup(group, groupIndex)">
+          @if (group.icon) { <oa-icon [value]="group.icon"></oa-icon> }
+          <span>{{ group.title }}</span>
+          <oa-icon class="tool-group-chevron" value="expand_more"></oa-icon>
+        </button>
+      </h3>
+      <div class="tool-list" cdkDropList [cdkDropListData]="group.tools" [cdkDropListConnectedTo]="connectedTo"
+        [id]="'oa-tool-group-' + groupCode(group, groupIndex)" [hidden]="!groupExpanded(group, groupIndex)">
+        @for (tool of group.tools; track $index) {
+        <button type="button" class="tool-item" cdkDrag
+          [cdkDragData]="{ groupCode: groupCode(group, groupIndex), tool }" (cdkDragStarted)="onDragStarted(tool)"
+          (cdkDragEnded)="onDragEnded()" (click)="selectTool(tool)" [disabled]="disabled" [title]="itemTitle(tool)">
+          <oa-icon [value]="tool.icon || 'widgets'"></oa-icon>
+          <span>{{ itemLabel(tool) }}</span>
+          <oa-icon class="tool-grip" value="drag_indicator"></oa-icon>
+        </button>
+        }
+      </div>
+    </section>
+    }
+    @if (!filteredToolGroups.length) {
+    <p class="empty-hint">{{ emptyToolsMessage }}</p>
+    }
+  </div>
   <div class="toolbox-footer">
-    <span>{{ workspaceType | titlecase }} builder</span>
     <span>{{ toolGroups.length }} tool group(s)</span>
   </div>
 </aside>

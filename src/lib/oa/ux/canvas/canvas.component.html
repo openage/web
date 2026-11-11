@@ -1,102 +1,150 @@
 <section class="builder-canvas" [ngClass]="className" [attr.data-root-document]="value"
   [attr.aria-label]="options['ariaLabel'] || 'Workspace canvas'">
-  <header class="canvas-heading">
+  <!-- <header class="canvas-heading">
     <oa-icon [value]="options['icon'] || 'dashboard'"></oa-icon>
     <h2>{{ title }}</h2>
-  </header>
+  </header> -->
 
   @if (loadError) { <div class="builder-notice" role="status">{{ loadError }}</div> }
 
   @if (visibleSections.length) {
   <div class="canvas-section-grid">
     @for (section of visibleSections; track section.code) {
-    <section class="canvas-section" cdkDropList
-      [cdkDropListData]="objectItems(sectionValue(section))"
-      [cdkDropListDisabled]="isArray(sectionValue(section))"
-      [id]="sectionDropZoneId(section)"
-      [cdkDropListConnectedTo]="toolboxDropListIds"
-      [class.drop-target]="isDropTargetAtPath(section, section.path)"
-      [class.selected]="selection?.sectionCode === section.code"
-      (cdkDropListDropped)="onDrop($event, section)">
-      <button type="button" class="canvas-section-heading"
-        [class.selected]="selection?.path === section.path" (click)="selectSection(section)">
+    <section class="canvas-section" [class.canvas-page-tree-section]="section.code === 'pages'"
+      [attr.data-section-code]="section.code" cdkDropList [cdkDropListData]="objectItems(sectionValue(section))"
+      [cdkDropListDisabled]="isArray(sectionValue(section))" [id]="sectionDropZoneId(section)"
+      [cdkDropListConnectedTo]="toolboxDropListIds" [class.drop-target]="isDropTargetAtPath(section, section.path)"
+      [class.selected]="selection?.sectionCode === section.code" (cdkDropListDropped)="onDrop($event, section)">
+      <button type="button" class="canvas-section-heading" [class.selected]="selection?.path === section.path"
+        (click)="selectSection(section)">
         <span>{{ section.title || section.code }}</span>
         @if (sectionValue(section); as sectionData) {
-          @if (isArray(sectionData)) { <span>{{ sectionData.length }}</span> }
+        @if (isArray(sectionData)) { <span>{{ sectionData.length }}</span> }
         }
       </button>
 
       @if (sectionValue(section); as sectionData) {
-        @if (isArray(sectionData)) {
-        <div class="canvas-list" cdkDropList [cdkDropListData]="objectItems(sectionData)"
-          [id]="sectionDropListId(section)" [cdkDropListConnectedTo]="toolboxDropListIds"
-          [class.drop-target]="isDropTargetAtPath(section, section.path)"
-          (cdkDropListDropped)="onDrop($event, section)">
-          @for (item of objectItems(sectionData); track trackByCode($index, item); let index = $index) {
-          <article class="canvas-node" cdkDrag [cdkDragData]="{ path: itemPath(section.path, index), index }"
-            [class.selected]="isSelected(itemPath(section.path, index))"
-            (click)="selectItem(item, section, itemPath(section.path, index), index)">
-            <header class="node-header" cdkDragHandle>
+      @if (isArray(sectionData)) {
+      @let rows = canvasRows(section, sectionData);
+      <div class="canvas-list" [class.canvas-page-tree]="section.code === 'pages'"
+        [attr.role]="section.code === 'pages' ? 'tree' : null"
+        [attr.aria-label]="section.code === 'pages' ? 'Pages' : null" cdkDropList [cdkDropListData]="objectItems(sectionData)"
+        [id]="sectionDropListId(section)" [cdkDropListConnectedTo]="toolboxDropListIds"
+        [class.drop-target]="isDropTargetAtPath(section, section.path)" (cdkDropListDropped)="onDrop($event, section)">
+        @for (row of rows; track row.key) {
+        @if (section.code !== 'pages' || pageTreeRowVisible(row, rows)) {
+        @let item = row.item;
+        @let index = row.index;
+        @let path = itemPath(section.path, index);
+        <article class="canvas-node" [class.canvas-page-node]="section.code === 'pages'" [class.page-tree-child]="row.depth > 0" [class.has-page-children]="row.hasChildren"
+          [attr.role]="section.code === 'pages' ? 'treeitem' : null"
+          [style.--page-tree-depth]="row.depth" [attr.aria-level]="section.code === 'pages' ? row.depth + 1 : null"
+          [attr.aria-expanded]="section.code === 'pages' && row.hasChildren ? isPageExpanded(row) : null"
+          cdkDrag [cdkDragDisabled]="section.code === 'pages'" [cdkDragData]="{ path, index }"
+          [class.selected]="isSelected(path)">
+          <header class="node-header">
+            @if (section.code === 'pages') {
+            @if (row.hasChildren) {
+            <button type="button" class="page-tree-toggle" [attr.aria-label]="(isPageExpanded(row) ? 'Collapse ' : 'Expand ') + itemLabel(item, index)"
+              [attr.aria-expanded]="isPageExpanded(row)" (click)="$event.stopPropagation(); togglePageNode(row)">
+              <oa-icon [value]="isPageExpanded(row) ? 'expand_more' : 'chevron_right'"></oa-icon>
+            </button>
+            } @else { <span class="page-tree-toggle-spacer" aria-hidden="true"></span> }
+            }
+            <button type="button" class="node-select" (click)="selectItem(item, section, path, index)">
               <span class="node-icon"><oa-icon [value]="item['icon'] || item['control'] || 'widgets'"></oa-icon></span>
-              <span class="node-title"><strong>{{ itemLabel(item, index) }}</strong><small>{{ itemType(item, section) }}</small></span>
-              <span class="node-grip"><oa-icon value="drag_indicator"></oa-icon></span>
-            </header>
-            @if (itemActionUrl(item, section.itemAction); as actionUrl) {
-            <a class="canvas-item-action" [href]="actionUrl" (click)="$event.stopPropagation()">{{ section.itemAction?.label }}</a>
-            }
-            @if (isSelected(itemPath(section.path, index))) {
-            <div class="canvas-node-actions" role="group" aria-label="Selected item actions">
-              <button type="button" aria-label="Move item up" title="Move up" [disabled]="index === 0"
-                (click)="$event.stopPropagation(); performItemAction('move-up', item, section, itemPath(section.path, index), index)">
+              <span class="node-title"><strong>{{ itemLabel(item, index) }}</strong><small>{{ itemType(item, section)
+                  }}</small></span>
+            </button>
+            @if (section.code === 'pages') {
+            <span class="canvas-node-actions page-node-actions" role="group" aria-label="Page actions">
+              <button type="button" aria-label="Move page up" title="Move up" [disabled]="index === 0"
+                (click)="$event.stopPropagation(); performItemAction('move-up', item, section, path, index)">
                 <oa-icon value="arrow_upward"></oa-icon></button>
-              <button type="button" aria-label="Move item down" title="Move down" [disabled]="index === objectItems(sectionData).length - 1"
-                (click)="$event.stopPropagation(); performItemAction('move-down', item, section, itemPath(section.path, index), index)">
+              <button type="button" aria-label="Move page down" title="Move down"
+                [disabled]="index === objectItems(sectionData).length - 1"
+                (click)="$event.stopPropagation(); performItemAction('move-down', item, section, path, index)">
                 <oa-icon value="arrow_downward"></oa-icon></button>
-              <button type="button" aria-label="Duplicate item" title="Duplicate"
-                (click)="$event.stopPropagation(); performItemAction('duplicate', item, section, itemPath(section.path, index), index)">
+              <button type="button" aria-label="Duplicate page" title="Duplicate"
+                (click)="$event.stopPropagation(); performItemAction('duplicate', item, section, path, index)">
                 <oa-icon value="content_copy"></oa-icon></button>
-              <button type="button" aria-label="Delete item" title="Delete"
-                (click)="$event.stopPropagation(); performItemAction('delete', item, section, itemPath(section.path, index), index)">
+              <button type="button" aria-label="Delete page" title="Delete"
+                (click)="$event.stopPropagation(); performItemAction('delete', item, section, path, index)">
                 <oa-icon value="delete"></oa-icon></button>
-            </div>
+              @if (itemActionUrl(item, section.itemAction); as editUrl) {
+              <a class="canvas-node-action" [href]="editUrl" aria-label="Edit page" title="Edit page"
+                (click)="$event.stopPropagation()"><oa-icon value="edit"></oa-icon></a>
+              } @else {
+              <button type="button" aria-label="Edit page" title="Edit page"
+                (click)="$event.stopPropagation(); selectItem(item, section, path, index)">
+                <oa-icon value="edit"></oa-icon></button>
+              }
+            </span>
+            } @else {
+            <span class="node-grip" cdkDragHandle><oa-icon value="drag_indicator"></oa-icon></span>
             }
-            @for (collection of childCollections(item); track collection.key) {
-              <div class="canvas-child-list" [attr.aria-label]="collection.key"
-                cdkDropList
-                [cdkDropListDisabled]="collection.key !== 'components'"
-                [cdkDropListData]="collection.items"
-                [id]="sectionDropListId(section, itemPath(section.path, index) + '.' + collection.key)"
-                [cdkDropListConnectedTo]="toolboxDropListIds"
-                [class.drop-target]="isDropTargetAtPath(section, itemPath(section.path, index) + '.' + collection.key)"
-                (cdkDropListDropped)="onDrop($event, section, itemPath(section.path, index) + '.' + collection.key)">
-                @if (!collection.items.length && collection.key === 'components') {
-                <p class="canvas-empty">Drop a tool here.</p>
-                }
-                @for (child of collection.items; track trackByCode($index, child); let childIndex = $index) {
-                <button type="button" class="canvas-child-node" cdkDrag
-                  [cdkDragData]="{ path: itemPath(itemPath(section.path, index) + '.' + collection.key, childIndex), index: childIndex }"
-                  [class.selected]="isSelected(itemPath(itemPath(section.path, index) + '.' + collection.key, childIndex))"
-                  (click)="$event.stopPropagation(); selectItem(child, section, itemPath(itemPath(section.path, index) + '.' + collection.key, childIndex), childIndex)">
-                  <strong>{{ itemLabel(child, childIndex) }}</strong><small>{{ itemType(child, section) }}</small>
-                </button>
-                }
-              </div>
+          </header>
+          @if (section.code !== 'pages' && itemActionUrl(item, section.itemAction); as actionUrl) {
+          <a class="canvas-item-action" [href]="actionUrl" [attr.aria-label]="section.itemAction?.label"
+            [title]="section.itemAction?.label" (click)="$event.stopPropagation()">
+            <oa-icon [value]="section.itemAction?.icon || 'edit'"></oa-icon>
+            <span>{{ section.itemAction?.label }}</span>
+          </a>
+          }
+          @if (section.code !== 'pages' && isSelected(itemPath(section.path, index))) {
+          <div class="canvas-node-actions" role="group" aria-label="Selected item actions">
+            <button type="button" aria-label="Move item up" title="Move up" [disabled]="index === 0"
+              (click)="$event.stopPropagation(); performItemAction('move-up', item, section, itemPath(section.path, index), index)">
+              <oa-icon value="arrow_upward"></oa-icon></button>
+            <button type="button" aria-label="Move item down" title="Move down"
+              [disabled]="index === objectItems(sectionData).length - 1"
+              (click)="$event.stopPropagation(); performItemAction('move-down', item, section, itemPath(section.path, index), index)">
+              <oa-icon value="arrow_downward"></oa-icon></button>
+            <button type="button" aria-label="Duplicate item" title="Duplicate"
+              (click)="$event.stopPropagation(); performItemAction('duplicate', item, section, itemPath(section.path, index), index)">
+              <oa-icon value="content_copy"></oa-icon></button>
+            <button type="button" aria-label="Delete item" title="Delete"
+              (click)="$event.stopPropagation(); performItemAction('delete', item, section, itemPath(section.path, index), index)">
+              <oa-icon value="delete"></oa-icon></button>
+          </div>
+          }
+          @for (collection of childCollections(item); track collection.key) {
+          <div class="canvas-child-list" [class.canvas-page-tree-children]="section.code === 'pages'"
+            [attr.aria-label]="collection.key" cdkDropList [cdkDropListDisabled]="collection.key !== 'components'"
+            [cdkDropListData]="collection.items"
+            [id]="sectionDropListId(section, itemPath(section.path, index) + '.' + collection.key)"
+            [cdkDropListConnectedTo]="toolboxDropListIds"
+            [class.drop-target]="isDropTargetAtPath(section, itemPath(section.path, index) + '.' + collection.key)"
+            (cdkDropListDropped)="onDrop($event, section, itemPath(section.path, index) + '.' + collection.key)">
+            @if (!collection.items.length && collection.key === 'components') {
+            <p class="canvas-empty">Drop a tool here.</p>
             }
-          </article>
+            @for (child of collection.items; track trackByCode($index, child); let childIndex = $index) {
+            <button type="button" class="canvas-child-node" [class.canvas-page-tree-node]="section.code === 'pages'"
+              cdkDrag
+              [cdkDragData]="{ path: itemPath(itemPath(section.path, index) + '.' + collection.key, childIndex), index: childIndex }"
+              [class.selected]="isSelected(itemPath(itemPath(section.path, index) + '.' + collection.key, childIndex))"
+              (click)="$event.stopPropagation(); selectItem(child, section, itemPath(itemPath(section.path, index) + '.' + collection.key, childIndex), childIndex)">
+              <strong>{{ itemLabel(child, childIndex) }}</strong><small>{{ itemType(child, section) }}</small>
+            </button>
+            }
+          </div>
           }
-          @if (!objectItems(sectionData).length) {
-          <p class="canvas-empty" [class.drop-target]="isDropTarget(section)">Drop a tool here.</p>
-          }
-        </div>
-        } @else if (isObject(sectionData)) {
-        <button type="button" class="canvas-node canvas-object-node"
-          [class.selected]="isSelected(section.path)"
-          (click)="selectSection(section)">
-          <strong>{{ itemLabel(sectionData, 0) }}</strong><small>{{ section.code }}</small>
-        </button>
-        } @else {
-        <p class="canvas-empty">This section is not configured yet.</p>
+        </article>
         }
+        }
+        @if (!objectItems(sectionData).length) {
+        <p class="canvas-empty" [class.drop-target]="isDropTarget(section)">Drop a tool here.</p>
+        }
+      </div>
+      } @else if (isObject(sectionData)) {
+      <button type="button" class="canvas-node canvas-object-node" [class.selected]="isSelected(section.path)"
+        (click)="selectSection(section)">
+        <strong>{{ itemLabel(sectionData, 0) }}</strong><small>{{ section.code }}</small>
+      </button>
+      } @else {
+      <p class="canvas-empty">This section is not configured yet.</p>
+      }
       } @else {
       <p class="canvas-empty">This section is not configured yet.</p>
       }
@@ -104,7 +152,9 @@
     }
   </div>
   } @else {
-  <div class="canvas-empty"><oa-icon value="widgets"></oa-icon><p>No canvas sections are configured.</p></div>
+  <div class="canvas-empty"><oa-icon value="widgets"></oa-icon>
+    <p>No canvas sections are configured.</p>
+  </div>
   }
 
   @if (validationErrors.length) {

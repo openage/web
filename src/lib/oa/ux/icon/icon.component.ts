@@ -44,7 +44,15 @@ export class IconComponent implements OnChanges {
 
     let icon: any = {};
     if (typeof this.value === 'string') {
-      if (this.value.startsWith('http')) {
+      const fontAwesomeTokens = this.value.trim().split(/\s+/);
+      const fontAwesomeName = fontAwesomeTokens.find((token) =>
+        /^fa-(?!solid$|regular$|brands$|light$|thin$|duotone$|sharp$|2xs$|xs$|sm$|lg$|xl$|2xl$|\d+x$)[a-z0-9-]+$/i.test(token));
+      if (fontAwesomeName && fontAwesomeTokens.some((token) => /^(?:fa|fas|far|fab|fal|fat|fad|fa-solid|fa-regular|fa-brands)$/.test(token))) {
+        icon.fa = fontAwesomeName.substring(3);
+        const additionalClasses = fontAwesomeTokens.filter((token) =>
+          token !== fontAwesomeName && !/^(?:fa|fas|far|fab|fal|fat|fad|fa-solid|fa-regular|fa-brands)$/.test(token));
+        this.class = [this.class, ...additionalClasses].filter(Boolean).join(' ');
+      } else if (this.value.startsWith('http')) {
         icon.url = this.value;
       } else if (this.value.startsWith('fa-')) {
         icon.fa = this.value.substring(3);

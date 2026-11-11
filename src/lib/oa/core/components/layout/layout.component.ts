@@ -9,6 +9,7 @@ import {
   OnChanges,
   OnInit,
   Output,
+  signal,
   SimpleChanges,
   TemplateRef
 } from "@angular/core";
@@ -109,6 +110,8 @@ export class LayoutComponent implements OnInit, OnChanges {
   styles: any = {};
   sections: any = {};
   popupSection: any;
+  readonly floatablePositions = signal<Record<string, { left: number; top: number }>>({});
+  private floatDrag?: { code: string; pointerId: number; offsetX: number; offsetY: number };
 
   public context = inject(ContextService);
   private conditionValidator = inject(ConditionValidatorService);
@@ -304,7 +307,7 @@ export class LayoutComponent implements OnInit, OnChanges {
       return s;
     });
 
-    if (section.type && section.type !== 'default') {
+    if (section.type && !['default', 'floatable', 'floating'].includes(section.type)) {
       section.container = section.container || {};
       section.container.header = section.container?.header || {};
       section.container.body = section.container?.body || {};
@@ -503,6 +506,62 @@ export class LayoutComponent implements OnInit, OnChanges {
   getSectionTitle(section: any): string {
     const title = section?.container?.header?.title;
     return (typeof title === 'string' ? title : title?.text) || section?.title || section?.label || section?.code || '';
+  }
+
+  sectionStyle(section: any): Record<string, unknown> {
+    const style = section?.style && typeof section.style === 'object' ? section.style : {};
+    if (!this.isFloatingSection(section)) return style;
+    const position = this.floatablePositions()[section.code];
+    return {
+      ...style,
+      position: 'fixed',
+      left: `${position?.left ?? 16}px`,
+      top: `${position?.top ?? 88}px`,
+      zIndex: 1200,
+      width: 'min(280px, calc(100vw - 32px))',
+      height: 'min(620px, calc(100vh - 104px))',
+      maxHeight: 'calc(100vh - 104px)'
+    };
+  }
+
+  isFloatingSection(section: any): boolean {
+    return section?.type === 'floating' || section?.type === 'floatable';
+  }
+
+  startSectionDrag(event: PointerEvent, section: any): void {
+    if (event.button !== 0) return;
+    const panel = (event.currentTarget as HTMLElement).closest('.section.floatable');
+    if (!(panel instanceof HTMLElement)) return;
+    event.preventDefault();
+    const bounds = panel.getBoundingClientRect();
+    this.floatDrag = {
+      code: section.code,
+      pointerId: event.pointerId,
+      offsetX: event.clientX - bounds.left,
+      offsetY: event.clientY - bounds.top
+    };
+    (event.currentTarget as HTMLElement).setPointerCapture(event.pointerId);
+  }
+
+  moveSectionDrag(event: PointerEvent, section: any): void {
+    if (!this.floatDrag || this.floatDrag.code !== section.code || this.floatDrag.pointerId !== event.pointerId) return;
+    const panel = (event.currentTarget as HTMLElement).closest('.section.floatable');
+    if (!(panel instanceof HTMLElement)) return;
+    const left = Math.max(0, Math.min(window.innerWidth - panel.offsetWidth,
+      event.clientX - this.floatDrag.offsetX));
+    const top = Math.max(0, Math.min(window.innerHeight - Math.min(panel.offsetHeight, 64),
+      event.clientY - this.floatDrag.offsetY));
+    this.floatablePositions.update((positions) => ({
+      ...positions,
+      [section.code]: { left, top }
+    }));
+  }
+
+  endSectionDrag(event: PointerEvent, section: any): void {
+    if (!this.floatDrag || this.floatDrag.code !== section.code || this.floatDrag.pointerId !== event.pointerId) return;
+    this.floatDrag = undefined;
+    const handle = event.currentTarget as HTMLElement;
+    if (handle.hasPointerCapture(event.pointerId)) handle.releasePointerCapture(event.pointerId);
   }
 
   getPopupButtonLabel(section: any): string {

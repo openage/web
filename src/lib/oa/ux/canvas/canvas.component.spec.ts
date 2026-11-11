@@ -2,6 +2,7 @@ import { signal } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { expect } from 'vitest';
 import { ContextService } from '../../core/services/context.service';
+import { ConstantService } from '../../core/services/constant.service';
 import { CanvasComponent } from './canvas.component';
 
 describe('CanvasComponent context data and selection', () => {
@@ -14,7 +15,10 @@ describe('CanvasComponent context data and selection', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [CanvasComponent],
-      providers: [{ provide: ContextService, useValue: context }]
+      providers: [
+        { provide: ContextService, useValue: context },
+        { provide: ConstantService, useValue: { lists: new Map(), icons: { get: () => undefined } } }
+      ]
     }).compileComponents();
   });
 
@@ -206,5 +210,57 @@ describe('CanvasComponent context data and selection', () => {
 
     expect(canvas.itemType({ code: 'system' }, { code: 'services', title: 'Services', path: 'services', itemType: 'Service' }))
       .toBe('Service');
+  });
+
+  it('builds a nested page tree from parent references and hierarchical page codes', () => {
+    const canvas = TestBed.createComponent(CanvasComponent).componentInstance;
+    const pages = [
+      { id: 'root', code: 'console.pages', title: 'Pages' },
+      { id: 'details', code: 'console.pages.details', title: 'Page details' },
+      { id: 'home', code: 'home', title: 'Home' },
+      { id: 'tools', code: 'tools', title: 'Tools', parentId: 'home' }
+    ];
+    canvas.value = { navs: pages };
+    canvas.options = { sections: [{ code: 'pages', title: 'Pages', path: 'navs' }] };
+
+    const rows = canvas.pageTreeRows(pages);
+    expect(rows.map((row) => [row.item['code'], row.depth, row.index])).toEqual([
+      ['console.pages', 0, 0],
+      ['console.pages.details', 1, 1],
+      ['home', 0, 2],
+      ['tools', 1, 3]
+    ]);
+    expect(rows[0].hasChildren).toBe(true);
+    expect(canvas.pageTreeRowVisible(rows[1], rows)).toBe(true);
+
+    canvas.togglePageNode(rows[0]);
+
+    expect(canvas.isPageExpanded(rows[0])).toBe(false);
+    expect(canvas.pageTreeRowVisible(rows[1], rows)).toBe(false);
+    expect(pages[1]['code']).toBe('console.pages.details');
+  });
+
+  it('renders the page hierarchy as expandable tree rows', () => {
+    const fixture = TestBed.createComponent(CanvasComponent);
+    const canvas = fixture.componentInstance;
+    const pages = [
+      { code: 'console.pages', title: 'Pages' },
+      { code: 'console.pages.details', title: 'Page details' },
+      { code: 'home', title: 'Home' }
+    ];
+    canvas.value = { navs: pages };
+    canvas.options = { sections: [{ code: 'pages', title: 'Pages', path: 'navs' }] };
+    fixture.detectChanges();
+
+    const root = fixture.nativeElement.querySelector('.canvas-page-node[aria-level="1"]') as HTMLElement;
+    expect(root.querySelector('.page-tree-toggle')).not.toBeNull();
+    expect(fixture.nativeElement.querySelectorAll('.canvas-page-node').length).toBe(3);
+    expect(root.querySelector('.page-node-actions button[aria-label="Duplicate page"]')).not.toBeNull();
+
+    (root.querySelector('.page-tree-toggle') as HTMLButtonElement).click();
+    fixture.detectChanges();
+
+    expect(fixture.nativeElement.querySelectorAll('.canvas-page-node').length).toBe(2);
+    expect(fixture.nativeElement.querySelector('.canvas-page-node[aria-level="2"]')).toBeNull();
   });
 });

@@ -1,5 +1,29 @@
 # Change log
 
+## 2026-10-23 — Refine floatable application toolbar
+
+### Key Changes
+- The floatable section header now places its configured title on the left and drag icon on the right.
+- Removed the toolbox's duplicate Workspace/Tools heading.
+- Changed toolbox groups to a single-open accordion and confined scrolling to the group list.
+
+### Verification
+- `npm.cmd run build:local -- --progress=false` — passed.
+- `applications.builder.json` parses and the floatable section still wraps the toolbar.
+- `git diff --check` — passed in both repositories.
+
+## 2026-10-23 — Add floatable layout sections
+
+### Key Changes
+- Added a `floatable` layout section type with a draggable title handle and viewport-constrained placement.
+- Moved the Applications builder toolbar into a floatable section in `applications.builder.json`.
+- Documented the new section type and its local-only position state.
+
+### Verification
+- `applications.builder.json` parses and contains a floatable section wrapping the toolbar; the canvas and properties controls remain in the editor section.
+- `npm.cmd run build:local -- --progress=false` — passed.
+- `git diff --check` — passed in both repositories.
+
 ## 2026-10-23 — Restore builder grid after adding preview wrapper
 
 ### Key Changes

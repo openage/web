@@ -1,64 +1,35 @@
 <ng-template #canvasTemplate let-item="item">
-  <oa-canvas [value]="item.value" [options]="item.options || {}" [selection]="canvasSelection"
-    [activeTool]="activeToolDrag()" [toolboxDropListIds]="toolboxDropListIds"
-    [validationErrors]="validationErrors()" [loadError]="loadError()"
-    (sectionSelected)="onCanvasSelection($event)" (toolDropped)="onCanvasToolDropped($event)"
+  <oa-canvas [value]="workspaceData()" [options]="item.options || {}" [selection]="canvasSelection"
+    [activeTool]="activeToolDrag()" [toolboxDropListIds]="toolboxDropListIds" [validationErrors]="validationErrors()"
+    [loadError]="loadError()" (sectionSelected)="onCanvasSelection($event)" (toolDropped)="onCanvasToolDropped($event)"
     (itemDropped)="onCanvasItemDropped($event)" (itemAction)="onCanvasItemAction($event)"></oa-canvas>
 </ng-template>
 
 <ng-template #toolboxTemplate let-item="item">
   <oa-toolbox [options]="item.options || {}" [value]="canvasSelection?.groupCode || ''"
-    [connectedTo]="canvasDropListIds"
-    [disabled]="!workspaceValid()" [workspaceType]="workspaceType()"
+    [connectedTo]="canvasDropListIds" [disabled]="!workspaceValid()"
     (toolDragStart)="onToolDragStart($any($event))" (toolDragEnd)="onToolDragEnd()"
     (toolSelected)="onToolSelected($any($event))"></oa-toolbox>
 </ng-template>
 
 <ng-template #propertiesTemplate let-item="item">
-  <oa-properties [value]="propertiesData" [type]="propertiesType"
-    [options]="propertiesOptions(item.options || {})"
+  <oa-properties [value]="propertiesData" [type]="propertiesType" [options]="propertiesOptions(item.options || {})"
     (valueChange)="onPropertiesChange($event)"></oa-properties>
 </ng-template>
 
 @if (layout && isInitialized) {
-<main [id]="page?.code" class="builder-page-layout" [class.application-builder]="workspaceType() === 'application'"
-  [class.hidden]="!isCurrent">
-  <header class="builder-workspace-bar" aria-label="Page builder controls">
-    <div class="builder-workspace-title">
-      <strong>{{ workspaceTitle() }}</strong>
-      <span>{{ dirty() ? 'Unsaved changes' : saved() ? 'Saved' : 'Ready to edit' }}</span>
-    </div>
-    @if (workspaceType() === 'page') {
-    <div class="builder-view-controls" role="group" aria-label="Editor view">
-      <button type="button" [class.active]="!previewMode()" [attr.aria-pressed]="!previewMode()"
-        (click)="previewMode.set(false)">Edit</button>
-      <button type="button" [class.active]="previewMode()" [attr.aria-pressed]="previewMode()"
-        (click)="previewMode.set(true)">Preview</button>
-    </div>
-    @if (previewMode()) {
-    <div class="builder-viewport-controls" role="group" aria-label="Preview size">
-      <button type="button" [class.active]="previewViewport() === 'desktop'"
-        [attr.aria-pressed]="previewViewport() === 'desktop'" (click)="setPreviewViewport('desktop')">Desktop</button>
-      <button type="button" [class.active]="previewViewport() === 'tablet'"
-        [attr.aria-pressed]="previewViewport() === 'tablet'" (click)="setPreviewViewport('tablet')">Tablet</button>
-      <button type="button" [class.active]="previewViewport() === 'mobile'"
-        [attr.aria-pressed]="previewViewport() === 'mobile'" (click)="setPreviewViewport('mobile')">Mobile</button>
-    </div>
-    }
-    }
-  </header>
-
+<main [id]="page?.code" class="builder-page-layout builder-workspace" [class.hidden]="!isCurrent">
   <div class="builder-editor-surface" [class.preview-active]="previewMode()">
     <oa-layout [layout]="layout" [params]="params" [components]="components" [templates]="templates"></oa-layout>
-    @if (previewMode() && workspaceType() === 'page') {
+    @if (previewMode()) {
     <section class="builder-live-preview" aria-label="Page preview">
       <div class="builder-preview-frame" [class.viewport-tablet]="previewViewport() === 'tablet'"
         [class.viewport-mobile]="previewViewport() === 'mobile'">
         @if (hasPreviewSections()) {
-          <oa-layout class="builder-preview-page" [layout]="previewLayout()" [params]="{}"
-            [components]="previewComponents()" [data]="{}"></oa-layout>
+        <oa-layout class="builder-preview-page" [layout]="previewLayout()" [params]="{}"
+          [components]="previewComponents()" [data]="{}"></oa-layout>
         } @else {
-          <p class="builder-preview-empty">Add sections to see the page preview.</p>
+        <p class="builder-preview-empty">Add sections to see the page preview.</p>
         }
       </div>
     </section>

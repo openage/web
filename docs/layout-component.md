@@ -9,6 +9,7 @@
 - `data`: data supplied to layout controls.
 - `params`, `filters`, `templates`, `columnTemplate`, `entity`, `view`, and `filterView`: optional values used by layout controls and views.
 - `selectable`: defaults to `false`. When enabled, clicking a rendered component sets `ContextService.selectedComponent` and emits `componentSelected`.
+- A section with `type: "floatable"` renders as a floating panel with its configured section title on the left and a drag handle icon on the right. Drag the handle to reposition it; position is local UI state and is not written back to section metadata. The panel stays within the browser viewport and can contain normal section components and nested sections.
 - Tabbed sections render accessible tabs with selected-state semantics, keyboard navigation using the arrow, Home, and End keys, visible focus, and associated tab panels.
 
 ## Outputs

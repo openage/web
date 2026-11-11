@@ -12,7 +12,6 @@ The component reads its groups from `options.groups`. A valid group has a non-em
   [value]="selectedGroupCode"
   [connectedTo]="canvasDropListIds"
   [disabled]="!workspaceValid"
-  [workspaceType]="'application'"
   (toolSelected)="addTool($event)"
   (toolDragStart)="beginToolDrag($event)"
   (toolDragEnd)="endToolDrag()">
@@ -22,15 +21,16 @@ The component reads its groups from `options.groups`. A valid group has a non-em
 | Input | Purpose |
 | --- | --- |
 | `options.groups` | Ordered group definitions, each with `code`, `title`, and `tools`. |
-| `options.title`, `options.eyebrow`, `options.class` | Panel heading, kicker, and additional CSS class. Defaults are “Tools” and “Workspace”. |
-| `value` | Code of the selected group. That group is highlighted, expanded, and sorted to the front. |
+| `options.class` | Additional CSS class for the toolbox panel. |
+| `value` | Code of the selected group. That group is highlighted and sorted to the front, and is preferred for initial expansion. |
 | `connectedTo` | IDs of compatible CDK drop lists, usually supplied by the builder canvas. |
 | `disabled` | Disables toolbox buttons, preventing selection and dragging while disabled. |
-| `workspaceType` | Workspace label displayed in the footer, followed by “builder”. |
 
 ## Search and groups
 
-Search matches each tool's `title`, `label`, `code`, and `control`, case-insensitively. It does not search group titles. Empty groups are hidden while searching; if none remain, the toolbox says either “No tools match this search” or “No tools are configured for this section.” Searching expands all matching groups. Outside search, groups start expanded, can be collapsed independently, and the selected group stays expanded.
+Search matches each tool's `title`, `label`, `code`, and `control`, case-insensitively. It does not search group titles. Empty groups are hidden while searching; if none remain, the toolbox says either “No tools match this search” or “No tools are configured for this section.” At most one group is expanded at a time. The selected group is preferred initially; otherwise the first visible group opens. Searching opens one matching group, and users can switch or collapse it.
+
+The toolbox no longer renders its own title and eyebrow. When used in a floatable layout section, the section title and drag handle provide the panel header. The group list is the toolbox's only scrollable region; search and footer remain in place.
 
 ## Dragging and selection
 

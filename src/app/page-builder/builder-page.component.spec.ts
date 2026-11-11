@@ -22,11 +22,11 @@ describe('BuilderPageComponent page workspace editing', () => {
   const fixturePage = fixtureDocument as Record<string, unknown>;
 
   const metadata: BuilderMetadata = {
-    workspaceType: 'page',
     title: 'Page',
     icon: 'dashboard',
     itemCollectionPath: 'meta.layout.sections',
     itemLabel: 'Sections',
+    persistence: { service: 'system', collection: 'navs' },
     toolbox: { groups: [] },
     propertySchemas: {},
     validationSchema: {},
@@ -57,7 +57,13 @@ describe('BuilderPageComponent page workspace editing', () => {
         { provide: HttpClient, useValue: {} },
         { provide: CacheService, useValue: { get: () => null, set: () => undefined } },
         { provide: ContextService, useValue: context },
-        { provide: ValidationService, useValue: { validate: () => [] } },
+        { provide: ValidationService, useValue: {
+          isObjectValid: (data: Record<string, unknown>, schema: Record<string, unknown>) => {
+            const required = Array.isArray(schema['required']) ? schema['required'] as string[] : [];
+            return required.filter((key) => data[key] === undefined || data[key] === null || data[key] === '')
+              .map((key) => ({ path: `$.${key}`, message: `${key} is required` }));
+          }
+        } },
         { provide: UxService, useValue: { reset: () => undefined } },
         { provide: ConstantService, useValue: { lists: new Map() } },
         { provide: NavService, useValue: {} },
@@ -118,10 +124,10 @@ describe('BuilderPageComponent page workspace editing', () => {
     });
   });
 
-  it('creates a missing configured section collection for application workspaces', () => {
+  it('creates a missing configured collection from its canvas definition', () => {
     component.metadata.set({
       ...metadata,
-      workspaceType: 'application',
+      itemCollectionPath: 'navs',
       canvasSections: [{
         code: 'sections',
         title: 'Layout sections',
@@ -152,8 +158,8 @@ describe('BuilderPageComponent page workspace editing', () => {
 
   it('shows collection selections without presenting an empty item form', () => {
     component.onCanvasSelection({
-      code: 'application-nav',
-      sectionCode: 'pages',
+      code: 'collection-item',
+      sectionCode: 'records',
       value: [{ code: 'home', title: 'Home' }],
       path: 'navs',
       index: -1
@@ -163,11 +169,14 @@ describe('BuilderPageComponent page workspace editing', () => {
     expect(component.propertiesData).toEqual({});
   });
 
-  it('adds page sections and controls with lossless defaults, and keeps section selection valid after reorder', () => {
-    component.metadata.set(metadata);
+  it('adds configured items with lossless defaults, and keeps selection valid after reorder', () => {
+    component.metadata.set({
+      ...metadata,
+      canvasSections: [{ code: 'layout', title: 'Layout', path: 'meta.layout.sections', targets: ['sections', 'components'] }]
+    });
     component.workspaceData.set(structuredClone(fixturePage));
     const initialCount = component.getBuilderPath(component.workspaceData(), 'meta.layout.sections') as unknown[];
-    component.addPageSection();
+    component.addConfiguredItem({ target: 'sections', value: { code: 'new-section', components: [{ control: 'html', value: [''] }] } });
     const sections = component.getBuilderPath(component.workspaceData(), 'meta.layout.sections') as Array<Record<string, unknown>>;
     expect(sections.length).toBe(initialCount.length + 1);
     expect(sections.at(-1)?.['components']).toEqual([{ control: 'html', value: [''] }]);
@@ -176,14 +185,14 @@ describe('BuilderPageComponent page workspace editing', () => {
     component.selectItem(sections.at(-1)!, `meta.layout.sections.${sections.length - 1}`, sections.length - 1);
     component.addConfiguredItem({ control: 'form', target: 'components' });
     const components = component.getBuilderPath(component.workspaceData(), `meta.layout.sections.${sections.length - 1}.components`) as Array<Record<string, unknown>>;
-    expect(components.at(-1)).toEqual({ control: 'form', options: { class: '', sections: [], fields: [], actions: [] }, value: {} });
+    expect(components.at(-1)).toEqual({ control: 'form' });
     expect(component.workspaceData()['id']).toBe(fixturePage['id']);
     component.selectItem(sections.at(-1)!, `meta.layout.sections.${sections.length - 1}`, sections.length - 1);
     component.moveSelection(-1);
     expect(component.selected()?.item['code']).toBe(newCode);
   });
 
-  it('duplicates sections with unique copy codes without rewriting nested content', () => {
+  it('duplicates configured items with fresh IDs and keeps nested content', () => {
     component.metadata.set(metadata);
     const source = structuredClone(fixturePage);
     component.workspaceData.set(source);
@@ -191,12 +200,12 @@ describe('BuilderPageComponent page workspace editing', () => {
     component.selectItem(sections[0], 'meta.layout.sections.0', 0);
     component.duplicateSelection();
     const updated = component.getBuilderPath(component.workspaceData(), 'meta.layout.sections') as Array<Record<string, unknown>>;
-    expect(updated[1]['code']).toBe('hero-section-copy');
+    expect(updated[1]['code']).not.toBe(updated[0]['code']);
     expect(updated[1]['components']).toEqual(sections[0]['components']);
     component.selectItem(updated[0], 'meta.layout.sections.0', 0);
     component.duplicateSelection();
     expect((component.getBuilderPath(component.workspaceData(), 'meta.layout.sections') as Array<Record<string, unknown>>)[1]['code'])
-      .toBe('hero-section-copy-2');
+      .not.toBe(updated[1]['code']);
   });
 
   it('preserves unknown root, metadata, and control fields through an edit and save', async () => {
@@ -222,8 +231,8 @@ describe('BuilderPageComponent page workspace editing', () => {
     expect(component.dirty()).toBe(false);
   });
 
-  it('validates a page before saving and keeps dirty state when persistence fails', async () => {
-    component.metadata.set(metadata);
+  it('validates configured data before saving and keeps dirty state when persistence fails', async () => {
+    component.metadata.set({ ...metadata, validationSchema: { required: ['status'] } });
     component.workspaceData.set(structuredClone(fixturePage));
     component.rememberWorkspaceAsSaved();
     component.updateWorkspaceValue('title', 'Unsaved title');
@@ -242,7 +251,7 @@ describe('BuilderPageComponent page workspace editing', () => {
   });
 
   it('duplicates a selected block and regenerates ids for it and its descendants', () => {
-    component.metadata.set({ ...metadata, workspaceType: 'application' });
+    component.metadata.set(metadata);
     const blocks = [{
       code: 'hero-1', type: 'hero', title: 'Hero',
       components: [{ code: 'text-1', type: 'text', title: 'Intro' }]

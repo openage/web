@@ -10,6 +10,16 @@
 - **Decision**: Scope the existing content/editor grid selectors to the new editor surface wrapper.
 - **Consequences**: Application and page builder metadata continue to control the toolbar, canvas, and properties layout after the preview wrapper is added.
 
+### [2026-10-23] Add Floatable Layout Sections
+- **Context**: The application builder needs a movable toolbar that can sit above the canvas without taking a permanent grid column.
+- **Decision**: Add the `floatable` section type with a drag handle, viewport-bounded positioning, and local-only position state; place the application builder toolbar inside one such section.
+- **Consequences**: Layout metadata can declare movable floating panels while normal section types retain their current rendering behavior. Floating positions reset when the layout instance is recreated.
+
+### [2026-10-23] Simplify Floatable Builder Toolbox
+- **Context**: The floating application toolbar repeated the “Builder tools” title and exposed independently expanded groups, while the whole panel scrolled instead of keeping its header and search fixed.
+- **Decision**: Use the floatable section title/handle as the sole header, keep only one toolbox group expanded at a time, and make the group list the scrolling region.
+- **Consequences**: The toolbar uses less vertical space and its controls remain accessible while navigating long tool lists.
+
 This log records key architectural decisions and significant code changes. AI agents must consult this log before making changes and append new entries after completing a task.
 
 ## Format
