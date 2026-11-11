@@ -60,4 +60,4 @@ The card layout and spacing intentionally follow the diagnostics page convention
 - compact summary metadata with a chevron affordance
 - responsive grid behavior for display-sized pages
 
-The styling is defined in [src/app/diagnostics/diagnostics.component.scss](../src/app/diagnostics/diagnostics.component.scss).
+The page styles are scoped to the `app-diagnostics` host in [src/styles.scss](../src/styles.scss), keeping them isolated while using the shared global stylesheet.

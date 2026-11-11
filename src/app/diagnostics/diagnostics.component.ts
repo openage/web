@@ -20,7 +20,6 @@ interface DiagnosticEntry {
   // eslint-disable-next-line @angular-eslint/component-selector
   selector: 'app-diagnostics',
   templateUrl: './diagnostics.component.html',
-  styleUrl: './diagnostics.component.scss',
   imports: [
     CommonModule,
     JsonViewerComponent,

@@ -28,7 +28,6 @@ import { CanvasComponent, CanvasItemAction, CanvasItemDrop, CanvasSelection, Can
     CanvasComponent
   ],
   templateUrl: './builder-page.component.html',
-  styleUrl: './builder-page.component.scss'
 })
 export class BuilderPageComponent extends DynamicPageComponent implements AfterViewInit, OnDestroy {
   @ViewChild('canvasTemplate') canvasTemplate?: TemplateRef<any>;

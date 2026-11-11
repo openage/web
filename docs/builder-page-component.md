@@ -42,4 +42,6 @@ Canvas, Toolbox, and Properties are standalone controls coordinated by the build
 
 The builder can preview any configured layout by setting `preview.layoutPath` and, optionally, `preview.componentsPath` in its metadata. Preview uses the normal OA layout renderer. Desktop, tablet, and mobile frame widths are available to inspect how content fits; these are not isolated browser viewports, so page CSS media queries still follow the app window width. Preview is read-only; use Canvas and Properties to make changes. Prompt-based AI generation and edits are not configured yet.
 
+Builder page and nested-control styles are scoped to the `app-builder-page` host in [src/styles.scss](../src/styles.scss), so the route reuses the shared stylesheet rather than loading a large component stylesheet.
+
 The page registers the configured control names `canvas`, `toolbar`/`toolbox`, and `properties`; there are no page/application/workflow canvas aliases. See [Builder control data flow](./builder-workspace.md) and the individual [canvas](./oa-canvas-component.md), [toolbox](./oa-toolbar-component.md), and [Properties](./oa-properties-component.md) guides for supported options and events.
